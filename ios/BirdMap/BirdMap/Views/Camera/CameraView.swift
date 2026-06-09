@@ -76,7 +76,7 @@ struct CameraView: View {
             }
             .navigationTitle("Report Sighting")
             .sheet(isPresented: $showPicker) {
-                PhotoPickerView(onSelected: { vm.nothingCapture($0) })
+                PhotoPickerView(onSelected: { vm.setImage($0) })
             }
             .alert("Sighting Submitted!", isPresented: $vm.uploadSuccess) {
                 Button("Great!") {}
@@ -124,7 +124,7 @@ struct LiveCameraView: UIViewControllerRepresentable {
         init(vm: CameraViewModel) { self.vm = vm }
 
         func captured(_ image: UIImage) {
-            vm.nothingCapture(image)
+            vm.setImage(image)
         }
     }
 }

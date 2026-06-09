@@ -1,9 +1,21 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import auth, sightings, annotations, leaderboard, model
+from app.database import engine, Base
+from app.models import user, sighting, annotation  # noqa: F401 — registers ORM models
 
-app = FastAPI(title="BirdMap API", version="1.0.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+
+
+app = FastAPI(title="BirdMap API", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

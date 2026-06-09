@@ -64,7 +64,9 @@ class BirdDataset(Dataset):
 def fetch_training_data(api_url: str, token: str, min_annotations: int):
     """Pull all sightings that have been annotated and build (url, label) pairs."""
     headers = {"Authorization": f"Bearer {token}"}
-    sightings = requests.get(f"{api_url}/sightings?limit=5000", headers=headers).json()
+    resp = requests.get(f"{api_url}/sightings?limit=5000", headers=headers)
+    resp.raise_for_status()
+    sightings = resp.json()
 
     samples = []
     species_counter: Counter = Counter()
@@ -72,11 +74,16 @@ def fetch_training_data(api_url: str, token: str, min_annotations: int):
     for s in sightings:
         if s["annotation_count"] < 1:
             continue
-        detail = requests.get(f"{api_url}/sightings/{s['id']}", headers=headers).json()
-        if not detail["annotations"]:
+        detail_resp = requests.get(f"{api_url}/sightings/{s['id']}", headers=headers)
+        if detail_resp.status_code != 200:
+            continue
+        detail = detail_resp.json()
+        if not detail.get("annotations"):
             continue
         # Use plurality-voted species
         votes = Counter(a["species"] for a in detail["annotations"])
+        if not votes:
+            continue
         species, _ = votes.most_common(1)[0]
         samples.append((detail["photo_url"], species))
         species_counter[species] += 1

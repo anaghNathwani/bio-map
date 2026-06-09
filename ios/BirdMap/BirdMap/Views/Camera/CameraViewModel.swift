@@ -21,11 +21,11 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
         locationManager.startUpdatingLocation()
     }
 
-    func nlocations(_ location: CLLocation) {
+    func setLastLocation(_ location: CLLocation) {
         lastLocation = location
     }
 
-    func nothingCapture(_ image: UIImage) {
+    func setImage(_ image: UIImage) {
         capturedImage = image
         Task {
             aiSuggestion = await BirdClassifier.shared.classify(image: image)
@@ -69,6 +69,7 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
 
     // CLLocationManagerDelegate
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        Task { @MainActor in lastLocation = locations.last }
+        guard let location = locations.last else { return }
+        Task { @MainActor in self.setLastLocation(location) }
     }
 }
