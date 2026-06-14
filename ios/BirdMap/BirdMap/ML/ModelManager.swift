@@ -1,9 +1,6 @@
 import Foundation
 import CoreML
-
-enum ModelManagerError: Error {
-    case unzipNotImplemented
-}
+import ZIPFoundation
 
 final class ModelManager {
     static let shared = ModelManager()
@@ -54,26 +51,6 @@ final class ModelManager {
     }
 
     private func unzip(at src: URL, to dest: URL) throws {
-        // coordinate reading the zip archive with Foundation's built-in zip support (iOS 16+)
-        var err: NSError?
-        NSFileCoordinator().coordinate(readingItemAt: src, options: .withoutChanges, error: &err) { url in
-            _ = try? FileManager.default.createDirectory(at: dest, withIntermediateDirectories: true)
-        }
-        if let err { throw err }
-
-        // Use the system-provided unzip via posix_spawn — not Process (which is macOS-only).
-        // On iOS, the recommended approach is ZipFoundation (add via SPM for App Store builds).
-        // This fallback unpacks using the Archive API available in the Swift standard library as
-        // of Swift 5.9 / iOS 16 via the Foundation framework's coordination APIs.
-        //
-        // For now we use a URLSession-downloaded zip and rely on the .mlpackage directory being
-        // accessible once expanded. A full implementation requires ZipFoundation:
-        //   https://github.com/weichsel/ZIPFoundation
-        //
-        // Add to Package.swift:
-        //   .package(url: "https://github.com/weichsel/ZIPFoundation.git", from: "0.9.19")
-        // Then replace this method body with:
-        //   try FileManager.default.unzipItem(at: src, to: dest)
-        throw ModelManagerError.unzipNotImplemented
+        try FileManager.default.unzipItem(at: src, to: dest)
     }
 }
