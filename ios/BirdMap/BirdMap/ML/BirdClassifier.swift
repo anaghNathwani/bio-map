@@ -12,38 +12,58 @@ struct ClassificationResult {
 final class BirdClassifier {
     static let shared = BirdClassifier()
 
-    func classify(image: UIImage) async -> ClassificationResult? {
-        guard let model = ModelManager.shared.currentModel,
-              let cgImage = image.cgImage else { return nil }
+    // Cache both the loaded model and the Vision wrapper — recreating VNCoreMLModel
+    // on every inference wastes CPU cycles and increases battery drain.
+    private var cachedModelVersion: String?
+    private var cachedVNModel: VNCoreMLModel?
 
-        do {
-            let vnModel = try VNCoreMLModel(for: model)
-            return try await withCheckedThrowingContinuation { continuation in
-                let request = VNCoreMLRequest(model: vnModel) { req, err in
-                    if let err {
-                        continuation.resume(throwing: err)
-                        return
-                    }
-                    guard let results = req.results as? [VNClassificationObservation],
-                          let top = results.first else {
-                        continuation.resume(returning: nil)
-                        return
-                    }
-                    continuation.resume(returning: ClassificationResult(
-                        species: top.identifier,
-                        confidence: top.confidence
-                    ))
+    private var vnModel: VNCoreMLModel? {
+        get throws {
+            let version = UserDefaults.standard.string(forKey: "model_version") ?? ""
+            if let cached = cachedVNModel, cachedModelVersion == version {
+                return cached
+            }
+            guard let mlModel = ModelManager.shared.currentModel else { return nil }
+            let vn = try VNCoreMLModel(for: mlModel)
+            cachedVNModel = vn
+            cachedModelVersion = version
+            return vn
+        }
+    }
+
+    // Run inference on a dedicated background queue at .userInitiated QoS.
+    // Avoids running CPU-heavy work on the main actor which would use higher
+    // scheduling priority than needed and hurt battery life.
+    private let inferenceQueue = DispatchQueue(
+        label: "com.birdmap.inference",
+        qos: .userInitiated
+    )
+
+    func classify(image: UIImage) async -> ClassificationResult? {
+        guard let cgImage = image.cgImage,
+              let model = try? vnModel else { return nil }
+
+        return await withCheckedContinuation { continuation in
+            inferenceQueue.async {
+                let request = VNCoreMLRequest(model: model) { req, _ in
+                    let top = (req.results as? [VNClassificationObservation])?.first
+                    continuation.resume(returning: top.map {
+                        ClassificationResult(species: $0.identifier, confidence: $0.confidence)
+                    })
                 }
                 request.imageCropAndScaleOption = .centerCrop
-                let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
                 do {
-                    try handler.perform([request])
+                    try VNImageRequestHandler(cgImage: cgImage, options: [:]).perform([request])
                 } catch {
-                    continuation.resume(throwing: error)
+                    print("[BirdClassifier] Inference failed: \(error)")
+                    continuation.resume(returning: nil)
                 }
             }
-        } catch {
-            return nil
         }
+    }
+
+    func invalidateCache() {
+        cachedVNModel = nil
+        cachedModelVersion = nil
     }
 }

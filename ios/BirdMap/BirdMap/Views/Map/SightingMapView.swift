@@ -60,7 +60,10 @@ struct SightingMapView: View {
             }
             .task { await vm.load() }
             .onMapCameraChange(frequency: .onEnd) { ctx in
-                Task { await vm.loadForRegion(ctx.region) }
+                // Debounce: cancel any pending region fetch and wait 600ms before
+                // firing a new one. Rapid pans/zooms won't each trigger a network
+                // request, reducing unnecessary radio activations.
+                vm.scheduleRegionLoad(ctx.region)
             }
         }
     }
@@ -71,13 +74,25 @@ final class SightingMapViewModel: ObservableObject {
     @Published var sightings: [Sighting] = []
     @Published var isLoading = false
 
+    private var debounceTask: Task<Void, Never>?
+
     func load() async {
         isLoading = true
         sightings = (try? await APIClient.shared.sightings()) ?? []
         isLoading = false
     }
 
-    func loadForRegion(_ region: MKCoordinateRegion) async {
+    func scheduleRegionLoad(_ region: MKCoordinateRegion) {
+        debounceTask?.cancel()
+        debounceTask = Task {
+            // 600ms debounce — waits for the user to stop moving the map
+            try? await Task.sleep(for: .milliseconds(600))
+            guard !Task.isCancelled else { return }
+            await loadForRegion(region)
+        }
+    }
+
+    private func loadForRegion(_ region: MKCoordinateRegion) async {
         let lat = region.center.latitude
         let lng = region.center.longitude
         let dLat = region.span.latitudeDelta / 2

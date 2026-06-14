@@ -1,13 +1,14 @@
 import Foundation
 
-/// Persists pending uploads so they survive app restarts when offline.
-/// Actor isolation ensures thread-safe queue access in async contexts.
+/// Persists pending uploads across app restarts.
+/// Stores image file paths instead of base64 strings to avoid 33% size
+/// inflation and the CPU cost of encoding/decoding large JPEG data.
 actor UploadQueue {
     static let shared = UploadQueue()
     private let key = "pending_uploads"
 
     struct PendingUpload: Codable {
-        let imageDataBase64: String
+        let imagePath: String        // absolute path to JPEG in caches directory
         let latitude: Double
         let longitude: Double
         let notes: String?
@@ -40,7 +41,10 @@ actor UploadQueue {
 
         var remaining: [PendingUpload] = []
         for item in snapshot {
-            guard let data = Data(base64Encoded: item.imageDataBase64) else { continue }
+            guard let data = try? Data(contentsOf: URL(fileURLWithPath: item.imagePath)) else {
+                // File missing — discard silently
+                continue
+            }
             do {
                 _ = try await APIClient.shared.uploadSighting(
                     imageData: data,
@@ -48,6 +52,8 @@ actor UploadQueue {
                     longitude: item.longitude,
                     notes: item.notes
                 )
+                // Delete the temp file on success
+                try? FileManager.default.removeItem(atPath: item.imagePath)
             } catch {
                 remaining.append(item)
             }

@@ -78,6 +78,8 @@ struct CameraView: View {
                 .padding(.top)
             }
             .navigationTitle("Report Sighting")
+            .onAppear { vm.startLocationUpdates() }
+            .onDisappear { vm.stopLocationUpdates() }
             .sheet(isPresented: $showPicker) {
                 PhotoPickerView(onSelected: { vm.setImage($0) })
             }
@@ -179,6 +181,13 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
         ])
 
         DispatchQueue.global(qos: .userInitiated).async { self.session.startRunning() }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Stop the session as soon as the view leaves screen — keeping it running
+        // burns CPU and camera hardware power for no benefit.
+        DispatchQueue.global(qos: .userInitiated).async { self.session.stopRunning() }
     }
 
     override func viewDidLayoutSubviews() {

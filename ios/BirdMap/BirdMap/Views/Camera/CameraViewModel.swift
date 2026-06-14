@@ -20,8 +20,21 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
     override init() {
         super.init()
         locationManager.delegate = self
+        // Hundred-metre accuracy is sufficient for a bird sighting pin on a map
+        // and uses far less GPS power than the default kCLLocationAccuracyBest.
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.distanceFilter = 50 // only update after moving 50m — suppresses noise
         locationManager.requestWhenInUseAuthorization()
+    }
+
+    /// Call when the camera/report tab becomes active.
+    func startLocationUpdates() {
         locationManager.startUpdatingLocation()
+    }
+
+    /// Call when the camera/report tab goes inactive to stop GPS hardware.
+    func stopLocationUpdates() {
+        locationManager.stopUpdatingLocation()
     }
 
     func setLastLocation(_ location: CLLocation) {
@@ -57,17 +70,34 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
             aiSuggestion = nil
             notes = ""
         } catch {
-            // Queue for retry when offline
-            let pending = UploadQueue.PendingUpload(
-                imageDataBase64: data.base64EncodedString(),
-                latitude: location.coordinate.latitude,
-                longitude: location.coordinate.longitude,
-                notes: notes.isEmpty ? nil : notes
-            )
-            await UploadQueue.shared.enqueue(pending)
+            // Store raw JPEG to a temp file instead of base64-encoding in memory —
+            // avoids 33% size inflation and CPU overhead of base64 encoding.
+            if let fileURL = saveImageToTemp(data: data) {
+                let pending = UploadQueue.PendingUpload(
+                    imagePath: fileURL.path,
+                    latitude: location.coordinate.latitude,
+                    longitude: location.coordinate.longitude,
+                    notes: notes.isEmpty ? nil : notes
+                )
+                await UploadQueue.shared.enqueue(pending)
+            }
             self.error = "Saved offline — will upload when connected."
         }
         isUploading = false
+    }
+
+    private func saveImageToTemp(data: Data) -> URL? {
+        let dir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("pending_uploads", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let url = dir.appendingPathComponent("\(UUID().uuidString).jpg")
+        do {
+            try data.write(to: url, options: .atomic)
+            return url
+        } catch {
+            print("[CameraViewModel] Failed to save pending image: \(error)")
+            return nil
+        }
     }
 
     // CLLocationManagerDelegate
