@@ -90,13 +90,19 @@ Validation uses only resize to 256 + center crop to 224 + normalization.
 After training, the model is exported using `coremltools`:
 
 ```python
+scale = 1.0 / 255.0
+bias  = [-m / s for m, s in zip(IMAGENET_MEAN, IMAGENET_STD)]
+
 mlmodel = ct.convert(
     traced_model,
-    inputs=[ct.ImageType(name="image", shape=(1, 3, 224, 224))],
+    inputs=[ct.ImageType(name="image", shape=(1, 3, 224, 224),
+                         scale=scale, bias=bias)],
     classifier_config=ct.ClassifierConfig(class_names),
     minimum_deployment_target=ct.target.iOS16,
 )
 ```
+
+`scale` and per-channel `bias` are set so that coremltools applies `output = (pixel * scale) + bias`, which is equivalent to `(pixel/255 - mean) / std` — the same normalisation used during training. An earlier version incorrectly computed `scale = 1/255/sum(std)/3`, which produced wrong preprocessing and degraded accuracy.
 
 `ClassifierConfig` embeds the species label list directly in the model — the iOS app does not need a separate label file. The output is a `.mlpackage` directory (Apple's modern model format, replacing the older `.mlmodel`).
 
@@ -111,8 +117,9 @@ Each trained model is assigned a version string based on UTC timestamp: `YYYYMMD
 | Upload | Zipped `.mlpackage` uploaded to MinIO at `models/birdmap_{version}.mlpackage.zip` |
 | Register | POST `/model/register` stores version metadata in `model_versions` table |
 | Activate | New version is set `is_active=True`; all previous versions set `is_active=False` |
-| Discovery | iOS app polls `GET /model/version` and compares with locally stored version string |
-| Download | If version differs, app downloads via presigned URL, unzips, replaces local `.mlpackage` |
+| Discovery | iOS app checks `GET /model/version` on launch and compares with locally stored version string |
+| Download | If version differs, app downloads via presigned URL, unzips with ZIPFoundation, replaces local `.mlpackage`, deletes zip |
+| Cache invalidation | `ModelManager` clears its cached `MLModel` and calls `BirdClassifier.invalidateCache()` — next inference uses the new model immediately |
 
 Only one model version is active at any time. Rolling back requires manually updating `is_active` in the database.
 

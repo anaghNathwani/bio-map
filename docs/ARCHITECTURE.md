@@ -68,13 +68,13 @@
 |---|---|
 | `BirdMapApp` | App lifecycle, routes to login or main tabs based on stored token |
 | `AppEnvironment` | Shared auth state (token, username) persisted in UserDefaults |
-| `APIClient` | All HTTP: multipart upload, JSON REST, JWT bearer header |
-| `UploadQueue` | Persists failed uploads to UserDefaults; flushes on reconnect |
-| `BirdClassifier` | Wraps CoreML model in a `VNCoreMLRequest`; returns top species + confidence |
-| `ModelManager` | Checks `/model/version`, downloads zip, unzips `.mlpackage` to Documents |
-| `CameraView` / `LiveCameraVC` | AVFoundation camera session; `UIImagePickerController` for library |
-| `CameraViewModel` | Coordinates capture → AI inference → upload flow |
-| `SightingMapView` | MapKit `Map` with per-pin annotations, bbox-filtered fetch on camera move |
+| `APIClient` | All HTTP via `batteryEfficientSession` (`waitsForConnectivity=true`, 60s timeout); multipart upload builder; JWT bearer header; typed `APIError` throws |
+| `UploadQueue` | Actor; persists failed uploads as JPEG file paths in caches directory; flushes on app launch; deletes files after successful upload |
+| `BirdClassifier` | Wraps CoreML model in `VNCoreMLRequest`; caches `VNCoreMLModel` per version; runs inference on dedicated `.userInitiated` background queue; returns top species + confidence |
+| `ModelManager` | Checks `/model/version`; downloads zip via presigned URL; unzips via ZIPFoundation; deletes zip after extraction; invalidates both its own `MLModel` cache and `BirdClassifier` cache after update |
+| `CameraView` / `LiveCameraVC` | AVFoundation camera session with `stopRunning()` in `viewWillDisappear`; `UIImagePickerController` for library; starts/stops GPS on appear/disappear |
+| `CameraViewModel` | GPS active only when Report tab visible (`startLocationUpdates`/`stopLocationUpdates`); `kCLLocationAccuracyHundredMeters`, 50m `distanceFilter`; `saveImageToTemp()` writes JPEG to disk for offline queue |
+| `SightingMapView` | MapKit `Map` with per-pin annotations; bbox-filtered fetch debounced 600ms via `Task.sleep` + cancellation |
 | `SightingDetailView` | Photo, AI suggestion, all community annotations, annotate CTA |
 | `AnnotationView` | Species + behavior + confidence form; POSTs to `/annotations` |
 | `LeaderboardView` | Ranked list of top annotators with medal icons |
@@ -125,8 +125,10 @@ User taps "Submit"
     │                       └─ INSERT INTO sightings (location=ST_MakePoint(lng, lat))
     │
     └─ On network failure:
-            UploadQueue.enqueue(PendingUpload)  → persisted to UserDefaults
+            CameraViewModel.saveImageToTemp()    → JPEG written to caches/pending_uploads/
+            UploadQueue.enqueue(PendingUpload)   → file path persisted to UserDefaults
             UploadQueue.flushIfNeeded()          → retried on next launch
+            (image file deleted after successful upload)
 ```
 
 ## Data Flow: Self-Learning Loop

@@ -52,7 +52,11 @@ docker-compose exec api python -m pytest backend/tests/ -v
 - SwiftUI views should be small — if a view body exceeds ~60 lines, extract a subview
 - All network calls must be `async throws` — never block the main thread
 - `@MainActor` on all `ObservableObject` ViewModels
-- No third-party dependencies in v1.0 — standard library and Apple frameworks only
+- Use `batteryEfficientSession` in `APIClient` for all network calls — do not introduce new `URLSession.shared` usages
+- CoreML inference must run on a dedicated background `DispatchQueue` (not the main actor) — see `BirdClassifier.inferenceQueue`
+- Cache expensive ML objects (`VNCoreMLModel`, `MLModel`) per model version — call `invalidateCache()` after a model update
+- GPS-dependent code must use `kCLLocationAccuracyHundredMeters` or coarser unless sub-100m precision is specifically justified
+- New shared mutable state that is accessed from async contexts must use `actor` isolation (see `UploadQueue`)
 
 ### Adding a new screen
 
@@ -141,7 +145,7 @@ The following items from the [MoSCoW document](MOSCOW.md) are well-scoped for ex
 |---|---|---|
 | Species autocomplete (C1) | Medium | Needs a species name list endpoint on the backend |
 | GeoJSON export endpoint (C3) | Low | PostGIS `ST_AsGeoJSON` + FastAPI endpoint |
-| ZipFoundation integration (C14 equivalent) | Low | Replace `Process`-based unzip in `ModelManager.swift` |
 | Dark mode polish (C10) | Low | Audit all hardcoded colours |
 | Sighting privacy toggle (C15) | Medium | Store `is_precise` flag; round coordinates to 0.1° on GET |
-| Annotation offline queue (v1.0 gap) | Medium | Mirror `UploadQueue` pattern for annotations |
+| Annotation offline queue (v1.0 gap) | Medium | Mirror `UploadQueue` actor pattern for annotations |
+| Map sighting cache (C6 equivalent) | Medium | Cache last fetched sightings so map isn't empty on offline launch |

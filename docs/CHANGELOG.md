@@ -9,11 +9,56 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Planned for v1.1
-- ZipFoundation integration to replace `Process`-based model unzip on iOS
 - Species autocomplete via a curated species list endpoint
 - Annotation offline queue (mirrors the sighting upload queue)
 - Layer-freezing strategy in ML pipeline for small-dataset training runs
 - Webhook-triggered retraining when annotation count crosses a threshold
+
+---
+
+## [1.1.0] — Battery & Performance Pass
+
+### Changed
+
+**iOS App — Battery optimisations**
+- `CLLocationManager` accuracy reduced to `kCLLocationAccuracyHundredMeters` with a 50m `distanceFilter` — sufficient for bird sighting pins; avoids the power cost of full GPS lock
+- GPS now starts and stops with the Report tab (`onAppear` / `onDisappear`) via `startLocationUpdates()` / `stopLocationUpdates()` — GPS hardware is off whenever the Report tab is not visible
+- `AVCaptureSession.stopRunning()` called in `LiveCameraVC.viewWillDisappear` — camera hardware no longer keeps running after navigating back
+- `VNCoreMLModel` is now cached per model version in `BirdClassifier`; only rebuilt when `ModelManager` signals a new version via `invalidateCache()` — previously recreated on every inference call
+- CoreML inference moved to a dedicated `DispatchQueue` at `.userInitiated` QoS — no longer runs on the main actor
+- `MLModel` cached in `ModelManager` per version string; only loaded from disk when the version changes
+- `URLSession.shared` replaced with `batteryEfficientSession` (`waitsForConnectivity = true`, 60s timeout) in `APIClient` — avoids hammering the radio when offline
+- Map region fetch debounced 600ms via `Task.sleep` + `Task` cancellation in `scheduleRegionLoad()` — rapid panning no longer triggers one network request per movement
+
+**iOS App — Offline queue**
+- `UploadQueue` converted from `class` + `NSLock` to `actor` for Swift 6 concurrency safety
+- Pending uploads now stored as JPEG file paths in `caches/pending_uploads/` instead of base64-encoded strings in `UserDefaults` — eliminates 33% size inflation and CPU cost of base64 encode/decode
+- Image files are deleted from disk after successful upload
+
+**iOS App — Model management**
+- Zip file deleted from disk after extraction to free storage
+- After a model update, `ModelManager` invalidates both its own `MLModel` cache and `BirdClassifier.cachedVNModel` so the next inference immediately uses the new model
+
+**iOS App — Reliability**
+- All `URLRequest` construction now `throws` on invalid URL instead of force-unwrapping
+- `APIClient` exposes typed `APIError` enum (`invalidURL`, `missingField`, `httpError`) and `checkStatus()` — HTTP 4xx/5xx are now thrown, not silently decoded as garbage
+- All response field accesses use `guard let` instead of `!` force-unwraps
+
+**Swift Package Manager**
+- Added `Package.swift` with ZIPFoundation `>= 0.9.19` dependency
+- `ModelManager.unzip()` now uses `FileManager.unzipItem(at:to:)` — replaces the old stub that always threw an error (model downloading was non-functional before this)
+
+**Backend**
+- `db.refresh(annotation)` added after commit in `annotations.py` so returned `id` reflects the DB-generated UUID
+- Status code constant `status.HTTP_400_BAD_REQUEST` used in `auth.py` instead of raw integer
+- Missing `__init__.py` added to `app/`, `app/models/`, `app/services/`
+- ORM models imported in `main.py` so SQLAlchemy registers all tables
+- `lifespan` handler added to run `create_all` on startup — tables are now created automatically
+
+**ML Pipeline**
+- `best_state` initialised to pre-training weights — prevents `None` crash if no epoch improves validation accuracy
+- CoreML normalisation `scale` fixed to `1/255` with per-channel `bias = -mean/std` — previous formula `1/255/sum(std)/3` produced incorrect image preprocessing
+- `fetch_training_data()` wrapped in `try/except` in `main()` with a meaningful error message
 
 ---
 
