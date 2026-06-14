@@ -43,4 +43,5 @@ async def submit_annotation(
     db.add(annotation)
     user.annotation_count += 1
     await db.commit()
+    await db.refresh(annotation)
     return {"id": str(annotation.id)}

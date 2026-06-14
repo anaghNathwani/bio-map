@@ -1,7 +1,8 @@
 import Foundation
 
 /// Persists pending uploads so they survive app restarts when offline.
-final class UploadQueue {
+/// Actor isolation ensures thread-safe queue access in async contexts.
+actor UploadQueue {
     static let shared = UploadQueue()
     private let key = "pending_uploads"
 
@@ -19,7 +20,11 @@ final class UploadQueue {
             return q
         }
         set {
-            UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: key)
+            guard let encoded = try? JSONEncoder().encode(newValue) else {
+                print("[UploadQueue] Failed to encode queue")
+                return
+            }
+            UserDefaults.standard.set(encoded, forKey: key)
         }
     }
 
@@ -30,8 +35,11 @@ final class UploadQueue {
     }
 
     func flushIfNeeded() async {
+        let snapshot = queue
+        guard !snapshot.isEmpty else { return }
+
         var remaining: [PendingUpload] = []
-        for item in queue {
+        for item in snapshot {
             guard let data = Data(base64Encoded: item.imageDataBase64) else { continue }
             do {
                 _ = try await APIClient.shared.uploadSighting(

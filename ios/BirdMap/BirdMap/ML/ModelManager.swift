@@ -17,7 +17,12 @@ final class ModelManager {
 
     var currentModel: MLModel? {
         guard let url = modelURL, FileManager.default.fileExists(atPath: url.path) else { return nil }
-        return try? MLModel(contentsOf: url)
+        do {
+            return try MLModel(contentsOf: url)
+        } catch {
+            print("[ModelManager] Failed to load model: \(error)")
+            return nil
+        }
     }
 
     func checkForUpdate() async {

@@ -1,5 +1,19 @@
 import Foundation
 
+enum APIError: Error, LocalizedError {
+    case invalidURL
+    case missingField(String)
+    case httpError(Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL: return "Invalid server URL"
+        case .missingField(let f): return "Missing field in response: \(f)"
+        case .httpError(let code): return "Server returned \(code)"
+        }
+    }
+}
+
 final class APIClient {
     static let shared = APIClient()
 
@@ -10,8 +24,9 @@ final class APIClient {
         UserDefaults.standard.string(forKey: "token")
     }
 
-    private func request(_ path: String, method: String = "GET", body: Data? = nil) -> URLRequest {
-        var req = URLRequest(url: URL(string: baseURL + path)!)
+    private func request(_ path: String, method: String = "GET", body: Data? = nil) throws -> URLRequest {
+        guard let url = URL(string: baseURL + path) else { throw APIError.invalidURL }
+        var req = URLRequest(url: url)
         req.httpMethod = method
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if let token { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
@@ -19,22 +34,31 @@ final class APIClient {
         return req
     }
 
+    private func checkStatus(_ response: URLResponse) throws {
+        guard let http = response as? HTTPURLResponse else { return }
+        if http.statusCode >= 400 { throw APIError.httpError(http.statusCode) }
+    }
+
     // MARK: - Auth
 
     func register(email: String, username: String, password: String) async throws -> String {
         let body = try JSONEncoder().encode(["email": email, "username": username, "password": password])
-        var req = request("/auth/register", method: "POST", body: body)
-        let (data, _) = try await URLSession.shared.data(for: req)
+        let req = try request("/auth/register", method: "POST", body: body)
+        let (data, response) = try await URLSession.shared.data(for: req)
+        try checkStatus(response)
         let resp = try JSONDecoder().decode([String: String].self, from: data)
-        return resp["access_token"]!
+        guard let token = resp["access_token"] else { throw APIError.missingField("access_token") }
+        return token
     }
 
     func login(email: String, password: String) async throws -> String {
         let body = try JSONEncoder().encode(["email": email, "password": password])
-        let req = request("/auth/login", method: "POST", body: body)
-        let (data, _) = try await URLSession.shared.data(for: req)
+        let req = try request("/auth/login", method: "POST", body: body)
+        let (data, response) = try await URLSession.shared.data(for: req)
+        try checkStatus(response)
         let resp = try JSONDecoder().decode([String: String].self, from: data)
-        return resp["access_token"]!
+        guard let token = resp["access_token"] else { throw APIError.missingField("access_token") }
+        return token
     }
 
     // MARK: - Sightings
@@ -44,42 +68,47 @@ final class APIClient {
         if let b = bbox {
             path += "&min_lat=\(b.minLat)&max_lat=\(b.maxLat)&min_lng=\(b.minLng)&max_lng=\(b.maxLng)"
         }
-        let (data, _) = try await URLSession.shared.data(for: request(path))
+        let (data, response) = try await URLSession.shared.data(for: try request(path))
+        try checkStatus(response)
         return try JSONDecoder().decode([Sighting].self, from: data)
     }
 
     func sightingDetail(id: UUID) async throws -> SightingDetail {
-        let (data, _) = try await URLSession.shared.data(for: request("/sightings/\(id)"))
+        let (data, response) = try await URLSession.shared.data(for: try request("/sightings/\(id)"))
+        try checkStatus(response)
         return try JSONDecoder().decode(SightingDetail.self, from: data)
     }
 
     func uploadSighting(imageData: Data, latitude: Double, longitude: Double, notes: String?) async throws -> String {
         let boundary = UUID().uuidString
-        var req = URLRequest(url: URL(string: baseURL + "/sightings")!)
+        guard let url = URL(string: baseURL + "/sightings") else { throw APIError.invalidURL }
+        var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         if let token { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
 
         var body = Data()
         func field(_ name: String, _ value: String) {
-            body.append("--\(boundary)\r\n".data(using: .utf8)!)
-            body.append("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8)!)
-            body.append("\(value)\r\n".data(using: .utf8)!)
+            body.append("--\(boundary)\r\n".data(using: .utf8) ?? Data())
+            body.append("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) ?? Data())
+            body.append("\(value)\r\n".data(using: .utf8) ?? Data())
         }
         field("latitude", "\(latitude)")
         field("longitude", "\(longitude)")
         if let notes { field("notes", notes) }
 
-        body.append("--\(boundary)\r\n".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n".data(using: .utf8)!)
-        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)\r\n".data(using: .utf8) ?? Data())
+        body.append("Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n".data(using: .utf8) ?? Data())
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8) ?? Data())
         body.append(imageData)
-        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8) ?? Data())
 
         req.httpBody = body
-        let (data, _) = try await URLSession.shared.data(for: req)
+        let (data, response) = try await URLSession.shared.data(for: req)
+        try checkStatus(response)
         let resp = try JSONDecoder().decode([String: String].self, from: data)
-        return resp["id"]!
+        guard let id = resp["id"] else { throw APIError.missingField("id") }
+        return id
     }
 
     // MARK: - Annotations
@@ -90,27 +119,32 @@ final class APIClient {
             let behavior: String?; let age_plumage: String?
         }
         let body = try JSONEncoder().encode(Body(species: species, confidence: confidence, behavior: behavior, age_plumage: agePlumage))
-        var req = request("/sightings/\(sightingID)/annotations", method: "POST", body: body)
-        _ = try await URLSession.shared.data(for: req)
+        let req = try request("/sightings/\(sightingID)/annotations", method: "POST", body: body)
+        let (_, response) = try await URLSession.shared.data(for: req)
+        try checkStatus(response)
     }
 
     // MARK: - Leaderboard
 
     func leaderboard() async throws -> [LeaderboardEntry] {
-        let (data, _) = try await URLSession.shared.data(for: request("/leaderboard"))
+        let (data, response) = try await URLSession.shared.data(for: try request("/leaderboard"))
+        try checkStatus(response)
         return try JSONDecoder().decode([LeaderboardEntry].self, from: data)
     }
 
     // MARK: - Model
 
     func modelVersion() async throws -> ModelVersionInfo {
-        let (data, _) = try await URLSession.shared.data(for: request("/model/version"))
+        let (data, response) = try await URLSession.shared.data(for: try request("/model/version"))
+        try checkStatus(response)
         return try JSONDecoder().decode(ModelVersionInfo.self, from: data)
     }
 
     func modelDownloadURL() async throws -> String {
-        let (data, _) = try await URLSession.shared.data(for: request("/model/download"))
+        let (data, response) = try await URLSession.shared.data(for: try request("/model/download"))
+        try checkStatus(response)
         let resp = try JSONDecoder().decode([String: String].self, from: data)
-        return resp["url"]!
+        guard let url = resp["url"] else { throw APIError.missingField("url") }
+        return url
     }
 }

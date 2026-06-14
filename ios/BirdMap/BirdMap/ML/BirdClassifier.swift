@@ -1,6 +1,8 @@
 import CoreML
 import Vision
+#if canImport(UIKit)
 import UIKit
+#endif
 
 struct ClassificationResult {
     let species: String

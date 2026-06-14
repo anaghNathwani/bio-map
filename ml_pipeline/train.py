@@ -117,7 +117,7 @@ def train(samples, class_names, epochs: int = 10, batch_size: int = 32):
     criterion = nn.CrossEntropyLoss()
 
     best_acc = 0.0
-    best_state = None
+    best_state = {k: v.cpu().clone() for k, v in model.state_dict().items()}
 
     for epoch in range(epochs):
         model.train()
@@ -152,11 +152,16 @@ def export_coreml(model, class_names: list[str], output_path: str):
     example = torch.rand(1, 3, 224, 224)
     traced = torch.jit.trace(model, example)
 
+    # Preprocessing: pixel → (pixel/255 - mean) / std
+    # coremltools ImageType applies: output = (input * scale) + bias
+    # So scale = 1/255 and bias = -mean/std (per channel)
+    scale = 1.0 / 255.0
+    bias = [-m / s for m, s in zip(IMAGENET_MEAN, IMAGENET_STD)]
     mlmodel = ct.convert(
         traced,
         inputs=[ct.ImageType(name="image", shape=example.shape,
-                             bias=[-m/s for m, s in zip(IMAGENET_MEAN, IMAGENET_STD)],
-                             scale=1.0/255.0/sum(IMAGENET_STD)/3)],
+                             bias=bias,
+                             scale=scale)],
         classifier_config=ct.ClassifierConfig(class_names),
         minimum_deployment_target=ct.target.iOS16,
     )
@@ -206,7 +211,11 @@ def main():
     args = parser.parse_args()
 
     print("Fetching training data...")
-    samples, class_names = fetch_training_data(args.api_url, args.token, args.min_annotations)
+    try:
+        samples, class_names = fetch_training_data(args.api_url, args.token, args.min_annotations)
+    except Exception as e:
+        print(f"Failed to fetch training data: {e}")
+        return
     print(f"  {len(samples)} samples, {len(class_names)} species: {class_names[:10]}...")
 
     if len(class_names) < 2:

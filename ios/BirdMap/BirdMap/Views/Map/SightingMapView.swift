@@ -1,5 +1,6 @@
 import SwiftUI
 import MapKit
+import CoreLocation
 
 struct SightingMapView: View {
     @StateObject private var vm = SightingMapViewModel()

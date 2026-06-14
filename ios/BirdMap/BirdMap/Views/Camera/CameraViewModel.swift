@@ -1,6 +1,9 @@
 import SwiftUI
 import AVFoundation
 import CoreLocation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 @MainActor
 final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -61,7 +64,7 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
                 longitude: location.coordinate.longitude,
                 notes: notes.isEmpty ? nil : notes
             )
-            UploadQueue.shared.enqueue(pending)
+            await UploadQueue.shared.enqueue(pending)
             self.error = "Saved offline — will upload when connected."
         }
         isUploading = false

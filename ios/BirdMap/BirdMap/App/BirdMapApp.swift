@@ -12,7 +12,10 @@ struct BirdMapApp: App {
             } else {
                 ContentView()
                     .environmentObject(env)
-                    .task { await ModelManager.shared.checkForUpdate() }
+                    .task {
+                        await ModelManager.shared.checkForUpdate()
+                        await UploadQueue.shared.flushIfNeeded()
+                    }
             }
         }
     }

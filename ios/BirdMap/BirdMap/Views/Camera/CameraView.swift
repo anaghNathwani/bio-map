@@ -1,5 +1,8 @@
 import SwiftUI
 import AVFoundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct CameraView: View {
     @StateObject private var vm = CameraViewModel()
