@@ -15,7 +15,6 @@ final class ModelManager {
             .appendingPathComponent("BirdClassifier.mlpackage")
     }
 
-    // Cached — loads from disk once per version, not on every access.
     var currentModel: MLModel? {
         let version = UserDefaults.standard.string(forKey: versionKey) ?? ""
         if let cached = cachedModel, cachedModelVersion == version {
@@ -44,26 +43,25 @@ final class ModelManager {
         guard let urlStr = try? await APIClient.shared.modelDownloadURL(),
               let url = URL(string: urlStr) else { return }
 
-        // Use a background URLSession so the download survives app backgrounding
-        // and doesn't need to restart if interrupted.
+        // Background URLSession so the download survives app backgrounding
         let config = URLSessionConfiguration.background(withIdentifier: "com.birdmap.modeldownload.\(version)")
-        config.isDiscretionary = true          // let the OS pick an efficient time
-        config.sessionSendsLaunchEvents = false // no need to relaunch for model updates
+        config.isDiscretionary = true
+        config.sessionSendsLaunchEvents = false
+        let session = URLSession(configuration: config)
 
         do {
-            let (tmpURL, _) = try await URLSession.shared.download(from: url)
+            let (tmpURL, _) = try await session.download(from: url)
             let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let zipDest = docs.appendingPathComponent("BirdClassifier_\(version).mlpackage.zip")
             try? FileManager.default.removeItem(at: zipDest)
             try FileManager.default.moveItem(at: tmpURL, to: zipDest)
 
             try unzip(at: zipDest, to: docs)
-            try? FileManager.default.removeItem(at: zipDest) // clean up zip after extraction
+            try? FileManager.default.removeItem(at: zipDest)
 
-            // Invalidate caches so next inference picks up the new model
             cachedModel = nil
             cachedModelVersion = nil
-            BirdClassifier.shared.invalidateCache()
+            await BirdClassifier.shared.invalidateCache()
 
             UserDefaults.standard.set(version, forKey: versionKey)
             print("[ModelManager] Updated to model version \(version)")

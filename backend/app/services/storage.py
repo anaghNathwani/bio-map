@@ -12,20 +12,19 @@ s3 = boto3.client(
 )
 
 
-def _ensure_bucket(bucket: str) -> None:
-    existing = [b["Name"] for b in s3.list_buckets()["Buckets"]]
-    if bucket not in existing:
-        s3.create_bucket(Bucket=bucket)
+def ensure_buckets() -> None:
+    """Create required buckets if they don't exist. Called once at app startup."""
+    existing = {b["Name"] for b in s3.list_buckets()["Buckets"]}
+    for bucket in (settings.s3_bucket, settings.model_bucket):
+        if bucket not in existing:
+            s3.create_bucket(Bucket=bucket)
 
 
 def upload_photo(data: bytes, content_type: str = "image/jpeg") -> tuple[str, str]:
     """Upload original + thumbnail, return (photo_url, thumbnail_url)."""
-    _ensure_bucket(settings.s3_bucket)
-
     key = f"sightings/{uuid.uuid4()}.jpg"
     s3.put_object(Bucket=settings.s3_bucket, Key=key, Body=data, ContentType=content_type)
 
-    # Generate thumbnail
     img = Image.open(io.BytesIO(data))
     img.thumbnail((400, 400))
     thumb_buf = io.BytesIO()
@@ -38,13 +37,13 @@ def upload_photo(data: bytes, content_type: str = "image/jpeg") -> tuple[str, st
         ContentType="image/jpeg",
     )
 
-    base = f"{settings.s3_endpoint}/{settings.s3_bucket}"
+    public_base = (settings.public_s3_url or settings.s3_endpoint)
+    base = f"{public_base}/{settings.s3_bucket}"
     return f"{base}/{key}", f"{base}/{thumb_key}"
 
 
 def upload_model(data: bytes, version: str) -> str:
     """Upload a CoreML model zip, return S3 key."""
-    _ensure_bucket(settings.model_bucket)
     key = f"models/birdmap_{version}.mlpackage.zip"
     s3.put_object(Bucket=settings.model_bucket, Key=key, Body=data, ContentType="application/zip")
     return key

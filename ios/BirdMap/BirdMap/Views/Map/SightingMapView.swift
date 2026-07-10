@@ -14,34 +14,32 @@ struct SightingMapView: View {
 
     var body: some View {
         NavigationStack {
-            Map(position: $cameraPosition) {
-                ForEach(vm.sightings) { sighting in
-                    Annotation(
-                        sighting.topSpecies ?? sighting.aiSpeciesSuggestion ?? "Unknown Bird",
-                        coordinate: CLLocationCoordinate2D(
-                            latitude: sighting.latitude,
-                            longitude: sighting.longitude
-                        )
-                    ) {
-                        Button {
-                            selectedSighting = sighting
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.teal.opacity(0.85))
-                                    .frame(width: 32, height: 32)
-                                Image(systemName: "bird.fill")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 14))
-                            }
+            ZStack(alignment: .bottom) {
+                Map(position: $cameraPosition) {
+                    ForEach(vm.sightings) { sighting in
+                        Annotation(
+                            sighting.topSpecies ?? sighting.aiSpeciesSuggestion ?? "Unknown",
+                            coordinate: CLLocationCoordinate2D(
+                                latitude: sighting.latitude,
+                                longitude: sighting.longitude
+                            )
+                        ) {
+                            sightingPin(sighting)
                         }
                     }
                 }
-            }
-            .mapControls {
-                MapUserLocationButton()
-                MapCompass()
-                MapScaleView()
+                .mapControls {
+                    MapUserLocationButton()
+                    MapCompass()
+                    MapScaleView()
+                }
+                .onMapCameraChange(frequency: .onEnd) { ctx in
+                    vm.scheduleRegionLoad(ctx.region)
+                }
+
+                if !vm.sightings.isEmpty {
+                    countBadge
+                }
             }
             .navigationTitle("Bird Sightings")
             .toolbar {
@@ -49,7 +47,9 @@ struct SightingMapView: View {
                     if vm.isLoading {
                         ProgressView()
                     } else {
-                        Button { Task { await vm.load() } } label: {
+                        Button {
+                            Task { await vm.load() }
+                        } label: {
                             Image(systemName: "arrow.clockwise")
                         }
                     }
@@ -57,15 +57,56 @@ struct SightingMapView: View {
             }
             .sheet(item: $selectedSighting) { sighting in
                 SightingDetailView(sightingID: sighting.id)
+                    .presentationDetents([.medium, .large])
             }
             .task { await vm.load() }
-            .onMapCameraChange(frequency: .onEnd) { ctx in
-                // Debounce: cancel any pending region fetch and wait 600ms before
-                // firing a new one. Rapid pans/zooms won't each trigger a network
-                // request, reducing unnecessary radio activations.
-                vm.scheduleRegionLoad(ctx.region)
+        }
+    }
+
+    private func sightingPin(_ sighting: Sighting) -> some View {
+        Button {
+            selectedSighting = sighting
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(
+                        sighting.annotationCount > 0
+                            ? LinearGradient(colors: [Color.teal, Color.teal.opacity(0.7)], startPoint: .top, endPoint: .bottom)
+                            : LinearGradient(colors: [Color.orange.opacity(0.9), Color.orange.opacity(0.6)], startPoint: .top, endPoint: .bottom)
+                    )
+                    .frame(width: 36, height: 36)
+                    .shadow(color: .black.opacity(0.25), radius: 4, y: 2)
+
+                Image(systemName: "bird.fill")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 15, weight: .semibold))
+
+                if sighting.annotationCount > 0 {
+                    Text("\(sighting.annotationCount)")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(3)
+                        .background(Color.green, in: Circle())
+                        .offset(x: 12, y: -12)
+                }
             }
         }
+        .buttonStyle(.plain)
+    }
+
+    private var countBadge: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "bird.fill")
+                .font(.caption)
+            Text("\(vm.sightings.count) sighting\(vm.sightings.count == 1 ? "" : "s") in view")
+                .font(.caption.weight(.medium))
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
+        .background(.ultraThinMaterial, in: Capsule())
+        .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+        .padding(.bottom, 12)
     }
 }
 
@@ -85,7 +126,6 @@ final class SightingMapViewModel: ObservableObject {
     func scheduleRegionLoad(_ region: MKCoordinateRegion) {
         debounceTask?.cancel()
         debounceTask = Task {
-            // 600ms debounce — waits for the user to stop moving the map
             try? await Task.sleep(for: .milliseconds(600))
             guard !Task.isCancelled else { return }
             await loadForRegion(region)

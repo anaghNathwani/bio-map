@@ -27,12 +27,17 @@ enum APIError: Error, LocalizedError {
 final class APIClient {
     static let shared = APIClient()
 
-    // Change to your server IP when testing on device
-    var baseURL = "http://localhost:8000"
+    // Reads API base URL from Info.plist key "API_BASE_URL".
+    // Set this per-scheme in Xcode: Product → Scheme → Edit → Run → Arguments.
+    // Defaults to localhost for simulator runs.
+    let baseURL: String = {
+        Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String
+            ?? "http://localhost:8000"
+    }()
 
-    private var token: String? {
-        UserDefaults.standard.string(forKey: "token")
-    }
+    weak var environment: AppEnvironment?
+
+    private var token: String? { KeychainHelper.load(for: "auth_token") }
 
     private func request(_ path: String, method: String = "GET", body: Data? = nil) throws -> URLRequest {
         guard let url = URL(string: baseURL + path) else { throw APIError.invalidURL }
@@ -46,29 +51,34 @@ final class APIClient {
 
     private func checkStatus(_ response: URLResponse) throws {
         guard let http = response as? HTTPURLResponse else { return }
+        if http.statusCode == 401 {
+            environment?.handleUnauthorized()
+            throw APIError.httpError(401)
+        }
         if http.statusCode >= 400 { throw APIError.httpError(http.statusCode) }
     }
 
     // MARK: - Auth
 
-    func register(email: String, username: String, password: String) async throws -> String {
+    struct AuthResponse: Decodable {
+        let access_token: String
+        let username: String
+    }
+
+    func register(email: String, username: String, password: String) async throws -> AuthResponse {
         let body = try JSONEncoder().encode(["email": email, "username": username, "password": password])
         let req = try request("/auth/register", method: "POST", body: body)
         let (data, response) = try await batteryEfficientSession.data(for: req)
         try checkStatus(response)
-        let resp = try JSONDecoder().decode([String: String].self, from: data)
-        guard let token = resp["access_token"] else { throw APIError.missingField("access_token") }
-        return token
+        return try JSONDecoder().decode(AuthResponse.self, from: data)
     }
 
-    func login(email: String, password: String) async throws -> String {
+    func login(email: String, password: String) async throws -> AuthResponse {
         let body = try JSONEncoder().encode(["email": email, "password": password])
         let req = try request("/auth/login", method: "POST", body: body)
         let (data, response) = try await batteryEfficientSession.data(for: req)
         try checkStatus(response)
-        let resp = try JSONDecoder().decode([String: String].self, from: data)
-        guard let token = resp["access_token"] else { throw APIError.missingField("access_token") }
-        return token
+        return try JSONDecoder().decode(AuthResponse.self, from: data)
     }
 
     // MARK: - Sightings

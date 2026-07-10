@@ -50,33 +50,39 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
 
     func upload() async {
         guard let image = capturedImage,
-              let location = lastLocation,
               let data = image.jpegData(compressionQuality: 0.85) else {
-            error = "Missing image or location"
+            error = "No photo selected"
             return
         }
 
+        // Use last known location; fall back to 0,0 so the sighting isn't lost.
+        // The server stores whatever coordinates we send, so a missing GPS fix
+        // results in a pin at the origin rather than a silently dropped sighting.
+        let latitude = lastLocation?.coordinate.latitude ?? 0
+        let longitude = lastLocation?.coordinate.longitude ?? 0
+        if lastLocation == nil {
+            error = "GPS fix unavailable — sighting will be saved without exact location."
+        }
+
         isUploading = true
-        error = nil
         do {
             _ = try await APIClient.shared.uploadSighting(
                 imageData: data,
-                latitude: location.coordinate.latitude,
-                longitude: location.coordinate.longitude,
+                latitude: latitude,
+                longitude: longitude,
                 notes: notes.isEmpty ? nil : notes
             )
             uploadSuccess = true
             capturedImage = nil
             aiSuggestion = nil
             notes = ""
+            error = nil
         } catch {
-            // Store raw JPEG to a temp file instead of base64-encoding in memory —
-            // avoids 33% size inflation and CPU overhead of base64 encoding.
             if let fileURL = saveImageToTemp(data: data) {
                 let pending = UploadQueue.PendingUpload(
                     imagePath: fileURL.path,
-                    latitude: location.coordinate.latitude,
-                    longitude: location.coordinate.longitude,
+                    latitude: latitude,
+                    longitude: longitude,
                     notes: notes.isEmpty ? nil : notes
                 )
                 await UploadQueue.shared.enqueue(pending)

@@ -3,19 +3,30 @@ import Combine
 
 final class AppEnvironment: ObservableObject {
     @Published var token: String? {
-        didSet { UserDefaults.standard.set(token, forKey: "token") }
+        didSet {
+            if let token { KeychainHelper.save(token, for: "auth_token") }
+            else { KeychainHelper.delete(for: "auth_token") }
+        }
     }
     @Published var username: String? {
-        didSet { UserDefaults.standard.set(username, forKey: "username") }
+        didSet {
+            if let username { KeychainHelper.save(username, for: "username") }
+            else { KeychainHelper.delete(for: "username") }
+        }
     }
 
     init() {
-        token = UserDefaults.standard.string(forKey: "token")
-        username = UserDefaults.standard.string(forKey: "username")
+        token = KeychainHelper.load(for: "auth_token")
+        username = KeychainHelper.load(for: "username")
     }
 
     func logout() {
         token = nil
         username = nil
+    }
+
+    /// Called when the API returns 401 — token is expired or revoked.
+    func handleUnauthorized() {
+        DispatchQueue.main.async { self.logout() }
     }
 }

@@ -9,11 +9,11 @@ struct ClassificationResult {
     let confidence: Float
 }
 
-final class BirdClassifier {
+// Actor serializes all cache reads/writes, eliminating the data race on
+// cachedVNModel that would occur when classify() is called concurrently.
+actor BirdClassifier {
     static let shared = BirdClassifier()
 
-    // Cache both the loaded model and the Vision wrapper — recreating VNCoreMLModel
-    // on every inference wastes CPU cycles and increases battery drain.
     private var cachedModelVersion: String?
     private var cachedVNModel: VNCoreMLModel?
 
@@ -31,20 +31,14 @@ final class BirdClassifier {
         }
     }
 
-    // Run inference on a dedicated background queue at .userInitiated QoS.
-    // Avoids running CPU-heavy work on the main actor which would use higher
-    // scheduling priority than needed and hurt battery life.
-    private let inferenceQueue = DispatchQueue(
-        label: "com.birdmap.inference",
-        qos: .userInitiated
-    )
-
     func classify(image: UIImage) async -> ClassificationResult? {
         guard let cgImage = image.cgImage,
               let model = try? vnModel else { return nil }
 
         return await withCheckedContinuation { continuation in
-            inferenceQueue.async {
+            // Dispatch off the actor's executor onto a background thread for
+            // CPU-heavy Vision inference, then resume the continuation.
+            DispatchQueue.global(qos: .userInitiated).async {
                 let request = VNCoreMLRequest(model: model) { req, _ in
                     let top = (req.results as? [VNClassificationObservation])?.first
                     continuation.resume(returning: top.map {

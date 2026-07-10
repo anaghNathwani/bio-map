@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import String, DateTime, ForeignKey, Text, Float
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from geoalchemy2 import Geometry
@@ -20,7 +20,7 @@ class Sighting(Base):
     # AI suggestion at upload time (may be empty for v1 cold-start)
     ai_species_suggestion: Mapped[str] = mapped_column(String(255), nullable=True)
     ai_confidence: Mapped[float] = mapped_column(Float, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     user: Mapped["User"] = relationship(back_populates="sightings")  # noqa: F821
     annotations: Mapped[list["Annotation"]] = relationship(back_populates="sighting")  # noqa: F821

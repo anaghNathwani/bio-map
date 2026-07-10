@@ -13,69 +13,15 @@ struct CameraView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     if let img = vm.capturedImage {
-                        Image(uiImage: img)
-                            .resizable()
-                            .scaledToFit()
-                            .cornerRadius(12)
-                            .padding(.horizontal)
-
-                        if let suggestion = vm.aiSuggestion {
-                            HStack {
-                                Image(systemName: "sparkles")
-                                Text("AI thinks: **\(suggestion.species)** (\(Int(suggestion.confidence * 100))%)")
-                            }
-                            .foregroundStyle(.teal)
-                            .font(.subheadline)
-                        }
-
-                        TextField("Notes (optional)", text: $vm.notes, axis: .vertical)
-                            .lineLimit(3...6)
-                            .textFieldStyle(.roundedBorder)
-                            .padding(.horizontal)
-
-                        if let error = vm.error {
-                            Text(error).foregroundStyle(.orange).font(.caption)
-                        }
-
-                        Button {
-                            Task { await vm.upload() }
-                        } label: {
-                            Label(vm.isUploading ? "Uploading..." : "Submit Sighting", systemImage: "paperplane.fill")
-                                .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(vm.isUploading)
-                        .padding(.horizontal)
-
+                        capturedImageSection(img)
                     } else {
-                        ContentUnavailableView(
-                            "No Photo Yet",
-                            systemImage: "bird",
-                            description: Text("Take a photo or choose from your library")
-                        )
-                        .padding(.top, 60)
+                        emptyStateSection
                     }
 
-                    HStack(spacing: 16) {
-                        Button {
-                            showPicker = true
-                        } label: {
-                            Label("Photo Library", systemImage: "photo.on.rectangle")
-                                .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.bordered)
-
-                        NavigationLink {
-                            LiveCameraView(vm: vm)
-                        } label: {
-                            Label("Camera", systemImage: "camera")
-                                .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.bordered)
-                    }
-                    .padding(.horizontal)
+                    captureButtons
                 }
                 .padding(.top)
+                .padding(.bottom, 32)
             }
             .navigationTitle("Report Sighting")
             .onAppear { vm.startLocationUpdates() }
@@ -85,8 +31,144 @@ struct CameraView: View {
             }
             .alert("Sighting Submitted!", isPresented: $vm.uploadSuccess) {
                 Button("Great!") {}
+            } message: {
+                Text("Your sighting has been added to the map and queued for community annotation.")
             }
         }
+    }
+
+    @ViewBuilder
+    private func capturedImageSection(_ img: UIImage) -> some View {
+        VStack(spacing: 16) {
+            ZStack(alignment: .bottomLeading) {
+                Image(uiImage: img)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
+
+                if let suggestion = vm.aiSuggestion {
+                    HStack(spacing: 6) {
+                        Image(systemName: "sparkles")
+                        Text("**\(suggestion.species)**")
+                        Text("· \(Int(suggestion.confidence * 100))% confidence")
+                            .foregroundStyle(.white.opacity(0.8))
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(.ultraThinMaterial.opacity(0.9), in: Capsule())
+                    .padding(12)
+                }
+            }
+            .padding(.horizontal)
+
+            VStack(spacing: 12) {
+                TextField("Notes (optional)", text: $vm.notes, axis: .vertical)
+                    .lineLimit(3...6)
+                    .padding(12)
+                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal)
+
+                if let error = vm.error {
+                    HStack(spacing: 6) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                        Text(error)
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                }
+
+                Button {
+                    Task { await vm.upload() }
+                } label: {
+                    HStack {
+                        if vm.isUploading {
+                            ProgressView().tint(.white)
+                        }
+                        Label(
+                            vm.isUploading ? "Uploading…" : "Submit Sighting",
+                            systemImage: vm.isUploading ? "clock" : "paperplane.fill"
+                        )
+                        .fontWeight(.semibold)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(vm.isUploading ? Color.gray : Color.teal, in: RoundedRectangle(cornerRadius: 14))
+                    .foregroundStyle(.white)
+                }
+                .disabled(vm.isUploading)
+                .padding(.horizontal)
+                .animation(.easeInOut(duration: 0.2), value: vm.isUploading)
+            }
+        }
+    }
+
+    private var emptyStateSection: some View {
+        VStack(spacing: 16) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(LinearGradient(
+                        colors: [Color.teal.opacity(0.12), Color.teal.opacity(0.04)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ))
+                    .frame(height: 260)
+
+                VStack(spacing: 12) {
+                    Image(systemName: "bird")
+                        .font(.system(size: 56))
+                        .foregroundStyle(Color.teal.opacity(0.6))
+                    Text("No Photo Yet")
+                        .font(.title3.bold())
+                        .foregroundStyle(.primary)
+                    Text("Take a photo or choose from your library\nto identify and report a sighting")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
+            }
+            .padding(.horizontal)
+        }
+    }
+
+    private var captureButtons: some View {
+        HStack(spacing: 12) {
+            Button {
+                showPicker = true
+            } label: {
+                VStack(spacing: 6) {
+                    Image(systemName: "photo.on.rectangle")
+                        .font(.title2)
+                    Text("Library")
+                        .font(.caption.weight(.medium))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+            }
+            .foregroundStyle(.primary)
+
+            NavigationLink {
+                LiveCameraView(vm: vm)
+            } label: {
+                VStack(spacing: 6) {
+                    Image(systemName: "camera.fill")
+                        .font(.title2)
+                    Text("Camera")
+                        .font(.caption.weight(.medium))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(Color.teal, in: RoundedRectangle(cornerRadius: 14))
+                .foregroundStyle(.white)
+            }
+        }
+        .padding(.horizontal)
     }
 }
 
@@ -185,8 +267,6 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // Stop the session as soon as the view leaves screen — keeping it running
-        // burns CPU and camera hardware power for no benefit.
         DispatchQueue.global(qos: .userInitiated).async { self.session.stopRunning() }
     }
 

@@ -10,41 +10,125 @@ struct LoginView: View {
     @State private var error: String?
 
     var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    TextField("Email", text: $email)
-                        .keyboardType(.emailAddress)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                    if isRegistering {
-                        TextField("Username", text: $username)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-                    }
-                    SecureField("Password", text: $password)
-                }
+        ZStack {
+            LinearGradient(
+                colors: [Color(hue: 0.48, saturation: 0.6, brightness: 0.35), Color(hue: 0.52, saturation: 0.5, brightness: 0.2)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
 
-                if let error {
-                    Text(error).foregroundStyle(.red).font(.caption)
-                }
+            ScrollView {
+                VStack(spacing: 0) {
+                    VStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(.white.opacity(0.15))
+                                .frame(width: 100, height: 100)
+                            Image(systemName: "bird.fill")
+                                .font(.system(size: 48))
+                                .foregroundStyle(.white)
+                        }
+                        .padding(.top, 60)
 
-                Section {
-                    Button(isLoading ? "Please wait..." : (isRegistering ? "Create Account" : "Sign In")) {
-                        Task { await submit() }
-                    }
-                    .disabled(isLoading)
-                }
+                        Text("BirdMap")
+                            .font(.largeTitle.bold())
+                            .foregroundStyle(.white)
 
-                Section {
-                    Button(isRegistering ? "Already have an account? Sign in" : "New here? Create account") {
-                        isRegistering.toggle()
-                        error = nil
+                        Text("Citizen science, one sighting at a time")
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.75))
+                            .multilineTextAlignment(.center)
                     }
-                    .foregroundStyle(.secondary)
+                    .padding(.bottom, 40)
+
+                    VStack(spacing: 16) {
+                        VStack(spacing: 12) {
+                            HStack {
+                                Image(systemName: "envelope")
+                                    .foregroundStyle(.secondary)
+                                    .frame(width: 20)
+                                TextField("Email", text: $email)
+                                    .keyboardType(.emailAddress)
+                                    .autocorrectionDisabled()
+                                    .textInputAutocapitalization(.never)
+                            }
+                            .padding()
+                            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+
+                            if isRegistering {
+                                HStack {
+                                    Image(systemName: "person")
+                                        .foregroundStyle(.secondary)
+                                        .frame(width: 20)
+                                    TextField("Username", text: $username)
+                                        .autocorrectionDisabled()
+                                        .textInputAutocapitalization(.never)
+                                }
+                                .padding()
+                                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                                .transition(.move(edge: .top).combined(with: .opacity))
+                            }
+
+                            HStack {
+                                Image(systemName: "lock")
+                                    .foregroundStyle(.secondary)
+                                    .frame(width: 20)
+                                SecureField("Password", text: $password)
+                            }
+                            .padding()
+                            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                        }
+                        .animation(.spring(duration: 0.3), value: isRegistering)
+
+                        if let error {
+                            HStack(spacing: 6) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                Text(error)
+                            }
+                            .font(.caption)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(.red.opacity(0.75), in: RoundedRectangle(cornerRadius: 8))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+
+                        Button {
+                            Task { await submit() }
+                        } label: {
+                            HStack {
+                                if isLoading {
+                                    ProgressView().tint(.white)
+                                }
+                                Text(isLoading ? "Please wait…" : (isRegistering ? "Create Account" : "Sign In"))
+                                    .fontWeight(.semibold)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.teal, in: RoundedRectangle(cornerRadius: 12))
+                            .foregroundStyle(.white)
+                        }
+                        .disabled(isLoading)
+
+                        Button {
+                            withAnimation(.spring(duration: 0.3)) {
+                                isRegistering.toggle()
+                                error = nil
+                            }
+                        } label: {
+                            Text(isRegistering ? "Already have an account? **Sign in**" : "New here? **Create account**")
+                                .font(.subheadline)
+                                .foregroundStyle(.white.opacity(0.85))
+                        }
+                        .padding(.top, 4)
+                    }
+                    .padding(24)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 40)
                 }
             }
-            .navigationTitle("BirdMap")
         }
     }
 
@@ -52,14 +136,14 @@ struct LoginView: View {
         isLoading = true
         error = nil
         do {
-            let token: String
+            let resp: APIClient.AuthResponse
             if isRegistering {
-                token = try await APIClient.shared.register(email: email, username: username, password: password)
-                env.username = username
+                resp = try await APIClient.shared.register(email: email, username: username, password: password)
             } else {
-                token = try await APIClient.shared.login(email: email, password: password)
+                resp = try await APIClient.shared.login(email: email, password: password)
             }
-            env.token = token
+            env.username = resp.username
+            env.token = resp.access_token
         } catch {
             self.error = error.localizedDescription
         }

@@ -6,16 +6,21 @@ struct BirdMapApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if env.token == nil {
-                LoginView()
-                    .environmentObject(env)
-            } else {
-                ContentView()
-                    .environmentObject(env)
-                    .task {
-                        await ModelManager.shared.checkForUpdate()
-                        await UploadQueue.shared.flushIfNeeded()
-                    }
+            Group {
+                if env.token == nil {
+                    LoginView()
+                } else {
+                    ContentView()
+                        .task {
+                            await ModelManager.shared.checkForUpdate()
+                            await UploadQueue.shared.flushIfNeeded()
+                        }
+                }
+            }
+            .environmentObject(env)
+            .task {
+                // Wire 401 handler to the live env instance on first launch
+                APIClient.shared.environment = env
             }
         }
     }

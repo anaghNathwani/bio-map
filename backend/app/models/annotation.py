@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import String, DateTime, ForeignKey, Float, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
@@ -15,7 +15,7 @@ class Annotation(Base):
     confidence: Mapped[float] = mapped_column(Float, default=1.0)  # annotator self-rating 0-1
     behavior: Mapped[str] = mapped_column(String(255), nullable=True)
     age_plumage: Mapped[str] = mapped_column(String(100), nullable=True)  # e.g. "adult", "juvenile"
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     sighting: Mapped["Sighting"] = relationship(back_populates="annotations")  # noqa: F821
     user: Mapped["User"] = relationship(back_populates="annotations")  # noqa: F821
@@ -29,5 +29,5 @@ class ModelVersion(Base):
     s3_key: Mapped[str] = mapped_column(String(1024))
     num_classes: Mapped[int] = mapped_column(Integer)
     accuracy: Mapped[float] = mapped_column(Float, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     is_active: Mapped[bool] = mapped_column(default=True)

@@ -1,11 +1,14 @@
+import asyncio
+import logging
 import uuid
-from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from typing import Optional, Annotated
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from geoalchemy2.functions import ST_MakePoint, ST_SetSRID, ST_Within, ST_MakeEnvelope
 from pydantic import BaseModel
 
+from app.config import settings
 from app.database import get_db
 from app.models.sighting import Sighting
 from app.models.annotation import Annotation
@@ -14,6 +17,9 @@ from app.api.deps import current_user
 from app.services.storage import upload_photo
 
 router = APIRouter(prefix="/sightings", tags=["sightings"])
+logger = logging.getLogger(__name__)
+
+ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/heic", "image/heif"}
 
 
 class AnnotationOut(BaseModel):
@@ -46,15 +52,22 @@ class SightingOut(BaseModel):
 
 @router.post("", status_code=201)
 async def create_sighting(
-    latitude: float = Form(...),
-    longitude: float = Form(...),
-    notes: Optional[str] = Form(None),
+    latitude: Annotated[float, Form(ge=-90, le=90)],
+    longitude: Annotated[float, Form(ge=-180, le=180)],
+    notes: Annotated[Optional[str], Form(max_length=2000)] = None,
     photo: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(current_user),
 ):
-    data = await photo.read()
-    photo_url, thumbnail_url = upload_photo(data, photo.content_type or "image/jpeg")
+    content_type = photo.content_type or "image/jpeg"
+    if content_type not in ALLOWED_CONTENT_TYPES:
+        raise HTTPException(status_code=415, detail=f"Unsupported image type: {content_type}")
+
+    data = await photo.read(settings.max_photo_bytes + 1)
+    if len(data) > settings.max_photo_bytes:
+        raise HTTPException(status_code=413, detail=f"Photo exceeds {settings.max_photo_bytes // (1024*1024)} MB limit")
+
+    photo_url, thumbnail_url = await asyncio.to_thread(upload_photo, data, content_type)
 
     sighting = Sighting(
         user_id=user.id,
@@ -68,41 +81,72 @@ async def create_sighting(
     db.add(sighting)
     await db.commit()
     await db.refresh(sighting)
+    logger.info("Sighting created: %s by user %s", sighting.id, user.id)
     return {"id": str(sighting.id), "photo_url": photo_url, "thumbnail_url": thumbnail_url}
 
 
 @router.get("")
 async def list_sightings(
-    min_lat: Optional[float] = None,
-    max_lat: Optional[float] = None,
-    min_lng: Optional[float] = None,
-    max_lng: Optional[float] = None,
-    limit: int = 200,
+    min_lat: Optional[float] = Query(None, ge=-90, le=90),
+    max_lat: Optional[float] = Query(None, ge=-90, le=90),
+    min_lng: Optional[float] = Query(None, ge=-180, le=180),
+    max_lng: Optional[float] = Query(None, ge=-180, le=180),
+    limit: int = Query(200, ge=1, le=500),
     db: AsyncSession = Depends(get_db),
 ):
-    q = select(Sighting)
+    count_sq = (
+        select(Annotation.sighting_id, func.count().label("annotation_count"))
+        .group_by(Annotation.sighting_id)
+        .subquery()
+    )
+
+    species_counts_sq = (
+        select(
+            Annotation.sighting_id,
+            Annotation.species,
+            func.count().label("cnt"),
+        )
+        .group_by(Annotation.sighting_id, Annotation.species)
+        .subquery()
+    )
+
+    ranked_sq = (
+        select(
+            species_counts_sq.c.sighting_id,
+            species_counts_sq.c.species,
+            func.rank().over(
+                partition_by=species_counts_sq.c.sighting_id,
+                order_by=species_counts_sq.c.cnt.desc(),
+            ).label("rnk"),
+        )
+        .subquery()
+    )
+    top_sq = (
+        select(ranked_sq.c.sighting_id, ranked_sq.c.species)
+        .where(ranked_sq.c.rnk == 1)
+        .subquery()
+    )
+
+    q = (
+        select(
+            Sighting,
+            func.coalesce(count_sq.c.annotation_count, 0).label("annotation_count"),
+            top_sq.c.species.label("top_species"),
+        )
+        .outerjoin(count_sq, count_sq.c.sighting_id == Sighting.id)
+        .outerjoin(top_sq, top_sq.c.sighting_id == Sighting.id)
+    )
+
     if all(v is not None for v in [min_lat, max_lat, min_lng, max_lng]):
         envelope = ST_MakeEnvelope(min_lng, min_lat, max_lng, max_lat, 4326)
         q = q.where(ST_Within(Sighting.location, envelope))
+
     q = q.order_by(Sighting.created_at.desc()).limit(limit)
     result = await db.execute(q)
-    sightings = result.scalars().all()
+    rows = result.all()
 
-    out = []
-    for s in sightings:
-        ann_result = await db.execute(
-            select(func.count()).where(Annotation.sighting_id == s.id)
-        )
-        count = ann_result.scalar()
-        top = await db.execute(
-            select(Annotation.species, func.count(Annotation.species).label("n"))
-            .where(Annotation.sighting_id == s.id)
-            .group_by(Annotation.species)
-            .order_by(func.count(Annotation.species).desc())
-            .limit(1)
-        )
-        top_row = top.first()
-        out.append({
+    return [
+        {
             "id": str(s.id),
             "latitude": s.latitude,
             "longitude": s.longitude,
@@ -111,10 +155,11 @@ async def list_sightings(
             "notes": s.notes,
             "ai_species_suggestion": s.ai_species_suggestion,
             "ai_confidence": s.ai_confidence,
-            "annotation_count": count,
-            "top_species": top_row[0] if top_row else None,
-        })
-    return out
+            "annotation_count": annotation_count,
+            "top_species": top_species,
+        }
+        for s, annotation_count, top_species in rows
+    ]
 
 
 @router.get("/{sighting_id}")
