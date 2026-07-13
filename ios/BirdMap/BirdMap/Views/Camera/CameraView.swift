@@ -211,7 +211,7 @@ struct LiveCameraView: UIViewControllerRepresentable {
         init(vm: CameraViewModel) { self.vm = vm }
 
         func captured(_ image: UIImage) {
-            vm.setImage(image)
+            Task { @MainActor in vm.setImage(image) }
         }
     }
 }

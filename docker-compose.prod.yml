@@ -1,0 +1,54 @@
+version: "3.9"
+
+# Production compose — runs on a single VPS alongside Fly.io-hosted API.
+# Use this if you want to self-host everything on one machine instead of Fly.
+# For Fly.io deployment, use fly.toml + managed Postgres + Tigris for S3.
+
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    restart: always
+    environment:
+      POSTGRES_DB: birdmap
+      POSTGRES_USER: birdmap
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U birdmap"]
+      interval: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  api:
+    build:
+      context: ./backend
+      target: production
+    restart: always
+    env_file: ./backend/.env.prod
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2"
+
+volumes:
+  pg_data:
+  minio_data:

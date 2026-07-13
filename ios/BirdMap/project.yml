@@ -1,0 +1,68 @@
+name: BirdMap
+options:
+  bundleIdPrefix: com.birdmap
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "16"
+
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation.git
+    from: 0.9.19
+
+targets:
+  BirdMap:
+    type: application
+    platform: iOS
+    sources:
+      - path: BirdMap
+    info:
+      path: BirdMap/Info.plist
+      properties:
+        API_BASE_URL: $(API_BASE_URL)
+        NSCameraUsageDescription: BirdMap needs camera access to photograph bird sightings.
+        NSLocationWhenInUseUsageDescription: BirdMap attaches your GPS location to each sighting so it can be placed on the map.
+        NSPhotoLibraryUsageDescription: BirdMap can use photos from your library to report sightings.
+        UIBackgroundModes:
+          - fetch
+          - processing
+    entitlements:
+      path: BirdMap/BirdMap.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.birdmap.app
+        SWIFT_VERSION: 5.9
+        DEVELOPMENT_TEAM: ""
+        CODE_SIGN_STYLE: Automatic
+    dependencies:
+      - package: ZIPFoundation
+    settings:
+      configs:
+        Debug:
+          API_BASE_URL: http://localhost:8000
+        Release:
+          API_BASE_URL: https://birdmap-api.fly.dev
+
+schemes:
+  BirdMap:
+    build:
+      targets:
+        BirdMap: all
+    run:
+      config: Debug
+      preActions:
+        - name: Start local backend
+          settingsTarget: BirdMap
+          script: |
+            # Start Docker Compose stack in the background if not already up
+            REPO="$SRCROOT/../../.."
+            docker compose -f "$REPO/docker-compose.yml" up -d --remove-orphans 2>/dev/null || true
+
+            # Wait up to 60 s for the API health endpoint
+            for i in $(seq 1 60); do
+              curl -sf http://localhost:8000/health > /dev/null 2>&1 && exit 0
+              sleep 1
+            done
+            echo "Warning: backend did not become healthy in 60s" >&2
+    archive:
+      config: Release
