@@ -55,7 +55,7 @@ schemes:
           settingsTarget: BirdMap
           script: |
             # Start Docker Compose stack in the background if not already up
-            REPO="$SRCROOT/../../.."
+            REPO="$SRCROOT/../.."
             docker compose -f "$REPO/docker-compose.yml" up -d --remove-orphans 2>/dev/null || true
 
             # Wait up to 60 s for the API health endpoint

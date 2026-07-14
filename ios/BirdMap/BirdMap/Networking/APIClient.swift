@@ -1,8 +1,15 @@
 import Foundation
 
-// Shared session configured for battery efficiency:
-// - waitsForConnectivity avoids repeated failed attempts when offline
-// - allows the OS to coalesce requests at opportunistic moments
+// Foreground API requests: short timeout so errors surface immediately.
+private let foregroundSession: URLSession = {
+    let config = URLSessionConfiguration.default
+    config.timeoutIntervalForRequest = 15
+    config.timeoutIntervalForResource = 30
+    return URLSession(configuration: config)
+}()
+
+// Background uploads/downloads: waits for connectivity so field sightings
+// don't fail when the user briefly loses signal.
 private let batteryEfficientSession: URLSession = {
     let config = URLSessionConfiguration.default
     config.waitsForConnectivity = true
@@ -68,7 +75,7 @@ final class APIClient {
     func register(email: String, username: String, password: String) async throws -> AuthResponse {
         let body = try JSONEncoder().encode(["email": email, "username": username, "password": password])
         let req = try request("/auth/register", method: "POST", body: body)
-        let (data, response) = try await batteryEfficientSession.data(for: req)
+        let (data, response) = try await foregroundSession.data(for: req)
         try checkStatus(response)
         return try JSONDecoder().decode(AuthResponse.self, from: data)
     }
@@ -76,7 +83,7 @@ final class APIClient {
     func login(email: String, password: String) async throws -> AuthResponse {
         let body = try JSONEncoder().encode(["email": email, "password": password])
         let req = try request("/auth/login", method: "POST", body: body)
-        let (data, response) = try await batteryEfficientSession.data(for: req)
+        let (data, response) = try await foregroundSession.data(for: req)
         try checkStatus(response)
         return try JSONDecoder().decode(AuthResponse.self, from: data)
     }
@@ -88,13 +95,13 @@ final class APIClient {
         if let b = bbox {
             path += "&min_lat=\(b.minLat)&max_lat=\(b.maxLat)&min_lng=\(b.minLng)&max_lng=\(b.maxLng)"
         }
-        let (data, response) = try await batteryEfficientSession.data(for: try request(path))
+        let (data, response) = try await foregroundSession.data(for: try request(path))
         try checkStatus(response)
         return try JSONDecoder().decode([Sighting].self, from: data)
     }
 
     func sightingDetail(id: UUID) async throws -> SightingDetail {
-        let (data, response) = try await batteryEfficientSession.data(for: try request("/sightings/\(id)"))
+        let (data, response) = try await foregroundSession.data(for: try request("/sightings/\(id)"))
         try checkStatus(response)
         return try JSONDecoder().decode(SightingDetail.self, from: data)
     }
@@ -140,14 +147,14 @@ final class APIClient {
         }
         let body = try JSONEncoder().encode(Body(species: species, confidence: confidence, behavior: behavior, age_plumage: agePlumage))
         let req = try request("/sightings/\(sightingID)/annotations", method: "POST", body: body)
-        let (_, response) = try await batteryEfficientSession.data(for: req)
+        let (_, response) = try await foregroundSession.data(for: req)
         try checkStatus(response)
     }
 
     // MARK: - Leaderboard
 
     func leaderboard() async throws -> [LeaderboardEntry] {
-        let (data, response) = try await batteryEfficientSession.data(for: try request("/leaderboard"))
+        let (data, response) = try await foregroundSession.data(for: try request("/leaderboard"))
         try checkStatus(response)
         return try JSONDecoder().decode([LeaderboardEntry].self, from: data)
     }
@@ -155,13 +162,13 @@ final class APIClient {
     // MARK: - Model
 
     func modelVersion() async throws -> ModelVersionInfo {
-        let (data, response) = try await batteryEfficientSession.data(for: try request("/model/version"))
+        let (data, response) = try await foregroundSession.data(for: try request("/model/version"))
         try checkStatus(response)
         return try JSONDecoder().decode(ModelVersionInfo.self, from: data)
     }
 
     func modelDownloadURL() async throws -> String {
-        let (data, response) = try await batteryEfficientSession.data(for: try request("/model/download"))
+        let (data, response) = try await foregroundSession.data(for: try request("/model/download"))
         try checkStatus(response)
         let resp = try JSONDecoder().decode([String: String].self, from: data)
         guard let url = resp["url"] else { throw APIError.missingField("url") }
