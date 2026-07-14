@@ -29,10 +29,16 @@ def ensure_buckets() -> None:
 
 def upload_photo(data: bytes, content_type: str = "image/jpeg") -> tuple[str, str]:
     """Upload original + thumbnail, return (photo_url, thumbnail_url)."""
+    try:
+        img = Image.open(io.BytesIO(data))
+        img.verify()  # raises if corrupt
+        img = Image.open(io.BytesIO(data))  # reopen after verify (verify closes stream)
+    except Exception as e:
+        raise ValueError(f"Cannot decode image: {e}") from e
+
     key = f"sightings/{uuid.uuid4()}.jpg"
     s3.put_object(Bucket=settings.s3_bucket, Key=key, Body=data, ContentType=content_type)
 
-    img = Image.open(io.BytesIO(data))
     img.thumbnail((400, 400))
     thumb_buf = io.BytesIO()
     img.save(thumb_buf, format="JPEG", quality=75)

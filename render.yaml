@@ -3,7 +3,7 @@ services:
     name: birdmap-api
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
-    dockerCommand: "sh -c 'alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2'"
+    dockerCommand: "sh -c 'alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2 --timeout-keep-alive 30'"
     plan: free
     region: oregon
     healthCheckPath: /health

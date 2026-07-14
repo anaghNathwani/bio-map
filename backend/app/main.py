@@ -4,12 +4,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from sqlalchemy import text
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
 from app.api import auth, sightings, annotations, leaderboard, model
 from app.config import settings
+from app.database import engine
 from app.services.storage import ensure_buckets
 # Models imported here so they exist in the process even though Alembic
 # (not create_all) manages the schema.
@@ -54,5 +56,11 @@ app.include_router(model.router)
 
 
 @app.get("/health")
-def health():
-    return {"status": "ok"}
+async def health():
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+        return {"status": "ok"}
+    except Exception as e:
+        logger.error("Health check failed: %s", e)
+        return JSONResponse(status_code=503, content={"status": "degraded", "detail": "database unreachable"})

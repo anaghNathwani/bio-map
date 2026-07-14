@@ -55,14 +55,13 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
             return
         }
 
-        // Use last known location; fall back to 0,0 so the sighting isn't lost.
-        // The server stores whatever coordinates we send, so a missing GPS fix
-        // results in a pin at the origin rather than a silently dropped sighting.
-        let latitude = lastLocation?.coordinate.latitude ?? 0
-        let longitude = lastLocation?.coordinate.longitude ?? 0
-        if lastLocation == nil {
-            error = "GPS fix unavailable — sighting will be saved without exact location."
+        guard let location = lastLocation else {
+            error = "Waiting for GPS fix — move to an area with clear sky and try again."
+            isUploading = false
+            return
         }
+        let latitude = location.coordinate.latitude
+        let longitude = location.coordinate.longitude
 
         isUploading = true
         do {

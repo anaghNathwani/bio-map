@@ -31,7 +31,7 @@ def _require_model_secret(x_model_secret: str = Header(..., alias="X-Model-Secre
 async def model_version(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(ModelVersion)
-        .where(ModelVersion.is_active == True)  # noqa: E712
+        .where(ModelVersion.is_active .is_(True))
         .order_by(ModelVersion.created_at.desc())
         .limit(1)
     )
@@ -50,7 +50,7 @@ async def model_version(db: AsyncSession = Depends(get_db)):
 async def model_download(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(ModelVersion)
-        .where(ModelVersion.is_active == True)  # noqa: E712
+        .where(ModelVersion.is_active .is_(True))
         .order_by(ModelVersion.created_at.desc())
         .limit(1)
     )

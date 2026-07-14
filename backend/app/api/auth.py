@@ -2,6 +2,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel, EmailStr, field_validator
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -66,7 +67,11 @@ async def register(request: Request, body: RegisterRequest, db: AsyncSession = D
         hashed_password=hash_password(body.password),
     )
     db.add(user)
-    await db.commit()
+    try:
+        await db.commit()
+    except IntegrityError:
+        await db.rollback()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email or username already taken")
     await db.refresh(user)
     logger.info("New user registered: %s", body.email)
     return TokenResponse(

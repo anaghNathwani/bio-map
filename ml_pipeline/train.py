@@ -56,9 +56,16 @@ class BirdDataset(Dataset):
 
     def __getitem__(self, idx):
         url, label = self.samples[idx]
-        resp = requests.get(url, timeout=30)
-        img = Image.open(io.BytesIO(resp.content)).convert("RGB")
-        return self.transform(img), label
+        try:
+            resp = requests.get(url, timeout=30)
+            resp.raise_for_status()
+            img = Image.open(io.BytesIO(resp.content)).convert("RGB")
+            return self.transform(img), label
+        except Exception as e:
+            print(f"[BirdDataset] Skipping {url}: {e}")
+            # Return a blank image so the DataLoader doesn't crash the epoch
+            blank = Image.new("RGB", (224, 224))
+            return self.transform(blank), label
 
 
 def fetch_training_data(api_url: str, token: str, min_annotations: int):
@@ -185,8 +192,12 @@ def upload_and_register(model_path: str, version: str, class_names: list[str],
     s3.upload_fileobj(zip_buf, bucket, s3_key)
     print(f"Uploaded model to s3://{bucket}/{s3_key}")
 
-    # Register in DB via API
-    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+    # Register in DB via API — requires X-Model-Secret header
+    model_secret = os.environ.get("MODEL_REGISTER_SECRET", "")
+    headers = {
+        "Content-Type": "application/json",
+        "X-Model-Secret": model_secret,
+    }
     resp = requests.post(f"{api_url}/model/register", json={
         "version": version,
         "s3_key": s3_key,
@@ -205,8 +216,8 @@ def main():
     parser.add_argument("--min-annotations", type=int, default=10)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--s3-endpoint", default="http://localhost:9000")
-    parser.add_argument("--s3-key-id", default="minioadmin")
-    parser.add_argument("--s3-secret", default="minioadmin123")
+    parser.add_argument("--s3-key-id", default=os.environ.get("S3_ACCESS_KEY", ""))
+    parser.add_argument("--s3-secret", default=os.environ.get("S3_SECRET_KEY", ""))
     parser.add_argument("--bucket", default="birdmap-models")
     args = parser.parse_args()
 

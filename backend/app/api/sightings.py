@@ -2,11 +2,13 @@ import asyncio
 import logging
 import uuid
 from typing import Optional, Annotated
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File, Form, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from geoalchemy2.functions import ST_MakePoint, ST_SetSRID, ST_Within, ST_MakeEnvelope
 from pydantic import BaseModel
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.config import settings
 from app.database import get_db
@@ -17,6 +19,7 @@ from app.api.deps import current_user
 from app.services.storage import upload_photo
 
 router = APIRouter(prefix="/sightings", tags=["sightings"])
+limiter = Limiter(key_func=get_remote_address)
 logger = logging.getLogger(__name__)
 
 ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/heic", "image/heif"}
@@ -67,7 +70,13 @@ async def create_sighting(
     if len(data) > settings.max_photo_bytes:
         raise HTTPException(status_code=413, detail=f"Photo exceeds {settings.max_photo_bytes // (1024*1024)} MB limit")
 
-    photo_url, thumbnail_url = await asyncio.to_thread(upload_photo, data, content_type)
+    try:
+        photo_url, thumbnail_url = await asyncio.to_thread(upload_photo, data, content_type)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=f"Invalid image: {e}")
+    except Exception as e:
+        logger.error("Photo upload failed: %s", e)
+        raise HTTPException(status_code=502, detail="Photo storage unavailable, please try again")
 
     sighting = Sighting(
         user_id=user.id,
@@ -86,7 +95,9 @@ async def create_sighting(
 
 
 @router.get("")
+@limiter.limit("60/minute")
 async def list_sightings(
+    request: Request,
     min_lat: Optional[float] = Query(None, ge=-90, le=90),
     max_lat: Optional[float] = Query(None, ge=-90, le=90),
     min_lng: Optional[float] = Query(None, ge=-180, le=180),
