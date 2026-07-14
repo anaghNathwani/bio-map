@@ -9,6 +9,8 @@ struct LoginView: View {
     @State private var isLoading = false
     @State private var error: String?
 
+    private let screen = ScreenSize.current
+
     var body: some View {
         ZStack {
             LinearGradient(
@@ -21,15 +23,16 @@ struct LoginView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     VStack(spacing: 12) {
+                        let iconSize = screen.scale(88, compact: 72, large: 100)
                         ZStack {
                             Circle()
                                 .fill(.white.opacity(0.15))
-                                .frame(width: 100, height: 100)
+                                .frame(width: iconSize, height: iconSize)
                             Image(systemName: "bird.fill")
-                                .font(.system(size: 48))
+                                .font(.system(size: iconSize * 0.5))
                                 .foregroundStyle(.white)
                         }
-                        .padding(.top, 60)
+                        .padding(.top, screen.scale(48, compact: 28, large: 60))
 
                         Text("BirdMap")
                             .font(.largeTitle.bold())
@@ -40,7 +43,7 @@ struct LoginView: View {
                             .foregroundStyle(.white.opacity(0.75))
                             .multilineTextAlignment(.center)
                     }
-                    .padding(.bottom, 40)
+                    .padding(.bottom, screen.scale(32, compact: 20, large: 40))
 
                     VStack(spacing: 16) {
                         VStack(spacing: 12) {

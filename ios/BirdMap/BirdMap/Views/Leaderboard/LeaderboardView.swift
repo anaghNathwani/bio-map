@@ -48,15 +48,16 @@ struct LeaderboardView: View {
     @ViewBuilder
     private var topThreePodium: some View {
         let top = Array(entries.prefix(3))
+        let base = ScreenSize.current.scale(150, compact: 120, large: 165)
         HStack(alignment: .bottom, spacing: 12) {
             if top.count > 1 {
-                podiumCard(entry: top[1], rank: 2, height: 120)
+                podiumCard(entry: top[1], rank: 2, height: base * 0.8)
             }
             if top.count > 0 {
-                podiumCard(entry: top[0], rank: 1, height: 150)
+                podiumCard(entry: top[0], rank: 1, height: base)
             }
             if top.count > 2 {
-                podiumCard(entry: top[2], rank: 3, height: 100)
+                podiumCard(entry: top[2], rank: 3, height: base * 0.67)
             }
         }
         .frame(maxWidth: .infinity)
@@ -65,7 +66,7 @@ struct LeaderboardView: View {
     private func podiumCard(entry: LeaderboardEntry, rank: Int, height: CGFloat) -> some View {
         VStack(spacing: 8) {
             Text(medalEmoji(for: rank - 1))
-                .font(.system(size: rank == 1 ? 36 : 28))
+                .font(.system(size: ScreenSize.current.scale(rank == 1 ? 36 : 28, compact: rank == 1 ? 28 : 22)))
 
             Text(entry.username)
                 .font(rank == 1 ? .headline : .subheadline)

@@ -72,7 +72,7 @@ struct SightingDetailView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 300)
+            .proportionalHeight(0.36, min: 200, max: 380)
             .clipped()
 
             LinearGradient(

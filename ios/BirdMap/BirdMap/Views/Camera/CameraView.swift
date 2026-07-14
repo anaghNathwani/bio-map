@@ -116,11 +116,12 @@ struct CameraView: View {
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ))
-                    .frame(height: 260)
+                    .proportionalHeight(0.34, min: 200, max: 320)
 
                 VStack(spacing: 12) {
+                    let iconSize = ScreenSize.current.scale(56, compact: 44, large: 64)
                     Image(systemName: "bird")
-                        .font(.system(size: 56))
+                        .font(.system(size: iconSize))
                         .foregroundStyle(Color.teal.opacity(0.6))
                     Text("No Photo Yet")
                         .font(.title3.bold())

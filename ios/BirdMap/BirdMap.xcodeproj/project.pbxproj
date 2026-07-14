@@ -15,6 +15,7 @@
 		4705061240F1E707E99FFEF3 /* BirdMapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB06EDE7B326433395E11D6 /* BirdMapApp.swift */; };
 		49E95791554A85BB6EAA31FC /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9625A2BA7ADB7FE18A1AAF1 /* AppEnvironment.swift */; };
 		4B3E301B790C238F757E9EA5 /* UploadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60DD2BEE7C4B22BEF60005A /* UploadQueue.swift */; };
+		4BA46034FB025D3860AA377C /* AdaptiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F3F8CA4FE49B74E063B25E /* AdaptiveLayout.swift */; };
 		7005C71718E24FFB3464E205 /* BirdClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1984A64CBE5025180837531 /* BirdClassifier.swift */; };
 		74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5D5F1484B6AE767133B8F9 /* AnnotationView.swift */; };
 		81079CEBBD777E69C31F0324 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A2DE291EF46F314C4B162F /* KeychainHelper.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		10F3F8CA4FE49B74E063B25E /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
 		2EB06EDE7B326433395E11D6 /* BirdMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdMapApp.swift; sourceTree = "<group>"; };
 		56E16CDEB102FDD8B1E2552A /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		689E1E37467EB1CFA0C7C2CD /* Sighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sighting.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 		854F0E1B4FF6657B9BA1F39B /* App */ = {
 			isa = PBXGroup;
 			children = (
+				10F3F8CA4FE49B74E063B25E /* AdaptiveLayout.swift */,
 				B9625A2BA7ADB7FE18A1AAF1 /* AppEnvironment.swift */,
 				2EB06EDE7B326433395E11D6 /* BirdMapApp.swift */,
 				F0937B2AAFE2AEF5216210CB /* ContentView.swift */,
@@ -242,6 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A31578A8052DCF77C0164B39 /* APIClient.swift in Sources */,
+				4BA46034FB025D3860AA377C /* AdaptiveLayout.swift in Sources */,
 				74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */,
 				49E95791554A85BB6EAA31FC /* AppEnvironment.swift in Sources */,
 				7005C71718E24FFB3464E205 /* BirdClassifier.swift in Sources */,
