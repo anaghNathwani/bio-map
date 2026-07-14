@@ -9,12 +9,19 @@ s3 = boto3.client(
     endpoint_url=settings.s3_endpoint,
     aws_access_key_id=settings.s3_access_key,
     aws_secret_access_key=settings.s3_secret_key,
+    # Supabase Storage and MinIO both work without a real AWS region
+    region_name="us-east-1",
 )
 
 
 def ensure_buckets() -> None:
     """Create required buckets if they don't exist. Called once at app startup."""
-    existing = {b["Name"] for b in s3.list_buckets()["Buckets"]}
+    try:
+        existing = {b["Name"] for b in s3.list_buckets()["Buckets"]}
+    except Exception:
+        # Supabase Storage doesn't support ListBuckets — skip the check.
+        # Buckets are created manually in the Supabase dashboard.
+        return
     for bucket in (settings.s3_bucket, settings.model_bucket):
         if bucket not in existing:
             s3.create_bucket(Bucket=bucket)

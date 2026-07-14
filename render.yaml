@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: birdmap-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerCommand: "sh -c 'alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2'"
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_ACCESS_KEY
+        sync: false
+      - key: S3_SECRET_KEY
+        sync: false
+      - key: S3_BUCKET
+        value: birdmap-photos
+      - key: MODEL_BUCKET
+        value: birdmap-models
+      - key: PUBLIC_S3_URL
+        sync: false
+      - key: MODEL_REGISTER_SECRET
+        sync: false
+      - key: CORS_ORIGINS
+        value: "*"
