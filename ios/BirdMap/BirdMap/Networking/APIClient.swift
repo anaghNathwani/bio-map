@@ -174,4 +174,88 @@ final class APIClient {
         guard let url = resp["url"] else { throw APIError.missingField("url") }
         return url
     }
+
+    // MARK: - Vision (Google Cloud)
+
+    struct VisionCandidate: Decodable {
+        let species: String
+        let confidence: Double
+    }
+
+    func identifyImage(imageData: Data) async throws -> [VisionCandidate] {
+        let boundary = UUID().uuidString
+        guard let url = URL(string: baseURL + "/vision/identify") else { throw APIError.invalidURL }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        if let token { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        req.httpBody = body
+
+        let (data, response) = try await foregroundSession.data(for: req)
+        try checkStatus(response)
+        struct Resp: Decodable { let candidates: [VisionCandidate] }
+        return (try? JSONDecoder().decode(Resp.self, from: data))?.candidates ?? []
+    }
+
+    // MARK: - Bird Info
+
+    func birdInfo(species: String) async throws -> BirdInfo {
+        let encoded = species.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? species
+        let (data, response) = try await foregroundSession.data(for: try request("/birds/info?species=\(encoded)"))
+        try checkStatus(response)
+        return try JSONDecoder().decode(BirdInfo.self, from: data)
+    }
+
+    // MARK: - Sound Upload
+
+    struct SoundUploadResult: Decodable {
+        let id: String
+        let audioURL: String?
+        let aiSpeciesSuggestion: String?
+        let aiConfidence: Double?
+
+        enum CodingKeys: String, CodingKey {
+            case id
+            case audioURL = "audio_url"
+            case aiSpeciesSuggestion = "ai_species_suggestion"
+            case aiConfidence = "ai_confidence"
+        }
+    }
+
+    func uploadSound(audioData: Data, filename: String, latitude: Double, longitude: Double, notes: String?) async throws -> SoundUploadResult {
+        let boundary = UUID().uuidString
+        guard let url = URL(string: baseURL + "/sounds") else { throw APIError.invalidURL }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        if let token { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+
+        var body = Data()
+        func field(_ name: String, _ value: String) {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8)!)
+            body.append("\(value)\r\n".data(using: .utf8)!)
+        }
+        field("latitude", "\(latitude)")
+        field("longitude", "\(longitude)")
+        if let notes { field("notes", notes) }
+
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"audio\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: audio/m4a\r\n\r\n".data(using: .utf8)!)
+        body.append(audioData)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+
+        req.httpBody = body
+        let (data, response) = try await batteryEfficientSession.data(for: req)
+        try checkStatus(response)
+        return try JSONDecoder().decode(SoundUploadResult.self, from: data)
+    }
 }

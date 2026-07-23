@@ -11,8 +11,10 @@ class Sighting(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), index=True)
-    photo_url: Mapped[str] = mapped_column(String(1024))
+    media_type: Mapped[str] = mapped_column(String(10), default="photo")
+    photo_url: Mapped[str] = mapped_column(String(1024), default="")
     thumbnail_url: Mapped[str] = mapped_column(String(1024), nullable=True)
+    audio_url: Mapped[str] = mapped_column(String(1024), nullable=True)
     location: Mapped[object] = mapped_column(Geometry("POINT", srid=4326))
     latitude: Mapped[float] = mapped_column(Float)
     longitude: Mapped[float] = mapped_column(Float)

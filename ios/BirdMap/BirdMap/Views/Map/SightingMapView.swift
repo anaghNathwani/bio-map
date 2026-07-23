@@ -70,24 +70,27 @@ struct SightingMapView: View {
             ZStack {
                 Circle()
                     .fill(
-                        sighting.annotationCount > 0
-                            ? LinearGradient(colors: [Color.teal, Color.teal.opacity(0.7)], startPoint: .top, endPoint: .bottom)
-                            : LinearGradient(colors: [Color.orange.opacity(0.9), Color.orange.opacity(0.6)], startPoint: .top, endPoint: .bottom)
+                        sighting.isAudio
+                            ? AnyShapeStyle(Color.indigo.gradient)
+                            : sighting.annotationCount > 0
+                                ? AnyShapeStyle(Color.teal.gradient)
+                                : AnyShapeStyle(Color.orange.gradient)
                     )
-                    .frame(width: 36, height: 36)
-                    .shadow(color: .black.opacity(0.25), radius: 4, y: 2)
+                    .frame(width: 38, height: 38)
+                    .shadow(color: .black.opacity(0.22), radius: 5, y: 3)
 
-                Image(systemName: "bird.fill")
+                Image(systemName: sighting.isAudio ? "waveform" : "bird.fill")
                     .foregroundStyle(.white)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
+                    .symbolEffect(.bounce, value: selectedSighting?.id == sighting.id)
 
                 if sighting.annotationCount > 0 {
                     Text("\(sighting.annotationCount)")
-                        .font(.system(size: 9, weight: .bold))
+                        .font(.system(size: 9, weight: .black))
                         .foregroundStyle(.white)
                         .padding(3)
-                        .background(Color.green, in: Circle())
-                        .offset(x: 12, y: -12)
+                        .background(Color.green.gradient, in: Circle())
+                        .offset(x: 13, y: -13)
                 }
             }
         }
@@ -96,17 +99,17 @@ struct SightingMapView: View {
 
     private var countBadge: some View {
         HStack(spacing: 6) {
-            Image(systemName: "bird.fill")
+            Image(systemName: "binoculars.fill")
+                .symbolRenderingMode(.hierarchical)
                 .font(.caption)
             Text("\(vm.sightings.count) sighting\(vm.sightings.count == 1 ? "" : "s") in view")
                 .font(.caption.weight(.medium))
         }
-        .foregroundStyle(.white)
-        .padding(.horizontal, 14)
-        .padding(.vertical, 8)
+        .foregroundStyle(.primary)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 9)
         .background(.ultraThinMaterial, in: Capsule())
-        .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
-        .padding(.bottom, 12)
+        .padding(.bottom, 14)
     }
 }
 

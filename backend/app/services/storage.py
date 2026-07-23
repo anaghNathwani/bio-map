@@ -14,6 +14,9 @@ s3 = boto3.client(
 )
 
 
+SOUNDS_BUCKET = "birdmap-sounds"
+
+
 def ensure_buckets() -> None:
     """Create required buckets if they don't exist. Called once at app startup."""
     try:
@@ -22,7 +25,7 @@ def ensure_buckets() -> None:
         # Supabase Storage doesn't support ListBuckets — skip the check.
         # Buckets are created manually in the Supabase dashboard.
         return
-    for bucket in (settings.s3_bucket, settings.model_bucket):
+    for bucket in (settings.s3_bucket, settings.model_bucket, SOUNDS_BUCKET):
         if bucket not in existing:
             s3.create_bucket(Bucket=bucket)
 
@@ -53,6 +56,15 @@ def upload_photo(data: bytes, content_type: str = "image/jpeg") -> tuple[str, st
     public_base = (settings.public_s3_url or settings.s3_endpoint)
     base = f"{public_base}/{settings.s3_bucket}"
     return f"{base}/{key}", f"{base}/{thumb_key}"
+
+
+def upload_audio(data: bytes, filename: str = "sound.m4a") -> str:
+    """Store audio recording, return public URL."""
+    ext = filename.rsplit(".", 1)[-1] if "." in filename else "m4a"
+    key = f"sounds/{uuid.uuid4()}.{ext}"
+    s3.put_object(Bucket=SOUNDS_BUCKET, Key=key, Body=data, ContentType="audio/mp4")
+    public_base = (settings.public_s3_url or settings.s3_endpoint)
+    return f"{public_base}/{SOUNDS_BUCKET}/{key}"
 
 
 def upload_model(data: bytes, version: str) -> str:

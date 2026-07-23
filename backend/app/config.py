@@ -27,6 +27,12 @@ class Settings(BaseSettings):
     # Maximum photo upload size in bytes (default 10 MB)
     max_photo_bytes: int = 10 * 1024 * 1024
 
+    # Optional integrations (leave blank to disable)
+    google_cloud_api_key: str = ""
+    ebird_api_key: str = ""
+    instagram_user_id: str = ""
+    instagram_access_token: str = ""
+
     model_config = {"env_file": ".env", "protected_namespaces": ()}
 
 

@@ -14,7 +14,11 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             LinearGradient(
-                colors: [Color(hue: 0.48, saturation: 0.6, brightness: 0.35), Color(hue: 0.52, saturation: 0.5, brightness: 0.2)],
+                colors: [
+                    Color(hue: 0.48, saturation: 0.72, brightness: 0.42),
+                    Color(hue: 0.52, saturation: 0.60, brightness: 0.26),
+                    Color(hue: 0.56, saturation: 0.50, brightness: 0.18)
+                ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -22,122 +26,173 @@ struct LoginView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
-                    VStack(spacing: 12) {
-                        let iconSize = screen.scale(88, compact: 72, large: 100)
-                        ZStack {
-                            Circle()
-                                .fill(.white.opacity(0.15))
-                                .frame(width: iconSize, height: iconSize)
-                            Image(systemName: "bird.fill")
-                                .font(.system(size: iconSize * 0.5))
-                                .foregroundStyle(.white)
-                        }
-                        .padding(.top, screen.scale(48, compact: 28, large: 60))
+                    heroSection
+                        .padding(.bottom, screen.scale(32, compact: 20, large: 40))
 
-                        Text("BirdMap")
-                            .font(.largeTitle.bold())
-                            .foregroundStyle(.white)
-
-                        Text("Citizen science, one sighting at a time")
-                            .font(.subheadline)
-                            .foregroundStyle(.white.opacity(0.75))
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.bottom, screen.scale(32, compact: 20, large: 40))
-
-                    VStack(spacing: 16) {
-                        VStack(spacing: 12) {
-                            HStack {
-                                Image(systemName: "envelope")
-                                    .foregroundStyle(.secondary)
-                                    .frame(width: 20)
-                                TextField("Email", text: $email)
-                                    .keyboardType(.emailAddress)
-                                    .autocorrectionDisabled()
-                                    .textInputAutocapitalization(.never)
-                            }
-                            .padding()
-                            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-
-                            if isRegistering {
-                                HStack {
-                                    Image(systemName: "person")
-                                        .foregroundStyle(.secondary)
-                                        .frame(width: 20)
-                                    TextField("Username", text: $username)
-                                        .autocorrectionDisabled()
-                                        .textInputAutocapitalization(.never)
-                                }
-                                .padding()
-                                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-                                .transition(.move(edge: .top).combined(with: .opacity))
-                            }
-
-                            HStack {
-                                Image(systemName: "lock")
-                                    .foregroundStyle(.secondary)
-                                    .frame(width: 20)
-                                SecureField("Password", text: $password)
-                            }
-                            .padding()
-                            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-                        }
-                        .animation(.spring(duration: 0.3), value: isRegistering)
-
-                        if let error {
-                            HStack(spacing: 6) {
-                                Image(systemName: "exclamationmark.triangle.fill")
-                                Text(error)
-                            }
-                            .font(.caption)
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(.red.opacity(0.75), in: RoundedRectangle(cornerRadius: 8))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-
-                        Button {
-                            Task { await submit() }
-                        } label: {
-                            HStack {
-                                if isLoading {
-                                    ProgressView().tint(.white)
-                                }
-                                Text(isLoading ? "Please wait…" : (isRegistering ? "Create Account" : "Sign In"))
-                                    .fontWeight(.semibold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.teal, in: RoundedRectangle(cornerRadius: 12))
-                            .foregroundStyle(.white)
-                        }
-                        .disabled(isLoading)
-
-                        Button {
-                            withAnimation(.spring(duration: 0.3)) {
-                                isRegistering.toggle()
-                                error = nil
-                            }
-                        } label: {
-                            Text(isRegistering ? "Already have an account? **Sign in**" : "New here? **Create account**")
-                                .font(.subheadline)
-                                .foregroundStyle(.white.opacity(0.85))
-                        }
-                        .padding(.top, 4)
-                    }
-                    .padding(24)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 40)
+                    formCard
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 40)
                 }
             }
+            .scrollBounceBehavior(.basedOnSize)
         }
     }
 
+    // MARK: - Hero
+
+    private var heroSection: some View {
+        VStack(spacing: 14) {
+            let iconSize = screen.scale(96, compact: 76, large: 108)
+            ZStack {
+                Circle()
+                    .background(.ultraThinMaterial, in: Circle())
+                    .frame(width: iconSize, height: iconSize)
+                Image(systemName: "bird.fill")
+                    .font(.system(size: iconSize * 0.46, weight: .medium))
+                    .foregroundStyle(.white)
+                    .symbolEffect(.pulse)
+            }
+            .padding(.top, screen.scale(56, compact: 32, large: 68))
+
+            Text("BirdMap")
+                .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                .foregroundStyle(.white)
+
+            Text("Citizen science, one sighting at a time")
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.78))
+                .multilineTextAlignment(.center)
+        }
+    }
+
+    // MARK: - Form card
+
+    private var formCard: some View {
+        VStack(spacing: 16) {
+            fieldsStack
+
+            if let error {
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .symbolRenderingMode(.multicolor)
+                    Text(error)
+                }
+                .font(.caption)
+                .foregroundStyle(.white)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(.red.opacity(0.7), in: RoundedRectangle(cornerRadius: 10))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+
+            submitButton
+            toggleButton
+        }
+        .padding(22)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24))
+    }
+
+    // MARK: - Fields
+
+    private var fieldsStack: some View {
+        VStack(spacing: 10) {
+            glassField {
+                Image(systemName: "envelope.fill")
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(.white.opacity(0.7))
+                    .frame(width: 22)
+                TextField("Email", text: $email)
+                    .keyboardType(.emailAddress)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                    .foregroundStyle(.white)
+                    .tint(.white)
+            }
+
+            if isRegistering {
+                glassField {
+                    Image(systemName: "person.fill")
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(.white.opacity(0.7))
+                        .frame(width: 22)
+                    TextField("Username", text: $username)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .foregroundStyle(.white)
+                        .tint(.white)
+                }
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+
+            glassField {
+                Image(systemName: "lock.fill")
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(.white.opacity(0.7))
+                    .frame(width: 22)
+                SecureField("Password", text: $password)
+                    .foregroundStyle(.white)
+                    .tint(.white)
+            }
+        }
+        .animation(.spring(duration: 0.35), value: isRegistering)
+    }
+
+    @ViewBuilder
+    private func glassField<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        HStack(spacing: 10) { content() }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 13)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+    }
+
+    // MARK: - Buttons
+
+    private var submitButton: some View {
+        Button {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            Task { await submit() }
+        } label: {
+            HStack(spacing: 8) {
+                if isLoading {
+                    ProgressView().tint(.white)
+                } else {
+                    Image(systemName: isRegistering ? "person.badge.plus" : "arrow.right.circle.fill")
+                        .symbolRenderingMode(.hierarchical)
+                }
+                Text(isLoading ? "Please wait…" : (isRegistering ? "Create Account" : "Sign In"))
+                    .fontWeight(.semibold)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .foregroundStyle(.white)
+            .background(Color.teal, in: RoundedRectangle(cornerRadius: 14))
+        }
+        .disabled(isLoading)
+        .animation(.easeInOut(duration: 0.2), value: isLoading)
+    }
+
+    private var toggleButton: some View {
+        Button {
+            withAnimation(.spring(duration: 0.35)) {
+                isRegistering.toggle()
+                error = nil
+            }
+        } label: {
+            Text(isRegistering
+                 ? "Already have an account? **Sign in**"
+                 : "New here? **Create account**")
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.88))
+        }
+        .padding(.top, 2)
+    }
+
+    // MARK: - Logic
+
+    @MainActor
     private func submit() async {
-        isLoading = true
-        error = nil
+        withAnimation(.easeInOut(duration: 0.2)) { isLoading = true; error = nil }
         do {
             let resp: APIClient.AuthResponse
             if isRegistering {
@@ -148,8 +203,8 @@ struct LoginView: View {
             env.username = resp.username
             env.token = resp.access_token
         } catch {
-            self.error = error.localizedDescription
+            withAnimation(.easeInOut(duration: 0.2)) { self.error = error.localizedDescription }
         }
-        isLoading = false
+        withAnimation(.easeInOut(duration: 0.2)) { isLoading = false }
     }
 }

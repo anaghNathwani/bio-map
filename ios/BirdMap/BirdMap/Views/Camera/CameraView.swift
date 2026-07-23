@@ -7,34 +7,46 @@ import UIKit
 struct CameraView: View {
     @StateObject private var vm = CameraViewModel()
     @State private var showPicker = false
+    @State private var showBirdInfo = false
+    @State private var visionCandidates: [APIClient.VisionCandidate] = []
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    if let img = vm.capturedImage {
-                        capturedImageSection(img)
-                    } else {
-                        emptyStateSection
-                    }
-
-                    captureButtons
+        ScrollView {
+            VStack(spacing: 20) {
+                if let img = vm.capturedImage {
+                    capturedImageSection(img)
+                } else {
+                    emptyStateSection
                 }
-                .padding(.top)
-                .padding(.bottom, 32)
+
+                captureButtons
             }
-            .navigationTitle("Report Sighting")
-            .onAppear { vm.startLocationUpdates() }
-            .onDisappear { vm.stopLocationUpdates() }
-            .sheet(isPresented: $showPicker) {
-                PhotoPickerView(onSelected: { vm.setImage($0) })
-            }
-            .alert("Sighting Submitted!", isPresented: $vm.uploadSuccess) {
-                Button("Great!") {}
-            } message: {
-                Text("Your sighting has been added to the map and queued for community annotation.")
+            .padding(.top)
+            .padding(.bottom, 32)
+        }
+        .onAppear { vm.startLocationUpdates() }
+        .onDisappear { vm.stopLocationUpdates() }
+        .sheet(isPresented: $showPicker) {
+            PhotoPickerView(onSelected: { img in
+                vm.setImage(img)
+                Task { await fetchVisionCandidates(img) }
+            })
+        }
+        .sheet(isPresented: $showBirdInfo) {
+            if let species = vm.aiSuggestion?.species {
+                BirdInfoView(species: species)
             }
         }
+        .alert("Sighting Submitted!", isPresented: $vm.uploadSuccess) {
+            Button("Great!") {}
+        } message: {
+            Text("Your sighting has been added to the map and queued for community annotation.")
+        }
+    }
+
+    private func fetchVisionCandidates(_ img: UIImage) async {
+        guard let data = img.jpegData(compressionQuality: 0.7) else { return }
+        visionCandidates = (try? await APIClient.shared.identifyImage(imageData: data)) ?? []
     }
 
     @ViewBuilder
@@ -44,22 +56,51 @@ struct CameraView: View {
                 Image(uiImage: img)
                     .resizable()
                     .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
+                    .clipShape(RoundedRectangle(cornerRadius: 18))
+                    .shadow(color: .black.opacity(0.18), radius: 10, y: 5)
 
                 if let suggestion = vm.aiSuggestion {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 8) {
                         Image(systemName: "sparkles")
+                            .symbolRenderingMode(.multicolor)
                         Text("**\(suggestion.species)**")
-                        Text("· \(Int(suggestion.confidence * 100))% confidence")
-                            .foregroundStyle(.white.opacity(0.8))
+                        Text("· \(Int(suggestion.confidence * 100))%")
+                            .foregroundStyle(.white.opacity(0.75))
+                        Spacer()
+                        Button("Learn More") { showBirdInfo = true }
+                            .font(.caption.weight(.semibold))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.teal.opacity(0.8), in: Capsule())
+                            .foregroundStyle(.white)
                     }
                     .font(.caption)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
-                    .background(.ultraThinMaterial.opacity(0.9), in: Capsule())
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .padding(14)
+                }
+
+                // Google Vision candidates
+                if !visionCandidates.isEmpty {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Label("Google Vision suggestions", systemImage: "eye.fill")
+                            .font(.caption2.bold())
+                            .foregroundStyle(.secondary)
+                        ForEach(visionCandidates.prefix(3), id: \.species) { c in
+                            HStack {
+                                Text(c.species).font(.caption)
+                                Spacer()
+                                Text("\(Int(c.confidence * 100))%")
+                                    .font(.caption.monospacedDigit())
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
                     .padding(12)
+                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal)
                 }
             }
             .padding(.horizontal)
@@ -74,6 +115,7 @@ struct CameraView: View {
                 if let error = vm.error {
                     HStack(spacing: 6) {
                         Image(systemName: "exclamationmark.triangle.fill")
+                            .symbolRenderingMode(.multicolor)
                         Text(error)
                     }
                     .font(.caption)
@@ -85,15 +127,15 @@ struct CameraView: View {
                 Button {
                     Task { await vm.upload() }
                 } label: {
-                    HStack {
+                    HStack(spacing: 8) {
                         if vm.isUploading {
                             ProgressView().tint(.white)
+                        } else {
+                            Image(systemName: "paperplane.fill")
+                                .symbolEffect(.bounce, value: vm.isUploading)
                         }
-                        Label(
-                            vm.isUploading ? "Uploading…" : "Submit Sighting",
-                            systemImage: vm.isUploading ? "clock" : "paperplane.fill"
-                        )
-                        .fontWeight(.semibold)
+                        Text(vm.isUploading ? "Uploading…" : "Submit Sighting")
+                            .fontWeight(.semibold)
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -110,19 +152,20 @@ struct CameraView: View {
     private var emptyStateSection: some View {
         VStack(spacing: 16) {
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 22)
                     .fill(LinearGradient(
-                        colors: [Color.teal.opacity(0.12), Color.teal.opacity(0.04)],
+                        colors: [Color.teal.opacity(0.13), Color.teal.opacity(0.04)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ))
                     .proportionalHeight(0.34, min: 200, max: 320)
 
-                VStack(spacing: 12) {
-                    let iconSize = ScreenSize.current.scale(56, compact: 44, large: 64)
+                VStack(spacing: 14) {
+                    let iconSize = ScreenSize.current.scale(60, compact: 46, large: 68)
                     Image(systemName: "bird")
                         .font(.system(size: iconSize))
-                        .foregroundStyle(Color.teal.opacity(0.6))
+                        .foregroundStyle(Color.teal.opacity(0.65))
+                        .symbolEffect(.pulse)
                     Text("No Photo Yet")
                         .font(.title3.bold())
                         .foregroundStyle(.primary)
@@ -143,19 +186,22 @@ struct CameraView: View {
                 showPicker = true
             } label: {
                 VStack(spacing: 6) {
-                    Image(systemName: "photo.on.rectangle")
+                    Image(systemName: "photo.stack")
                         .font(.title2)
+                        .symbolRenderingMode(.hierarchical)
                     Text("Library")
                         .font(.caption.weight(.medium))
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+                .padding(.vertical, 18)
+                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
             }
             .foregroundStyle(.primary)
 
             NavigationLink {
-                LiveCameraView(vm: vm)
+                LiveCameraView(vm: vm, onVisionResults: { candidates in
+                    visionCandidates = candidates
+                })
             } label: {
                 VStack(spacing: 6) {
                     Image(systemName: "camera.fill")
@@ -164,8 +210,8 @@ struct CameraView: View {
                         .font(.caption.weight(.medium))
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(Color.teal, in: RoundedRectangle(cornerRadius: 14))
+                .padding(.vertical, 18)
+                .background(Color.teal, in: RoundedRectangle(cornerRadius: 16))
                 .foregroundStyle(.white)
             }
         }
@@ -200,8 +246,13 @@ struct PhotoPickerView: UIViewControllerRepresentable {
 
 struct LiveCameraView: UIViewControllerRepresentable {
     var vm: CameraViewModel
+    var onVisionResults: (([APIClient.VisionCandidate]) -> Void)?
 
-    func makeCoordinator() -> Coordinator { Coordinator(vm: vm) }
+    func makeCoordinator() -> Coordinator {
+        let c = Coordinator(vm: vm)
+        c.onVisionResults = onVisionResults
+        return c
+    }
     func makeUIViewController(context: Context) -> LiveCameraVC {
         LiveCameraVC(coordinator: context.coordinator)
     }
@@ -211,8 +262,16 @@ struct LiveCameraView: UIViewControllerRepresentable {
         let vm: CameraViewModel
         init(vm: CameraViewModel) { self.vm = vm }
 
+        var onVisionResults: (([APIClient.VisionCandidate]) -> Void)?
+
         func captured(_ image: UIImage) {
-            Task { @MainActor in vm.setImage(image) }
+            Task { @MainActor in
+                vm.setImage(image)
+                if let data = image.jpegData(compressionQuality: 0.7),
+                   let candidates = try? await APIClient.shared.identifyImage(imageData: data) {
+                    onVisionResults?(candidates)
+                }
+            }
         }
     }
 }
@@ -224,7 +283,7 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
     private let coordinator: LiveCameraView.Coordinator
     private lazy var shutterButton: UIButton = {
         let b = UIButton(type: .system)
-        b.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+        b.setImage(UIImage(systemName: "camera.shutter.button.fill"), for: .normal)
         b.tintColor = .white
         b.contentVerticalAlignment = .fill
         b.contentHorizontalAlignment = .fill
@@ -259,8 +318,8 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
         NSLayoutConstraint.activate([
             shutterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             shutterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            shutterButton.widthAnchor.constraint(equalToConstant: 70),
-            shutterButton.heightAnchor.constraint(equalToConstant: 70),
+            shutterButton.widthAnchor.constraint(equalToConstant: 72),
+            shutterButton.heightAnchor.constraint(equalToConstant: 72),
         ])
 
         DispatchQueue.global(qos: .userInitiated).async { self.session.startRunning() }

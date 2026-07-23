@@ -1,10 +1,15 @@
 import SwiftUI
+import CoreLocation
+import AVKit
 
 struct SightingDetailView: View {
     let sightingID: UUID
     @State private var detail: SightingDetail?
     @State private var isLoading = true
     @State private var showAnnotate = false
+    @State private var showBirdInfo = false
+    @State private var locationName: String?
+    @State private var audioPlayer: AVPlayer?
 
     var body: some View {
         NavigationStack {
@@ -23,7 +28,7 @@ struct SightingDetailView: View {
                     Button {
                         showAnnotate = true
                     } label: {
-                        Label("Annotate", systemImage: "pencil.and.list.clipboard")
+                        Label("Annotate", systemImage: "checklist.unchecked")
                     }
                     .disabled(detail == nil)
                 }
@@ -36,6 +41,11 @@ struct SightingDetailView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showBirdInfo) {
+                if let species = detail?.displaySpecies {
+                    BirdInfoView(species: species)
+                }
+            }
             .task { await loadDetail() }
         }
     }
@@ -46,7 +56,7 @@ struct SightingDetailView: View {
             VStack(spacing: 0) {
                 photoHeader(detail)
 
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 16) {
                     metadataSection(detail)
                     annotationsSection(detail)
                 }
@@ -59,47 +69,75 @@ struct SightingDetailView: View {
     @ViewBuilder
     private func photoHeader(_ detail: SightingDetail) -> some View {
         ZStack(alignment: .bottom) {
-            AsyncImage(url: URL(string: detail.photoURL)) { phase in
-                switch phase {
-                case .success(let img):
-                    img.resizable().scaledToFill()
-                case .failure:
-                    Rectangle().fill(Color(.secondarySystemBackground))
-                        .overlay(Image(systemName: "photo").font(.largeTitle).foregroundStyle(.secondary))
-                default:
-                    Rectangle().fill(Color(.secondarySystemBackground))
-                        .overlay(ProgressView())
+            if detail.isAudio {
+                // Audio sighting — show waveform placeholder + player
+                Rectangle()
+                    .fill(LinearGradient(colors: [Color.indigo.opacity(0.6), Color.purple.opacity(0.4)],
+                                         startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(maxWidth: .infinity, minHeight: 200)
+                    .overlay(
+                        VStack(spacing: 12) {
+                            Image(systemName: "waveform.and.mic")
+                                .font(.system(size: 56))
+                                .foregroundStyle(.white.opacity(0.8))
+                            if let audioURLStr = detail.audioURL, let audioURL = URL(string: audioURLStr) {
+                                Button {
+                                    if audioPlayer == nil {
+                                        audioPlayer = AVPlayer(url: audioURL)
+                                    }
+                                    audioPlayer?.play()
+                                } label: {
+                                    Label("Play Recording", systemImage: "play.circle.fill")
+                                        .font(.headline)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 10)
+                                        .background(.ultraThinMaterial, in: Capsule())
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                        }
+                    )
+            } else {
+                AsyncImage(url: URL(string: detail.photoURL)) { phase in
+                    switch phase {
+                    case .success(let img):
+                        img.resizable().scaledToFill()
+                    case .failure:
+                        Rectangle().fill(Color(.secondarySystemBackground))
+                            .overlay(Image(systemName: "photo.badge.exclamationmark").font(.largeTitle).foregroundStyle(.secondary))
+                    default:
+                        Rectangle().fill(Color(.secondarySystemBackground)).overlay(ProgressView())
+                    }
                 }
+                .frame(maxWidth: .infinity)
+                .frame(minHeight: 220, maxHeight: 380)
+                .clipped()
             }
-            .frame(maxWidth: .infinity)
-            .proportionalHeight(0.36, min: 200, max: 380)
-            .clipped()
 
-            LinearGradient(
-                colors: [.clear, .black.opacity(0.6)],
-                startPoint: .center,
-                endPoint: .bottom
-            )
+            LinearGradient(colors: [.clear, .black.opacity(0.55)], startPoint: .center, endPoint: .bottom)
 
             if let species = detail.aiSpeciesSuggestion {
-                HStack(spacing: 8) {
-                    Image(systemName: "sparkles")
+                HStack(spacing: 10) {
+                    Image(systemName: "sparkles").symbolRenderingMode(.multicolor).font(.subheadline)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("AI Suggestion")
-                            .font(.caption2)
-                            .foregroundStyle(.white.opacity(0.7))
-                        Text(species)
-                            .font(.headline)
-                            .foregroundStyle(.white)
+                        Text(detail.isAudio ? "BirdNET ID" : "AI Suggestion")
+                            .font(.caption2).foregroundStyle(.white.opacity(0.72))
+                        Text(species).font(.headline).foregroundStyle(.white)
                     }
                     Spacer()
                     if let conf = detail.aiConfidence {
-                        Text("\(Int(conf * 100))%")
-                            .font(.title3.bold())
-                            .foregroundStyle(confidenceColor(conf))
+                        Text("\(Int(conf * 100))%").font(.title3.bold()).foregroundStyle(confidenceColor(conf))
                     }
+                    Button("Info") { showBirdInfo = true }
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Color.teal.opacity(0.85), in: Capsule())
+                        .foregroundStyle(.white)
                 }
-                .padding(16)
+                .padding(14)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                .padding(12)
             }
         }
     }
@@ -114,12 +152,13 @@ struct SightingDetailView: View {
             }
 
             HStack(spacing: 6) {
-                Image(systemName: "mappin.circle.fill")
-                    .foregroundStyle(.teal)
-                Text(String(format: "%.4f, %.4f", detail.latitude, detail.longitude))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .monospaced()
+                Image(systemName: "mappin.circle.fill").symbolRenderingMode(.multicolor)
+                if let name = locationName {
+                    Text(name).font(.caption).foregroundStyle(.secondary)
+                } else {
+                    Text(String(format: "%.4f, %.4f", detail.latitude, detail.longitude))
+                        .font(.caption).foregroundStyle(.secondary).monospaced()
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -131,11 +170,12 @@ struct SightingDetailView: View {
     private func annotationsSection(_ detail: SightingDetail) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Community Annotations")
+                Label("Community Annotations", systemImage: "person.3.sequence.fill")
+                    .symbolRenderingMode(.hierarchical)
                     .font(.headline)
                 Spacer()
                 Text("\(detail.annotations.count)")
-                    .font(.caption)
+                    .font(.caption.bold())
                     .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
@@ -143,8 +183,9 @@ struct SightingDetailView: View {
             }
 
             if detail.annotations.isEmpty {
-                VStack(spacing: 8) {
-                    Image(systemName: "person.3")
+                VStack(spacing: 10) {
+                    Image(systemName: "person.3.sequence")
+                        .symbolRenderingMode(.hierarchical)
                         .font(.title2)
                         .foregroundStyle(.secondary)
                     Text("No annotations yet")
@@ -198,7 +239,8 @@ struct SightingDetailView: View {
                     confidenceBadge(ann.confidence)
                 }
                 if let behavior = ann.behavior {
-                    Label(behavior, systemImage: "figure.walk")
+                    Label(behavior, systemImage: "binoculars.fill")
+                        .symbolRenderingMode(.hierarchical)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -232,5 +274,15 @@ struct SightingDetailView: View {
         isLoading = true
         detail = try? await APIClient.shared.sightingDetail(id: sightingID)
         isLoading = false
+        if let d = detail {
+            await reverseGeocode(lat: d.latitude, lng: d.longitude)
+        }
+    }
+
+    private func reverseGeocode(lat: Double, lng: Double) async {
+        let location = CLLocation(latitude: lat, longitude: lng)
+        guard let placemark = try? await CLGeocoder().reverseGeocodeLocation(location).first else { return }
+        let parts = [placemark.locality, placemark.administrativeArea].compactMap { $0 }
+        if !parts.isEmpty { locationName = parts.joined(separator: ", ") }
     }
 }

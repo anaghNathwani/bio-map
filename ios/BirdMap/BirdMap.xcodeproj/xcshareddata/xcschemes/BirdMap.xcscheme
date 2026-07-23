@@ -56,7 +56,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Start local backend"
-               scriptText = "# Start Docker Compose stack in the background if not already up&#10;REPO=&quot;$SRCROOT/../..&quot;&#10;docker compose -f &quot;$REPO/docker-compose.yml&quot; up -d --remove-orphans 2&gt;/dev/null || true&#10;&#10;# Wait up to 60 s for the API health endpoint&#10;for i in $(seq 1 60); do&#10;  curl -sf http://localhost:8000/health &gt; /dev/null 2&gt;&amp;1 &amp;&amp; exit 0&#10;  sleep 1&#10;done&#10;echo &quot;Warning: backend did not become healthy in 60s&quot; &gt;&amp;2&#10;">
+               scriptText = "# Start Docker Compose stack in the background if not already up&#10;REPO=&quot;$SRCROOT/../../..&quot;&#10;open -a Docker 2&gt;/dev/null || true&#10;for i in $(seq 1 30); do&#10;  docker info &gt; /dev/null 2&gt;&amp;1 &amp;&amp; break&#10;  sleep 1&#10;done&#10;docker compose -f &quot;$REPO/docker-compose.yml&quot; up -d --remove-orphans 2&gt;/dev/null || true&#10;&#10;# Wait up to 60 s for the API health endpoint&#10;for i in $(seq 1 60); do&#10;  curl -sf http://localhost:8000/health &gt; /dev/null 2&gt;&amp;1 &amp;&amp; exit 0&#10;  sleep 1&#10;done&#10;echo &quot;Warning: backend did not become healthy in 60s&quot; &gt;&amp;2&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"

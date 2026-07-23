@@ -13,7 +13,7 @@ struct LeaderboardView: View {
                 } else if entries.isEmpty {
                     ContentUnavailableView(
                         "No Entries Yet",
-                        systemImage: "trophy",
+                        systemImage: "trophy.fill",
                         description: Text("Start annotating sightings to appear here!")
                     )
                 } else {
@@ -49,7 +49,7 @@ struct LeaderboardView: View {
     private var topThreePodium: some View {
         let top = Array(entries.prefix(3))
         let base = ScreenSize.current.scale(150, compact: 120, large: 165)
-        HStack(alignment: .bottom, spacing: 12) {
+        HStack(alignment: .bottom, spacing: 10) {
             if top.count > 1 {
                 podiumCard(entry: top[1], rank: 2, height: base * 0.8)
             }
@@ -65,8 +65,10 @@ struct LeaderboardView: View {
 
     private func podiumCard(entry: LeaderboardEntry, rank: Int, height: CGFloat) -> some View {
         VStack(spacing: 8) {
-            Text(medalEmoji(for: rank - 1))
-                .font(.system(size: ScreenSize.current.scale(rank == 1 ? 36 : 28, compact: rank == 1 ? 28 : 22)))
+            Image(systemName: rankSymbol(rank))
+                .font(.system(size: ScreenSize.current.scale(rank == 1 ? 34 : 26, compact: rank == 1 ? 26 : 20)))
+                .symbolRenderingMode(.multicolor)
+                .symbolEffect(.bounce, value: rank)
 
             Text(entry.username)
                 .font(rank == 1 ? .headline : .subheadline)
@@ -86,13 +88,10 @@ struct LeaderboardView: View {
         .padding(.vertical, 16)
         .padding(.horizontal, 8)
         .frame(height: height)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(podiumColor(rank: rank).opacity(0.12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .strokeBorder(podiumColor(rank: rank).opacity(0.3), lineWidth: 1)
-                )
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .strokeBorder(podiumColor(rank: rank).opacity(0.35), lineWidth: 1)
         )
     }
 
@@ -118,7 +117,8 @@ struct LeaderboardView: View {
             Spacer()
 
             HStack(spacing: 4) {
-                Image(systemName: "pencil.and.list.clipboard")
+                Image(systemName: "checklist.checked")
+                    .symbolRenderingMode(.hierarchical)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text("\(entry.annotationCount)")
@@ -134,19 +134,19 @@ struct LeaderboardView: View {
 
     private func podiumColor(rank: Int) -> Color {
         switch rank {
-        case 1: return Color(hue: 0.12, saturation: 0.85, brightness: 0.8) // gold
-        case 2: return Color(hue: 0.6, saturation: 0.1, brightness: 0.65) // silver
-        case 3: return Color(hue: 0.07, saturation: 0.65, brightness: 0.65) // bronze
+        case 1: return Color(hue: 0.12, saturation: 0.85, brightness: 0.8)
+        case 2: return Color(hue: 0.6, saturation: 0.1, brightness: 0.65)
+        case 3: return Color(hue: 0.07, saturation: 0.65, brightness: 0.65)
         default: return .teal
         }
     }
 
-    private func medalEmoji(for index: Int) -> String {
-        switch index {
-        case 0: return "🥇"
-        case 1: return "🥈"
-        case 2: return "🥉"
-        default: return "🐦"
+    private func rankSymbol(_ rank: Int) -> String {
+        switch rank {
+        case 1: return "trophy.fill"
+        case 2: return "medal.fill"
+        case 3: return "medal"
+        default: return "bird.fill"
         }
     }
 

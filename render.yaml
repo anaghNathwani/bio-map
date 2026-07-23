@@ -1,3 +1,11 @@
+databases:
+  - name: birdmap-db
+    plan: free
+    region: oregon
+    postgresMajorVersion: 15
+    databaseName: birdmap
+    user: birdmap
+
 services:
   - type: web
     name: birdmap-api
@@ -9,9 +17,13 @@ services:
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: birdmap-db
+          property: connectionString
       - key: SECRET_KEY
-        sync: false
+        generateValue: true
+      - key: MODEL_REGISTER_SECRET
+        generateValue: true
       - key: S3_ENDPOINT
         sync: false
       - key: S3_ACCESS_KEY
@@ -24,7 +36,13 @@ services:
         value: birdmap-models
       - key: PUBLIC_S3_URL
         sync: false
-      - key: MODEL_REGISTER_SECRET
-        sync: false
       - key: CORS_ORIGINS
         value: "*"
+      - key: GOOGLE_CLOUD_API_KEY
+        sync: false
+      - key: EBIRD_API_KEY
+        sync: false
+      - key: INSTAGRAM_USER_ID
+        value: ""
+      - key: INSTAGRAM_ACCESS_TOKEN
+        value: ""
