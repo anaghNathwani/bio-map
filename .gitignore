@@ -60,3 +60,4 @@ logs/
 .vscode/
 *.swp
 *.swo
+web/node_modules/
