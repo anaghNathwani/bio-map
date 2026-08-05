@@ -1,4 +1,6 @@
 import SwiftUI
+import AuthenticationServices
+import CryptoKit
 
 struct LoginView: View {
     @EnvironmentObject var env: AppEnvironment
@@ -8,6 +10,7 @@ struct LoginView: View {
     @State private var isRegistering = false
     @State private var isLoading = false
     @State private var error: String?
+    @State private var currentNonce: String?
 
     private let screen = ScreenSize.current
 
@@ -88,6 +91,15 @@ struct LoginView: View {
 
             submitButton
             toggleButton
+
+            HStack {
+                Rectangle().fill(.white.opacity(0.25)).frame(height: 1)
+                Text("or").font(.caption).foregroundStyle(.white.opacity(0.6)).padding(.horizontal, 8)
+                Rectangle().fill(.white.opacity(0.25)).frame(height: 1)
+            }
+
+            appleSignInButton
+            googleSignInButton
         }
         .padding(22)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24))
@@ -188,23 +200,116 @@ struct LoginView: View {
         .padding(.top, 2)
     }
 
-    // MARK: - Logic
+    private var appleSignInButton: some View {
+        SignInWithAppleButton(.signIn) { request in
+            let nonce = randomNonceString()
+            currentNonce = nonce
+            request.requestedScopes = [.fullName, .email]
+            request.nonce = sha256(nonce)
+        } onCompletion: { result in
+            handleAppleResult(result)
+        }
+        .signInWithAppleButtonStyle(.white)
+        .frame(height: 50)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .disabled(isLoading)
+    }
 
-    @MainActor
+    private var googleSignInButton: some View {
+        Button {
+            Task { await signInWithGoogle() }
+        } label: {
+            HStack(spacing: 10) {
+                Text("G")
+                    .font(.system(size: 17, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color(red: 0.26, green: 0.52, blue: 0.96))
+                Text("Sign in with Google")
+                    .fontWeight(.semibold)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+            .foregroundStyle(.white)
+        }
+        .disabled(isLoading)
+    }
+
+    // MARK: - Auth logic
+
     private func submit() async {
         withAnimation(.easeInOut(duration: 0.2)) { isLoading = true; error = nil }
+        let trimEmail = email.trimmingCharacters(in: .whitespaces)
+        let trimUser = username.trimmingCharacters(in: .whitespaces)
         do {
-            let resp: APIClient.AuthResponse
             if isRegistering {
-                resp = try await APIClient.shared.register(email: email, username: username, password: password)
+                guard trimUser.count >= 2 else {
+                    withAnimation { error = "Username must be at least 2 characters" }
+                    isLoading = false; return
+                }
+                try await FirebaseService.shared.register(email: trimEmail, username: trimUser, password: password)
+                env.saveUsername(trimUser)
             } else {
-                resp = try await APIClient.shared.login(email: email, password: password)
+                try await FirebaseService.shared.login(email: trimEmail, password: password)
+                if let name = await FirebaseService.shared.fetchUsername() { env.saveUsername(name) }
             }
-            env.username = resp.username
-            env.token = resp.access_token
         } catch {
             withAnimation(.easeInOut(duration: 0.2)) { self.error = error.localizedDescription }
         }
         withAnimation(.easeInOut(duration: 0.2)) { isLoading = false }
     }
+
+    private func handleAppleResult(_ result: Result<ASAuthorization, Error>) {
+        switch result {
+        case .success(let auth):
+            guard
+                let credential = auth.credential as? ASAuthorizationAppleIDCredential,
+                let tokenData = credential.identityToken,
+                let idToken = String(data: tokenData, encoding: .utf8),
+                let nonce = currentNonce
+            else { error = "Apple sign-in failed"; return }
+            let displayName = [credential.fullName?.givenName, credential.fullName?.familyName]
+                .compactMap { $0 }.joined(separator: " ")
+            Task {
+                isLoading = true
+                do {
+                    try await FirebaseService.shared.signInWithApple(
+                        idToken: idToken, nonce: nonce,
+                        displayName: displayName.isEmpty ? nil : displayName
+                    )
+                    if let name = await FirebaseService.shared.fetchUsername() { env.saveUsername(name) }
+                } catch { self.error = error.localizedDescription }
+                isLoading = false
+            }
+        case .failure(let err):
+            if (err as NSError).code != ASAuthorizationError.canceled.rawValue {
+                error = err.localizedDescription
+            }
+        }
+    }
+
+    private func signInWithGoogle() async {
+        isLoading = true
+        do {
+            try await FirebaseService.shared.signInWithGoogle()
+            if let name = await FirebaseService.shared.fetchUsername() { env.saveUsername(name) }
+        } catch { self.error = error.localizedDescription }
+        isLoading = false
+    }
+}
+
+// MARK: - Nonce helpers
+
+private func randomNonceString(length: Int = 32) -> String {
+    let charset = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+    var result = ""
+    var remaining = length
+    while remaining > 0 {
+        (0..<16).map { _ -> UInt8 in var b: UInt8 = 0; _ = SecRandomCopyBytes(kSecRandomDefault, 1, &b); return b }
+            .forEach { b in guard remaining > 0 else { return }; if b < charset.count { result.append(charset[Int(b)]); remaining -= 1 } }
+    }
+    return result
+}
+
+private func sha256(_ input: String) -> String {
+    SHA256.hash(data: Data(input.utf8)).map { String(format: "%02x", $0) }.joined()
 }

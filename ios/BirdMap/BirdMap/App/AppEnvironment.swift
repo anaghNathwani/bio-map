@@ -1,32 +1,34 @@
 import Foundation
 import Combine
+import FirebaseAuth
 
 final class AppEnvironment: ObservableObject {
-    @Published var token: String? {
-        didSet {
-            if let token { KeychainHelper.save(token, for: "auth_token") }
-            else { KeychainHelper.delete(for: "auth_token") }
-        }
-    }
-    @Published var username: String? {
-        didSet {
-            if let username { KeychainHelper.save(username, for: "username") }
-            else { KeychainHelper.delete(for: "username") }
-        }
-    }
+    @Published var user: FirebaseAuth.User?
+    @Published var username: String?
+
+    var isLoggedIn: Bool { user != nil }
+
+    private var handle: AuthStateDidChangeListenerHandle?
 
     init() {
-        token = KeychainHelper.load(for: "auth_token")
-        username = KeychainHelper.load(for: "username")
+        handle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+            self?.user = user
+        }
+        username = UserDefaults.standard.string(forKey: "username")
+    }
+
+    deinit {
+        if let handle { Auth.auth().removeStateDidChangeListener(handle) }
     }
 
     func logout() {
-        token = nil
+        try? Auth.auth().signOut()
         username = nil
+        UserDefaults.standard.removeObject(forKey: "username")
     }
 
-    /// Called when the API returns 401 — token is expired or revoked.
-    func handleUnauthorized() {
-        DispatchQueue.main.async { self.logout() }
+    func saveUsername(_ name: String) {
+        username = name
+        UserDefaults.standard.set(name, forKey: "username")
     }
 }

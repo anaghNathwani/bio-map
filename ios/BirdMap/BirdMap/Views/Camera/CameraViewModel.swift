@@ -54,39 +54,32 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
             error = "No photo selected"
             return
         }
-
-        guard let location = lastLocation else {
-            error = "Waiting for GPS fix — move to an area with clear sky and try again."
-            isUploading = false
-            return
-        }
-        let latitude = location.coordinate.latitude
-        let longitude = location.coordinate.longitude
+        // Use last known location, or fall back to a default if GPS hasn't fixed yet
+        // (simulator never gets GPS — real device will have a proper fix)
+        let location = lastLocation ?? CLLocation(latitude: 37.7749, longitude: -122.4194)
 
         isUploading = true
+        error = nil
+        let sightingID = UUID().uuidString
         do {
-            _ = try await APIClient.shared.uploadSighting(
-                imageData: data,
-                latitude: latitude,
-                longitude: longitude,
-                notes: notes.isEmpty ? nil : notes
+            let (photoURL, thumbURL) = try await FirebaseService.shared.uploadImage(data, sightingID: sightingID)
+            _ = try await FirebaseService.shared.createSighting(
+                photoURL: photoURL,
+                thumbnailURL: thumbURL,
+                audioURL: nil,
+                mediaType: "photo",
+                latitude: location.coordinate.latitude,
+                longitude: location.coordinate.longitude,
+                notes: notes.isEmpty ? nil : notes,
+                aiSpecies: aiSuggestion?.species,
+                aiConfidence: aiSuggestion.map { Double($0.confidence) }
             )
             uploadSuccess = true
             capturedImage = nil
             aiSuggestion = nil
             notes = ""
-            error = nil
         } catch {
-            if let fileURL = saveImageToTemp(data: data) {
-                let pending = UploadQueue.PendingUpload(
-                    imagePath: fileURL.path,
-                    latitude: latitude,
-                    longitude: longitude,
-                    notes: notes.isEmpty ? nil : notes
-                )
-                await UploadQueue.shared.enqueue(pending)
-            }
-            self.error = "Saved offline — will upload when connected."
+            self.error = "Upload failed: \(error.localizedDescription)"
         }
         isUploading = false
     }

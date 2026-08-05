@@ -9,6 +9,12 @@ packages:
   ZIPFoundation:
     url: https://github.com/weichsel/ZIPFoundation.git
     from: 0.9.19
+  FirebaseSDK:
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    from: 11.0.0
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS.git
+    from: 8.0.0
 
 targets:
   BirdMap:
@@ -21,11 +27,15 @@ targets:
       properties:
         API_BASE_URL: $(API_BASE_URL)
         NSCameraUsageDescription: BirdMap needs camera access to photograph bird sightings.
+        NSMicrophoneUsageDescription: BirdMap records bird calls to identify species by sound.
         NSLocationWhenInUseUsageDescription: BirdMap attaches your GPS location to each sighting so it can be placed on the map.
         NSPhotoLibraryUsageDescription: BirdMap can use photos from your library to report sightings.
         UIBackgroundModes:
           - fetch
           - processing
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - com.birdmap.app
     entitlements:
       path: BirdMap/BirdMap.entitlements
       properties:
@@ -34,20 +44,31 @@ targets:
         com.apple.security.device.camera: true
         com.apple.security.personal-information.location: true
         com.apple.security.files.user-selected.read-write: true
+        com.apple.developer.applesignin:
+          - Default
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.birdmap.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.birdmap.BirdMap
         SWIFT_VERSION: 5.9
         DEVELOPMENT_TEAM: ""
         CODE_SIGN_STYLE: Automatic
-    dependencies:
-      - package: ZIPFoundation
-    settings:
       configs:
         Debug:
           API_BASE_URL: http://localhost:8000
         Release:
           API_BASE_URL: https://birdmap-api.fly.dev
+    dependencies:
+      - package: ZIPFoundation
+      - package: FirebaseSDK
+        product: FirebaseAuth
+      - package: FirebaseSDK
+        product: FirebaseFirestore
+      - package: FirebaseSDK
+        product: FirebaseStorage
+      - package: GoogleSignIn
+        product: GoogleSignIn
+      - package: GoogleSignIn
+        product: GoogleSignInSwift
 
 schemes:
   BirdMap:
@@ -60,11 +81,8 @@ schemes:
         - name: Start local backend
           settingsTarget: BirdMap
           script: |
-            # Start Docker Compose stack in the background if not already up
             REPO="$SRCROOT/../.."
             docker compose -f "$REPO/docker-compose.yml" up -d --remove-orphans 2>/dev/null || true
-
-            # Wait up to 60 s for the API health endpoint
             for i in $(seq 1 60); do
               curl -sf http://localhost:8000/health > /dev/null 2>&1 && exit 0
               sleep 1

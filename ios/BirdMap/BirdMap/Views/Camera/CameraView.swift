@@ -8,7 +8,7 @@ struct CameraView: View {
     @StateObject private var vm = CameraViewModel()
     @State private var showPicker = false
     @State private var showBirdInfo = false
-    @State private var visionCandidates: [APIClient.VisionCandidate] = []
+    @State private var visionCandidates: [VisionCandidate] = []
 
     var body: some View {
         ScrollView {
@@ -246,7 +246,7 @@ struct PhotoPickerView: UIViewControllerRepresentable {
 
 struct LiveCameraView: UIViewControllerRepresentable {
     var vm: CameraViewModel
-    var onVisionResults: (([APIClient.VisionCandidate]) -> Void)?
+    var onVisionResults: (([VisionCandidate]) -> Void)?
 
     func makeCoordinator() -> Coordinator {
         let c = Coordinator(vm: vm)
@@ -262,7 +262,7 @@ struct LiveCameraView: UIViewControllerRepresentable {
         let vm: CameraViewModel
         init(vm: CameraViewModel) { self.vm = vm }
 
-        var onVisionResults: (([APIClient.VisionCandidate]) -> Void)?
+        var onVisionResults: (([VisionCandidate]) -> Void)?
 
         func captured(_ image: UIImage) {
             Task { @MainActor in
