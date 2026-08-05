@@ -1,6 +1,5 @@
 import Foundation
 import CoreML
-import ZIPFoundation
 
 final class ModelManager {
     static let shared = ModelManager()
@@ -30,47 +29,5 @@ final class ModelManager {
             print("[ModelManager] Failed to load model: \(error)")
             return nil
         }
-    }
-
-    func checkForUpdate() async {
-        guard let remote = try? await APIClient.shared.modelVersion() else { return }
-        let stored = UserDefaults.standard.string(forKey: versionKey) ?? ""
-        guard remote.version != stored else { return }
-        await downloadModel(version: remote.version)
-    }
-
-    private func downloadModel(version: String) async {
-        guard let urlStr = try? await APIClient.shared.modelDownloadURL(),
-              let url = URL(string: urlStr) else { return }
-
-        // Background URLSession so the download survives app backgrounding
-        let config = URLSessionConfiguration.background(withIdentifier: "com.birdmap.modeldownload.\(version)")
-        config.isDiscretionary = true
-        config.sessionSendsLaunchEvents = false
-        let session = URLSession(configuration: config)
-
-        do {
-            let (tmpURL, _) = try await session.download(from: url)
-            let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let zipDest = docs.appendingPathComponent("BirdClassifier_\(version).mlpackage.zip")
-            try? FileManager.default.removeItem(at: zipDest)
-            try FileManager.default.moveItem(at: tmpURL, to: zipDest)
-
-            try unzip(at: zipDest, to: docs)
-            try? FileManager.default.removeItem(at: zipDest)
-
-            cachedModel = nil
-            cachedModelVersion = nil
-            await BirdClassifier.shared.invalidateCache()
-
-            UserDefaults.standard.set(version, forKey: versionKey)
-            print("[ModelManager] Updated to model version \(version)")
-        } catch {
-            print("[ModelManager] Download failed: \(error)")
-        }
-    }
-
-    private func unzip(at src: URL, to dest: URL) throws {
-        try FileManager.default.unzipItem(at: src, to: dest)
     }
 }

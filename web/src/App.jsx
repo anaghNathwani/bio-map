@@ -3,8 +3,7 @@ import L from 'leaflet'
 import 'leaflet'
 import FilterBar from './components/FilterBar.jsx'
 import SightingPopup from './components/SightingPopup.jsx'
-
-const API = import.meta.env.VITE_API_URL || ''
+import { fetchSightings } from './firebase.js'
 
 const photoIcon = L.divIcon({
   html: `<div style="background:#0d9488;border:2px solid white;border-radius:50%;width:14px;height:14px;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>`,
@@ -87,24 +86,22 @@ export default function App() {
     return () => { map.remove(); leafletRef.current = null }
   }, [])
 
-  // Fetch sightings
-  const fetchSightings = useCallback(async () => {
+  // Fetch sightings from Firestore
+  const loadSightings = useCallback(async () => {
     try {
-      const r = await fetch(`${API}/sightings/public?limit=500`)
-      if (!r.ok) return
-      const data = await r.json()
+      const data = await fetchSightings(500)
       setSightings(data)
       setCount(data.length)
     } catch (e) {
-      console.warn('Fetch failed:', e)
+      console.warn('Firestore fetch failed:', e)
     }
   }, [])
 
   useEffect(() => {
-    fetchSightings()
-    const interval = setInterval(fetchSightings, 30000)
+    loadSightings()
+    const interval = setInterval(loadSightings, 30000)
     return () => clearInterval(interval)
-  }, [fetchSightings])
+  }, [loadSightings])
 
   // Sync markers when filtered list changes
   useEffect(() => {
@@ -114,7 +111,7 @@ export default function App() {
     markersRef.current = {}
 
     filtered.forEach(s => {
-      const icon = s.media_type === 'audio' ? audioIcon : photoIcon
+      const icon = s.mediaType === 'audio' ? audioIcon : photoIcon
       const marker = L.marker([s.latitude, s.longitude], { icon })
       marker.on('click', () => setSelected(s))
       cluster.addLayer(marker)

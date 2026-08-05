@@ -22,13 +22,13 @@ export default function FilterBar({ sightings, onFiltered }) {
     if (species.trim()) {
       const q = species.toLowerCase()
       result = result.filter(s =>
-        (s.ai_species_suggestion || '').toLowerCase().includes(q) ||
-        (s.top_species || '').toLowerCase().includes(q) ||
+        (s.aiSpeciesSuggestion || '').toLowerCase().includes(q) ||
+        (s.topSpecies || '').toLowerCase().includes(q) ||
         (s.notes || '').toLowerCase().includes(q)
       )
     }
     if (type !== 'all') {
-      result = result.filter(s => s.media_type === type)
+      result = result.filter(s => s.mediaType === type)
     }
     onFiltered(result)
   }, [sightings, species, type, onFiltered])

@@ -68,7 +68,6 @@ struct LeaderboardView: View {
             Image(systemName: rankSymbol(rank))
                 .font(.system(size: ScreenSize.current.scale(rank == 1 ? 34 : 26, compact: rank == 1 ? 26 : 20)))
                 .symbolRenderingMode(.multicolor)
-                .symbolEffect(.bounce, value: rank)
 
             Text(entry.username)
                 .font(rank == 1 ? .headline : .subheadline)
@@ -152,7 +151,7 @@ struct LeaderboardView: View {
 
     private func loadLeaderboard() async {
         isLoading = true
-        entries = (try? await APIClient.shared.leaderboard()) ?? []
+        entries = (try? await FirebaseService.shared.fetchLeaderboard()) ?? []
         isLoading = false
     }
 }

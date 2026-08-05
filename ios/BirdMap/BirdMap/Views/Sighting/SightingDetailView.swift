@@ -3,7 +3,7 @@ import CoreLocation
 import AVKit
 
 struct SightingDetailView: View {
-    let sightingID: UUID
+    let sightingID: String
     @State private var detail: SightingDetail?
     @State private var isLoading = true
     @State private var showAnnotate = false
@@ -98,7 +98,7 @@ struct SightingDetailView: View {
                         }
                     )
             } else {
-                AsyncImage(url: URL(string: detail.photoURL)) { phase in
+                AsyncImage(url: detail.photoURL.flatMap { URL(string: $0) }) { phase in
                     switch phase {
                     case .success(let img):
                         img.resizable().scaledToFill()
@@ -272,7 +272,7 @@ struct SightingDetailView: View {
 
     private func loadDetail() async {
         isLoading = true
-        detail = try? await APIClient.shared.sightingDetail(id: sightingID)
+        detail = try? await FirebaseService.shared.fetchSightingDetail(id: sightingID)
         isLoading = false
         if let d = detail {
             await reverseGeocode(lat: d.latitude, lng: d.longitude)

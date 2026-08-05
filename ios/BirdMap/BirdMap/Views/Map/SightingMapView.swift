@@ -5,17 +5,18 @@ import CoreLocation
 struct SightingMapView: View {
     @StateObject private var vm = SightingMapViewModel()
     @State private var selectedSighting: Sighting?
-    @State private var cameraPosition = MapCameraPosition.region(
+    @State private var cameraPosition = MapCameraPosition.userLocation(fallback: .region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
             span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5)
         )
-    )
+    ))
 
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
                 Map(position: $cameraPosition) {
+                    UserAnnotation()
                     ForEach(vm.sightings) { sighting in
                         Annotation(
                             sighting.topSpecies ?? sighting.aiSpeciesSuggestion ?? "Unknown",
@@ -37,29 +38,31 @@ struct SightingMapView: View {
                     vm.scheduleRegionLoad(ctx.region)
                 }
 
-                if !vm.sightings.isEmpty {
+                if vm.isLoading {
+                    loadingBadge
+                } else if !vm.sightings.isEmpty {
                     countBadge
                 }
             }
             .navigationTitle("Bird Sightings")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    if vm.isLoading {
-                        ProgressView()
-                    } else {
-                        Button {
-                            Task { await vm.load() }
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                        }
+                    Button {
+                        Task { await vm.load() }
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
                     }
+                    .disabled(vm.isLoading)
                 }
             }
             .sheet(item: $selectedSighting) { sighting in
-                SightingDetailView(sightingID: sighting.id)
+                SightingDetailView(sightingID: sighting.id ?? "")
                     .presentationDetents([.medium, .large])
             }
-            .task { await vm.load() }
+            .task {
+                vm.requestLocationPermission()
+                await vm.load()
+            }
         }
     }
 
@@ -82,7 +85,6 @@ struct SightingMapView: View {
                 Image(systemName: sighting.isAudio ? "waveform" : "bird.fill")
                     .foregroundStyle(.white)
                     .font(.system(size: 16, weight: .semibold))
-                    .symbolEffect(.bounce, value: selectedSighting?.id == sighting.id)
 
                 if sighting.annotationCount > 0 {
                     Text("\(sighting.annotationCount)")
@@ -111,6 +113,19 @@ struct SightingMapView: View {
         .background(.ultraThinMaterial, in: Capsule())
         .padding(.bottom, 14)
     }
+
+    private var loadingBadge: some View {
+        HStack(spacing: 8) {
+            ProgressView().scaleEffect(0.8)
+            Text("Loading sightings…")
+                .font(.caption.weight(.medium))
+        }
+        .foregroundStyle(.primary)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 9)
+        .background(.ultraThinMaterial, in: Capsule())
+        .padding(.bottom, 14)
+    }
 }
 
 @MainActor
@@ -119,10 +134,15 @@ final class SightingMapViewModel: ObservableObject {
     @Published var isLoading = false
 
     private var debounceTask: Task<Void, Never>?
+    private let locationManager = CLLocationManager()
+
+    func requestLocationPermission() {
+        locationManager.requestWhenInUseAuthorization()
+    }
 
     func load() async {
         isLoading = true
-        sightings = (try? await APIClient.shared.sightings()) ?? []
+        sightings = (try? await FirebaseService.shared.fetchSightings()) ?? []
         isLoading = false
     }
 
@@ -140,7 +160,7 @@ final class SightingMapViewModel: ObservableObject {
         let lng = region.center.longitude
         let dLat = region.span.latitudeDelta / 2
         let dLng = region.span.longitudeDelta / 2
-        sightings = (try? await APIClient.shared.sightings(bbox: (
+        sightings = (try? await FirebaseService.shared.fetchSightings(region: (
             minLat: lat - dLat, maxLat: lat + dLat,
             minLng: lng - dLng, maxLng: lng + dLng
         ))) ?? []

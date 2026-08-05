@@ -1,94 +1,82 @@
 import Foundation
+import FirebaseFirestore
+import CoreLocation
 
 struct Sighting: Identifiable, Codable {
-    let id: UUID
-    let latitude: Double
-    let longitude: Double
-    let photoURL: String
-    let thumbnailURL: String?
-    let audioURL: String?
-    let mediaType: String?
-    let notes: String?
-    let aiSpeciesSuggestion: String?
-    let aiConfidence: Double?
-    let annotationCount: Int
-    let topSpecies: String?
+    @DocumentID var id: String?
+    var latitude: Double
+    var longitude: Double
+    var photoURL: String?
+    var thumbnailURL: String?
+    var audioURL: String?
+    var mediaType: String
+    var notes: String?
+    var aiSpeciesSuggestion: String?
+    var aiConfidence: Double?
+    var annotationCount: Int
+    var topSpecies: String?
+    var userId: String
+    var username: String?
+    var createdAt: Timestamp?
 
     var isAudio: Bool { mediaType == "audio" }
     var displaySpecies: String? { topSpecies ?? aiSpeciesSuggestion }
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
 
     enum CodingKeys: String, CodingKey {
-        case id, latitude, longitude, notes
-        case photoURL = "photo_url"
-        case thumbnailURL = "thumbnail_url"
-        case audioURL = "audio_url"
-        case mediaType = "media_type"
-        case aiSpeciesSuggestion = "ai_species_suggestion"
-        case aiConfidence = "ai_confidence"
-        case annotationCount = "annotation_count"
-        case topSpecies = "top_species"
+        case id, latitude, longitude, notes, username
+        case photoURL = "photoURL"
+        case thumbnailURL = "thumbnailURL"
+        case audioURL = "audioURL"
+        case mediaType = "mediaType"
+        case aiSpeciesSuggestion = "aiSpeciesSuggestion"
+        case aiConfidence = "aiConfidence"
+        case annotationCount = "annotationCount"
+        case topSpecies = "topSpecies"
+        case userId = "userId"
+        case createdAt = "createdAt"
     }
 }
 
-struct SightingDetail: Identifiable, Codable {
-    let id: UUID
-    let latitude: Double
-    let longitude: Double
-    let photoURL: String
-    let thumbnailURL: String?
-    let audioURL: String?
-    let mediaType: String?
-    let notes: String?
-    let aiSpeciesSuggestion: String?
-    let aiConfidence: Double?
-    let annotations: [AnnotationItem]
+struct SightingDetail: Identifiable {
+    var id: String
+    var latitude: Double
+    var longitude: Double
+    var photoURL: String?
+    var thumbnailURL: String?
+    var audioURL: String?
+    var mediaType: String
+    var notes: String?
+    var aiSpeciesSuggestion: String?
+    var aiConfidence: Double?
+    var annotations: [AnnotationItem]
 
     var isAudio: Bool { mediaType == "audio" }
     var displaySpecies: String? { aiSpeciesSuggestion }
-
-    enum CodingKeys: String, CodingKey {
-        case id, latitude, longitude, notes, annotations
-        case photoURL = "photo_url"
-        case thumbnailURL = "thumbnail_url"
-        case audioURL = "audio_url"
-        case mediaType = "media_type"
-        case aiSpeciesSuggestion = "ai_species_suggestion"
-        case aiConfidence = "ai_confidence"
-    }
 }
 
 struct AnnotationItem: Identifiable, Codable {
-    let id: UUID
-    let species: String
-    let confidence: Double
-    let behavior: String?
-    let agePlumage: String?
-    let username: String
+    @DocumentID var id: String?
+    var species: String
+    var confidence: Double
+    var behavior: String?
+    var agePlumage: String?
+    var username: String
+    var userId: String
+    var createdAt: Timestamp?
 
     enum CodingKeys: String, CodingKey {
         case id, species, confidence, behavior, username
-        case agePlumage = "age_plumage"
+        case agePlumage = "agePlumage"
+        case userId = "userId"
+        case createdAt = "createdAt"
     }
 }
 
-struct LeaderboardEntry: Identifiable, Codable {
-    var id: String { username }
-    let username: String
-    let annotationCount: Int
-
-    enum CodingKeys: String, CodingKey {
-        case username
-        case annotationCount = "annotation_count"
-    }
-}
-
-struct ModelVersionInfo: Codable {
-    let version: String
-    let numClasses: Int
-    let accuracy: Double?
-
-    enum CodingKeys: String, CodingKey {
-        case version, accuracy
-        case numClasses = "num_classes"
-    }
+struct LeaderboardEntry: Identifiable {
+    var id: String
+    var username: String
+    var annotationCount: Int
 }

@@ -1,12 +1,19 @@
+import os
+from pydantic import model_validator
 from pydantic_settings import BaseSettings
+
+_INSECURE_DEFAULTS = {
+    "secret_key": "change-me-in-production",
+    "model_register_secret": "change-me",
+}
 
 
 class Settings(BaseSettings):
-    database_url: str
-    secret_key: str
-    s3_endpoint: str
-    s3_access_key: str
-    s3_secret_key: str
+    database_url: str = ""
+    secret_key: str = "change-me-in-production"
+    s3_endpoint: str = ""
+    s3_access_key: str = ""
+    s3_secret_key: str = ""
     s3_bucket: str = "birdmap-photos"
     model_bucket: str = "birdmap-models"
     access_token_expire_minutes: int = 60 * 24 * 30
@@ -34,6 +41,20 @@ class Settings(BaseSettings):
     instagram_access_token: str = ""
 
     model_config = {"env_file": ".env", "protected_namespaces": ()}
+
+    @model_validator(mode="after")
+    def check_production_secrets(self) -> "Settings":
+        if os.getenv("ENVIRONMENT") == "production":
+            for field, default in _INSECURE_DEFAULTS.items():
+                if getattr(self, field) == default:
+                    raise ValueError(
+                        f"{field.upper()} must be set to a secure value in production"
+                    )
+            if self.cors_origins == "*":
+                raise ValueError(
+                    "CORS_ORIGINS must be set to explicit origins in production"
+                )
+        return self
 
 
 settings = Settings()

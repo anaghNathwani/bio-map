@@ -6,9 +6,9 @@ from app.config import settings
 
 s3 = boto3.client(
     "s3",
-    endpoint_url=settings.s3_endpoint,
-    aws_access_key_id=settings.s3_access_key,
-    aws_secret_access_key=settings.s3_secret_key,
+    endpoint_url=settings.s3_endpoint or "http://localhost:9000",
+    aws_access_key_id=settings.s3_access_key or "minioadmin",
+    aws_secret_access_key=settings.s3_secret_key or "minioadmin",
     # Supabase Storage and MinIO both work without a real AWS region
     region_name="us-east-1",
 )

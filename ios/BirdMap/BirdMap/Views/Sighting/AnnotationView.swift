@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AnnotationView: View {
-    let sightingID: UUID
+    let sightingID: String
     let onDone: () -> Void
 
     @State private var species = ""
@@ -189,7 +189,7 @@ struct AnnotationView: View {
     private func submit() async {
         isSubmitting = true
         do {
-            try await APIClient.shared.submitAnnotation(
+            try await FirebaseService.shared.submitAnnotation(
                 sightingID: sightingID,
                 species: species.trimmingCharacters(in: .whitespaces),
                 confidence: confidence,

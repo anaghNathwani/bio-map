@@ -34,7 +34,7 @@ const styles = {
 }
 
 function speciesName(s) {
-  return s.top_species || s.ai_species_suggestion || 'Unknown bird'
+  return s.topSpecies || s.aiSpeciesSuggestion || 'Unknown bird'
 }
 
 function ebirUrl(species) {
@@ -49,8 +49,8 @@ function aabUrl(species) {
 
 export default function SightingPopup({ sighting: s, onClose }) {
   const name = speciesName(s)
-  const isAudio = s.media_type === 'audio'
-  const conf = s.ai_confidence ? Math.round(s.ai_confidence * 100) : null
+  const isAudio = s.mediaType === 'audio'
+  const conf = s.aiConfidence ? Math.round(s.aiConfidence * 100) : null
 
   return (
     <div style={styles.overlay}>
@@ -58,15 +58,15 @@ export default function SightingPopup({ sighting: s, onClose }) {
 
       {isAudio ? (
         <div style={styles.audioPlaceholder}>🎙️</div>
-      ) : s.thumbnail_url || s.photo_url ? (
-        <img src={s.thumbnail_url || s.photo_url} alt={name} style={styles.photo} />
+      ) : s.thumbnailURL || s.photoURL ? (
+        <img src={s.thumbnailURL || s.photoURL} alt={name} style={styles.photo} />
       ) : (
         <div style={styles.audioPlaceholder}>🐦</div>
       )}
 
-      {isAudio && s.audio_url && (
+      {isAudio && s.audioURL && (
         <audio controls style={{ width: '100%', marginTop: 0 }}>
-          <source src={s.audio_url} />
+          <source src={s.audioURL} />
         </audio>
       )}
 
@@ -79,8 +79,8 @@ export default function SightingPopup({ sighting: s, onClose }) {
 
         {conf && <div style={styles.meta}>AI confidence: {conf}%</div>}
         <div style={styles.meta}>📍 {s.latitude.toFixed(4)}, {s.longitude.toFixed(4)}</div>
-        {s.annotation_count > 0 && (
-          <div style={styles.meta}>💬 {s.annotation_count} annotation{s.annotation_count !== 1 ? 's' : ''}</div>
+        {s.annotationCount > 0 && (
+          <div style={styles.meta}>💬 {s.annotationCount} annotation{s.annotationCount !== 1 ? 's' : ''}</div>
         )}
         {s.notes && <div style={{ ...styles.meta, marginTop: 6, fontStyle: 'italic' }}>"{s.notes}"</div>}
 
