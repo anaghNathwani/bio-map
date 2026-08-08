@@ -118,7 +118,7 @@ export default function App() {
       markersRef.current[s.id] = marker
     })
   }, [filtered])
-
+//  <a href="/" style={styles.back}>🐦 BirdMap</a>
   return (
     <div style={styles.app}>
       <header style={styles.header}>

@@ -45,7 +45,7 @@ export default function CommunityPage() {
     <div style={styles.page}>
       <header style={styles.header}>
         <a href="/" style={styles.back}>← Map</a>
-        <span style={styles.logo}>🐦 BirdMap</span>
+        <span style={styles.logo}><a href="/" style={styles.back}>🐦 BirdMap</a></span>
       </header>
 
       <div style={styles.hero}>
