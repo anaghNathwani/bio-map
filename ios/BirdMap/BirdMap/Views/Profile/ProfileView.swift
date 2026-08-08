@@ -1,5 +1,8 @@
 import SwiftUI
 import UserNotifications
+import SafariServices
+
+private let baseURL = "https://birdmap-citizenscience.web.app"
 
 struct ProfileView: View {
     @EnvironmentObject var env: AppEnvironment
@@ -10,7 +13,7 @@ struct ProfileView: View {
     @State private var isSaving = false
     @State private var saveError: String?
     @State private var showLogoutConfirm = false
-    @State private var showTerms = false
+    @State private var safariURL: URL?
 
     var body: some View {
         NavigationStack {
@@ -100,18 +103,10 @@ struct ProfileView: View {
 
                 // MARK: - About
                 Section {
-                    Button {
-                        showTerms = true
-                    } label: {
-                        HStack {
-                            Label("Terms of Service", systemImage: "doc.text.fill")
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                        }
-                    }
-                    .foregroundStyle(.primary)
+                    aboutRow("Citizen science bird tracking", icon: "globe", path: "/citizen-science")
+                    aboutRow("Community annotations", icon: "person.3.fill", path: "/community")
+                    aboutRow("On-device AI identification", icon: "sparkles", path: "/ai")
+                    aboutRow("Terms of Service", icon: "doc.text.fill", path: "/terms")
                 } header: {
                     Text("About")
                 }
@@ -129,8 +124,9 @@ struct ProfileView: View {
             .sheet(isPresented: $isEditingUsername) {
                 editUsernameSheet
             }
-            .sheet(isPresented: $showTerms) {
-                termsSheet
+            .sheet(item: $safariURL) { url in
+                SafariView(url: url)
+                    .ignoresSafeArea()
             }
             .confirmationDialog("Sign out of BirdMap?", isPresented: $showLogoutConfirm, titleVisibility: .visible) {
                 Button("Sign Out", role: .destructive) { env.logout() }
@@ -188,48 +184,6 @@ struct ProfileView: View {
         .presentationDetents([.medium])
     }
 
-    // MARK: - Terms sheet
-
-    private var termsSheet: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Group {
-                        Text("By using BirdMap, you agree to the following terms:")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-
-                        termSection("1. Data Use", body: "Sightings and photos you submit are shared with the BirdMap community to support citizen science research. Location data is stored with each sighting.")
-
-                        termSection("2. Conduct", body: "You agree to submit accurate sightings and not misuse the platform. Spam, offensive content, or intentionally false reports may result in account removal.")
-
-                        termSection("3. Privacy", body: "Your email address is never shared publicly. Your username and sightings are visible to other users.")
-
-                        termSection("4. Content", body: "You retain ownership of photos you upload. By uploading, you grant BirdMap a license to display them within the app.")
-
-                        termSection("5. Changes", body: "These terms may be updated at any time. Continued use of the app constitutes acceptance of the updated terms.")
-                    }
-                    .padding(.horizontal)
-                }
-                .padding(.vertical)
-            }
-            .navigationTitle("Terms of Service")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { showTerms = false }
-                }
-            }
-        }
-    }
-
-    private func termSection(_ title: String, body: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title).font(.headline)
-            Text(body).font(.body).foregroundStyle(.secondary)
-        }
-    }
-
     // MARK: - Helpers
 
     private func saveUsername() async {
@@ -266,4 +220,29 @@ struct ProfileView: View {
             UIApplication.shared.open(url)
         }
     }
+
+    @ViewBuilder
+    private func aboutRow(_ title: String, icon: String, path: String) -> some View {
+        Button {
+            if let url = URL(string: baseURL + path) { safariURL = url }
+        } label: {
+            HStack {
+                Label(title, systemImage: icon)
+                Spacer()
+                Image(systemName: "arrow.up.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .foregroundStyle(.primary)
+    }
 }
+
+struct SafariView: UIViewControllerRepresentable {
+    let url: URL
+    func makeUIViewController(context: Context) -> SFSafariViewController {
+        SFSafariViewController(url: url)
+    }
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
+}
+
