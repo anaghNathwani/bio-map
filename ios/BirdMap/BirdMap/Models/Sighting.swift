@@ -66,12 +66,21 @@ struct AnnotationItem: Identifiable, Codable {
     var username: String
     var userId: String
     var createdAt: Timestamp?
+    /// Set when this annotation came from the post-upload AI review flow:
+    /// "confirmed" (user tapped Right), "rejected" (Wrong), or "unsure".
+    var reviewOfAI: String?
+    /// Written by the self-hosted moderation pipeline (ml_pipeline/live_service.py):
+    /// "ok" or "flagged". Nil until the moderation pass has run.
+    var moderation: String?
+    var moderationScore: Double?
 
     enum CodingKeys: String, CodingKey {
-        case id, species, confidence, behavior, username
+        case id, species, confidence, behavior, username, moderation
         case agePlumage = "agePlumage"
         case userId = "userId"
         case createdAt = "createdAt"
+        case reviewOfAI = "reviewOfAI"
+        case moderationScore = "moderationScore"
     }
 }
 

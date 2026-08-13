@@ -1,4 +1,5 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -16,7 +17,8 @@ service cloud.firestore {
         && request.resource.data.keys().hasAll(['latitude', 'longitude', 'mediaType', 'userId'])
         && request.resource.data.latitude is number
         && request.resource.data.longitude is number;
-      // Allow incrementing annotationCount and updating topSpecies (from annotation submit)
+      // Allow incrementing annotationCount and updating topSpecies (from annotation submit),
+      // and allow the trusted server-side annotation pipeline to set AI suggestion fields.
       allow update: if request.auth != null && (
         request.auth.uid == resource.data.userId ||
         (request.resource.data.diff(resource.data).affectedKeys()
@@ -30,9 +32,24 @@ service cloud.firestore {
         allow create: if request.auth != null
           && request.resource.data.userId == request.auth.uid
           && request.resource.data.keys().hasAll(['species', 'confidence', 'userId', 'username']);
-        allow update, delete: if request.auth != null
-          && request.auth.uid == resource.data.userId;
+        // Owners may edit their own annotation, but only the fields they're allowed to set
+        // themselves — moderation/moderationScore are written only by the trusted
+        // server-side moderation pipeline (which uses the Admin SDK and bypasses these rules),
+        // so a client can never self-clear a "flagged" verdict.
+        allow update: if request.auth != null
+          && request.auth.uid == resource.data.userId
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['species', 'confidence', 'behavior', 'agePlumage', 'reviewOfAI']);
+        allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
       }
+    }
+
+    // Model versions: published only by the trusted server-side training pipeline
+    // (Admin SDK, bypasses these rules). Publicly readable so ModelManager can check
+    // for updates without requiring a signed-in user.
+    match /model_versions/{versionID} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }

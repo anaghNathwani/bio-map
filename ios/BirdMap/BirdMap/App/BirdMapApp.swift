@@ -16,6 +16,10 @@ struct BirdMapApp: App {
         }
 
         Task {
+            await ModelManager.shared.checkForUpdate()
+        }
+
+        Task {
             await UploadQueue.shared.flushIfNeeded { item in
                 guard let data = try? Data(contentsOf: URL(fileURLWithPath: item.imagePath)) else { return }
                 let sightingID = UUID().uuidString

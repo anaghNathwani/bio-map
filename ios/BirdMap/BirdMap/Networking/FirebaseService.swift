@@ -196,7 +196,7 @@ final class FirebaseService {
         )
     }
 
-    func submitAnnotation(sightingID: String, species: String, confidence: Double, behavior: String?, agePlumage: String?) async throws {
+    func submitAnnotation(sightingID: String, species: String, confidence: Double, behavior: String?, agePlumage: String?, reviewOfAI: String? = nil) async throws {
         guard let uid = currentUID else { throw AppError.notLoggedIn }
         let username = await fetchUsername() ?? "unknown"
 
@@ -209,15 +209,17 @@ final class FirebaseService {
         ]
         if let v = behavior { data["behavior"] = v }
         if let v = agePlumage { data["agePlumage"] = v }
+        if let v = reviewOfAI { data["reviewOfAI"] = v }
 
         try await db.collection("sightings").document(sightingID)
             .collection("annotations").addDocument(data: data)
 
-        // Update annotation count + top species on sighting (best-effort)
-        try? await db.collection("sightings").document(sightingID).updateData([
-            "annotationCount": FieldValue.increment(Int64(1)),
-            "topSpecies": species,
-        ])
+        // Update annotation count + top species on sighting (best-effort).
+        // An "unsure" review carries no species — leave topSpecies as-is rather
+        // than blanking it out.
+        var sightingUpdate: [String: Any] = ["annotationCount": FieldValue.increment(Int64(1))]
+        if !species.isEmpty { sightingUpdate["topSpecies"] = species }
+        try? await db.collection("sightings").document(sightingID).updateData(sightingUpdate)
 
         // Increment user's annotation count
         try? await db.collection("users").document(uid).updateData([

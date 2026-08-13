@@ -31,29 +31,33 @@ actor BirdClassifier {
         }
     }
 
-    func classify(image: UIImage) async -> ClassificationResult? {
+    /// Returns the top-`count` predictions, sorted by confidence descending.
+    func classifyTopN(image: UIImage, count: Int = 3) async -> [ClassificationResult] {
         guard let cgImage = image.cgImage,
-              let model = try? vnModel else { return nil }
+              let model = try? vnModel else { return [] }
 
         return await withCheckedContinuation { continuation in
-            // Dispatch off the actor's executor onto a background thread for
-            // CPU-heavy Vision inference, then resume the continuation.
             DispatchQueue.global(qos: .userInitiated).async {
                 let request = VNCoreMLRequest(model: model) { req, _ in
-                    let top = (req.results as? [VNClassificationObservation])?.first
-                    continuation.resume(returning: top.map {
+                    let observations = (req.results as? [VNClassificationObservation]) ?? []
+                    let top = observations.prefix(count).map {
                         ClassificationResult(species: $0.identifier, confidence: $0.confidence)
-                    })
+                    }
+                    continuation.resume(returning: top)
                 }
                 request.imageCropAndScaleOption = .centerCrop
                 do {
                     try VNImageRequestHandler(cgImage: cgImage, options: [:]).perform([request])
                 } catch {
                     print("[BirdClassifier] Inference failed: \(error)")
-                    continuation.resume(returning: nil)
+                    continuation.resume(returning: [])
                 }
             }
         }
+    }
+
+    func classify(image: UIImage) async -> ClassificationResult? {
+        await classifyTopN(image: image, count: 1).first
     }
 
     func invalidateCache() {

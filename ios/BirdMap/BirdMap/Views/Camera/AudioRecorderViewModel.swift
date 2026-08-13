@@ -1,6 +1,7 @@
 import SwiftUI
 import AVFoundation
 import CoreLocation
+import FirebaseFirestore
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -17,10 +18,16 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     @Published var meterLevel: Float = 0
     @Published var notes = ""
     @Published var hasRecording = false
+    /// True while waiting for the self-hosted BirdNET watcher (ml_pipeline/live_service.py)
+    /// to analyze the just-uploaded recording.
+    @Published var isAnalyzing = false
+    @Published var analysisTimedOut = false
+    @Published var lastUploadedSightingID: String?
 
     private var recorder: AVAudioRecorder?
     private var meterTimer: Timer?
     private var countTimer: Timer?
+    private var sightingListener: ListenerRegistration?
     private(set) var recordingURL: URL?
     private let locationManager = CLLocationManager()
     private(set) var lastLocation: CLLocation?
@@ -116,22 +123,61 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
                 latitude: location.coordinate.latitude,
                 longitude: location.coordinate.longitude,
                 notes: notes.isEmpty ? nil : notes,
-                aiSpecies: aiSuggestion,
-                aiConfidence: aiConfidence
+                aiSpecies: nil,
+                aiConfidence: nil
             )
-            uploadSuccess = true
             notes = ""
             hasRecording = false
             recordingURL = nil
             recordingSeconds = 0
+            lastUploadedSightingID = sightingID
+            startAnalyzing(sightingID: sightingID)
         } catch {
             self.error = "Upload failed: \(error.localizedDescription)"
         }
         isUploading = false
     }
 
+    /// Listens for the self-hosted BirdNET watcher (ml_pipeline/live_service.py) to
+    /// populate this sighting's AI suggestion. Falls back to a plain success state
+    /// if nothing arrives within the timeout (e.g. the watcher isn't running) —
+    /// the sighting is still saved and can be annotated manually later.
+    private func startAnalyzing(sightingID: String) {
+        isAnalyzing = true
+        analysisTimedOut = false
+        aiSuggestion = nil
+        aiConfidence = nil
+
+        sightingListener?.remove()
+        sightingListener = FirebaseService.shared.db.collection("sightings").document(sightingID)
+            .addSnapshotListener { [weak self] snapshot, _ in
+                guard let self, let data = snapshot?.data(),
+                      let species = data["aiSpeciesSuggestion"] as? String else { return }
+                Task { @MainActor in
+                    guard self.isAnalyzing else { return } // already resolved (e.g. timed out)
+                    self.aiSuggestion = species
+                    self.aiConfidence = data["aiConfidence"] as? Double
+                    self.isAnalyzing = false
+                    self.sightingListener?.remove()
+                    self.sightingListener = nil
+                }
+            }
+
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 45_000_000_000)
+            guard let self, self.isAnalyzing else { return }
+            self.isAnalyzing = false
+            self.analysisTimedOut = true
+            self.sightingListener?.remove()
+            self.sightingListener = nil
+            self.uploadSuccess = true
+        }
+    }
+
     func reset() {
         stopRecording()
+        sightingListener?.remove()
+        sightingListener = nil
         recordingURL = nil
         recordingSeconds = 0
         aiSuggestion = nil
@@ -139,5 +185,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         error = nil
         uploadSuccess = false
         hasRecording = false
+        isAnalyzing = false
+        analysisTimedOut = false
     }
 }

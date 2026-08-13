@@ -9,6 +9,10 @@ struct CameraView: View {
     @State private var showPicker = false
     @State private var showBirdInfo = false
     @State private var visionCandidates: [VisionCandidate] = []
+    @State private var showAIReview = false
+    @State private var showAnnotate = false
+    @State private var showPlainSuccess = false
+    @State private var pendingVerdict: AIVerdict?
 
     var body: some View {
         ScrollView {
@@ -37,11 +41,50 @@ struct CameraView: View {
                 BirdInfoView(species: species)
             }
         }
-        .alert("Sighting Submitted!", isPresented: $vm.uploadSuccess) {
+        .onChange(of: vm.uploadSuccess) { _, success in
+            guard success else { return }
+            vm.uploadSuccess = false
+            if vm.lastAISuggestion != nil {
+                showAIReview = true
+            } else {
+                showPlainSuccess = true
+            }
+        }
+        .sheet(isPresented: $showAIReview) {
+            if let suggestion = vm.lastAISuggestion {
+                aiReviewSheet(species: suggestion.species, confidence: Double(suggestion.confidence))
+            }
+        }
+        .sheet(isPresented: $showAnnotate) {
+            if let sightingID = vm.lastUploadedSightingID {
+                AnnotationView(
+                    sightingID: sightingID,
+                    initialSpecies: pendingVerdict == .confirmed ? (vm.lastAISuggestion?.species ?? "") : "",
+                    initialConfidence: pendingVerdict == .confirmed ? 0.95 : 0.6,
+                    reviewOfAI: pendingVerdict?.reviewOfAI
+                ) {
+                    showAnnotate = false
+                }
+            }
+        }
+        .alert("Sighting Submitted!", isPresented: $showPlainSuccess) {
             Button("Great!") {}
         } message: {
             Text("Your sighting has been added to the map and queued for community annotation.")
         }
+    }
+
+    private func aiReviewSheet(species: String, confidence: Double) -> some View {
+        VStack {
+            Spacer()
+            AIPredictionCard(species: species, confidence: confidence) { verdict in
+                pendingVerdict = verdict
+                showAIReview = false
+                showAnnotate = true
+            }
+            Spacer()
+        }
+        .presentationDetents([.medium])
     }
 
     private func fetchVisionCandidates(_ img: UIImage) async {
@@ -81,29 +124,30 @@ struct CameraView: View {
                     .background(.ultraThinMaterial, in: Capsule())
                     .padding(14)
                 }
-
-                // Google Vision candidates
-                if !visionCandidates.isEmpty {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Label("Google Vision suggestions", systemImage: "eye.fill")
-                            .font(.caption2.bold())
-                            .foregroundStyle(.secondary)
-                        ForEach(visionCandidates.prefix(3), id: \.species) { c in
-                            HStack {
-                                Text(c.species).font(.caption)
-                                Spacer()
-                                Text("\(Int(c.confidence * 100))%")
-                                    .font(.caption.monospacedDigit())
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                    .padding(12)
-                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
-                    .padding(.horizontal)
-                }
             }
             .padding(.horizontal)
+
+            // On-device AI candidates
+            if !vm.aiCandidates.isEmpty {
+                candidatesPanel(
+                    title: "On-Device AI · Common Birds",
+                    icon: "cpu.fill",
+                    iconColor: .teal,
+                    items: vm.aiCandidates.map { ($0.species, Double($0.confidence)) }
+                )
+            } else if vm.capturedImage != nil && !ModelManager.shared.isModelAvailable {
+                noModelBanner
+            }
+
+            // Google Vision candidates
+            if !visionCandidates.isEmpty {
+                candidatesPanel(
+                    title: "Google Vision",
+                    icon: "eye.fill",
+                    iconColor: .indigo,
+                    items: visionCandidates.prefix(3).map { ($0.species, $0.confidence) }
+                )
+            }
 
             VStack(spacing: 12) {
                 TextField("Notes (optional)", text: $vm.notes, axis: .vertical)
@@ -147,6 +191,46 @@ struct CameraView: View {
                 .animation(.easeInOut(duration: 0.2), value: vm.isUploading)
             }
         }
+    }
+
+    @ViewBuilder
+    private func candidatesPanel(title: String, icon: String, iconColor: Color,
+                                  items: [(String, Double)]) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Label(title, systemImage: icon)
+                .font(.caption2.bold())
+                .foregroundStyle(iconColor)
+            ForEach(items, id: \.0) { species, confidence in
+                HStack {
+                    Text(species).font(.caption)
+                    Spacer()
+                    Text("\(Int(confidence * 100))%")
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding(12)
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+        .padding(.horizontal)
+    }
+
+    private var noModelBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "arrow.down.circle")
+                .foregroundStyle(.teal)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("On-device model not yet downloaded")
+                    .font(.caption.weight(.semibold))
+                Text("Connect to the backend to fetch the common-bird classifier.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+        }
+        .padding(12)
+        .background(Color.teal.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+        .padding(.horizontal)
     }
 
     private var emptyStateSection: some View {

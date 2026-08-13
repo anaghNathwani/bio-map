@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import './base.css'
 import App from './App.jsx'
 import CitizenSciencePage from './pages/CitizenSciencePage.jsx'
 import CommunityPage from './pages/CommunityPage.jsx'

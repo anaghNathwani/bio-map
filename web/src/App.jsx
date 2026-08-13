@@ -4,49 +4,21 @@ import 'leaflet'
 import FilterBar from './components/FilterBar.jsx'
 import SightingPopup from './components/SightingPopup.jsx'
 import { fetchSightings } from './firebase.js'
+import './App.css'
 
 const photoIcon = L.divIcon({
-  html: `<div style="background:#0d9488;border:2px solid white;border-radius:50%;width:14px;height:14px;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>`,
+  html: `<div class="marker-dot marker-dot--photo"></div>`,
   className: '',
   iconSize: [14, 14],
   iconAnchor: [7, 7],
 })
 
 const audioIcon = L.divIcon({
-  html: `<div style="background:#8b5cf6;border:2px solid white;border-radius:50%;width:14px;height:14px;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>`,
+  html: `<div class="marker-dot marker-dot--audio"></div>`,
   className: '',
   iconSize: [14, 14],
   iconAnchor: [7, 7],
 })
-
-const styles = {
-  app: { height: '100vh', display: 'flex', flexDirection: 'column' },
-  header: {
-    padding: '12px 20px',
-    background: 'linear-gradient(135deg,#0d9488,#0369a1)',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    boxShadow: '0 2px 8px rgba(0,0,0,.3)',
-    zIndex: 1000,
-  },
-  logo: { fontSize: 22, fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: 8 },
-  subtitle: { fontSize: 12, color: 'rgba(255,255,255,.75)', marginTop: 1 },
-  badge: {
-    marginLeft: 'auto', background: 'rgba(255,255,255,.2)', color: '#fff',
-    padding: '3px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600,
-  },
-  mapContainer: { flex: 1, position: 'relative' },
-  map: { width: '100%', height: '100%' },
-  legend: {
-    position: 'absolute', bottom: 30, right: 10, zIndex: 1000,
-    background: 'rgba(15,17,23,.85)', backdropFilter: 'blur(8px)',
-    borderRadius: 10, padding: '10px 14px', fontSize: 12, color: '#e8eaf0',
-    border: '1px solid rgba(255,255,255,.1)',
-  },
-  legendRow: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 },
-  dot: (color) => ({ width: 10, height: 10, borderRadius: '50%', background: color, flexShrink: 0 }),
-}
 
 export default function App() {
   const mapRef = useRef(null)
@@ -118,25 +90,24 @@ export default function App() {
       markersRef.current[s.id] = marker
     })
   }, [filtered])
-//  <a href="/" style={styles.back}>🐦 BirdMap</a>
   return (
-    <div style={styles.app}>
-      <header style={styles.header}>
+    <div className="app">
+      <header className="app-header">
         <div>
-          <div style={styles.logo}>🐦 BirdMap</div>
-          <div style={styles.subtitle}>Live community bird sightings</div>
+          <div className="app-logo">🐦 BirdMap</div>
+          <div className="app-subtitle">Live community bird sightings</div>
         </div>
         <FilterBar sightings={sightings} onFiltered={setFiltered} />
-        <div style={styles.badge}>{count} sightings</div>
+        <div className="app-badge">{count} sightings</div>
       </header>
 
-      <div style={styles.mapContainer}>
-        <div ref={mapRef} style={styles.map} />
+      <div className="map-container">
+        <div ref={mapRef} className="map" />
 
-        <div style={styles.legend}>
-          <div style={{ fontWeight: 600, marginBottom: 6, color: '#94a3b8', fontSize: 11, textTransform: 'uppercase', letterSpacing: 1 }}>Sighting type</div>
-          <div style={styles.legendRow}><div style={styles.dot('#0d9488')} /> Photo</div>
-          <div style={styles.legendRow}><div style={styles.dot('#8b5cf6')} /> Audio</div>
+        <div className="legend">
+          <div className="legend-title">Sighting type</div>
+          <div className="legend-row"><div className="legend-dot legend-dot--photo" /> Photo</div>
+          <div className="legend-row"><div className="legend-dot legend-dot--audio" /> Audio</div>
         </div>
 
         {selected && (

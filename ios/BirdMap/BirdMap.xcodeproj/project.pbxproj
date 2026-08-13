@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		015A7BFC3EEA778940F099D3 /* BirdInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21912C8A76A78705F8D1D49E /* BirdInfo.swift */; };
+		07020764C02F22C9D9EDEFF5 /* AIPredictionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F68091FD6BA1A16E45D14 /* AIPredictionCard.swift */; };
 		0A8099F8923726FCD092FE1B /* SightingMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3917232B887930F8F3CC6E6 /* SightingMapView.swift */; };
 		2BA2D6E603C8F4ABF6AA5546 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5ED1993ACE378B92FE66F /* ModelManager.swift */; };
 		2ECA2C52A320E7F67AC4189B /* Sighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689E1E37467EB1CFA0C7C2CD /* Sighting.swift */; };
@@ -30,6 +31,7 @@
 		74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5D5F1484B6AE767133B8F9 /* AnnotationView.swift */; };
 		81079CEBBD777E69C31F0324 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A2DE291EF46F314C4B162F /* KeychainHelper.swift */; };
 		8592880555382BDED3F2EE84 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5984AFA95E40AFE756D4D3 /* FirebaseService.swift */; };
+		8EC3E81B5BFEFC6430CC0A0D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343243962E3612773481F502 /* ProfileView.swift */; };
 		9540F52CE0CFCBAA6AC82AE0 /* SightingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD31526D99593252A1958E58 /* SightingDetailView.swift */; };
 		9BC563BFCA0123B81AA09B9D /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DB12F018E31261FE1BDCE0 /* LeaderboardView.swift */; };
 		9E756129ADC0855B061B9AB4 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 0BE946E6F371CB9BAB291AA5 /* ZIPFoundation */; };
@@ -44,6 +46,7 @@
 		21912C8A76A78705F8D1D49E /* BirdInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdInfo.swift; sourceTree = "<group>"; };
 		2A5C4C8BC99DBD814228983B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2EB06EDE7B326433395E11D6 /* BirdMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdMapApp.swift; sourceTree = "<group>"; };
+		343243962E3612773481F502 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		40ACB9DE0D7F2B00653C2C19 /* AudioRecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderViewModel.swift; sourceTree = "<group>"; };
 		42DA995A54E694C1C973E5BB /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		475AE05DD4ACEFC3F3C4CC14 /* GoogleService-Info 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info 2.plist"; sourceTree = "<group>"; };
@@ -62,6 +65,7 @@
 		B95EE6F1D96F699764DE2531 /* BirdInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdInfoView.swift; sourceTree = "<group>"; };
 		B9625A2BA7ADB7FE18A1AAF1 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		C1984A64CBE5025180837531 /* BirdClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdClassifier.swift; sourceTree = "<group>"; };
+		C70F68091FD6BA1A16E45D14 /* AIPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPredictionCard.swift; sourceTree = "<group>"; };
 		D390E46F4442A61026B54472 /* BirdMap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BirdMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7F5ED1993ACE378B92FE66F /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		F0937B2AAFE2AEF5216210CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -92,6 +96,14 @@
 				B95EE6F1D96F699764DE2531 /* BirdInfoView.swift */,
 			);
 			path = Bird;
+			sourceTree = "<group>";
+		};
+		1E1CD89604E40F1100AB90F8 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				343243962E3612773481F502 /* ProfileView.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		2298FB146CCE33EF4A087045 /* Leaderboard */ = {
@@ -176,6 +188,7 @@
 		BA222A8095C4F6C63147DF41 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				C70F68091FD6BA1A16E45D14 /* AIPredictionCard.swift */,
 				42DA995A54E694C1C973E5BB /* AudioRecorderView.swift */,
 				40ACB9DE0D7F2B00653C2C19 /* AudioRecorderViewModel.swift */,
 				56E16CDEB102FDD8B1E2552A /* CameraView.swift */,
@@ -218,6 +231,7 @@
 				BA222A8095C4F6C63147DF41 /* Camera */,
 				2298FB146CCE33EF4A087045 /* Leaderboard */,
 				E1EDD57DC9DE8D6C14BA2A2D /* Map */,
+				1E1CD89604E40F1100AB90F8 /* Profile */,
 				BE6722DDC38095F614A75E69 /* Sighting */,
 			);
 			path = Views;
@@ -307,6 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07020764C02F22C9D9EDEFF5 /* AIPredictionCard.swift in Sources */,
 				A31578A8052DCF77C0164B39 /* APIClient.swift in Sources */,
 				4BA46034FB025D3860AA377C /* AdaptiveLayout.swift in Sources */,
 				74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */,
@@ -325,6 +340,7 @@
 				9BC563BFCA0123B81AA09B9D /* LeaderboardView.swift in Sources */,
 				FBE60E8002C1442B956A0F84 /* LoginView.swift in Sources */,
 				2BA2D6E603C8F4ABF6AA5546 /* ModelManager.swift in Sources */,
+				8EC3E81B5BFEFC6430CC0A0D /* ProfileView.swift in Sources */,
 				2ECA2C52A320E7F67AC4189B /* Sighting.swift in Sources */,
 				9540F52CE0CFCBAA6AC82AE0 /* SightingDetailView.swift in Sources */,
 				0A8099F8923726FCD092FE1B /* SightingMapView.swift in Sources */,

@@ -1,0 +1,106 @@
+.static-page {
+  min-height: 100vh;
+  background: #0f1117;
+  color: #e8eaf0;
+  font-family: system-ui, sans-serif;
+}
+
+.static-page-header {
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #0d9488, #0369a1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.static-page-back {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.static-page-logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.static-page-hero {
+  padding: 60px 24px 48px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+.static-page-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+}
+
+.static-page-h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: #fff;
+}
+
+.static-page-sub {
+  font-size: 16px;
+  color: #94a3b8;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.static-page-section {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.static-page-h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #5eead4;
+  margin: 0 0 12px;
+}
+
+.static-page-p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #cbd5e1;
+  margin: 0 0 32px;
+}
+
+.static-page-card {
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+.static-page-card-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.static-page-card-body {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+.static-page-footer {
+  text-align: center;
+  padding: 24px;
+  color: #475569;
+  font-size: 13px;
+  border-top: 1px solid rgba(255, 255, 255, .06);
+}

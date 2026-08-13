@@ -2,17 +2,35 @@ import SwiftUI
 
 struct AnnotationView: View {
     let sightingID: String
+    /// Set when this form was opened from the post-upload AI review card —
+    /// "confirmed" (Right), "rejected" (Wrong), or "unsure". Nil for a normal,
+    /// unprompted community annotation.
+    let reviewOfAI: String?
     let onDone: () -> Void
 
-    @State private var species = ""
+    @State private var species: String
     @State private var behavior = ""
     @State private var agePlumage = ""
-    @State private var confidence: Double = 0.9
+    @State private var confidence: Double
     @State private var isSubmitting = false
     @State private var error: String?
 
     private let behaviorOptions = ["Perching", "Foraging", "Flying", "Singing", "Nesting", "Swimming", "Other"]
     private let plumageOptions = ["Adult", "Juvenile", "Immature", "First winter", "Unknown"]
+
+    init(sightingID: String, initialSpecies: String = "", initialConfidence: Double = 0.9,
+         reviewOfAI: String? = nil, onDone: @escaping () -> Void) {
+        self.sightingID = sightingID
+        self.reviewOfAI = reviewOfAI
+        self.onDone = onDone
+        _species = State(initialValue: initialSpecies)
+        _confidence = State(initialValue: initialConfidence)
+    }
+
+    /// "Unsure" reviews are a valid, complete annotation on their own — no species required.
+    private var canSubmit: Bool {
+        isSubmitting == false && (reviewOfAI == "unsure" || !species.trimmingCharacters(in: .whitespaces).isEmpty)
+    }
 
     private var confidenceColor: Color {
         switch confidence {
@@ -61,7 +79,7 @@ struct AnnotationView: View {
                             Text("Save").bold()
                         }
                     }
-                    .disabled(species.trimmingCharacters(in: .whitespaces).isEmpty || isSubmitting)
+                    .disabled(!canSubmit)
                 }
             }
         }
@@ -69,12 +87,12 @@ struct AnnotationView: View {
 
     private var speciesSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            sectionHeader("Species", icon: "bird.fill", required: true)
+            sectionHeader("Species", icon: "bird.fill", required: reviewOfAI != "unsure")
 
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(.secondary)
-                TextField("e.g. American Robin", text: $species)
+                TextField(reviewOfAI == "unsure" ? "Leave blank if you're not sure" : "e.g. American Robin", text: $species)
                     .autocorrectionDisabled()
             }
             .padding(12)
@@ -194,7 +212,8 @@ struct AnnotationView: View {
                 species: species.trimmingCharacters(in: .whitespaces),
                 confidence: confidence,
                 behavior: behavior.isEmpty ? nil : behavior,
-                agePlumage: agePlumage.isEmpty ? nil : agePlumage
+                agePlumage: agePlumage.isEmpty ? nil : agePlumage,
+                reviewOfAI: reviewOfAI
             )
             onDone()
         } catch {

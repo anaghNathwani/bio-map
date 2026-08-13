@@ -78,19 +78,10 @@ final class APIClient {
         return (try? JSONDecoder().decode(Resp.self, from: data))?.candidates ?? []
     }
 
-    // MARK: - Bird Info (Wikipedia direct + eBird proxy fallback)
+    // MARK: - Bird Info (Wikipedia direct)
 
     func birdInfo(species: String) async throws -> BirdInfo {
-        // Try the backend first (includes eBird taxonomy); fall back to Wikipedia direct call.
-        if let result = try? await birdInfoFromBackend(species: species) { return result }
-        return try await birdInfoFromWikipedia(species: species)
-    }
-
-    private func birdInfoFromBackend(species: String) async throws -> BirdInfo {
-        let encoded = species.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? species
-        let (data, response) = try await foregroundSession.data(for: try request("/birds/info?species=\(encoded)"))
-        try checkStatus(response)
-        return try JSONDecoder().decode(BirdInfo.self, from: data)
+        try await birdInfoFromWikipedia(species: species)
     }
 
     private func birdInfoFromWikipedia(species: String) async throws -> BirdInfo {

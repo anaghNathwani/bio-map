@@ -1,0 +1,46 @@
+.community-page-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
+}
+
+.community-page-step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.community-page-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0d9488;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.community-page-step-text {
+  flex: 1;
+}
+
+.community-page-step-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.community-page-step-body {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.6;
+}

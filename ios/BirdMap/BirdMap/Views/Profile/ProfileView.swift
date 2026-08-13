@@ -1,6 +1,5 @@
 import SwiftUI
 import UserNotifications
-import SafariServices
 
 private let baseURL = "https://birdmap-citizenscience.web.app"
 
@@ -236,13 +235,5 @@ struct ProfileView: View {
         }
         .foregroundStyle(.primary)
     }
-}
-
-struct SafariView: UIViewControllerRepresentable {
-    let url: URL
-    func makeUIViewController(context: Context) -> SFSafariViewController {
-        SFSafariViewController(url: url)
-    }
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
 }
 

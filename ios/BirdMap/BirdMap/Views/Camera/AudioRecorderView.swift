@@ -3,14 +3,20 @@ import SwiftUI
 struct AudioRecorderView: View {
     @StateObject private var vm = AudioRecorderViewModel()
     @State private var showBirdInfo = false
+    @State private var showAIReview = false
+    @State private var showAnnotate = false
+    @State private var pendingVerdict: AIVerdict?
 
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 waveformSection
                 controlSection
-                if vm.recordingURL != nil || vm.aiSuggestion != nil {
+                if vm.recordingURL != nil {
                     uploadSection
+                }
+                if vm.isAnalyzing {
+                    analyzingSection
                 }
             }
             .padding(.top, 24)
@@ -18,20 +24,62 @@ struct AudioRecorderView: View {
         }
         .onAppear { vm.startLocationUpdates() }
         .onDisappear { vm.stopLocationUpdates() }
+        .onChange(of: vm.aiSuggestion) { _, species in
+            guard species != nil, !vm.isAnalyzing else { return }
+            showAIReview = true
+        }
         .alert("Sound Submitted!", isPresented: $vm.uploadSuccess) {
             Button("Great!") { vm.reset() }
         } message: {
-            if let species = vm.aiSuggestion {
-                Text("Detected: \(species). Added to the map!")
-            } else {
-                Text("Your recording has been added to the map.")
-            }
+            Text("Your recording has been added to the map. We couldn't analyze it in time, but you can still annotate it from the sighting later.")
         }
         .sheet(isPresented: $showBirdInfo) {
             if let species = vm.aiSuggestion {
                 BirdInfoView(species: species)
             }
         }
+        .sheet(isPresented: $showAIReview) {
+            if let species = vm.aiSuggestion {
+                aiReviewSheet(species: species, confidence: vm.aiConfidence ?? 0.5)
+            }
+        }
+        .sheet(isPresented: $showAnnotate, onDismiss: { vm.reset() }) {
+            if let sightingID = vm.lastUploadedSightingID {
+                AnnotationView(
+                    sightingID: sightingID,
+                    initialSpecies: pendingVerdict == .confirmed ? (vm.aiSuggestion ?? "") : "",
+                    initialConfidence: pendingVerdict == .confirmed ? 0.95 : 0.6,
+                    reviewOfAI: pendingVerdict?.reviewOfAI
+                ) {
+                    showAnnotate = false
+                }
+            }
+        }
+    }
+
+    private func aiReviewSheet(species: String, confidence: Double) -> some View {
+        VStack {
+            Spacer()
+            AIPredictionCard(species: species, confidence: confidence) { verdict in
+                pendingVerdict = verdict
+                showAIReview = false
+                showAnnotate = true
+            }
+            Spacer()
+        }
+        .presentationDetents([.medium])
+    }
+
+    private var analyzingSection: some View {
+        HStack(spacing: 10) {
+            ProgressView()
+            Text("Analyzing your recording…")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .padding(14)
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+        .padding(.horizontal)
     }
 
     private var waveformSection: some View {
@@ -111,35 +159,6 @@ struct AudioRecorderView: View {
     @ViewBuilder
     private var uploadSection: some View {
         VStack(spacing: 14) {
-            // AI result
-            if let species = vm.aiSuggestion {
-                HStack(spacing: 10) {
-                    Image(systemName: "waveform.badge.magnifyingglass")
-                        .symbolRenderingMode(.multicolor)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Identified as")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                        Text("**\(species)**")
-                    }
-                    Spacer()
-                    if let conf = vm.aiConfidence {
-                        Text("\(Int(conf * 100))%")
-                            .font(.subheadline.bold())
-                            .foregroundStyle(confidenceColor(conf))
-                    }
-                    Button("Info") { showBirdInfo = true }
-                        .font(.caption.weight(.semibold))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(Color.teal.opacity(0.15), in: Capsule())
-                        .foregroundStyle(Color.teal)
-                }
-                .padding(14)
-                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
-                .padding(.horizontal)
-            }
-
             // Notes
             TextField("Notes (optional)", text: $vm.notes, axis: .vertical)
                 .lineLimit(2...4)
@@ -175,10 +194,6 @@ struct AudioRecorderView: View {
             .disabled(vm.isUploading || vm.isRecording)
             .padding(.horizontal)
         }
-    }
-
-    private func confidenceColor(_ c: Double) -> Color {
-        c >= 0.8 ? .green : c >= 0.5 ? .orange : .red
     }
 
     private func formatTime(_ s: Int) -> String {

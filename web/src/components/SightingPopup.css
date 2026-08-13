@@ -1,0 +1,112 @@
+.sighting-popup {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  background: rgba(15, 17, 23, .95);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .5);
+  overflow: hidden;
+}
+
+.sighting-popup-photo {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+.sighting-popup-audio-placeholder {
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.sighting-popup-audio-player {
+  width: 100%;
+  margin-top: 0;
+}
+
+.sighting-popup-body {
+  padding: 14px;
+}
+
+.sighting-popup-species {
+  font-weight: 700;
+  font-size: 16px;
+  color: #e2e8f0;
+  margin-bottom: 4px;
+}
+
+.sighting-popup-meta {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.sighting-popup-meta--notes {
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.sighting-popup-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.sighting-popup-badge--audio {
+  background: rgba(139, 92, 246, .2);
+  color: #a78bfa;
+}
+
+.sighting-popup-badge--photo {
+  background: rgba(13, 148, 136, .2);
+  color: #2dd4bf;
+}
+
+.sighting-popup-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, .5);
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sighting-popup-links {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.sighting-popup-link {
+  font-size: 11px;
+  color: #38bdf8;
+  text-decoration: none;
+  padding: 3px 8px;
+  background: rgba(56, 189, 248, .1);
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, .2);
+}

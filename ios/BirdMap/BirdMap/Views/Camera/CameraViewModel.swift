@@ -8,11 +8,18 @@ import UIKit
 @MainActor
 final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var capturedImage: UIImage?
+    /// Top classification result — used for the upload payload and the primary badge.
     @Published var aiSuggestion: ClassificationResult?
+    /// Top-3 on-device results shown as alternatives in the UI.
+    @Published var aiCandidates: [ClassificationResult] = []
     @Published var notes = ""
     @Published var isUploading = false
     @Published var uploadSuccess = false
     @Published var error: String?
+    /// Snapshot of the sighting + AI suggestion taken right before upload() clears
+    /// state, so the post-upload AI review card has something to show.
+    @Published var lastUploadedSightingID: String?
+    @Published var lastAISuggestion: ClassificationResult?
 
     private let locationManager = CLLocationManager()
     private(set) var lastLocation: CLLocation?
@@ -43,8 +50,12 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
 
     func setImage(_ image: UIImage) {
         capturedImage = image
+        aiSuggestion = nil
+        aiCandidates = []
         Task {
-            aiSuggestion = await BirdClassifier.shared.classify(image: image)
+            let results = await BirdClassifier.shared.classifyTopN(image: image, count: 3)
+            aiCandidates = results
+            aiSuggestion = results.first
         }
     }
 
@@ -74,9 +85,12 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
                 aiSpecies: aiSuggestion?.species,
                 aiConfidence: aiSuggestion.map { Double($0.confidence) }
             )
+            lastUploadedSightingID = sightingID
+            lastAISuggestion = aiSuggestion
             uploadSuccess = true
             capturedImage = nil
             aiSuggestion = nil
+            aiCandidates = []
             notes = ""
         } catch {
             self.error = "Upload failed: \(error.localizedDescription)"

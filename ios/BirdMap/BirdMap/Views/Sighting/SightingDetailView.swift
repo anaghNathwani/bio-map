@@ -233,8 +233,18 @@ struct SightingDetailView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(ann.species)
+                    Text(ann.species.isEmpty ? "Marked unsure" : ann.species)
                         .font(.subheadline.bold())
+                        .foregroundStyle(ann.species.isEmpty ? .secondary : .primary)
+                        .italic(ann.species.isEmpty)
+                    if ann.moderation == "flagged" {
+                        Label("Flagged", systemImage: "flag.fill")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.red.opacity(0.85), in: Capsule())
+                    }
                     Spacer()
                     confidenceBadge(ann.confidence)
                 }

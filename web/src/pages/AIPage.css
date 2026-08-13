@@ -1,0 +1,10 @@
+.ai-page-highlight {
+  background: rgba(13, 148, 136, .12);
+  border: 1px solid rgba(13, 148, 136, .3);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  font-size: 15px;
+  color: #5eead4;
+  line-height: 1.7;
+}
