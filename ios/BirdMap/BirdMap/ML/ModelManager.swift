@@ -40,7 +40,7 @@ final class ModelManager {
 
     /// Checks Firestore for a new active photo model version and downloads it if one exists.
     /// Safe to call on any concurrency context — uses async APIs internally.
-    /// Models are published by `ml_pipeline/train.py` to the `model_versions` collection
+    /// Models are published by `ml_pipeline/convert_photo_model.py` + `publish_model.py` to the `model_versions` collection
     /// and Firebase Storage — see docs/ML_PIPELINE.md.
     func checkForUpdate() async {
         do {

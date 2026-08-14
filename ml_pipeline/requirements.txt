@@ -1,10 +1,17 @@
-torch==2.3.0
-torchvision==0.18.0
-coremltools==7.2
-pillow==10.3.0
-requests==2.31.0
-scikit-learn==1.4.2
-tqdm==4.66.4
+# For live_service.py and publish_model.py — NOT for convert_photo_model.py,
+# which needs coremltools and must live in its own venv (see
+# requirements-convert.txt and the comment at the top of convert_photo_model.py:
+# coremltools and firebase-admin require mutually incompatible protobuf ranges
+# and cannot be installed together).
 firebase-admin==6.5.0
 sentence-transformers==3.0.1
 birdnetlib==0.18.1
+librosa==0.10.2.post1
+tensorflow==2.15.1
+requests==2.31.0
+tqdm==4.66.4
+# Pinned explicitly: firebase-admin's transitive deps (google-cloud-firestore,
+# google-api-core) require >=4.25.8, tensorflow 2.15.1 requires <5.0.0 — this
+# is the verified overlap. Confirmed to import cleanly together; do not let
+# pip drift this to protobuf's latest (6.x), which breaks tensorflow/coremltools.
+protobuf>=4.25.8,<5.0.0

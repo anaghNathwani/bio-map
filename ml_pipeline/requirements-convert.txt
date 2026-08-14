@@ -1,0 +1,9 @@
+# For convert_photo_model.py ONLY — run this in its own venv, separate from
+# requirements.txt. coremltools requires protobuf<=4.0.0 (no protobuf release
+# even exists between 3.20.3 and 4.21.0, so this is really "protobuf 3.x
+# only"), which is incompatible with firebase-admin's requirements. See the
+# comment at the top of convert_photo_model.py.
+tensorflow==2.15.1
+coremltools==7.2
+requests==2.31.0
+tqdm==4.66.4

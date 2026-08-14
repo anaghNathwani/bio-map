@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BirdMap is a citizen science iOS app for bird sighting collection, community annotation, and ML bird identification (on-device for photos, server-side for audio). The **live backend is Firebase** (Auth, Firestore, Storage) — the repo also contains a FastAPI Python backend (`backend/`) that is legacy/optional (Google Vision proxy + Wikipedia/eBird info lookups only; not deployed, not required) and a self-hosted PyTorch ML pipeline (`ml_pipeline/`) that reads/writes Firestore directly via the Admin SDK.
+BirdMap is a citizen science iOS app for bird sighting collection, community annotation, and ML bird identification (on-device for photos, server-side for audio). The **live backend is Firebase** (Auth, Firestore, Storage) — the repo also contains a FastAPI Python backend (`backend/`) that is legacy/optional (Google Vision proxy + Wikipedia/eBird info lookups only; not deployed, not required) and a self-hosted ML pipeline (`ml_pipeline/`) that reads/writes Firestore directly via the Admin SDK.
+
+**No models are trained or fine-tuned in-house.** Both the photo model (Google AIY Birds V1) and audio model (Cornell's BirdNET) are complete, pre-trained, ready-to-use models from vetted American organizations, used exactly as released. `ml_pipeline/convert_photo_model.py` + `publish_model.py` only convert/republish the photo model to CoreML — they do not train anything. See `docs/ML_PIPELINE.md` for why (and for why that's two scripts, not one — `coremltools` and `firebase-admin` can't be installed in the same environment).
 
 ## Commands
 
@@ -18,13 +20,18 @@ xcodebuild -scheme BirdMap -destination 'id=<simulator-udid>' -configuration Deb
 ### ML Pipeline (self-hosted, talks directly to Firestore/Storage via the Admin SDK)
 ```bash
 cd birdmap/ml_pipeline
+
+# One-time photo model publish — TWO separate venvs, not one (coremltools and
+# firebase-admin require mutually incompatible protobuf ranges, confirmed —
+# see docs/ML_PIPELINE.md):
+python3 -m venv .venv-convert && source .venv-convert/bin/activate
+pip install -r requirements-convert.txt
+python convert_photo_model.py --output ./output
+deactivate
+
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-
-# One-time bootstrap: produces the first real base model from iNaturalist photos
-python train.py --bootstrap-common-birds
-
-# Retrain on community annotations
-python train.py --min-annotations 50
+python publish_model.py --input ./output
 
 # Live audio ID (BirdNET) + annotation moderation — keep running continuously
 python live_service.py
@@ -64,7 +71,8 @@ Only used for the Google Vision photo-ID proxy and Wikipedia/eBird bird-info loo
 ### ML Pipeline (`ml_pipeline/`)
 
 Self-hosted Python scripts using the Firebase Admin SDK (`firestore_client.py`) — no Cloud Functions, no Blaze-only compute required for the scripts themselves (Firebase Storage itself does need Blaze, for uploads generally):
-- `train.py` — fetches plurality-voted, non-flagged photo annotations from Firestore, fine-tunes EfficientNet-B0 (PyTorch, ImageNet1K pretrained), exports to `.mlpackage` via `coremltools`, uploads to Firebase Storage, registers the new version in `model_versions`. `--bootstrap-common-birds` seeds from iNaturalist when there's little/no annotation data yet.
+- `convert_photo_model.py` — downloads Google's pre-trained AIY Birds V1 model (MobileNetV2, Apache 2.0) from TensorFlow Hub as-is, resolves common names via the iNaturalist taxonomy API, converts to `.mlpackage` via `coremltools`. Writes a local zip + manifest.json — no Firebase involved (needs its own venv, `requirements-convert.txt`).
+- `publish_model.py` — takes that local zip + manifest, uploads to Firebase Storage, registers the new version in `model_versions`. Uses `requirements.txt`, no coremltools. No training anywhere in this pair — a one-time conversion/publish step, run again only to re-publish.
 - `live_service.py` — long-running process with two Firestore realtime listeners: BirdNET audio analysis (writes `aiSpeciesSuggestion`/`aiConfidence` onto audio sightings) and annotation moderation (writes `moderation`/`moderationScore` onto new annotations using a local sentence-embedding model).
 
 Full details: `docs/ML_PIPELINE.md`.
@@ -72,7 +80,6 @@ Full details: `docs/ML_PIPELINE.md`.
 ### Key data flows
 
 - **Sighting upload:** `CameraViewModel.upload()` / `AudioRecorderViewModel.upload()` → `FirebaseService.uploadImage/uploadAudio` + `createSighting` → Firebase Storage + Firestore. On failure, `UploadQueue` persists to disk and retries on next launch.
-- **Model update:** App launch → `ModelManager.checkForUpdate()` → query `model_versions` → download zip from Storage if version changed → unzip to `Documents/BirdClassifier.mlpackage` → `BirdClassifier` picks it up on next inference.
-- **AI review loop:** Prediction shown (on-device for photo, async via `live_service.py` for audio) → user taps Right/Wrong/Unsure → `AnnotationView` pre-filled accordingly → `FirebaseService.submitAnnotation()` writes to Firestore with `reviewOfAI` set.
-- **Moderation loop:** New annotation written → `live_service.py`'s moderation listener classifies it → `moderation`/`moderationScore` written back → flagged annotations are excluded from `train.py`'s plurality voting.
-- **Self-learning loop:** Annotations accumulate → `python train.py` (manual or `--watch`) → new model registered in `model_versions` → app downloads it on next launch.
+- **Model update:** App launch → `ModelManager.checkForUpdate()` → query `model_versions` → download zip from Storage if version changed → unzip to `Documents/BirdClassifier.mlpackage` → `BirdClassifier` picks it up on next inference. The model itself never changes on its own — this only fires again if `convert_photo_model.py` + `publish_model.py` are re-run to ship an updated/fixed version.
+- **AI review loop:** Prediction shown (on-device for photo, async via `live_service.py` for audio) → user taps Right/Wrong/Unsure → `AnnotationView` pre-filled accordingly → `FirebaseService.submitAnnotation()` writes to Firestore with `reviewOfAI` set. This builds a community dataset but does not retrain any model.
+- **Moderation loop:** New annotation written → `live_service.py`'s moderation listener classifies it → `moderation`/`moderationScore` written back → flagged annotations are excluded from the plurality-voted "top species" shown on a sighting.
