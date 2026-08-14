@@ -6,7 +6,7 @@ export default function CommunityPage() {
   return (
     <div className="static-page">
       <header className="static-page-header">
-        <a href="/" className="static-page-back">← Map</a>
+        <a href="/" className="static-page-back">← Home</a>
         <span className="static-page-logo"><a href="/" className="static-page-back">🐦 BirdMap</a></span>
       </header>
 
