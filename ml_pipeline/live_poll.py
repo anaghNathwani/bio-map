@@ -1,40 +1,46 @@
 """
-BirdMap live service — self-hosted, run continuously from Terminal.
+BirdMap live poll — run periodically (e.g. via the scheduled GitHub Actions
+workflow at .github/workflows/live-poll.yml) rather than as a persistent
+process. A persistent listener needs an always-on machine to actually be
+"live"; polling on a schedule runs entirely on free, ephemeral CI minutes
+instead, at the cost of turning "instant" into "within one poll interval."
 
-Runs two Firestore realtime listeners (push-based watches, not polling):
+Each run does two things once, then exits:
 
-  1. Audio bird-call ID — analyzes newly uploaded audio sightings with
-     BirdNET (birdnetlib, Cornell's open-weight bird-call model, used as-is
-     — not fine-tuned in this pass) and writes the prediction back onto the
-     sighting doc, the same fields the on-device photo classifier fills in.
+  1. Audio bird-call ID — finds audio sightings with no aiSpeciesSuggestion
+     yet, downloads the recording (a plain HTTPS GET — Supabase Storage
+     buckets are public for reads, no credentials needed to fetch), analyzes
+     it with BirdNET (birdnetlib, Cornell's open-weight bird-call model, used
+     as-is — not fine-tuned), and writes the prediction back onto the
+     sighting doc.
 
-  2. Annotation moderation — classifies each new community annotation as a
-     genuine attempt or a "shitpost" using a small local open-weight
-     sentence-embedding model (no LLM API key, no training from scratch),
-     and writes the verdict back onto the annotation doc. Annotations with
-     no species ("unsure") are always "ok" and never touch the model.
+  2. Annotation moderation — finds annotations with moderation == "pending"
+     (set by the app at submission time — see FirebaseService.submitAnnotation
+     in the iOS app) and classifies each as a genuine attempt or a
+     "shitpost" using a small local open-weight sentence-embedding model (no
+     LLM API key, no training from scratch), writing the verdict back.
+     Annotations with no species ("unsure") are always "ok" and never touch
+     the model.
 
 Usage:
-    python live_service.py
-    python live_service.py --service-account path/to/key.json
+    python live_poll.py
+    python live_poll.py --service-account path/to/key.json
 
 Credentials: see firestore_client.py.
-
-Quick note: This is off-loaded to the firebase client, and not run locally on a user's device.
 """
 
 import argparse
 import logging
 import os
 import tempfile
-import time
 
+import requests
 from google.cloud.firestore_v1.base_query import FieldFilter
 
 import firestore_client
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-logger = logging.getLogger("live_service")
+logger = logging.getLogger("live_poll")
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -61,16 +67,19 @@ def _run_birdnet(audio_path: str, lat: float | None, lng: float | None) -> list[
     )[:3]
 
 
-def _process_audio_sighting(db, bucket, doc_id: str, data: dict) -> None:
-    logger.info("Analyzing audio sighting %s...", doc_id)
-    blob = bucket.blob(f"sightings/{doc_id}/audio.m4a")
-    if not blob.exists():
-        logger.warning("  No audio blob found for %s, skipping", doc_id)
+def _process_audio_sighting(db, doc_id: str, data: dict) -> None:
+    audio_url = data.get("audioURL")
+    if not audio_url:
+        logger.warning("  No audioURL for %s, skipping", doc_id)
         return
 
+    logger.info("Analyzing audio sighting %s...", doc_id)
+    resp = requests.get(audio_url, timeout=60)
+    resp.raise_for_status()
+
     with tempfile.NamedTemporaryFile(suffix=".m4a", delete=False) as f:
+        f.write(resp.content)
         tmp_path = f.name
-        blob.download_to_file(f)
 
     try:
         detections = _run_birdnet(tmp_path, data.get("latitude"), data.get("longitude"))
@@ -88,23 +97,20 @@ def _process_audio_sighting(db, bucket, doc_id: str, data: dict) -> None:
     logger.info("  %s -> %s", doc_id, top["species"] if top else "no detection")
 
 
-def _watch_audio(db, bucket):
+def poll_audio(db) -> int:
+    """Process every unanalyzed audio sighting once. Returns count processed."""
     query = db.collection("sightings").where(filter=FieldFilter("mediaType", "==", "audio"))
-
-    def on_snapshot(col_snapshot, changes, read_time):
-        for change in changes:
-            if change.type.name not in ("ADDED", "MODIFIED"):
-                continue
-            doc = change.document
-            data = doc.to_dict() or {}
-            if data.get("aiSpeciesSuggestion") is not None:
-                continue  # already analyzed
-            try:
-                _process_audio_sighting(db, bucket, doc.id, data)
-            except Exception:
-                logger.exception("  Failed processing audio sighting %s", doc.id)
-
-    return query.on_snapshot(on_snapshot)
+    processed = 0
+    for doc in query.stream():
+        data = doc.to_dict() or {}
+        if data.get("aiSpeciesSuggestion") is not None:
+            continue  # already analyzed
+        try:
+            _process_audio_sighting(db, doc.id, data)
+            processed += 1
+        except Exception:
+            logger.exception("  Failed processing audio sighting %s", doc.id)
+    return processed
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -188,24 +194,19 @@ def _process_annotation(db, sighting_id: str, ann_id: str, data: dict) -> None:
     logger.info("  annotation %s/%s -> %s (%.2f)", sighting_id, ann_id, verdict, score)
 
 
-def _watch_moderation(db):
-    query = db.collection_group("annotations")
-
-    def on_snapshot(col_snapshot, changes, read_time):
-        for change in changes:
-            if change.type.name != "ADDED":
-                continue
-            doc = change.document
-            data = doc.to_dict() or {}
-            if data.get("moderation") is not None:
-                continue  # already moderated
-            sighting_id = doc.reference.parent.parent.id
-            try:
-                _process_annotation(db, sighting_id, doc.id, data)
-            except Exception:
-                logger.exception("  Failed moderating annotation %s", doc.id)
-
-    return query.on_snapshot(on_snapshot)
+def poll_moderation(db) -> int:
+    """Process every annotation still marked moderation == "pending". Returns count processed."""
+    query = db.collection_group("annotations").where(filter=FieldFilter("moderation", "==", "pending"))
+    processed = 0
+    for doc in query.stream():
+        data = doc.to_dict() or {}
+        sighting_id = doc.reference.parent.parent.id
+        try:
+            _process_annotation(db, sighting_id, doc.id, data)
+            processed += 1
+        except Exception:
+            logger.exception("  Failed moderating annotation %s", doc.id)
+    return processed
 
 
 def main():
@@ -216,19 +217,10 @@ def main():
     args = parser.parse_args()
 
     db = firestore_client.get_db(args.service_account)
-    bucket = firestore_client.get_bucket(args.service_account)
 
-    logger.info("Starting audio + moderation live listeners (Ctrl+C to stop)...")
-    audio_watch = _watch_audio(db, bucket)
-    moderation_watch = _watch_moderation(db)
-
-    try:
-        while True:
-            time.sleep(3600)
-    except KeyboardInterrupt:
-        logger.info("Stopping...")
-        audio_watch.unsubscribe()
-        moderation_watch.unsubscribe()
+    n_audio = poll_audio(db)
+    n_mod = poll_moderation(db)
+    logger.info("Done: %d audio sighting(s) analyzed, %d annotation(s) moderated", n_audio, n_mod)
 
 
 if __name__ == "__main__":

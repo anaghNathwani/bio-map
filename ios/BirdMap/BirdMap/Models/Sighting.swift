@@ -69,7 +69,7 @@ struct AnnotationItem: Identifiable, Codable {
     /// Set when this annotation came from the post-upload AI review flow:
     /// "confirmed" (user tapped Right), "rejected" (Wrong), or "unsure".
     var reviewOfAI: String?
-    /// Written by the self-hosted moderation pipeline (ml_pipeline/live_service.py):
+    /// Written by the self-hosted moderation pipeline (ml_pipeline/live_poll.py):
     /// "ok" or "flagged". Nil until the moderation pass has run.
     var moderation: String?
     var moderationScore: Double?

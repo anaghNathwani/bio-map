@@ -9,7 +9,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
-from app.api import auth, sightings, annotations, leaderboard, model, vision, birds, sounds
+from app.api import auth, sightings, annotations, leaderboard, model, vision, birds, sounds, media
 from app.config import settings
 from app.database import engine
 from app.services.storage import ensure_buckets
@@ -56,6 +56,7 @@ app.include_router(model.router)
 app.include_router(vision.router)
 app.include_router(birds.router)
 app.include_router(sounds.router)
+app.include_router(media.router)
 
 
 @app.get("/health")

@@ -1,11 +1,12 @@
-databases:
-  - name: birdmap-db
-    plan: free
-    region: oregon
-    postgresMajorVersion: 15
-    databaseName: birdmap
-    user: birdmap
-
+# Deploys to Render's free web service tier (no credit card required).
+# Backed by Supabase for Postgres + S3-compatible Storage (also free, no
+# card) — not a Render-managed database, since Render's free Postgres tier
+# auto-deletes after a fixed period, while Supabase's just pauses after 7
+# days idle (recoverable, not destructive). See docs/DEPLOYMENT.md.
+#
+# DATABASE_URL, S3_*, and FIREBASE_SERVICE_ACCOUNT_JSON are `sync: false` —
+# ./deploy.sh sets them for you after provisioning the Supabase project, or
+# set them manually via `render env set` / the Render dashboard.
 services:
   - type: web
     name: birdmap-api
@@ -17,9 +18,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: birdmap-db
-          property: connectionString
+        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: MODEL_REGISTER_SECRET
@@ -38,11 +37,9 @@ services:
         sync: false
       - key: CORS_ORIGINS
         value: "*"
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
       - key: GOOGLE_CLOUD_API_KEY
         sync: false
       - key: EBIRD_API_KEY
         sync: false
-      - key: INSTAGRAM_USER_ID
-        value: ""
-      - key: INSTAGRAM_ACCESS_TOKEN
-        value: ""

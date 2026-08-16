@@ -2,7 +2,6 @@ import Foundation
 import CoreML
 import ZIPFoundation
 import FirebaseFirestore
-import FirebaseStorage
 
 final class ModelManager {
     static let shared = ModelManager()
@@ -40,8 +39,9 @@ final class ModelManager {
 
     /// Checks Firestore for a new active photo model version and downloads it if one exists.
     /// Safe to call on any concurrency context — uses async APIs internally.
-    /// Models are published by `ml_pipeline/convert_photo_model.py` + `publish_model.py` to the `model_versions` collection
-    /// and Firebase Storage — see docs/ML_PIPELINE.md.
+    /// Models are published by `ml_pipeline/convert_photo_model.py` + `publish_model.py` to the
+    /// `model_versions` Firestore collection and Supabase Storage (not Firebase Storage, which
+    /// now requires a paid Blaze plan for any usage) — see docs/ML_PIPELINE.md.
     func checkForUpdate() async {
         do {
             // 1. Find the active photo model version
@@ -52,7 +52,8 @@ final class ModelManager {
                 .getDocuments()
             guard let doc = snap.documents.first,
                   let version = doc.data()["version"] as? String,
-                  let storagePath = doc.data()["storagePath"] as? String else {
+                  let downloadURLString = doc.data()["downloadURL"] as? String,
+                  let downloadURL = URL(string: downloadURLString) else {
                 print("[ModelManager] No active photo model published yet")
                 return
             }
@@ -66,8 +67,7 @@ final class ModelManager {
 
             print("[ModelManager] Downloading model v\(version)…")
 
-            // 3. Download the zip from Firebase Storage
-            let downloadURL = try await Storage.storage().reference(withPath: storagePath).downloadURL()
+            // 3. Download the zip — a public Supabase Storage URL, no auth needed
             let (zipTemp, _) = try await URLSession.shared.download(from: downloadURL)
 
             // 4. Unzip into Documents — the zip root is BirdClassifier.mlpackage/

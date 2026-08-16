@@ -2,7 +2,7 @@ import asyncio
 import logging
 import uuid
 from typing import Optional, Annotated
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, UploadFile, File, Form, Query
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File, Form, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from geoalchemy2.functions import ST_MakePoint, ST_SetSRID, ST_Within, ST_MakeEnvelope
@@ -17,7 +17,6 @@ from app.models.annotation import Annotation
 from app.models.user import User
 from app.api.deps import current_user
 from app.services.storage import upload_photo
-from app.services import instagram
 
 router = APIRouter(prefix="/sightings", tags=["sightings"])
 limiter = Limiter(key_func=get_remote_address)
@@ -64,7 +63,6 @@ async def create_sighting(
     photo: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(current_user),
-    background_tasks: BackgroundTasks = BackgroundTasks(),
 ):
     content_type = photo.content_type or "image/jpeg"
     if content_type not in ALLOWED_CONTENT_TYPES:
@@ -98,13 +96,6 @@ async def create_sighting(
     await db.commit()
     await db.refresh(sighting)
     logger.info("Sighting created: %s by user %s", sighting.id, user.id)
-
-    background_tasks.add_task(
-        instagram.post_sighting,
-        photo_url,
-        ai_species,
-        f"{latitude:.4f}, {longitude:.4f}",
-    )
 
     return {"id": str(sighting.id), "photo_url": photo_url, "thumbnail_url": thumbnail_url}
 

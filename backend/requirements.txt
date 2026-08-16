@@ -14,3 +14,13 @@ psycopg2-binary==2.9.9
 slowapi==0.1.9
 requests==2.31.0
 birdnetlib==0.18.1
+librosa==0.10.2.post1
+# birdnetlib needs a TFLite interpreter; tflite-runtime has no reliable wheel
+# coverage, so it falls back to tensorflow's bundled tf.lite. This pulls in
+# firebase-admin's transitive google-cloud-firestore/google-api-core deps too
+# (for the media broker, app/services/firebase_auth.py) — those need
+# protobuf>=4.25.8, tensorflow needs protobuf<5.0.0. Pin explicitly; verified
+# (in ml_pipeline, same combination) that 4.25.9 satisfies both together.
+tensorflow==2.15.1
+protobuf>=4.25.8,<5.0.0
+firebase-admin==6.5.0

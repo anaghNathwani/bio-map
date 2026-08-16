@@ -18,7 +18,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     @Published var meterLevel: Float = 0
     @Published var notes = ""
     @Published var hasRecording = false
-    /// True while waiting for the self-hosted BirdNET watcher (ml_pipeline/live_service.py)
+    /// True while waiting for the self-hosted BirdNET watcher (ml_pipeline/live_poll.py)
     /// to analyze the just-uploaded recording.
     @Published var isAnalyzing = false
     @Published var analysisTimedOut = false
@@ -138,7 +138,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         isUploading = false
     }
 
-    /// Listens for the self-hosted BirdNET watcher (ml_pipeline/live_service.py) to
+    /// Listens for the self-hosted BirdNET watcher (ml_pipeline/live_poll.py) to
     /// populate this sighting's AI suggestion. Falls back to a plain success state
     /// if nothing arrives within the timeout (e.g. the watcher isn't running) —
     /// the sighting is still saved and can be annotated manually later.

@@ -84,7 +84,7 @@ export default function LandingPage() {
             >
               What We Built — See the Map
             </Link>
-            <AppStoreBadge href="#" />
+            <AppStoreBadge />
           </div>
         </div>
 
@@ -182,7 +182,7 @@ export default function LandingPage() {
           >
             What We Built — Open the Map
           </Link>
-          <AppStoreBadge href="#" size="lg" />
+          <AppStoreBadge size="lg" />
         </div>
       </section>
 

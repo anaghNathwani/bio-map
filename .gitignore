@@ -1,6 +1,12 @@
 # Environment
 .env
+.env.*
+!.env.example
 *.env.local
+
+# Credentials
+firebase-service-account*.json
+*-service-account*.json
 
 # Python
 __pycache__/

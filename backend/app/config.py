@@ -37,8 +37,11 @@ class Settings(BaseSettings):
     # Optional integrations (leave blank to disable)
     google_cloud_api_key: str = ""
     ebird_api_key: str = ""
-    instagram_user_id: str = ""
-    instagram_access_token: str = ""
+
+    # Firebase service account JSON (inline), used to verify the live app's
+    # Firebase ID tokens for the media upload broker (app/api/media.py).
+    # Falls back to Application Default Credentials if left blank.
+    firebase_service_account_json: str = ""
 
     model_config = {"env_file": ".env", "protected_namespaces": ()}
 

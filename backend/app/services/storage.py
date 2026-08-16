@@ -80,3 +80,42 @@ def get_model_download_url(s3_key: str, expires: int = 3600) -> str:
         Params={"Bucket": settings.model_bucket, "Key": s3_key},
         ExpiresIn=expires,
     )
+
+
+# ── Media broker (app/api/media.py) ─────────────────────────────────────────
+# Separate from upload_photo/upload_audio above, which serve this backend's
+# own Postgres-based sightings flow with its own random-key convention.
+# These key uploads by the caller-supplied Firestore sighting ID instead,
+# matching the path convention the live Firebase-based app already uses
+# (sightings/{id}/photo.jpg etc.), so a client that used to write directly to
+# Firebase Storage can switch to calling this backend with no other changes.
+
+def _upload_sighting_object(data: bytes, sighting_id: str, filename: str, content_type: str) -> str:
+    key = f"sightings/{sighting_id}/{filename}"
+    s3.put_object(Bucket=settings.s3_bucket, Key=key, Body=data, ContentType=content_type)
+    public_base = (settings.public_s3_url or settings.s3_endpoint)
+    return f"{public_base}/{settings.s3_bucket}/{key}"
+
+
+def upload_sighting_photo(data: bytes, sighting_id: str) -> tuple[str, str]:
+    """Upload a sighting's original photo + a 400x400 thumbnail, return (photo_url, thumbnail_url)."""
+    try:
+        img = Image.open(io.BytesIO(data))
+        img.verify()  # raises if corrupt
+        img = Image.open(io.BytesIO(data))  # reopen after verify (verify closes stream)
+    except Exception as e:
+        raise ValueError(f"Cannot decode image: {e}") from e
+
+    photo_url = _upload_sighting_object(data, sighting_id, "photo.jpg", "image/jpeg")
+
+    img.thumbnail((400, 400))
+    thumb_buf = io.BytesIO()
+    img.save(thumb_buf, format="JPEG", quality=75)
+    thumbnail_url = _upload_sighting_object(thumb_buf.getvalue(), sighting_id, "thumbnail.jpg", "image/jpeg")
+
+    return photo_url, thumbnail_url
+
+
+def upload_sighting_audio(data: bytes, sighting_id: str) -> str:
+    """Upload a sighting's audio recording, return its public URL."""
+    return _upload_sighting_object(data, sighting_id, "audio.m4a", "audio/mp4")

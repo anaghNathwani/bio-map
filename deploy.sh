@@ -1,23 +1,44 @@
 #!/usr/bin/env bash
 # BirdMap deployment script
 # Deploys:
-#   1. Firestore rules + indexes → Firebase
-#   2. Firebase Hosting (web map) → Firebase
-#   3. FastAPI backend (Vision API + Bird Info proxy) → Fly.io
+#   1. Firestore rules + indexes -> Firebase (free, Spark plan — unaffected by
+#      the Storage/Blaze requirement, which only gates Firebase *Storage*)
+#   2. Firebase Hosting (web map) -> Firebase
+#   3. Backend (media upload broker + legacy Postgres API) -> Render, backed
+#      by Supabase (Postgres + S3-compatible Storage) — all free, no card
+#      required anywhere. See docs/DEPLOYMENT.md for why this replaced the
+#      previous Fly.io + Firebase Storage setup.
 #
-# Prerequisites:
+# Prerequisites (one-time, needs your browser — this script can't do these for you):
 #   firebase-tools:  npm install -g firebase-tools && firebase login
-#   flyctl:          brew install flyctl && fly auth login
-#   Node + npm:      for web build
+#   supabase CLI:    brew install supabase/tap/supabase && supabase login
+#   render CLI:      brew install render && render login
+#   Node + npm:      for the web build
+#
+# Also needs a Firebase service account key for the backend + GitHub Actions
+# live-poll workflow to authenticate as an admin (Firebase Console -> Project
+# Settings -> Service Accounts -> Generate new private key). Pass its path as
+# the first argument, or place it at ./firebase-service-account.json.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 FIREBASE_ROOT="$(dirname "$REPO_ROOT")"   # firebase.json lives one level up
 WEB_DIR="$REPO_ROOT/web"
+APP_NAME="birdmap-api"
+SUPABASE_PROJECT_NAME="birdmap-app"
+FIREBASE_KEY_PATH="${1:-$REPO_ROOT/firebase-service-account.json}"
 
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; NC='\033[0m'
 info() { echo -e "${GREEN}==>${NC} $*"; }
 warn() { echo -e "${YELLOW}WARN:${NC} $*"; }
+
+if [ ! -f "$FIREBASE_KEY_PATH" ]; then
+  warn "No Firebase service account key found at $FIREBASE_KEY_PATH"
+  warn "Get one: Firebase Console -> Project Settings -> Service Accounts -> Generate new private key"
+  warn "Then re-run: ./deploy.sh /path/to/key.json"
+  exit 1
+fi
+FIREBASE_SERVICE_ACCOUNT_JSON="$(cat "$FIREBASE_KEY_PATH")"
 
 # ── 1. Build web app ──────────────────────────────────────────────────────────
 if [ ! -f "$WEB_DIR/.env.local" ]; then
@@ -33,7 +54,7 @@ else
   SKIP_WEB=0
 fi
 
-# ── 2. Deploy to Firebase ─────────────────────────────────────────────────────
+# ── 2. Deploy to Firebase (Firestore rules/indexes + Hosting only — no Storage) ─
 info "Deploying to Firebase..."
 cd "$FIREBASE_ROOT"
 if [ "${SKIP_WEB:-0}" = "0" ]; then
@@ -43,37 +64,159 @@ else
 fi
 cd "$REPO_ROOT"
 
-# ── 3. Deploy backend to Fly.io ───────────────────────────────────────────────
-info "Deploying backend to Fly.io..."
-if ! command -v fly &>/dev/null; then
-  warn "flyctl not found. Install: brew install flyctl && fly auth login"
-  warn "Skipping backend deploy."
-else
-  if ! fly status --app birdmap-api &>/dev/null 2>&1; then
-    info "Creating Fly.io app 'birdmap-api'..."
-    fly apps create birdmap-api
-    echo ""
-    warn "Set required secrets before first deploy:"
-    echo "  fly secrets set --app birdmap-api \\"
-    echo "    DATABASE_URL='postgresql+asyncpg://...' \\"
-    echo "    SECRET_KEY='$(python3 -c "import secrets; print(secrets.token_hex(32))")' \\"
-    echo "    S3_ENDPOINT='...' S3_ACCESS_KEY='...' S3_SECRET_KEY='...'"
-    echo ""
-    echo "Then re-run this script."
-    exit 0
-  fi
+# ── 3. Supabase project (Postgres + Storage) ──────────────────────────────────
+info "Checking Supabase auth..."
+supabase projects list > /dev/null 2>&1 || { warn "Run 'supabase login' first, then re-run this script."; exit 1; }
+render services list > /dev/null 2>&1 || { warn "Run 'render login' first, then re-run this script."; exit 1; }
 
-  fly deploy --app birdmap-api --dockerfile backend/Dockerfile --build-target production
-  info "Backend live at: https://birdmap-api.fly.dev"
+info "Finding or creating Supabase project..."
+ORG_ID=$(supabase orgs list --output json | python3 -c "import sys,json; print(json.load(sys.stdin)[0]['id'])")
+# hex, not urlsafe-base64: urlsafe can start with '-', which some CLI arg
+# parsers (confirmed: this one) misread as an unknown flag rather than a value.
+DB_PASSWORD=$(python3 -c "import secrets; print(secrets.token_hex(24))")
+
+set +e
+PROJECT_JSON=$(supabase projects create "$SUPABASE_PROJECT_NAME" \
+  --org-id "$ORG_ID" \
+  --db-password "$DB_PASSWORD" \
+  --region us-east-1 \
+  --output json)
+CREATE_EXIT=$?
+set -e
+
+if [ $CREATE_EXIT -ne 0 ] || [ -z "$PROJECT_JSON" ]; then
+  echo "    (create failed or project may already exist — checking by name...)"
+  PROJECT_JSON=$(supabase projects list --output json | \
+    python3 -c "import sys,json; ps=json.load(sys.stdin); p=next((x for x in ps if x['name']=='$SUPABASE_PROJECT_NAME'), None); print(json.dumps(p) if p else '', end='')")
+  if [ -z "$PROJECT_JSON" ]; then
+    echo "ERROR: 'supabase projects create' failed and no existing project named '$SUPABASE_PROJECT_NAME' was found."
+    echo "Re-run with --debug to see the real error: supabase projects create ... --debug"
+    exit 1
+  fi
 fi
+
+PROJECT_REF=$(echo "$PROJECT_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+echo "    Project ref: $PROJECT_REF"
+
+info "Waiting for Supabase project to be ready..."
+for i in $(seq 1 60); do
+  STATUS=$(supabase projects list --output json | \
+    python3 -c "import sys,json; ps=json.load(sys.stdin); p=next((x for x in ps if x['id']=='$PROJECT_REF'), {}); print(p.get('status',''))" 2>/dev/null || echo "")
+  [ "$STATUS" = "ACTIVE_HEALTHY" ] && break
+  echo "    Status: $STATUS (${i}0s)..."
+  sleep 10
+done
+
+info "Enabling PostGIS extension..."
+supabase db execute --project-ref "$PROJECT_REF" \
+  --sql "CREATE EXTENSION IF NOT EXISTS postgis;" 2>/dev/null || \
+  echo "    (PostGIS may already be enabled)"
+
+info "Fetching Supabase credentials..."
+KEYS_JSON=$(supabase projects api-keys --project-ref "$PROJECT_REF" --output json)
+SERVICE_KEY=$(echo "$KEYS_JSON" | python3 -c "import sys,json; ks=json.load(sys.stdin); print(next(x['api_key'] for x in ks if x['name']=='service_role'))")
+ANON_KEY=$(echo "$KEYS_JSON" | python3 -c "import sys,json; ks=json.load(sys.stdin); print(next(x['api_key'] for x in ks if x['name']=='anon'))")
+
+# Transaction pooler (port 6543) for asyncpg compatibility
+DB_URL="postgresql+asyncpg://postgres.${PROJECT_REF}:${DB_PASSWORD}@aws-0-us-east-1.pooler.supabase.com:6543/postgres?prepared_statement_cache_size=0"
+S3_ENDPOINT="https://${PROJECT_REF}.supabase.co/storage/v1/s3"
+PUBLIC_S3_URL="https://${PROJECT_REF}.supabase.co/storage/v1"
+SUPABASE_URL="https://${PROJECT_REF}.supabase.co"
+
+MODEL_REGISTER_SECRET=$(python3 -c "import secrets; print(secrets.token_hex(32))")
+SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
+
+# ── 4. Push code, deploy backend to Render ────────────────────────────────────
+info "Pushing code to GitHub..."
+cd "$REPO_ROOT"
+git push origin main
+
+info "Setting up Render service..."
+GITHUB_REPO=$(git remote get-url origin | sed 's|https://github.com/||;s|\.git$||')
+
+SERVICE_ID=$(render services list --output json 2>/dev/null | \
+  python3 -c "import sys,json; svcs=json.load(sys.stdin); s=next((x for x in svcs if x.get('name')=='$APP_NAME'), None); print(s['id'] if s else '')" 2>/dev/null || echo "")
+
+if [ -z "$SERVICE_ID" ]; then
+  echo "    Creating new Render web service..."
+  SERVICE_JSON=$(render services create \
+    --name "$APP_NAME" \
+    --type web \
+    --runtime docker \
+    --repo "https://github.com/$GITHUB_REPO" \
+    --branch main \
+    --plan free \
+    --output json 2>/dev/null)
+  SERVICE_ID=$(echo "$SERVICE_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+fi
+echo "    Service ID: $SERVICE_ID"
+
+info "Setting Render environment variables..."
+render env set \
+  --service "$SERVICE_ID" \
+  DATABASE_URL="$DB_URL" \
+  SECRET_KEY="$SECRET_KEY" \
+  S3_ENDPOINT="$S3_ENDPOINT" \
+  S3_ACCESS_KEY="$PROJECT_REF" \
+  S3_SECRET_KEY="$SERVICE_KEY" \
+  PUBLIC_S3_URL="$PUBLIC_S3_URL" \
+  MODEL_REGISTER_SECRET="$MODEL_REGISTER_SECRET" \
+  FIREBASE_SERVICE_ACCOUNT_JSON="$FIREBASE_SERVICE_ACCOUNT_JSON" \
+  CORS_ORIGINS="*"
+
+info "Triggering Render deploy..."
+render deploys create --service "$SERVICE_ID" --output json > /dev/null
+
+info "Waiting for Render service URL..."
+for i in $(seq 1 20); do
+  RENDER_URL=$(render services show --service "$SERVICE_ID" --output json 2>/dev/null | \
+    python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('serviceDetails',{}).get('url',''))" 2>/dev/null || echo "")
+  [ -n "$RENDER_URL" ] && break
+  sleep 3
+done
+
+if [ -n "$RENDER_URL" ]; then
+  info "Patching iOS project.yml with $RENDER_URL..."
+  sed -i '' "s|https://birdmap-api.fly.dev|$RENDER_URL|g" "$REPO_ROOT/ios/BirdMap/project.yml"
+  cd "$REPO_ROOT/ios/BirdMap" && xcodegen generate > /dev/null
+  cp Package.resolved.backup BirdMap.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved 2>/dev/null || true
+  cd "$REPO_ROOT"
+  echo "    Xcode project regenerated."
+fi
+
+# ── 5. Save secrets locally + print GitHub Actions setup ─────────────────────
+cat > "$REPO_ROOT/backend/.env.prod" <<EOF
+DATABASE_URL=$DB_URL
+SECRET_KEY=$SECRET_KEY
+S3_ENDPOINT=$S3_ENDPOINT
+S3_ACCESS_KEY=$PROJECT_REF
+S3_SECRET_KEY=$SERVICE_KEY
+S3_BUCKET=birdmap-photos
+MODEL_BUCKET=birdmap-models
+PUBLIC_S3_URL=$PUBLIC_S3_URL
+MODEL_REGISTER_SECRET=$MODEL_REGISTER_SECRET
+CORS_ORIGINS=*
+EOF
+chmod 600 "$REPO_ROOT/backend/.env.prod"
 
 echo ""
 info "Deployment complete!"
-echo "  Web map:  $(cd "$FIREBASE_ROOT" && firebase hosting:channel:list 2>/dev/null | grep 'live' | awk '{print $2}' || echo '<firebase hosting URL>')"
-echo "  API:      https://birdmap-api.fly.dev"
+echo "  Web map:          $(cd "$FIREBASE_ROOT" && firebase hosting:channel:list 2>/dev/null | grep 'live' | awk '{print $2}' || echo '<firebase hosting URL>')"
+echo "  API:               ${RENDER_URL:-<pending — check Render dashboard>}"
+echo "  Supabase project:  https://supabase.com/dashboard/project/$PROJECT_REF"
+echo "  Secrets saved to:  backend/.env.prod"
 echo ""
-if [ -z "$(fly secrets list --app birdmap-api 2>/dev/null | grep GOOGLE_CLOUD_API_KEY || true)" ]; then
-  warn "Google Vision not configured. Set: fly secrets set --app birdmap-api GOOGLE_CLOUD_API_KEY=<key>"
+warn "Render free tier sleeps after 15 min of inactivity — first request after takes ~30-60s."
+echo ""
+info "One more manual step: add these as GitHub Actions secrets so the live-poll"
+info "workflow (.github/workflows/live-poll.yml) can run — Settings -> Secrets"
+info "and variables -> Actions on the repo, or run:"
+echo ""
+echo "  gh secret set FIREBASE_SERVICE_ACCOUNT_JSON < \"$FIREBASE_KEY_PATH\""
+echo "  gh secret set RENDER_URL --body \"$RENDER_URL\""
+echo "  gh secret set SUPABASE_URL --body \"$SUPABASE_URL\""
+echo "  gh secret set SUPABASE_ANON_KEY --body \"$ANON_KEY\""
+echo ""
+if [ -z "$(render env get --service "$SERVICE_ID" GOOGLE_CLOUD_API_KEY 2>/dev/null)" ]; then
+  warn "Google Vision not configured (optional). Set: render env set --service $SERVICE_ID GOOGLE_CLOUD_API_KEY=<key>"
 fi
-echo "  Tonight: upgrade Firebase to Blaze → Firebase Console → Billing → Upgrade"
-echo "  This enables Firebase Storage quota for photo/audio uploads from the iOS app."

@@ -8,6 +8,16 @@ private let foregroundSession: URLSession = {
     return URLSession(configuration: config)
 }()
 
+// Longer timeout for media uploads — the backend runs on Render's free tier,
+// which sleeps after 15 minutes idle and takes 30-60s to cold-start on the
+// next request, on top of the actual upload time.
+private let uploadSession: URLSession = {
+    let config = URLSessionConfiguration.default
+    config.timeoutIntervalForRequest = 90
+    config.timeoutIntervalForResource = 120
+    return URLSession(configuration: config)
+}()
+
 enum APIError: Error, LocalizedError {
     case invalidURL
     case missingField(String)
@@ -31,9 +41,18 @@ struct ModelVersionInfo: Decodable {
     let version: String
 }
 
-// Keeps only the features that still proxy through the local Docker backend:
-// Google Vision bird ID and Wikipedia/eBird bird info.
-// All auth, sightings, annotations, and leaderboard now go through FirebaseService.
+private struct MediaUploadResponse: Decodable {
+    let photoURL: String?
+    let thumbnailURL: String?
+    let audioURL: String?
+}
+
+// Talks to the backend (Render-hosted, see docs/DEPLOYMENT.md) for: the media
+// upload broker (photo/audio -> Supabase Storage, since Firebase Storage now
+// requires a paid Blaze plan for any usage), the Google Vision bird-ID proxy,
+// and Wikipedia bird info. All Firestore reads/writes (sightings, annotations,
+// leaderboard, auth) go through FirebaseService, unaffected by any of this —
+// only the underlying media *blobs* moved off Firebase.
 final class APIClient {
     static let shared = APIClient()
 
@@ -53,6 +72,54 @@ final class APIClient {
     private func checkStatus(_ response: URLResponse) throws {
         guard let http = response as? HTTPURLResponse, http.statusCode >= 400 else { return }
         throw APIError.httpError(http.statusCode)
+    }
+
+    // MARK: - Media upload broker (Supabase Storage via backend, Firebase-token-verified)
+
+    func uploadPhoto(data: Data, sightingID: String, idToken: String) async throws -> (photoURL: String, thumbnailURL: String?) {
+        guard let url = URL(string: baseURL + "/media/sightings/\(sightingID)/photo") else { throw APIError.invalidURL }
+        let boundary = UUID().uuidString
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("Bearer \(idToken)", forHTTPHeaderField: "Authorization")
+        req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"photo\"; filename=\"photo.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        req.httpBody = body
+
+        let (respData, response) = try await uploadSession.data(for: req)
+        try checkStatus(response)
+        let decoded = try JSONDecoder().decode(MediaUploadResponse.self, from: respData)
+        guard let photoURL = decoded.photoURL else { throw APIError.missingField("photoURL") }
+        return (photoURL, decoded.thumbnailURL)
+    }
+
+    func uploadAudio(data: Data, sightingID: String, idToken: String) async throws -> String {
+        guard let url = URL(string: baseURL + "/media/sightings/\(sightingID)/audio") else { throw APIError.invalidURL }
+        let boundary = UUID().uuidString
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("Bearer \(idToken)", forHTTPHeaderField: "Authorization")
+        req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"audio\"; filename=\"audio.m4a\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: audio/mp4\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        req.httpBody = body
+
+        let (respData, response) = try await uploadSession.data(for: req)
+        try checkStatus(response)
+        let decoded = try JSONDecoder().decode(MediaUploadResponse.self, from: respData)
+        guard let audioURL = decoded.audioURL else { throw APIError.missingField("audioURL") }
+        return audioURL
     }
 
     // MARK: - Vision (Google Cloud proxy)

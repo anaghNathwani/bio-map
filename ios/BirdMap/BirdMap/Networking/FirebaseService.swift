@@ -1,16 +1,17 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
-import FirebaseStorage
 import GoogleSignIn
 import UIKit
 import CoreLocation
 
-// Central Firebase service — replaces APIClient for all data operations.
+// Central Firebase service — replaces APIClient for all data operations,
+// except media blobs (photo/audio), which are proxied through the backend to
+// Supabase Storage — see Networking/APIClient.swift and docs/DEPLOYMENT.md
+// for why (Firebase Storage now requires a paid Blaze plan for any usage).
 final class FirebaseService {
     static let shared = FirebaseService()
     let db = Firestore.firestore()
-    let storage = Storage.storage()
 
     private init() {}
 
@@ -93,35 +94,19 @@ final class FirebaseService {
         try await db.collection("users").document(uid).setData(["username": newUsername], merge: true)
     }
 
-    // MARK: - Storage Upload
+    // MARK: - Media Upload (proxied through the backend to Supabase Storage)
 
     func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?) {
-        let ref = storage.reference().child("sightings/\(sightingID)/photo.jpg")
-        let meta = StorageMetadata()
-        meta.contentType = "image/jpeg"
-        _ = try await ref.putDataAsync(data, metadata: meta)
-        let url = try await ref.downloadURL()
-
-        // Thumbnail: resize on-device
-        var thumbURL: String? = nil
-        if let img = UIImage(data: data), let thumb = img.thumbnail(maxSize: 400),
-           let thumbData = thumb.jpegData(compressionQuality: 0.75) {
-            let thumbRef = storage.reference().child("sightings/\(sightingID)/thumbnail.jpg")
-            _ = try? await thumbRef.putDataAsync(thumbData, metadata: meta)
-            thumbURL = try? await thumbRef.downloadURL().absoluteString
-        }
-
-        return (url.absoluteString, thumbURL)
+        guard let user = Auth.auth().currentUser else { throw AppError.notLoggedIn }
+        let idToken = try await user.getIDToken()
+        // Thumbnail generation happens server-side now (backend/app/services/storage.py).
+        return try await APIClient.shared.uploadPhoto(data: data, sightingID: sightingID, idToken: idToken)
     }
 
     func uploadAudio(_ data: Data, sightingID: String, filename: String) async throws -> String {
-        let ext = filename.hasSuffix(".m4a") ? "m4a" : "m4a"
-        let ref = storage.reference().child("sightings/\(sightingID)/audio.\(ext)")
-        let meta = StorageMetadata()
-        meta.contentType = "audio/mp4"
-        _ = try await ref.putDataAsync(data, metadata: meta)
-        let url = try await ref.downloadURL()
-        return url.absoluteString
+        guard let user = Auth.auth().currentUser else { throw AppError.notLoggedIn }
+        let idToken = try await user.getIDToken()
+        return try await APIClient.shared.uploadAudio(data: data, sightingID: sightingID, idToken: idToken)
     }
 
     // MARK: - Sightings
@@ -206,6 +191,10 @@ final class FirebaseService {
             "species": species,
             "confidence": confidence,
             "createdAt": Timestamp(),
+            // Polled by ml_pipeline/live_poll.py (moderation.where("moderation", "==", "pending"))
+            // — set explicitly here since Firestore can't efficiently query for a
+            // field's absence, only its value.
+            "moderation": "pending",
         ]
         if let v = behavior { data["behavior"] = v }
         if let v = agePlumage { data["agePlumage"] = v }
@@ -250,16 +239,5 @@ enum AppError: LocalizedError {
         case .notLoggedIn: return "You must be logged in"
         case .notFound: return "Not found"
         }
-    }
-}
-
-// MARK: - UIImage thumbnail helper
-private extension UIImage {
-    func thumbnail(maxSize: CGFloat) -> UIImage? {
-        let scale = maxSize / max(size.width, size.height)
-        guard scale < 1 else { return self }
-        let newSize = CGSize(width: size.width * scale, height: size.height * scale)
-        let renderer = UIGraphicsImageRenderer(size: newSize)
-        return renderer.image { _ in draw(in: CGRect(origin: .zero, size: newSize)) }
     }
 }
