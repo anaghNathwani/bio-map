@@ -107,18 +107,20 @@ for i in $(seq 1 60); do
   sleep 10
 done
 
+# Transaction pooler (port 6543) — plain postgres:// for the Supabase CLI,
+# SQLAlchemy-flavored postgresql+asyncpg:// (with prepared statement caching
+# disabled, required for pgbouncer) for the backend itself.
+RAW_DB_URL="postgresql://postgres.${PROJECT_REF}:${DB_PASSWORD}@aws-0-us-east-1.pooler.supabase.com:6543/postgres"
+DB_URL="postgresql+asyncpg://postgres.${PROJECT_REF}:${DB_PASSWORD}@aws-0-us-east-1.pooler.supabase.com:6543/postgres?prepared_statement_cache_size=0"
+
 info "Enabling PostGIS extension..."
-supabase db execute --project-ref "$PROJECT_REF" \
-  --sql "CREATE EXTENSION IF NOT EXISTS postgis;" 2>/dev/null || \
-  echo "    (PostGIS may already be enabled)"
+supabase db query --db-url "$RAW_DB_URL" "CREATE EXTENSION IF NOT EXISTS postgis;" 2>/dev/null || \
+  echo "    (PostGIS may already be enabled, or the project isn't ready yet — verify manually if needed)"
 
 info "Fetching Supabase credentials..."
 KEYS_JSON=$(supabase projects api-keys --project-ref "$PROJECT_REF" --output json)
 SERVICE_KEY=$(echo "$KEYS_JSON" | python3 -c "import sys,json; ks=json.load(sys.stdin); print(next(x['api_key'] for x in ks if x['name']=='service_role'))")
 ANON_KEY=$(echo "$KEYS_JSON" | python3 -c "import sys,json; ks=json.load(sys.stdin); print(next(x['api_key'] for x in ks if x['name']=='anon'))")
-
-# Transaction pooler (port 6543) for asyncpg compatibility
-DB_URL="postgresql+asyncpg://postgres.${PROJECT_REF}:${DB_PASSWORD}@aws-0-us-east-1.pooler.supabase.com:6543/postgres?prepared_statement_cache_size=0"
 S3_ENDPOINT="https://${PROJECT_REF}.supabase.co/storage/v1/s3"
 PUBLIC_S3_URL="https://${PROJECT_REF}.supabase.co/storage/v1"
 SUPABASE_URL="https://${PROJECT_REF}.supabase.co"
@@ -134,46 +136,56 @@ git push origin main
 info "Setting up Render service..."
 GITHUB_REPO=$(git remote get-url origin | sed 's|https://github.com/||;s|\.git$||')
 
+# render services list returns a bare `null` (not `[]`) when there are zero
+# services — guard for that explicitly rather than assuming a list.
 SERVICE_ID=$(render services list --output json 2>/dev/null | \
-  python3 -c "import sys,json; svcs=json.load(sys.stdin); s=next((x for x in svcs if x.get('name')=='$APP_NAME'), None); print(s['id'] if s else '')" 2>/dev/null || echo "")
+  python3 -c "import sys,json; svcs=json.load(sys.stdin) or []; s=next((x for x in svcs if x.get('name')=='$APP_NAME'), None); print(s['id'] if s else '')" 2>/dev/null || echo "")
 
 if [ -z "$SERVICE_ID" ]; then
   echo "    Creating new Render web service..."
+  # --type web_service (not "web"), --root-directory backend (Dockerfile is
+  # at backend/Dockerfile, not repo root) — confirmed against the live CLI,
+  # not assumed from older docs. There is no separate "set env vars" command
+  # (`render env` doesn't exist, and `services update` has no --env-var flag)
+  # — --env-var only works at creation time, so all of it goes here.
   SERVICE_JSON=$(render services create \
     --name "$APP_NAME" \
-    --type web \
+    --type web_service \
     --runtime docker \
+    --root-directory backend \
     --repo "https://github.com/$GITHUB_REPO" \
     --branch main \
     --plan free \
-    --output json 2>/dev/null)
+    --env-var "DATABASE_URL=$DB_URL" \
+    --env-var "SECRET_KEY=$SECRET_KEY" \
+    --env-var "S3_ENDPOINT=$S3_ENDPOINT" \
+    --env-var "S3_ACCESS_KEY=$PROJECT_REF" \
+    --env-var "S3_SECRET_KEY=$SERVICE_KEY" \
+    --env-var "S3_BUCKET=birdmap-photos" \
+    --env-var "MODEL_BUCKET=birdmap-models" \
+    --env-var "PUBLIC_S3_URL=$PUBLIC_S3_URL" \
+    --env-var "MODEL_REGISTER_SECRET=$MODEL_REGISTER_SECRET" \
+    --env-var "FIREBASE_SERVICE_ACCOUNT_JSON=$FIREBASE_SERVICE_ACCOUNT_JSON" \
+    --env-var "CORS_ORIGINS=*" \
+    --confirm \
+    --output json)
   SERVICE_ID=$(echo "$SERVICE_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+  echo "    Service ID: $SERVICE_ID"
+  info "Deploy auto-triggered on creation (auto-deploy defaults on)."
+else
+  echo "    Service ID: $SERVICE_ID"
+  warn "Service already existed — env vars are create-time only via this CLI (no update"
+  warn "command supports --env-var); set/change them via the Render dashboard if needed."
+  info "Triggering a fresh deploy..."
+  render deploys create "$SERVICE_ID" --confirm --output json > /dev/null
 fi
-echo "    Service ID: $SERVICE_ID"
 
-info "Setting Render environment variables..."
-render env set \
-  --service "$SERVICE_ID" \
-  DATABASE_URL="$DB_URL" \
-  SECRET_KEY="$SECRET_KEY" \
-  S3_ENDPOINT="$S3_ENDPOINT" \
-  S3_ACCESS_KEY="$PROJECT_REF" \
-  S3_SECRET_KEY="$SERVICE_KEY" \
-  PUBLIC_S3_URL="$PUBLIC_S3_URL" \
-  MODEL_REGISTER_SECRET="$MODEL_REGISTER_SECRET" \
-  FIREBASE_SERVICE_ACCOUNT_JSON="$FIREBASE_SERVICE_ACCOUNT_JSON" \
-  CORS_ORIGINS="*"
-
-info "Triggering Render deploy..."
-render deploys create --service "$SERVICE_ID" --output json > /dev/null
-
-info "Waiting for Render service URL..."
-for i in $(seq 1 20); do
-  RENDER_URL=$(render services show --service "$SERVICE_ID" --output json 2>/dev/null | \
-    python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('serviceDetails',{}).get('url',''))" 2>/dev/null || echo "")
-  [ -n "$RENDER_URL" ] && break
-  sleep 3
-done
+# Render web service URLs are the deterministic https://<name>.onrender.com
+# pattern unless a custom domain is attached — simpler and more reliable
+# than parsing CLI JSON output (whose exact shape has already drifted once
+# tonight) to find it.
+RENDER_URL="https://${APP_NAME}.onrender.com"
+info "Render URL (assuming default domain): $RENDER_URL"
 
 if [ -n "$RENDER_URL" ]; then
   info "Patching iOS project.yml with $RENDER_URL..."
@@ -217,6 +229,5 @@ echo "  gh secret set RENDER_URL --body \"$RENDER_URL\""
 echo "  gh secret set SUPABASE_URL --body \"$SUPABASE_URL\""
 echo "  gh secret set SUPABASE_ANON_KEY --body \"$ANON_KEY\""
 echo ""
-if [ -z "$(render env get --service "$SERVICE_ID" GOOGLE_CLOUD_API_KEY 2>/dev/null)" ]; then
-  warn "Google Vision not configured (optional). Set: render env set --service $SERVICE_ID GOOGLE_CLOUD_API_KEY=<key>"
-fi
+info "Google Vision (optional) isn't set — this CLI has no way to set/inspect env vars"
+info "after creation, add GOOGLE_CLOUD_API_KEY via the Render dashboard if you want it."
