@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
-# BirdMap deployment script
+# BirdMap deployment script — Render compute target.
 # Deploys:
 #   1. Firestore rules + indexes -> Firebase (free, Spark plan — unaffected by
 #      the Storage/Blaze requirement, which only gates Firebase *Storage*)
 #   2. Firebase Hosting (web map) -> Firebase
 #   3. Backend (media upload broker + legacy Postgres API) -> Render, backed
 #      by Supabase (Postgres + S3-compatible Storage) — all free, no card
-#      required anywhere. See docs/DEPLOYMENT.md for why this replaced the
-#      previous Fly.io + Firebase Storage setup.
+#      required for Supabase; Render currently requires a card on file even
+#      on its free plan (confirmed live, contrary to its own docs) — see
+#      docs/DEPLOYMENT.md. For a compute target that doesn't need a card,
+#      see deploy-gcp.sh (Cloud Run) instead — same Supabase data layer,
+#      different compute host. Both are safe to keep configured at once.
 #
 # Prerequisites (one-time, needs your browser — this script can't do these for you):
 #   firebase-tools:  npm install -g firebase-tools && firebase login
@@ -64,66 +67,9 @@ else
 fi
 cd "$REPO_ROOT"
 
-# ── 3. Supabase project (Postgres + Storage) ──────────────────────────────────
-info "Checking Supabase auth..."
-supabase projects list > /dev/null 2>&1 || { warn "Run 'supabase login' first, then re-run this script."; exit 1; }
+# ── 3. Supabase project (Postgres + Storage) — shared with deploy-gcp.sh ──────
 render services list > /dev/null 2>&1 || { warn "Run 'render login' first, then re-run this script."; exit 1; }
-
-info "Finding or creating Supabase project..."
-ORG_ID=$(supabase orgs list --output json | python3 -c "import sys,json; print(json.load(sys.stdin)[0]['id'])")
-# hex, not urlsafe-base64: urlsafe can start with '-', which some CLI arg
-# parsers (confirmed: this one) misread as an unknown flag rather than a value.
-DB_PASSWORD=$(python3 -c "import secrets; print(secrets.token_hex(24))")
-
-set +e
-PROJECT_JSON=$(supabase projects create "$SUPABASE_PROJECT_NAME" \
-  --org-id "$ORG_ID" \
-  --db-password "$DB_PASSWORD" \
-  --region us-east-1 \
-  --output json)
-CREATE_EXIT=$?
-set -e
-
-if [ $CREATE_EXIT -ne 0 ] || [ -z "$PROJECT_JSON" ]; then
-  echo "    (create failed or project may already exist — checking by name...)"
-  PROJECT_JSON=$(supabase projects list --output json | \
-    python3 -c "import sys,json; ps=json.load(sys.stdin); p=next((x for x in ps if x['name']=='$SUPABASE_PROJECT_NAME'), None); print(json.dumps(p) if p else '', end='')")
-  if [ -z "$PROJECT_JSON" ]; then
-    echo "ERROR: 'supabase projects create' failed and no existing project named '$SUPABASE_PROJECT_NAME' was found."
-    echo "Re-run with --debug to see the real error: supabase projects create ... --debug"
-    exit 1
-  fi
-fi
-
-PROJECT_REF=$(echo "$PROJECT_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
-echo "    Project ref: $PROJECT_REF"
-
-info "Waiting for Supabase project to be ready..."
-for i in $(seq 1 60); do
-  STATUS=$(supabase projects list --output json | \
-    python3 -c "import sys,json; ps=json.load(sys.stdin); p=next((x for x in ps if x['id']=='$PROJECT_REF'), {}); print(p.get('status',''))" 2>/dev/null || echo "")
-  [ "$STATUS" = "ACTIVE_HEALTHY" ] && break
-  echo "    Status: $STATUS (${i}0s)..."
-  sleep 10
-done
-
-# Transaction pooler (port 6543) — plain postgres:// for the Supabase CLI,
-# SQLAlchemy-flavored postgresql+asyncpg:// (with prepared statement caching
-# disabled, required for pgbouncer) for the backend itself.
-RAW_DB_URL="postgresql://postgres.${PROJECT_REF}:${DB_PASSWORD}@aws-0-us-east-1.pooler.supabase.com:6543/postgres"
-DB_URL="postgresql+asyncpg://postgres.${PROJECT_REF}:${DB_PASSWORD}@aws-0-us-east-1.pooler.supabase.com:6543/postgres?prepared_statement_cache_size=0"
-
-info "Enabling PostGIS extension..."
-supabase db query --db-url "$RAW_DB_URL" "CREATE EXTENSION IF NOT EXISTS postgis;" 2>/dev/null || \
-  echo "    (PostGIS may already be enabled, or the project isn't ready yet — verify manually if needed)"
-
-info "Fetching Supabase credentials..."
-KEYS_JSON=$(supabase projects api-keys --project-ref "$PROJECT_REF" --output json)
-SERVICE_KEY=$(echo "$KEYS_JSON" | python3 -c "import sys,json; ks=json.load(sys.stdin); print(next(x['api_key'] for x in ks if x['name']=='service_role'))")
-ANON_KEY=$(echo "$KEYS_JSON" | python3 -c "import sys,json; ks=json.load(sys.stdin); print(next(x['api_key'] for x in ks if x['name']=='anon'))")
-S3_ENDPOINT="https://${PROJECT_REF}.supabase.co/storage/v1/s3"
-PUBLIC_S3_URL="https://${PROJECT_REF}.supabase.co/storage/v1"
-SUPABASE_URL="https://${PROJECT_REF}.supabase.co"
+source "$REPO_ROOT/provision-supabase.sh"
 
 MODEL_REGISTER_SECRET=$(python3 -c "import secrets; print(secrets.token_hex(32))")
 SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
@@ -187,14 +133,12 @@ fi
 RENDER_URL="https://${APP_NAME}.onrender.com"
 info "Render URL (assuming default domain): $RENDER_URL"
 
-if [ -n "$RENDER_URL" ]; then
-  info "Patching iOS project.yml with $RENDER_URL..."
-  sed -i '' "s|https://birdmap-api.fly.dev|$RENDER_URL|g" "$REPO_ROOT/ios/BirdMap/project.yml"
-  cd "$REPO_ROOT/ios/BirdMap" && xcodegen generate > /dev/null
-  cp Package.resolved.backup BirdMap.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved 2>/dev/null || true
-  cd "$REPO_ROOT"
-  echo "    Xcode project regenerated."
-fi
+info "Patching iOS project.yml with $RENDER_URL..."
+sed -i '' "s|https://birdmap-api.fly.dev|$RENDER_URL|g; s|https://birdmap-api-[a-z0-9]*\.run\.app|$RENDER_URL|g" "$REPO_ROOT/ios/BirdMap/project.yml"
+cd "$REPO_ROOT/ios/BirdMap" && xcodegen generate > /dev/null
+cp Package.resolved.backup BirdMap.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved 2>/dev/null || true
+cd "$REPO_ROOT"
+echo "    Xcode project regenerated."
 
 # ── 5. Save secrets locally + print GitHub Actions setup ─────────────────────
 cat > "$REPO_ROOT/backend/.env.prod" <<EOF

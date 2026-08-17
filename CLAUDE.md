@@ -51,8 +51,10 @@ Needs Firebase Admin credentials: `--service-account <path>`, `GOOGLE_APPLICATIO
 # Local dev (Postgres + MinIO via Docker Compose)
 cd birdmap && docker-compose up -d
 
-# Production: ./deploy.sh /path/to/firebase-service-account.json
-# (Render + Supabase, see docs/DEPLOYMENT.md)
+# Production, pick one compute target (same Supabase data layer either way):
+./deploy.sh /path/to/firebase-service-account.json                    # Render — needs a card, confirmed live
+./deploy-gcp.sh <gcp-project-id> /path/to/firebase-service-account.json  # Cloud Run — needs GCP billing enabled
+# See docs/DEPLOYMENT.md
 ```
 The media upload broker (`app/api/media.py`) is load-bearing — every real photo/audio upload from the app goes through it. The rest (`auth.py`, `sightings.py`, `annotations.py`, `leaderboard.py`, `model.py`) is a separate, independent Postgres-backed system the live app doesn't call.
 

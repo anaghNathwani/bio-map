@@ -2,16 +2,20 @@
 
 ## Overview and why this architecture
 
-Everything in production runs on free tiers **with no credit card attached anywhere**. That constraint, not just cost minimization, drove several concrete decisions worth knowing before touching this:
+Production started from a **no credit card attached anywhere** constraint. That drove several decisions worth knowing before touching this, and a couple of them didn't survive contact with reality — noted below rather than pretending the story is cleaner than it was:
 
 - **Firebase Storage is not used**, anywhere, for anything. As of February 2026, Google requires a linked billing account (the Blaze plan) to use Cloud Storage for Firebase at all, even for $0-billed usage within the free tier. Firestore and Firebase Auth are unaffected — only Storage is gated — so they're still used directly.
-- **Photo/audio/model blobs live in Supabase Storage instead** — genuinely free, no card, for both private and public buckets (unlike Backblaze B2, whose free tier requires a card specifically for public buckets). Reads are direct public URLs; writes are proxied through the FastAPI backend (`backend/app/api/media.py`), which verifies the caller's Firebase ID token before uploading on their behalf, since Supabase Storage has no native way to authorize a Firebase-issued token itself.
+- **Photo/audio/model blobs live in Supabase Storage instead** — genuinely free, no card, for both private and public buckets (confirmed live; unlike Backblaze B2, whose free tier requires a card specifically for public buckets, and unlike Cloudflare R2, whose card requirement is disputed even in its own community). Reads are direct public URLs; writes are proxied through the FastAPI backend (`backend/app/api/media.py`), which verifies the caller's Firebase ID token before uploading on their behalf, since Supabase Storage has no native way to authorize a Firebase-issued token itself.
 - **The backend's database is Supabase Postgres, not a Render-managed database.** Render's free Postgres tier auto-*deletes* the database after a fixed period; Supabase's free tier only *pauses* after 7 days of inactivity (recoverable, not destructive) — meaningfully different for anything called "production."
-- **The backend runs on Render's free web service tier** — no card required, but it sleeps after 15 minutes idle (30-60s cold start on the next request). Fine for infrequent operations (an upload, a Vision lookup); not fine for anything that needs to be always listening.
+- **Backend compute has two supported targets, both fine to keep configured at once — pick whichever fits:**
+  - **Render** (`deploy.sh`) — despite its own docs and widespread reporting saying otherwise, this project's workspace was rejected with `need_payment_info` when actually attempting to create a free-plan service (confirmed live, not assumed). A card is required. Sleeps after 15 min idle (30-60s cold start on next request).
+  - **Google Cloud Run** (`deploy-gcp.sh`) — also requires billing enabled on the GCP project (same as Firebase Blaze; not avoidable, that's how Cloud Run/Cloud Build billing works, regardless of program). Scales to zero when idle rather than sleeping on a fixed schedule. A natural fit if billing is covered by a Google Cloud for Education (or similar institutional/credit) arrangement rather than a personal card.
+  - Koyeb was also tried and abandoned — it's pivoted toward AI-model-inference hosting rather than general app hosting, no API-key/billing management surface was reachable for a fresh account.
+  - Both compute targets share the **same Supabase project** (`provision-supabase.sh`, sourced by both deploy scripts) — the data layer doesn't change based on where the container runs.
 - **`ml_pipeline/live_poll.py` runs on a GitHub Actions schedule, not as a persistent process** — for the same reason a persistent Firestore listener needs an always-on machine, which isn't free unless you provide your own. Polling on a schedule (`.github/workflows/live-poll.yml`) runs entirely on free CI minutes instead, at the cost of "instant" becoming "within one poll interval" (20 minutes by default).
 - **Fly.io is not used.** As of 2024-2025 it discontinued its free tier entirely — a card is required almost immediately.
 
-If any of these constraints get relaxed later (a card becomes acceptable, or budget opens up), the natural upgrade path is: enable Firebase Blaze and move Storage back to Firebase (reverts `storage.rules` from vestigial), or move the backend to a paid Render/Fly instance for always-on reliability instead of sleep/cold-start behavior.
+The practical lesson embedded in the deploy scripts themselves: every platform's "free, no card" claim in this list was verified by actually attempting the action, not by reading docs or search results — three separate platforms (Render, Koyeb, and disputed reports on Cloudflare R2) turned out to not match their own marketing once actually tested this session.
 
 ---
 
@@ -55,6 +59,31 @@ The repo is private, so Actions minutes are metered (2000 free min/month) — th
 
 ---
 
+## Production deployment (Google Cloud Run alternative)
+
+Same result as `deploy.sh`, different compute host — same Supabase project (Postgres + Storage), same Firestore/Hosting deploy, backend built straight from `backend/Dockerfile` via Cloud Build instead of Render.
+
+```bash
+gcloud auth login
+gcloud projects list   # find or create the project ID to deploy into
+./deploy-gcp.sh <gcp-project-id> /path/to/firebase-service-account.json
+```
+
+**One-time prerequisites:**
+
+```bash
+brew install --cask google-cloud-sdk && gcloud auth login
+brew install supabase/tap/supabase && supabase login   # if not already done for deploy.sh
+```
+
+The GCP project needs **billing enabled** (Console → Billing → link a billing account) before this will run — Cloud Run and Cloud Build require it regardless of actual usage, the same shape as Firebase's Blaze requirement. The script checks this up front and exits with a clear message rather than failing partway through if it's missing. This is a natural fit once a Google Cloud for Education (or other institutional) billing account is available, since that's what backs the billing account rather than a personal card.
+
+What it does differently from `deploy.sh`: enables the Cloud Run/Cloud Build/Artifact Registry APIs, writes all backend env vars (including the Firebase service account JSON, which contains commas/braces/colons that would break `gcloud`'s comma-separated `--set-env-vars` format) to a temporary YAML file via `--env-vars-file` instead, and deploys with `gcloud run deploy --source=backend`. Secrets get saved to `backend/.env.gcp` (gitignored) rather than `.env.prod`, so running both scripts back to back doesn't clobber either record.
+
+Cloud Run scales to zero when idle rather than sleeping on Render's fixed 15-minute schedule — cold start only happens after a genuinely quiet period, not a fixed timer.
+
+---
+
 ## Local development
 
 ```bash
@@ -82,4 +111,5 @@ Render's dashboard shows deploy logs and request logs directly; there's no separ
 
 - **Revert to Firebase Storage:** restore `storage.rules`'s real content (currently marked vestigial but unchanged), re-add the `FirebaseStorage` SPM product to `ios/BirdMap/project.yml`, and point `FirebaseService.uploadImage`/`uploadAudio` back at the Storage SDK instead of the backend's `/media` endpoints. Requires enabling Blaze.
 - **Disable the live-poll workflow:** delete or disable `.github/workflows/live-poll.yml` in the repo's Actions settings. Audio sightings will simply never get an AI suggestion, and annotations will stay `moderation: "pending"` — both fail safe (nothing blocks on this).
-- **Roll back the backend:** Render keeps previous deploys; redeploy an earlier one from its dashboard.
+- **Roll back the backend:** Render keeps previous deploys; redeploy an earlier one from its dashboard. Cloud Run keeps previous revisions too — `gcloud run services update-traffic birdmap-api --region=us-central1 --to-revisions=<revision>=100`.
+- **Switch compute target:** both `deploy.sh` and `deploy-gcp.sh` patch the same `ios/BirdMap/project.yml` `API_BASE_URL` — running one after the other just repoints the app at whichever ran last. Both backends stay live independently unless explicitly torn down.
