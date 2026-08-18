@@ -78,9 +78,37 @@ brew install supabase/tap/supabase && supabase login   # if not already done for
 
 The GCP project needs **billing enabled** (Console → Billing → link a billing account) before this will run — Cloud Run and Cloud Build require it regardless of actual usage, the same shape as Firebase's Blaze requirement. The script checks this up front and exits with a clear message rather than failing partway through if it's missing. This is a natural fit once a Google Cloud for Education (or other institutional) billing account is available, since that's what backs the billing account rather than a personal card.
 
-What it does differently from `deploy.sh`: enables the Cloud Run/Cloud Build/Artifact Registry APIs, writes all backend env vars (including the Firebase service account JSON, which contains commas/braces/colons that would break `gcloud`'s comma-separated `--set-env-vars` format) to a temporary YAML file via `--env-vars-file` instead, and deploys with `gcloud run deploy --source=backend`. Secrets get saved to `backend/.env.gcp` (gitignored) rather than `.env.prod`, so running both scripts back to back doesn't clobber either record.
+What it does differently from `deploy.sh`: enables the Cloud Run/Cloud Build/Artifact Registry APIs, writes all backend env vars (including the Firebase service account JSON, which contains commas/braces/colons that would break `gcloud`'s comma-separated `--set-env-vars` format) to a temporary YAML file via `--env-vars-file` instead, and deploys with `gcloud run deploy --source=backend`.
 
 Cloud Run scales to zero when idle rather than sleeping on Render's fixed 15-minute schedule — cold start only happens after a genuinely quiet period, not a fixed timer.
+
+---
+
+## Production deployment (self-hosted alternative — your own machine as a temporary server)
+
+For a pitch/demo period before Cloud Run funding comes through: run the exact same backend container on a spare machine instead of a cloud platform. Same Supabase data layer, same `backend/Dockerfile`. Written for a fresh **Ubuntu Server** install — modest hardware is fine (an old i3 with 16GB RAM and no GPU runs this comfortably; nothing here does on-device ML, the heaviest thing is `tensorflow`'s CPU-only inference path for BirdNET).
+
+**On your Mac**, generate the shared credentials first if you haven't already (this alone doesn't need Render or GCP to succeed):
+```bash
+SUPABASE_PROJECT_NAME=birdmap-app REPO_ROOT="$(pwd)" source ./provision-supabase.sh
+```
+This writes `backend/.env.supabase` — copy that one file to the PC (`scp`, a USB drive, whatever's easiest).
+
+**On the PC** (after installing Ubuntu Server and cloning this repo there):
+```bash
+git clone https://github.com/anaghNathwani/bird-app.git && cd bird-app/birdmap
+# copy backend/.env.supabase here first
+./deploy-selfhost.sh
+```
+
+What it does: installs Docker and `cloudflared` if missing, builds `backend/Dockerfile` and runs it with `--restart unless-stopped` (survives crashes and reboots), then exposes it via a **Cloudflare Tunnel quick tunnel** — free, no Cloudflare account, no domain needed, gives a real `https://*.trycloudflare.com` URL. Installed as a systemd service (`birdmap-tunnel`) so it also survives reboots.
+
+**The one real tradeoff**, confirmed rather than assumed: a Cloudflare Tunnel only gets a *stable, unchanging* URL if it's a *named* tunnel, which requires owning a domain on Cloudflare DNS. Without one, quick tunnels are the only option, and the URL changes every time the tunnel process restarts (reboot, crash, manual restart). The systemd service logs every URL it's assigned to `/var/log/birdmap-tunnel-url.log` — after any restart, check that file and re-point the app:
+```bash
+# on your Mac
+./update-api-url.sh https://whatever-the-new-one-is.trycloudflare.com
+```
+If this ends up running for longer than "temporary," a cheap domain added to Cloudflare removes this whole caveat (persistent named tunnel, no more URL rotation) — not built here since it wasn't asked for and isn't free.
 
 ---
 
@@ -111,5 +139,6 @@ Render's dashboard shows deploy logs and request logs directly; there's no separ
 
 - **Revert to Firebase Storage:** restore `storage.rules`'s real content (currently marked vestigial but unchanged), re-add the `FirebaseStorage` SPM product to `ios/BirdMap/project.yml`, and point `FirebaseService.uploadImage`/`uploadAudio` back at the Storage SDK instead of the backend's `/media` endpoints. Requires enabling Blaze.
 - **Disable the live-poll workflow:** delete or disable `.github/workflows/live-poll.yml` in the repo's Actions settings. Audio sightings will simply never get an AI suggestion, and annotations will stay `moderation: "pending"` — both fail safe (nothing blocks on this).
-- **Roll back the backend:** Render keeps previous deploys; redeploy an earlier one from its dashboard. Cloud Run keeps previous revisions too — `gcloud run services update-traffic birdmap-api --region=us-central1 --to-revisions=<revision>=100`.
-- **Switch compute target:** both `deploy.sh` and `deploy-gcp.sh` patch the same `ios/BirdMap/project.yml` `API_BASE_URL` — running one after the other just repoints the app at whichever ran last. Both backends stay live independently unless explicitly torn down.
+- **Roll back the backend:** Render keeps previous deploys; redeploy an earlier one from its dashboard. Cloud Run keeps previous revisions too — `gcloud run services update-traffic birdmap-api --region=us-central1 --to-revisions=<revision>=100`. Self-hosted: `docker logs birdmap-api` / rebuild from an earlier commit.
+- **Switch compute target:** all three deploy scripts call the same `update-api-url.sh` to patch `ios/BirdMap/project.yml`'s `API_BASE_URL` — running any one of them just repoints the app at whichever ran last. All three backends stay live independently unless explicitly torn down.
+- **Stop self-hosting:** `docker rm -f birdmap-api && sudo systemctl disable --now birdmap-tunnel`.

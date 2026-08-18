@@ -8,9 +8,10 @@
 #      by Supabase (Postgres + S3-compatible Storage) — all free, no card
 #      required for Supabase; Render currently requires a card on file even
 #      on its free plan (confirmed live, contrary to its own docs) — see
-#      docs/DEPLOYMENT.md. For a compute target that doesn't need a card,
-#      see deploy-gcp.sh (Cloud Run) instead — same Supabase data layer,
-#      different compute host. Both are safe to keep configured at once.
+#      docs/DEPLOYMENT.md. For compute targets that don't need a personal
+#      card, see deploy-gcp.sh (Cloud Run) or deploy-selfhost.sh (your own
+#      machine) — same Supabase data layer either way. All three are safe to
+#      keep configured at once.
 #
 # Prerequisites (one-time, needs your browser — this script can't do these for you):
 #   firebase-tools:  npm install -g firebase-tools && firebase login
@@ -67,12 +68,9 @@ else
 fi
 cd "$REPO_ROOT"
 
-# ── 3. Supabase project (Postgres + Storage) — shared with deploy-gcp.sh ──────
+# ── 3. Supabase project (Postgres + Storage) — shared with the other two ──────
 render services list > /dev/null 2>&1 || { warn "Run 'render login' first, then re-run this script."; exit 1; }
 source "$REPO_ROOT/provision-supabase.sh"
-
-MODEL_REGISTER_SECRET=$(python3 -c "import secrets; print(secrets.token_hex(32))")
-SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
 
 # ── 4. Push code, deploy backend to Render ────────────────────────────────────
 info "Pushing code to GitHub..."
@@ -132,35 +130,14 @@ fi
 # tonight) to find it.
 RENDER_URL="https://${APP_NAME}.onrender.com"
 info "Render URL (assuming default domain): $RENDER_URL"
-
-info "Patching iOS project.yml with $RENDER_URL..."
-sed -i '' "s|https://birdmap-api.fly.dev|$RENDER_URL|g; s|https://birdmap-api-[a-z0-9]*\.run\.app|$RENDER_URL|g" "$REPO_ROOT/ios/BirdMap/project.yml"
-cd "$REPO_ROOT/ios/BirdMap" && xcodegen generate > /dev/null
-cp Package.resolved.backup BirdMap.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved 2>/dev/null || true
-cd "$REPO_ROOT"
-echo "    Xcode project regenerated."
-
-# ── 5. Save secrets locally + print GitHub Actions setup ─────────────────────
-cat > "$REPO_ROOT/backend/.env.prod" <<EOF
-DATABASE_URL=$DB_URL
-SECRET_KEY=$SECRET_KEY
-S3_ENDPOINT=$S3_ENDPOINT
-S3_ACCESS_KEY=$PROJECT_REF
-S3_SECRET_KEY=$SERVICE_KEY
-S3_BUCKET=birdmap-photos
-MODEL_BUCKET=birdmap-models
-PUBLIC_S3_URL=$PUBLIC_S3_URL
-MODEL_REGISTER_SECRET=$MODEL_REGISTER_SECRET
-CORS_ORIGINS=*
-EOF
-chmod 600 "$REPO_ROOT/backend/.env.prod"
+"$REPO_ROOT/update-api-url.sh" "$RENDER_URL"
 
 echo ""
 info "Deployment complete!"
 echo "  Web map:          $(cd "$FIREBASE_ROOT" && firebase hosting:channel:list 2>/dev/null | grep 'live' | awk '{print $2}' || echo '<firebase hosting URL>')"
-echo "  API:               ${RENDER_URL:-<pending — check Render dashboard>}"
+echo "  API:               $RENDER_URL"
 echo "  Supabase project:  https://supabase.com/dashboard/project/$PROJECT_REF"
-echo "  Secrets saved to:  backend/.env.prod"
+echo "  Secrets saved to:  backend/.env.supabase"
 echo ""
 warn "Render free tier sleeps after 15 min of inactivity — first request after takes ~30-60s."
 echo ""

@@ -72,11 +72,8 @@ cd "$FIREBASE_ROOT"
 if [ "${SKIP_WEB:-0}" = "0" ]; then firebase deploy --only firestore,hosting; else firebase deploy --only firestore; fi
 cd "$REPO_ROOT"
 
-# ── 3. Supabase project (Postgres + Storage) — shared with deploy.sh ──────────
+# ── 3. Supabase project (Postgres + Storage) — shared with the other two ─────
 source "$REPO_ROOT/provision-supabase.sh"
-
-MODEL_REGISTER_SECRET=$(python3 -c "import secrets; print(secrets.token_hex(32))")
-SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
 
 # ── 4. Enable required APIs ────────────────────────────────────────────────────
 info "Enabling Cloud Run + Cloud Build + Artifact Registry APIs (idempotent if already on)..."
@@ -126,35 +123,14 @@ rm -f "$ENV_VARS_FILE"
 
 GCP_URL=$(gcloud run services describe "$APP_NAME" --region="$REGION" --format="value(status.url)")
 info "Cloud Run URL: $GCP_URL"
-
-info "Patching iOS project.yml with $GCP_URL..."
-sed -i '' "s|https://birdmap-api.fly.dev|$GCP_URL|g; s|https://birdmap-api.onrender.com|$GCP_URL|g" "$REPO_ROOT/ios/BirdMap/project.yml"
-cd "$REPO_ROOT/ios/BirdMap" && xcodegen generate > /dev/null
-cp Package.resolved.backup BirdMap.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved 2>/dev/null || true
-cd "$REPO_ROOT"
-echo "    Xcode project regenerated."
-
-# ── 6. Save secrets locally ────────────────────────────────────────────────────
-cat > "$REPO_ROOT/backend/.env.gcp" <<EOF
-DATABASE_URL=$DB_URL
-SECRET_KEY=$SECRET_KEY
-S3_ENDPOINT=$S3_ENDPOINT
-S3_ACCESS_KEY=$PROJECT_REF
-S3_SECRET_KEY=$SERVICE_KEY
-S3_BUCKET=birdmap-photos
-MODEL_BUCKET=birdmap-models
-PUBLIC_S3_URL=$PUBLIC_S3_URL
-MODEL_REGISTER_SECRET=$MODEL_REGISTER_SECRET
-CORS_ORIGINS=*
-EOF
-chmod 600 "$REPO_ROOT/backend/.env.gcp"
+"$REPO_ROOT/update-api-url.sh" "$GCP_URL"
 
 echo ""
 info "Deployment complete!"
 echo "  Web map:          $(cd "$FIREBASE_ROOT" && firebase hosting:channel:list 2>/dev/null | grep 'live' | awk '{print $2}' || echo '<firebase hosting URL>')"
 echo "  API (Cloud Run):   $GCP_URL"
 echo "  Supabase project:  https://supabase.com/dashboard/project/$PROJECT_REF"
-echo "  Secrets saved to:  backend/.env.gcp"
+echo "  Secrets saved to:  backend/.env.supabase"
 echo ""
 info "Cloud Run scales to zero when idle (unlike Render, no fixed sleep/wake schedule —"
 info "cold start only on the first request after a quiet period)."
