@@ -35,6 +35,7 @@
 		9BC563BFCA0123B81AA09B9D /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DB12F018E31261FE1BDCE0 /* LeaderboardView.swift */; };
 		9E756129ADC0855B061B9AB4 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 0BE946E6F371CB9BAB291AA5 /* ZIPFoundation */; };
 		A31578A8052DCF77C0164B39 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F774BC8F3476F72083FAEB /* APIClient.swift */; };
+		BFE97DC16EA94CD22E6D05D1 /* AdditionalBirdsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77211DC0EA92575DE7CB2308 /* AdditionalBirdsSection.swift */; };
 		D2C6D17E2E8167515BAB5AC0 /* BirdInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95EE6F1D96F699764DE2531 /* BirdInfoView.swift */; };
 		D358F033227E132F4C7A104E /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F1E536E2CDF56A8FB29053 /* CameraViewModel.swift */; };
 		FBE60E8002C1442B956A0F84 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B9CDBBC78969FEE89CFA6D /* LoginView.swift */; };
@@ -53,6 +54,7 @@
 		56E16CDEB102FDD8B1E2552A /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		689E1E37467EB1CFA0C7C2CD /* Sighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sighting.swift; sourceTree = "<group>"; };
 		7269AB0D63AF8D5A05D0D682 /* BirdMap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BirdMap.entitlements; sourceTree = "<group>"; };
+		77211DC0EA92575DE7CB2308 /* AdditionalBirdsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalBirdsSection.swift; sourceTree = "<group>"; };
 		7C5D5F1484B6AE767133B8F9 /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		90F774BC8F3476F72083FAEB /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		97B9CDBBC78969FEE89CFA6D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 		BA222A8095C4F6C63147DF41 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				77211DC0EA92575DE7CB2308 /* AdditionalBirdsSection.swift */,
 				C70F68091FD6BA1A16E45D14 /* AIPredictionCard.swift */,
 				42DA995A54E694C1C973E5BB /* AudioRecorderView.swift */,
 				40ACB9DE0D7F2B00653C2C19 /* AudioRecorderViewModel.swift */,
@@ -321,6 +324,7 @@
 				07020764C02F22C9D9EDEFF5 /* AIPredictionCard.swift in Sources */,
 				A31578A8052DCF77C0164B39 /* APIClient.swift in Sources */,
 				4BA46034FB025D3860AA377C /* AdaptiveLayout.swift in Sources */,
+				BFE97DC16EA94CD22E6D05D1 /* AdditionalBirdsSection.swift in Sources */,
 				74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */,
 				49E95791554A85BB6EAA31FC /* AppEnvironment.swift in Sources */,
 				5989D58E5C27D49837FF11D0 /* AudioRecorderView.swift in Sources */,

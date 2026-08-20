@@ -166,6 +166,15 @@ final class FirebaseService {
             .collection("annotations").order(by: "createdAt", descending: true).getDocuments()
         let annotations = annSnap.documents.compactMap { try? $0.data(as: AnnotationItem.self) }
 
+        // Drop the first entry — it's the same bird as aiSpeciesSuggestion
+        // above, already shown as the primary result; this is the rest.
+        let additionalSpecies: [BirdCandidate] = (data["aiSpeciesSuggestions"] as? [[String: Any]] ?? [])
+            .dropFirst()
+            .compactMap { entry in
+                guard let sp = entry["species"] as? String else { return nil }
+                return BirdCandidate(species: sp, confidence: entry["confidence"] as? Double ?? 0)
+            }
+
         return SightingDetail(
             id: id,
             latitude: data["latitude"] as? Double ?? 0,
@@ -177,6 +186,7 @@ final class FirebaseService {
             notes: data["notes"] as? String,
             aiSpeciesSuggestion: data["aiSpeciesSuggestion"] as? String,
             aiConfidence: data["aiConfidence"] as? Double,
+            additionalSpecies: additionalSpecies,
             annotations: annotations
         )
     }

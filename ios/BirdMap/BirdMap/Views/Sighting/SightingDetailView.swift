@@ -53,15 +53,20 @@ struct SightingDetailView: View {
     @ViewBuilder
     private func detailContent(_ detail: SightingDetail) -> some View {
         ScrollView {
-            VStack(spacing: 0) {
+            VStack(spacing: 16) {
                 photoHeader(detail)
+
+                if !detail.additionalSpecies.isEmpty {
+                    AdditionalBirdsSection(sightingID: detail.id, candidates: detail.additionalSpecies)
+                }
 
                 VStack(alignment: .leading, spacing: 16) {
                     metadataSection(detail)
                     annotationsSection(detail)
                 }
-                .padding()
+                .padding(.horizontal)
             }
+            .padding(.bottom)
         }
         .background(Color(.systemGroupedBackground))
     }

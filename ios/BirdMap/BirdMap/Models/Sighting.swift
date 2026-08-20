@@ -51,6 +51,10 @@ struct SightingDetail: Identifiable {
     var notes: String?
     var aiSpeciesSuggestion: String?
     var aiConfidence: Double?
+    /// Species detected beyond the primary aiSpeciesSuggestion (BirdNET can
+    /// report several distinct calls in one recording) — see live_poll.py's
+    /// aiSpeciesSuggestions field. Does not include the primary entry.
+    var additionalSpecies: [BirdCandidate]
     var annotations: [AnnotationItem]
 
     var isAudio: Bool { mediaType == "audio" }
