@@ -12,7 +12,9 @@ Two backends, each with a real job:
 
 The self-hosted ML pipeline (`ml_pipeline/`) reads/writes Firestore via the Admin SDK and Supabase Storage via boto3 (S3-compatible).
 
-**No models are trained or fine-tuned in-house.** Both the photo model (Google AIY Birds V1) and audio model (Cornell's BirdNET) are complete, pre-trained, ready-to-use models from vetted American organizations, used exactly as released. `ml_pipeline/convert_photo_model.py` + `publish_model.py` only convert/republish the photo model to CoreML — they do not train anything. See `docs/ML_PIPELINE.md` for why (and for why that's two scripts, not one — `coremltools` and `firebase-admin` can't be installed in the same environment).
+**No models are trained or fine-tuned in-house.** The photo model (Google AIY Birds V1), photo object detector (Apple's pre-converted YOLOv3-Tiny/COCO CoreML model), and audio model (Cornell's BirdNET) are all complete, pre-trained, ready-to-use models from vetted American organizations, used exactly as released. `ml_pipeline/convert_photo_model.py` / `convert_bird_detector_model.py` + `publish_model.py` only convert (or, for the detector, just fetch — see below)/republish these to CoreML — they do not train anything. See `docs/ML_PIPELINE.md` for why (and for why conversion and publishing are separate scripts — `coremltools` and `firebase-admin` can't be installed in the same environment).
+
+**Multiple birds in one sighting:** BirdNET (audio) already scores every species independently per segment, so `live_poll.py` surfaces every species clearing a confidence bar, not just the top one. Photos get the same treatment via two layered tiers: `MultiBirdDetector.swift`'s on-device Vision saliency (Tier 1, always available, no model download) crops and classifies extra salient regions; `BirdDetector.swift` (Tier 2, optional) uses a real object-detection CoreML model for far more reliable region-finding when its model has been published. Both feed the same `AdditionalBirdsSection` review UI as audio. See `docs/ML_PIPELINE.md`'s "Multiple birds in one photo/recording" section for the full detail, including why converting a TF-Hub COCO detector ourselves didn't work and what we used instead.
 
 ## Commands
 
@@ -38,6 +40,15 @@ deactivate
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python publish_model.py --input ./output
+
+# One-time photo *detector* publish (Tier 2 multi-bird photo detection) — no
+# TF/coremltools conversion involved, just downloads + verifies Apple's own
+# pre-converted CoreML object detector; see docs/ML_PIPELINE.md for why:
+source .venv-convert/bin/activate
+python convert_bird_detector_model.py --output ./output_detector
+deactivate
+source .venv/bin/activate
+python publish_model.py --input ./output_detector
 
 # Live audio ID (BirdNET) + annotation moderation — polls once and exits;
 # scheduled by .github/workflows/live-poll.yml in production (free, no
@@ -72,15 +83,16 @@ The media upload broker (`app/api/media.py`) is load-bearing — every real phot
 
 **Offline queue:** `Networking/UploadQueue.swift` — Swift `actor`. Failed uploads are persisted as JPEG paths in `caches/pending_uploads/` with file paths stored in `UserDefaults`. Flushed on app launch.
 
-**ML:** `ML/BirdClassifier.swift` wraps a CoreML `VNCoreMLRequest` on a `.userInitiated` background queue — on-device photo classification. `ML/ModelManager.swift` queries the `model_versions` Firestore collection for the active photo model and downloads the `.mlpackage.zip` from its `downloadURL` (a public Supabase Storage URL — no Firebase Storage, no auth needed to fetch it) if the version changed, unzips with ZIPFoundation, then invalidates the `BirdClassifier` model cache. Audio classification is server-side (BirdNET via `ml_pipeline/live_poll.py`, scheduled) — the app uploads the recording and listens for the sighting doc's `aiSpeciesSuggestion` to populate, polled in within one interval rather than instantly.
+**ML:** `ML/BirdClassifier.swift` wraps a CoreML `VNCoreMLRequest` on a `.userInitiated` background queue — on-device photo species classification. `ML/BirdDetector.swift` wraps a second CoreML model (Tier 2 multi-bird detection, optional) that localizes bird-shaped regions via `VNRecognizedObjectObservation`, with NMS already baked into the model's pipeline. `ML/MultiBirdDetector.swift` is the entry point CameraViewModel actually calls: it prefers `BirdDetector` when its model is available, falling back to on-device Vision saliency (`VNGenerateObjectnessBasedSaliencyImageRequest`, no model download needed) otherwise, then crops+classifies each region with `BirdClassifier`. `ML/ModelManager.swift` queries the `model_versions` Firestore collection for the active `"photo"` classifier and (independently) the active `"photo_detector"` model, downloading/unzipping either from its `downloadURL` (public Supabase Storage URLs — no Firebase Storage, no auth needed) if its version changed, then invalidating the relevant model's cache. Audio classification is server-side (BirdNET via `ml_pipeline/live_poll.py`, scheduled) — the app uploads the recording and listens for the sighting doc's `aiSpeciesSuggestion` (plus `aiSpeciesSuggestions` for additional species) to populate, within one poll interval rather than instantly.
 
 **Views:**
 - `Views/Auth/LoginView.swift` — login + register in one form, toggled by `isRegistering`
-- `Views/Camera/CameraView.swift` + `CameraViewModel.swift` — photo capture (live AVFoundation or library picker), on-device AI inference, upload flow, post-upload AI review (Right/Wrong/Unsure)
-- `Views/Camera/AIPredictionCard.swift` — shared prediction + reference-photo + review card, used by both photo and audio flows
+- `Views/Camera/CameraView.swift` + `CameraViewModel.swift` — photo capture (live AVFoundation or library picker), on-device AI inference (species + multi-bird detection), upload flow, post-upload AI review (Right/Wrong/Unsure)
+- `Views/Camera/AIPredictionCard.swift` — shared prediction + reference-photo + review card for the primary suggestion, used by both photo and audio flows
+- `Views/Camera/AdditionalBirdsSection.swift` — shared review list for extra detected species beyond the primary one (audio's BirdNET secondary matches, photo's Tier 1/2 additional regions); each row submits its own annotation directly
 - `Views/Camera/AudioRecorderView.swift` + `AudioRecorderViewModel.swift` — recording, upload, "analyzing" wait state, then the same AI review flow once BirdNET's server-side result lands
 - `Views/Map/SightingMapView.swift` — MapKit annotations with 600ms debounced bbox fetch on camera change
-- `Views/Sighting/SightingDetailView.swift` — photo/audio, AI suggestion, community annotations list (with a "flagged" badge for moderated annotations)
+- `Views/Sighting/SightingDetailView.swift` — photo/audio, AI suggestion(s) including any additional detected species, community annotations list (with a "flagged" badge for moderated annotations)
 - `Views/Sighting/AnnotationView.swift` — species/behavior/confidence form; can be pre-filled from an AI review verdict
 - `Views/Leaderboard/LeaderboardView.swift` — ranked annotators list
 
@@ -88,14 +100,15 @@ The media upload broker (`app/api/media.py`) is load-bearing — every real phot
 
 Self-hosted Python scripts using the Firebase Admin SDK (`firestore_client.py`) for Firestore, and boto3 for Supabase Storage:
 - `convert_photo_model.py` — downloads Google's pre-trained AIY Birds V1 model (MobileNetV2, Apache 2.0) from TensorFlow Hub as-is, resolves common names via the iNaturalist taxonomy API, converts to `.mlpackage` via `coremltools`. Writes a local zip + manifest.json — no Firebase or Supabase involved (needs its own venv, `requirements-convert.txt` — `coremltools` and `firebase-admin` can't coexist in one environment, see docs/ML_PIPELINE.md).
-- `publish_model.py` — takes that local zip + manifest, uploads to Supabase Storage (boto3, S3-compatible), registers the new version in Firestore `model_versions`. Uses `requirements.txt`, no coremltools. No training anywhere in this pair — a one-time conversion/publish step, run again only to re-publish.
-- `live_poll.py` — run once per invocation (scheduled by `.github/workflows/live-poll.yml` in production, free): BirdNET audio analysis (writes `aiSpeciesSuggestion`/`aiConfidence` onto audio sightings with none yet) and annotation moderation (writes `moderation`/`moderationScore` onto annotations still marked `moderation == "pending"`, using a local sentence-embedding model).
+- `convert_bird_detector_model.py` — Tier 2 multi-bird photo detection model. Downloads Apple's own pre-converted CoreML object detector (YOLOv3-Tiny/COCO) directly — no TF/coremltools conversion, since that path was tried against TF Hub's official detector and confirmed not to work with current tooling (see docs/ML_PIPELINE.md). Verifies the download's structure, writes the same zip + manifest.json layout as the photo model (`mediaType: "photo_detector"`).
+- `publish_model.py` — takes a local zip + manifest (from either convert script above), uploads to Supabase Storage (boto3, S3-compatible), registers the new version in Firestore `model_versions` keyed by `manifest["mediaType"]`. Uses `requirements.txt`, no coremltools. No training anywhere in this pipeline — a one-time conversion/publish step per model, run again only to re-publish.
+- `live_poll.py` — run once per invocation (scheduled by `.github/workflows/live-poll.yml` in production, free): BirdNET audio analysis (writes `aiSpeciesSuggestion`/`aiConfidence`, plus `aiSpeciesSuggestions` for any additional distinct species, onto audio sightings with none yet) and annotation moderation (writes `moderation`/`moderationScore` onto annotations still marked `moderation == "pending"`, using a local sentence-embedding model).
 
 Full details: `docs/ML_PIPELINE.md`. Free/no-card architecture reasoning: `docs/DEPLOYMENT.md`.
 
 ### Key data flows
 
 - **Sighting upload:** `CameraViewModel.upload()` / `AudioRecorderViewModel.upload()` → `FirebaseService.uploadImage/uploadAudio` (fetches a Firebase ID token, POSTs to the backend's `/media` broker) → Supabase Storage, then `createSighting` → Firestore, with the returned public URL. On failure, `UploadQueue` persists to disk and retries on next launch.
-- **Model update:** App launch → `ModelManager.checkForUpdate()` → query `model_versions` → download zip from its `downloadURL` if version changed → unzip to `Documents/BirdClassifier.mlpackage` → `BirdClassifier` picks it up on next inference. The model itself never changes on its own — this only fires again if `convert_photo_model.py` + `publish_model.py` are re-run to ship an updated/fixed version.
+- **Model update:** App launch → `ModelManager.checkForUpdate()` → independently checks `model_versions` for `"photo"` (classifier, → `Documents/BirdClassifier.mlpackage`, picked up by `BirdClassifier`) and `"photo_detector"` (Tier 2 detector, → `Documents/BirdDetector.mlmodel`, picked up by `BirdDetector`) → downloads+unzips whichever changed. Neither model changes on its own — this only fires again if the relevant convert script + `publish_model.py` are re-run to ship an updated/fixed version, or (for the detector) the first time it's ever published at all.
 - **AI review loop:** Prediction shown (on-device for photo, async via `live_poll.py` for audio, polled within one interval) → user taps Right/Wrong/Unsure → `AnnotationView` pre-filled accordingly → `FirebaseService.submitAnnotation()` writes to Firestore with `reviewOfAI` set and `moderation: "pending"`. This builds a community dataset but does not retrain any model.
 - **Moderation loop:** New annotation written with `moderation: "pending"` → next `live_poll.py` run classifies it → `moderation`/`moderationScore` written back → flagged annotations are excluded from the plurality-voted "top species" shown on a sighting.

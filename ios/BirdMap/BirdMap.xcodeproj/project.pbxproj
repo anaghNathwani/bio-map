@@ -26,6 +26,7 @@
 		5504E0490661EA5C123AB491 /* AudioRecorderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40ACB9DE0D7F2B00653C2C19 /* AudioRecorderViewModel.swift */; };
 		5989D58E5C27D49837FF11D0 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DA995A54E694C1C973E5BB /* AudioRecorderView.swift */; };
 		61DD6D29C94C601830F72BD9 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D4BB492E4333661303201A9F /* GoogleSignIn */; };
+		6482C9DF7831372E18F34B54 /* BirdDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4357DF792227991A4D10EAE1 /* BirdDetector.swift */; };
 		7005C71718E24FFB3464E205 /* BirdClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1984A64CBE5025180837531 /* BirdClassifier.swift */; };
 		74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5D5F1484B6AE767133B8F9 /* AnnotationView.swift */; };
 		81079CEBBD777E69C31F0324 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A2DE291EF46F314C4B162F /* KeychainHelper.swift */; };
@@ -50,6 +51,7 @@
 		343243962E3612773481F502 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		40ACB9DE0D7F2B00653C2C19 /* AudioRecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderViewModel.swift; sourceTree = "<group>"; };
 		42DA995A54E694C1C973E5BB /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
+		4357DF792227991A4D10EAE1 /* BirdDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdDetector.swift; sourceTree = "<group>"; };
 		475AE05DD4ACEFC3F3C4CC14 /* GoogleService-Info 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info 2.plist"; sourceTree = "<group>"; };
 		4B5984AFA95E40AFE756D4D3 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		56E16CDEB102FDD8B1E2552A /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				C1984A64CBE5025180837531 /* BirdClassifier.swift */,
+				4357DF792227991A4D10EAE1 /* BirdDetector.swift */,
 				E7F5ED1993ACE378B92FE66F /* ModelManager.swift */,
 				7B45CC53551AA86FE2A75A32 /* MultiBirdDetector.swift */,
 			);
@@ -333,6 +336,7 @@
 				5989D58E5C27D49837FF11D0 /* AudioRecorderView.swift in Sources */,
 				5504E0490661EA5C123AB491 /* AudioRecorderViewModel.swift in Sources */,
 				7005C71718E24FFB3464E205 /* BirdClassifier.swift in Sources */,
+				6482C9DF7831372E18F34B54 /* BirdDetector.swift in Sources */,
 				015A7BFC3EEA778940F099D3 /* BirdInfo.swift in Sources */,
 				D2C6D17E2E8167515BAB5AC0 /* BirdInfoView.swift in Sources */,
 				4705061240F1E707E99FFEF3 /* BirdMapApp.swift in Sources */,

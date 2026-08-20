@@ -32,15 +32,31 @@ enum MultiBirdDetector {
     static let iouDedupeThreshold: CGFloat = 0.3
 
     /// Returns additional distinct-species candidates beyond `primarySpecies`
-    /// (the existing whole-image classification), or an empty array if the
-    /// photo doesn't have more than one salient region.
+    /// (the existing whole-image classification). Prefers the real object
+    /// detector (Tier 2, BirdDetector.swift) whenever its model has been
+    /// published and downloaded; falls back to Vision saliency (Tier 1) when
+    /// it hasn't — see ModelManager.isDetectorModelAvailable.
     static func detectAdditional(in rawImage: UIImage, primarySpecies: String?) async -> [BirdCandidate] {
         let image = normalizedUp(rawImage)
         guard let cgImage = image.cgImage else { return [] }
 
+        if ModelManager.shared.isDetectorModelAvailable {
+            let regions = await BirdDetector.shared.detectBirds(in: image)
+            // A real detector confidently reporting zero regions is more
+            // trustworthy than falling back to saliency's guesswork, so
+            // don't fall through here even if regions is empty.
+            return await classify(boxes: regions.map { $0.boundingBox }, in: image, primarySpecies: primarySpecies)
+        }
+
         let boxes = await salientBoxes(cgImage: cgImage)
         guard boxes.count > 1 else { return [] }
+        return await classify(boxes: boxes, in: image, primarySpecies: primarySpecies)
+    }
 
+    /// Crops each box, classifies the crop's species, and dedupes down to
+    /// the best-confidence match per distinct species (excluding
+    /// `primarySpecies`, already shown as the primary result elsewhere).
+    private static func classify(boxes: [CGRect], in image: UIImage, primarySpecies: String?) async -> [BirdCandidate] {
         var bestPerSpecies: [String: BirdCandidate] = [:]
         for box in boxes.prefix(maxRegions) {
             guard let cropped = crop(image: image, normalizedBox: box) else { continue }
@@ -56,7 +72,6 @@ enum MultiBirdDetector {
                 croppedImage: cropped
             )
         }
-
         return Array(bestPerSpecies.values.sorted { $0.confidence > $1.confidence }.prefix(maxReported))
     }
 
