@@ -12,7 +12,10 @@ Each run does two things once, then exits:
      buckets are public for reads, no credentials needed to fetch), analyzes
      it with BirdNET (birdnetlib, Cornell's open-weight bird-call model, used
      as-is — not fine-tuned), and writes the prediction back onto the
-     sighting doc.
+     sighting doc. BirdNET classifies each 3-second segment independently
+     with a per-species confidence (not a single argmax), so it can and does
+     already distinguish multiple distinct species in one recording — the
+     app writes the full list (aiSpeciesSuggestions), not just the top one.
 
   2. Annotation moderation — finds annotations with moderation == "pending"
      (set by the app at submission time — see FirebaseService.submitAnnotation
@@ -47,6 +50,14 @@ logger = logging.getLogger("live_poll")
 # Audio: BirdNET (ported from backend/app/services/birdnet.py)
 # ─────────────────────────────────────────────────────────────────────────
 
+# A secondary species needs to clear a real confidence bar to be worth
+# surfacing as "we also heard X" — BirdNET's own min_conf=0.1 below is
+# deliberately permissive (catches quiet/distant calls for the top result),
+# but that's too noisy a bar for claiming a second distinct bird is present.
+SECONDARY_CONFIDENCE_THRESHOLD = 0.5
+MAX_SPECIES_REPORTED = 3
+
+
 def _run_birdnet(audio_path: str, lat: float | None, lng: float | None) -> list[dict]:
     from birdnetlib import Recording
     from birdnetlib.analyzer import Analyzer
@@ -55,16 +66,29 @@ def _run_birdnet(audio_path: str, lat: float | None, lng: float | None) -> list[
     recording = Recording(analyzer, audio_path, lat=lat, lon=lng, min_conf=0.1)
     recording.analyze()
     results = recording.detections or []
+
+    # BirdNET scores every species independently per 3-second segment (not a
+    # single top-1 per segment) — genuinely simultaneous/overlapping calls
+    # from different species can both score high in the same segment. Keep
+    # the best confidence seen for each distinct species across the whole
+    # recording, whether that's from the same segment or different ones.
     seen: dict[str, float] = {}
     for r in results:
         name = r.get("common_name") or r.get("scientific_name", "Unknown")
         conf = float(r.get("confidence", 0))
         if name not in seen or conf > seen[name]:
             seen[name] = conf
-    return sorted(
+
+    ranked = sorted(
         [{"species": k, "confidence": v} for k, v in seen.items()],
         key=lambda x: x["confidence"], reverse=True,
-    )[:3]
+    )
+    if not ranked:
+        return []
+    # Always keep the top result regardless of its score (existing
+    # behavior); any beyond that only count if they clear the higher bar.
+    kept = [ranked[0]] + [d for d in ranked[1:] if d["confidence"] >= SECONDARY_CONFIDENCE_THRESHOLD]
+    return kept[:MAX_SPECIES_REPORTED]
 
 
 def _process_audio_sighting(db, doc_id: str, data: dict) -> None:
@@ -93,8 +117,16 @@ def _process_audio_sighting(db, doc_id: str, data: dict) -> None:
     db.collection("sightings").document(doc_id).update({
         "aiSpeciesSuggestion": top["species"] if top else None,
         "aiConfidence": top["confidence"] if top else None,
+        # Full ranked list, including the top entry — lets the app show
+        # "we also heard X" for genuinely distinct additional species
+        # instead of only ever surfacing one bird per recording.
+        "aiSpeciesSuggestions": detections,
     })
-    logger.info("  %s -> %s", doc_id, top["species"] if top else "no detection")
+    if len(detections) > 1:
+        logger.info("  %s -> %s (+%d more: %s)", doc_id, top["species"], len(detections) - 1,
+                    ", ".join(d["species"] for d in detections[1:]))
+    else:
+        logger.info("  %s -> %s", doc_id, top["species"] if top else "no detection")
 
 
 def poll_audio(db) -> int:

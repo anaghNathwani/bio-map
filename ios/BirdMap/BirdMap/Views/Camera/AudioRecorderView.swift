@@ -18,6 +18,9 @@ struct AudioRecorderView: View {
                 if vm.isAnalyzing {
                     analyzingSection
                 }
+                if let sightingID = vm.lastUploadedSightingID {
+                    AdditionalBirdsSection(sightingID: sightingID, candidates: vm.aiAdditionalSuggestions)
+                }
             }
             .padding(.top, 24)
             .padding(.bottom, 40)

@@ -15,6 +15,9 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     @Published var recordingSeconds: Int = 0
     @Published var aiSuggestion: String?
     @Published var aiConfidence: Double?
+    /// Additional distinct species BirdNET heard in the same recording, beyond
+    /// the primary aiSuggestion — see live_poll.py's aiSpeciesSuggestions.
+    @Published var aiAdditionalSuggestions: [BirdCandidate] = []
     @Published var meterLevel: Float = 0
     @Published var notes = ""
     @Published var hasRecording = false
@@ -147,6 +150,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         analysisTimedOut = false
         aiSuggestion = nil
         aiConfidence = nil
+        aiAdditionalSuggestions = []
 
         sightingListener?.remove()
         sightingListener = FirebaseService.shared.db.collection("sightings").document(sightingID)
@@ -157,6 +161,15 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
                     guard self.isAnalyzing else { return } // already resolved (e.g. timed out)
                     self.aiSuggestion = species
                     self.aiConfidence = data["aiConfidence"] as? Double
+                    if let extra = data["aiSpeciesSuggestions"] as? [[String: Any]] {
+                        // Drop the first entry — it's the same bird as aiSuggestion above,
+                        // already shown as the primary card; this list is the rest.
+                        self.aiAdditionalSuggestions = extra.dropFirst().compactMap { entry in
+                            guard let sp = entry["species"] as? String else { return nil }
+                            let conf = entry["confidence"] as? Double ?? 0
+                            return BirdCandidate(species: sp, confidence: conf)
+                        }
+                    }
                     self.isAnalyzing = false
                     self.sightingListener?.remove()
                     self.sightingListener = nil
@@ -182,6 +195,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         recordingSeconds = 0
         aiSuggestion = nil
         aiConfidence = nil
+        aiAdditionalSuggestions = []
         error = nil
         uploadSuccess = false
         hasRecording = false
