@@ -12,6 +12,9 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
     @Published var aiSuggestion: ClassificationResult?
     /// Top-3 on-device results shown as alternatives in the UI.
     @Published var aiCandidates: [ClassificationResult] = []
+    /// Additional distinct species found via saliency-region detection
+    /// (MultiBirdDetector) — birds in the same frame beyond aiSuggestion.
+    @Published var aiAdditionalSuggestions: [BirdCandidate] = []
     @Published var notes = ""
     @Published var isUploading = false
     @Published var uploadSuccess = false
@@ -20,6 +23,7 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
     /// state, so the post-upload AI review card has something to show.
     @Published var lastUploadedSightingID: String?
     @Published var lastAISuggestion: ClassificationResult?
+    @Published var lastAdditionalSuggestions: [BirdCandidate] = []
 
     private let locationManager = CLLocationManager()
     private(set) var lastLocation: CLLocation?
@@ -52,10 +56,14 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
         capturedImage = image
         aiSuggestion = nil
         aiCandidates = []
+        aiAdditionalSuggestions = []
         Task {
             let results = await BirdClassifier.shared.classifyTopN(image: image, count: 3)
             aiCandidates = results
             aiSuggestion = results.first
+            aiAdditionalSuggestions = await MultiBirdDetector.detectAdditional(
+                in: image, primarySpecies: results.first?.species
+            )
         }
     }
 
@@ -83,14 +91,17 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
                 longitude: location.coordinate.longitude,
                 notes: notes.isEmpty ? nil : notes,
                 aiSpecies: aiSuggestion?.species,
-                aiConfidence: aiSuggestion.map { Double($0.confidence) }
+                aiConfidence: aiSuggestion.map { Double($0.confidence) },
+                aiAdditionalSpecies: aiAdditionalSuggestions
             )
             lastUploadedSightingID = sightingID
             lastAISuggestion = aiSuggestion
+            lastAdditionalSuggestions = aiAdditionalSuggestions
             uploadSuccess = true
             capturedImage = nil
             aiSuggestion = nil
             aiCandidates = []
+            aiAdditionalSuggestions = []
             notes = ""
         } catch {
             self.error = "Upload failed: \(error.localizedDescription)"

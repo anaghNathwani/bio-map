@@ -24,6 +24,10 @@ struct CameraView: View {
                 }
 
                 captureButtons
+
+                if let sightingID = vm.lastUploadedSightingID, !vm.lastAdditionalSuggestions.isEmpty {
+                    AdditionalBirdsSection(sightingID: sightingID, candidates: vm.lastAdditionalSuggestions)
+                }
             }
             .padding(.top)
             .padding(.bottom, 32)
@@ -137,6 +141,18 @@ struct CameraView: View {
                 )
             } else if vm.capturedImage != nil && !ModelManager.shared.isModelAvailable {
                 noModelBanner
+            }
+
+            // Other birds spotted via saliency-region detection, beyond the
+            // primary suggestion above — confirmed/corrected after upload,
+            // this is just a preview of what will be offered then.
+            if !vm.aiAdditionalSuggestions.isEmpty {
+                candidatesPanel(
+                    title: "Also Spotted in Frame",
+                    icon: "bird.fill",
+                    iconColor: .orange,
+                    items: vm.aiAdditionalSuggestions.map { ($0.species, $0.confidence) }
+                )
             }
 
             // Google Vision candidates

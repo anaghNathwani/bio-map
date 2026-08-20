@@ -120,7 +120,8 @@ final class FirebaseService {
         longitude: Double,
         notes: String?,
         aiSpecies: String?,
-        aiConfidence: Double?
+        aiConfidence: Double?,
+        aiAdditionalSpecies: [BirdCandidate] = []
     ) async throws -> String {
         guard let uid = currentUID else { throw AppError.notLoggedIn }
         let username = await fetchUsername() ?? "unknown"
@@ -140,6 +141,13 @@ final class FirebaseService {
         if let v = notes { data["notes"] = v }
         if let v = aiSpecies { data["aiSpeciesSuggestion"] = v }
         if let v = aiConfidence { data["aiConfidence"] = v }
+        // Mirrors live_poll.py's format so fetchSightingDetail's parsing
+        // (which drops element 0, the primary) works for photos too.
+        if let species = aiSpecies {
+            let primary: [String: Any] = ["species": species, "confidence": aiConfidence ?? 0]
+            let extras = aiAdditionalSpecies.map { ["species": $0.species, "confidence": $0.confidence] }
+            data["aiSpeciesSuggestions"] = [primary] + extras
+        }
 
         try await ref.setData(data)
         return ref.documentID
