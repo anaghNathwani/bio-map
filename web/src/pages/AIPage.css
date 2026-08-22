@@ -1,4 +1,7 @@
 .ai-page-highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   background: rgba(13, 148, 136, .12);
   border: 1px solid rgba(13, 148, 136, .3);
   border-radius: 10px;
@@ -7,4 +10,9 @@
   font-size: 15px;
   color: #5eead4;
   line-height: 1.7;
+}
+
+.ai-page-highlight-icon {
+  flex: none;
+  margin-top: 3px;
 }

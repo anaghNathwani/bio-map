@@ -17,7 +17,6 @@
 		416E38EC1BE38A7030265F3F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A5C4C8BC99DBD814228983B /* GoogleService-Info.plist */; };
 		435B5298EB397F42E5873D8F /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E16CDEB102FDD8B1E2552A /* CameraView.swift */; };
 		4705061240F1E707E99FFEF3 /* BirdMapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB06EDE7B326433395E11D6 /* BirdMapApp.swift */; };
-		474F07E55382C0185A78E5D7 /* GoogleService-Info 2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 475AE05DD4ACEFC3F3C4CC14 /* GoogleService-Info 2.plist */; };
 		49E95791554A85BB6EAA31FC /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9625A2BA7ADB7FE18A1AAF1 /* AppEnvironment.swift */; };
 		4B3E301B790C238F757E9EA5 /* UploadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60DD2BEE7C4B22BEF60005A /* UploadQueue.swift */; };
 		4BA46034FB025D3860AA377C /* AdaptiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F3F8CA4FE49B74E063B25E /* AdaptiveLayout.swift */; };
@@ -27,9 +26,9 @@
 		5989D58E5C27D49837FF11D0 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DA995A54E694C1C973E5BB /* AudioRecorderView.swift */; };
 		61DD6D29C94C601830F72BD9 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D4BB492E4333661303201A9F /* GoogleSignIn */; };
 		6482C9DF7831372E18F34B54 /* BirdDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4357DF792227991A4D10EAE1 /* BirdDetector.swift */; };
+		6BB1819BB984688A76B0DC54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D450CF3885ED708D7806E3E /* Assets.xcassets */; };
 		7005C71718E24FFB3464E205 /* BirdClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1984A64CBE5025180837531 /* BirdClassifier.swift */; };
 		74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5D5F1484B6AE767133B8F9 /* AnnotationView.swift */; };
-		81079CEBBD777E69C31F0324 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A2DE291EF46F314C4B162F /* KeychainHelper.swift */; };
 		8592880555382BDED3F2EE84 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5984AFA95E40AFE756D4D3 /* FirebaseService.swift */; };
 		8EC3E81B5BFEFC6430CC0A0D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343243962E3612773481F502 /* ProfileView.swift */; };
 		9540F52CE0CFCBAA6AC82AE0 /* SightingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD31526D99593252A1958E58 /* SightingDetailView.swift */; };
@@ -52,7 +51,6 @@
 		40ACB9DE0D7F2B00653C2C19 /* AudioRecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderViewModel.swift; sourceTree = "<group>"; };
 		42DA995A54E694C1C973E5BB /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		4357DF792227991A4D10EAE1 /* BirdDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdDetector.swift; sourceTree = "<group>"; };
-		475AE05DD4ACEFC3F3C4CC14 /* GoogleService-Info 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info 2.plist"; sourceTree = "<group>"; };
 		4B5984AFA95E40AFE756D4D3 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		56E16CDEB102FDD8B1E2552A /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		689E1E37467EB1CFA0C7C2CD /* Sighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sighting.swift; sourceTree = "<group>"; };
@@ -60,6 +58,7 @@
 		77211DC0EA92575DE7CB2308 /* AdditionalBirdsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalBirdsSection.swift; sourceTree = "<group>"; };
 		7B45CC53551AA86FE2A75A32 /* MultiBirdDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBirdDetector.swift; sourceTree = "<group>"; };
 		7C5D5F1484B6AE767133B8F9 /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		7D450CF3885ED708D7806E3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		90F774BC8F3476F72083FAEB /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		97B9CDBBC78969FEE89CFA6D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		99DB12F018E31261FE1BDCE0 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
@@ -75,7 +74,6 @@
 		E7F5ED1993ACE378B92FE66F /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		F0937B2AAFE2AEF5216210CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F4F1E536E2CDF56A8FB29053 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
-		F6A2DE291EF46F314C4B162F /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,7 +150,6 @@
 				B9625A2BA7ADB7FE18A1AAF1 /* AppEnvironment.swift */,
 				2EB06EDE7B326433395E11D6 /* BirdMapApp.swift */,
 				F0937B2AAFE2AEF5216210CB /* ContentView.swift */,
-				F6A2DE291EF46F314C4B162F /* KeychainHelper.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -178,8 +175,8 @@
 		B64A428F0C6D46956DE23CBE /* BirdMap */ = {
 			isa = PBXGroup;
 			children = (
+				7D450CF3885ED708D7806E3E /* Assets.xcassets */,
 				7269AB0D63AF8D5A05D0D682 /* BirdMap.entitlements */,
-				475AE05DD4ACEFC3F3C4CC14 /* GoogleService-Info 2.plist */,
 				2A5C4C8BC99DBD814228983B /* GoogleService-Info.plist */,
 				B785BF604D7ED67BCBF93B20 /* Info.plist */,
 				854F0E1B4FF6657B9BA1F39B /* App */,
@@ -315,7 +312,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				474F07E55382C0185A78E5D7 /* GoogleService-Info 2.plist in Resources */,
+				6BB1819BB984688A76B0DC54 /* Assets.xcassets in Resources */,
 				416E38EC1BE38A7030265F3F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,7 +341,6 @@
 				D358F033227E132F4C7A104E /* CameraViewModel.swift in Sources */,
 				390447AF8E21B4D1F2A86E1C /* ContentView.swift in Sources */,
 				8592880555382BDED3F2EE84 /* FirebaseService.swift in Sources */,
-				81079CEBBD777E69C31F0324 /* KeychainHelper.swift in Sources */,
 				9BC563BFCA0123B81AA09B9D /* LeaderboardView.swift in Sources */,
 				FBE60E8002C1442B956A0F84 /* LoginView.swift in Sources */,
 				2BA2D6E603C8F4ABF6AA5546 /* ModelManager.swift in Sources */,

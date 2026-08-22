@@ -1,4 +1,6 @@
 import React from 'react'
+import { Globe, Camera, Mic, MapPin } from 'lucide-react'
+import birdMark from '../assets/bird-mark.svg'
 import './StaticPage.css'
 
 export default function CitizenSciencePage() {
@@ -6,11 +8,13 @@ export default function CitizenSciencePage() {
     <div className="static-page">
       <header className="static-page-header">
         <a href="/" className="static-page-back">← Home</a>
-        <span className="static-page-logo"><a href="/" className="static-page-back">🐦 BirdMap</a></span>
+        <span className="static-page-logo">
+          <a href="/" className="static-page-back"><img src={birdMark} alt="" />BirdMap</a>
+        </span>
       </header>
 
       <div className="static-page-hero">
-        <div className="static-page-icon">🌐</div>
+        <div className="static-page-icon"><Globe className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">Citizen Science Bird Tracking</h1>
         <p className="static-page-sub">
           Every sighting you submit becomes part of a growing scientific dataset
@@ -39,15 +43,15 @@ export default function CitizenSciencePage() {
         <h2 className="static-page-h2">What you can contribute</h2>
 
         <div className="static-page-card">
-          <div className="static-page-card-title">📸 Photo sightings</div>
+          <div className="static-page-card-title"><Camera size={16} strokeWidth={1.75} /> Photo sightings</div>
           <div className="static-page-card-body">Capture a bird in the wild — BirdMap's on-device AI suggests the species and your photo is uploaded to the community map.</div>
         </div>
         <div className="static-page-card">
-          <div className="static-page-card-title">🎙️ Audio recordings</div>
+          <div className="static-page-card-title"><Mic size={16} strokeWidth={1.75} /> Audio recordings</div>
           <div className="static-page-card-body">Record a call or song when you can't see the bird clearly. Audio sightings appear on the map as purple markers and can be annotated by the community.</div>
         </div>
         <div className="static-page-card">
-          <div className="static-page-card-title">📍 Location data</div>
+          <div className="static-page-card-title"><MapPin size={16} strokeWidth={1.75} /> Location data</div>
           <div className="static-page-card-body">Every sighting is tagged with GPS coordinates, making it possible to map species distributions across the country in real time.</div>
         </div>
       </div>

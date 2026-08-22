@@ -2,44 +2,76 @@
   min-height: 100vh;
   background: #0f1117;
   color: #e8eaf0;
-  font-family: system-ui, sans-serif;
+  font-family: 'Geist Variable', system-ui, sans-serif;
 }
 
 .static-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
   padding: 16px 24px;
-  background: linear-gradient(135deg, #0d9488, #0369a1);
+  background: rgba(15, 17, 23, .85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .static-page-back {
-  color: #fff;
+  color: rgba(255, 255, 255, .7);
   text-decoration: none;
   font-size: 14px;
-  opacity: 0.85;
   display: flex;
   align-items: center;
   gap: 6px;
+  transition: color .15s ease;
+}
+
+.static-page-back:hover {
+  color: #fff;
 }
 
 .static-page-logo {
-  font-size: 20px;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: #fff;
   margin-left: auto;
   margin-right: auto;
 }
 
+.static-page-logo img {
+  height: 22px;
+  width: 22px;
+}
+
+.static-page-logo .static-page-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+}
+
 .static-page-hero {
   padding: 60px 24px 48px;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
 }
 
 .static-page-icon {
-  font-size: 56px;
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .15);
+  color: #5eead4;
 }
 
 .static-page-h1 {
@@ -51,7 +83,7 @@
 
 .static-page-sub {
   font-size: 16px;
-  color: #94a3b8;
+  color: #a8b3c4;
   max-width: 520px;
   margin: 0 auto;
 }
@@ -72,35 +104,44 @@
 .static-page-p {
   font-size: 15px;
   line-height: 1.7;
-  color: #cbd5e1;
+  color: #c3ccd9;
   margin: 0 0 32px;
 }
 
 .static-page-card {
-  background: rgba(255, 255, 255, .05);
-  border: 1px solid rgba(255, 255, 255, .08);
-  border-radius: 12px;
-  padding: 20px 24px;
-  margin-bottom: 16px;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  padding: 20px 0;
+}
+
+.static-page-card:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
 }
 
 .static-page-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 600;
   font-size: 15px;
   color: #fff;
   margin-bottom: 4px;
 }
 
+.static-page-card-title svg {
+  flex: none;
+  color: #5eead4;
+}
+
 .static-page-card-body {
   font-size: 14px;
-  color: #94a3b8;
+  color: #a8b3c4;
   line-height: 1.6;
 }
 
 .static-page-footer {
   text-align: center;
   padding: 24px;
-  color: #475569;
+  color: #8b95a6;
   font-size: 13px;
-  border-top: 1px solid rgba(255, 255, 255, .06);
+  border-top: 1px solid rgba(255, 255, 255, .1);
 }

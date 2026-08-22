@@ -26,6 +26,12 @@
 				<string>com.birdmap.app</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.857243141648-8l5f0go14vg8iqj9lbg73csrhsb5c9jo</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -37,10 +43,5 @@
 	<string>BirdMap records bird calls to identify species by sound.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>BirdMap can use photos from your library to report sightings.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>processing</string>
-	</array>
 </dict>
 </plist>

@@ -1,4 +1,6 @@
 import React from 'react'
+import { Cpu, Lock } from 'lucide-react'
+import birdMark from '../assets/bird-mark.svg'
 import './StaticPage.css'
 import './AIPage.css'
 
@@ -7,11 +9,13 @@ export default function AIPage() {
     <div className="static-page">
       <header className="static-page-header">
         <a href="/" className="static-page-back">← Home</a>
-        <span className="static-page-logo"><a href="/" className="static-page-back">🐦 BirdMap</a></span>
+        <span className="static-page-logo">
+          <a href="/" className="static-page-back"><img src={birdMark} alt="" />BirdMap</a>
+        </span>
       </header>
 
       <div className="static-page-hero">
-        <div className="static-page-icon">✨</div>
+        <div className="static-page-icon"><Cpu className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">On-Device AI Identification</h1>
         <p className="static-page-sub">
           BirdMap identifies birds instantly from your photos — entirely on your
@@ -29,19 +33,22 @@ export default function AIPage() {
         </p>
 
         <div className="ai-page-highlight">
-          🔒 Your photo never leaves your device until you tap <strong>Submit</strong>.
-          Identification happens locally, keeping your privacy intact.
+          <Lock className="ai-page-highlight-icon" size={16} strokeWidth={2} />
+          <span>
+            Your photo never leaves your device until you tap <strong>Submit</strong>.
+            Identification happens locally, keeping your privacy intact.
+          </span>
         </div>
 
         <h2 className="static-page-h2">The model</h2>
 
         <div className="static-page-card">
           <div className="static-page-card-title">Architecture</div>
-          <div className="static-page-card-body">EfficientNet-B0 fine-tuned on community-submitted sightings and exported to Apple's CoreML format (.mlpackage) for fast, low-power inference on-device.</div>
+          <div className="static-page-card-body">Google's AIY Birds V1 (MobileNetV2), a complete pre-trained model converted to Apple's CoreML format (.mlpackage) for fast, low-power inference on-device. Nothing is trained or fine-tuned in-house.</div>
         </div>
         <div className="static-page-card">
-          <div className="static-page-card-title">Self-improving</div>
-          <div className="static-page-card-body">Community annotations feed a retraining pipeline. When enough new verified sightings accumulate, a new model version is built and silently delivered to the app — so accuracy improves over time.</div>
+          <div className="static-page-card-title">Versioned, not retrained on your data</div>
+          <div className="static-page-card-body">Community annotations build a dataset and flag likely mistakes, but they don't retrain this model. A newer model version only ships when the team converts and publishes one.</div>
         </div>
         <div className="static-page-card">
           <div className="static-page-card-title">Over-the-air updates</div>
@@ -53,8 +60,9 @@ export default function AIPage() {
           The model performs best on clear, well-lit photos where the bird is the
           main subject. Distant, blurry, or partially obscured birds may yield lower
           confidence scores or incorrect suggestions. That's why community
-          annotation exists — human expertise corrects what AI gets wrong, and those
-          corrections make the next model better.
+          annotation exists — human expertise corrects what the AI gets wrong, even
+          when that correction doesn't change how the model itself identifies the
+          next photo.
         </p>
       </div>
 

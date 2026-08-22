@@ -71,6 +71,14 @@ cd birdmap && docker-compose up -d
 ```
 The media upload broker (`app/api/media.py`) is load-bearing — every real photo/audio upload from the app goes through it. The rest (`auth.py`, `sightings.py`, `annotations.py`, `leaderboard.py`, `model.py`) is a separate, independent Postgres-backed system the live app doesn't call.
 
+### Web (`web/`)
+```bash
+cd birdmap/web
+npm run dev      # Vite dev server
+npm run build    # production build to dist/
+```
+Reads `sightings` directly from Firestore client-side (`src/firebase.js`) — no backend involved. Not the same codebase as the iOS app; see Architecture below.
+
 ## Architecture
 
 ### iOS App (`ios/BirdMap/BirdMap/`)
@@ -105,6 +113,14 @@ Self-hosted Python scripts using the Firebase Admin SDK (`firestore_client.py`) 
 - `live_poll.py` — run once per invocation (scheduled by `.github/workflows/live-poll.yml` in production, free): BirdNET audio analysis (writes `aiSpeciesSuggestion`/`aiConfidence`, plus `aiSpeciesSuggestions` for any additional distinct species, onto audio sightings with none yet) and annotation moderation (writes `moderation`/`moderationScore` onto annotations still marked `moderation == "pending"`, using a local sentence-embedding model).
 
 Full details: `docs/ML_PIPELINE.md`. Free/no-card architecture reasoning: `docs/DEPLOYMENT.md`.
+
+### Web frontend (`web/`)
+
+React + Vite + Tailwind v4 (with `shadcn/tailwind.css` tokens) marketing site and community map, separate from the iOS app.
+
+- `App.jsx` — the `/map` route: Leaflet map reading live sightings from Firestore (`src/firebase.js`'s `fetchSightings`), with `FilterBar`/`SightingPopup` for interaction. This is the one functional (non-marketing) page.
+- `pages/LandingPage.jsx` — the marketing homepage. Design conventions to preserve when touching it: no emoji as icons (use `lucide-react`, one consistent stroke weight), no gradient-clip text for emphasis (solid `text-teal-300` instead), no eyebrow/kicker labels above headings, features rendered as a hairline-divided list rather than a grid of identical icon+heading+text cards. `components/canvasui/` holds several bespoke WebGL effects (`DitheredObject`, `Glass`, `Liquid`, `ParticleReveal`, `Glitch`) — only `DitheredObject` is used on the landing page (the hero bird mark); the others are unused elsewhere and were deliberately left out to keep the page to one authored motion effect rather than stacking all of them.
+- `pages/AIPage.jsx`, `CommunityPage.jsx`, `CitizenSciencePage.jsx`, `TermsPage.jsx` — static content pages sharing `StaticPage.css`. Keep their AI/model claims consistent with the ML Pipeline section above (no in-house training/fine-tuning, no retraining from community annotations) — these pages previously claimed the photo model was "fine-tuned on community-submitted sightings" with a "retraining pipeline," which was factually wrong and has been corrected.
 
 ### Key data flows
 

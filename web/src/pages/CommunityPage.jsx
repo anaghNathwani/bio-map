@@ -1,4 +1,6 @@
 import React from 'react'
+import { Users } from 'lucide-react'
+import birdMark from '../assets/bird-mark.svg'
 import './StaticPage.css'
 import './CommunityPage.css'
 
@@ -7,11 +9,13 @@ export default function CommunityPage() {
     <div className="static-page">
       <header className="static-page-header">
         <a href="/" className="static-page-back">← Home</a>
-        <span className="static-page-logo"><a href="/" className="static-page-back">🐦 BirdMap</a></span>
+        <span className="static-page-logo">
+          <a href="/" className="static-page-back"><img src={birdMark} alt="" />BirdMap</a>
+        </span>
       </header>
 
       <div className="static-page-hero">
-        <div className="static-page-icon">👥</div>
+        <div className="static-page-icon"><Users className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">Community Annotations</h1>
         <p className="static-page-sub">
           Every sighting on BirdMap can be reviewed and verified by the community,
@@ -64,9 +68,8 @@ export default function CommunityPage() {
         <p className="static-page-p">
           AI models are not perfect. Community review catches misidentifications,
           adds behavioural context that photos alone can't convey, and builds a
-          layer of human expertise on top of automated suggestions. Over time, your
-          annotations also feed back into model retraining — so the AI improves
-          because of you.
+          layer of human expertise on top of automated suggestions — a growing,
+          verified record that's more reliable than any single AI guess.
         </p>
       </div>
 

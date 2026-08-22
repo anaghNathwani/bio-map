@@ -1,4 +1,6 @@
 import React from 'react'
+import { FileText } from 'lucide-react'
+import birdMark from '../assets/bird-mark.svg'
 import './StaticPage.css'
 import './TermsPage.css'
 
@@ -7,11 +9,13 @@ export default function TermsPage() {
     <div className="static-page">
       <header className="static-page-header">
         <a href="/" className="static-page-back">← Home</a>
-        <span className="static-page-logo"><a href="/" className="static-page-back">🐦 BirdMap</a></span>
+        <span className="static-page-logo">
+          <a href="/" className="static-page-back"><img src={birdMark} alt="" />BirdMap</a>
+        </span>
       </header>
 
       <div className="static-page-hero">
-        <div className="static-page-icon">📄</div>
+        <div className="static-page-icon"><FileText className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">Terms of Service</h1>
         <p className="static-page-sub">Please read these terms carefully before using BirdMap.</p>
       </div>

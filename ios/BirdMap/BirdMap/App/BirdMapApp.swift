@@ -51,6 +51,9 @@ struct BirdMapApp: App {
             }
             .environmentObject(env)
             .preferredColorScheme(colorScheme(for: appearanceMode))
+            .onOpenURL { url in
+                _ = GIDSignIn.sharedInstance.handle(url)
+            }
         }
     }
 

@@ -37,10 +37,6 @@ struct VisionCandidate: Decodable {
     let confidence: Double
 }
 
-struct ModelVersionInfo: Decodable {
-    let version: String
-}
-
 private struct MediaUploadResponse: Decodable {
     let photoURL: String?
     let thumbnailURL: String?
