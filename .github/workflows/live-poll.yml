@@ -3,12 +3,16 @@ name: Live poll (audio ID + moderation)
 # Runs ml_pipeline/live_poll.py on a schedule instead of as a persistent
 # process — free (GitHub Actions, no card required), at the cost of "live"
 # meaning "checked within the last interval" rather than instant. See
-# docs/ML_PIPELINE.md and docs/DEPLOYMENT.md for why.
+# docs/ML_PIPELINE.md and docs/DEPLOYMENT.md for why. A second, independent
+# job (check-training-trigger) runs on the same schedule to check whether
+# enough newly-processed annotations have accumulated to justify starting a
+# training run — see ml_pipeline/check_training_trigger.py.
 #
 # This repo is private, so Actions minutes are metered (2000 free min/month).
 # The schedule below is deliberately conservative to stay well within that;
 # tighten CRON_SCHEDULE below (and this comment) if you make the repo public,
-# since public repos get unlimited free minutes.
+# since public repos get unlimited free minutes (runners stay CPU-only
+# either way — going public removes the minutes budget, not compute limits).
 #
 # Required repo secrets (Settings -> Secrets and variables -> Actions):
 #   FIREBASE_SERVICE_ACCOUNT_JSON  — full contents of a Firebase service
@@ -17,6 +21,10 @@ name: Live poll (audio ID + moderation)
 #   RENDER_URL       — e.g. https://birdmap-api.onrender.com
 #   SUPABASE_URL     — e.g. https://<project-ref>.supabase.co
 #   SUPABASE_ANON_KEY
+# Note: as of this writing no Supabase project has actually been provisioned
+# for this app (see docs/DEPLOYMENT.md) — the Supabase keepalive ping and
+# anything that publishes a model (ml_pipeline/publish_model.py) needs one
+# created first (provision-supabase.sh) before those secrets are meaningful.
 
 on:
   schedule:
@@ -63,3 +71,38 @@ jobs:
           RENDER_URL: ${{ secrets.RENDER_URL }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+  # Independent job, same schedule, no `needs:` — runs on its own runner so a
+  # bug here can never block or break the poll job above. Checks whether
+  # enough newly-processed annotations have accumulated to justify kicking
+  # off training, and just logs it — the training/publish code that would
+  # actually consume this signal isn't built yet (see
+  # ml_pipeline/check_training_trigger.py's docstring).
+  check-training-trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: ml_pipeline/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+        working-directory: ml_pipeline
+
+      - name: Write Firebase service account key
+        run: echo "$FIREBASE_SERVICE_ACCOUNT_JSON" > /tmp/firebase-key.json
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+
+      - name: Check combined-model training trigger
+        run: python check_training_trigger.py --target combined --service-account /tmp/firebase-key.json
+        working-directory: ml_pipeline
+
+      - name: Check moderation-model training trigger
+        run: python check_training_trigger.py --target moderation --service-account /tmp/firebase-key.json
+        working-directory: ml_pipeline

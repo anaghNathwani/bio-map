@@ -17,6 +17,8 @@ Production started from a **no credit card attached anywhere** constraint. That 
 
 The practical lesson embedded in the deploy scripts themselves: every platform's "free, no card" claim in this list was verified by actually attempting the action, not by reading docs or search results — three separate platforms (Render, Koyeb, and disputed reports on Cloudflare R2) turned out to not match their own marketing once actually tested this session.
 
+**Current status, confirmed directly: no Supabase project has actually been provisioned for this app.** `backend/.env` on disk only has local Docker-Compose dev placeholders (`minio:9000`, `minioadmin`); no `backend/.env.supabase` exists anywhere, which is what `provision-supabase.sh` would have written had it been run. This means Storage-backed production features (photo/audio upload via the backend's media broker, and `ml_pipeline/publish_model.py`) have likely never worked in production, regardless of whatever else in this doc describes as "confirmed live." Provisioning one for real needs an interactive `supabase login` (browser OAuth) that has to be done by a human, then `SUPABASE_PROJECT_NAME=... REPO_ROOT="$(pwd)" source ./provision-supabase.sh`.
+
 ---
 
 ## Production deployment
@@ -55,7 +57,9 @@ The script prints these at the end; they can also be set any time via `gh secret
 | `SUPABASE_URL` | `https://<project-ref>.supabase.co` |
 | `SUPABASE_ANON_KEY` | Supabase anon key (keeps the project from pausing after 7 days idle) |
 
-The repo is private, so Actions minutes are metered (2000 free min/month) — the workflow's schedule (`*/20 * * * *`) is deliberately conservative to stay well within that. Making the repo public removes the metering entirely (unlimited free minutes) if faster polling is ever needed.
+The repo is private, so Actions minutes are metered (2000 free min/month) — the workflow's schedule (`*/20 * * * *`) is deliberately conservative to stay well within that. Making the repo public removes the metering entirely (unlimited free minutes) if faster polling is ever needed — runners stay CPU-only either way, so this affects the minutes budget, not what kind of training work can actually run.
+
+A second job in the same workflow, `check-training-trigger`, runs on the same schedule and checks whether enough newly-processed annotations have accumulated to justify starting a training run (see `docs/ML_PIPELINE.md`'s "Our in-house training policy"). It's cheap (no torch/coremltools, just a Firestore count query) and currently only logs — no training job exists yet to actually consume the signal.
 
 ---
 

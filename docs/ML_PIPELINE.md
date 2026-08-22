@@ -2,21 +2,21 @@
 
 ## Overview
 
-BirdMap ships four models. **None of them are trained or fine-tuned in-house** — all are used exactly as released by their publisher, all sourced from vetted American organizations (no Chinese-origin models or weights):
+BirdMap ships four models, all originally sourced from vetted American organizations (no Chinese-origin models or weights). **As of this writing, all four still run exactly as released by their publisher** — but this is a transition state, not the policy. Company policy has changed from "nothing is trained in-house" to **fine-tuning (and where useful, quantizing) these pretrained weights on our own community-annotation data**, funded by and triggered on annotation volume, once there's enough of it to be worth doing. See "Our in-house training policy" below for what's actually live today versus what's designed but not yet built.
 
 | Model | Publisher | Modality | Runs | Fine-tuned by us? |
 |---|---|---|---|---|
-| Bird species ID | Google (AIY Projects), Apache 2.0 | Photo | On-device (CoreML) | No — used as-is |
-| Multi-bird photo detector (Tier 2) | Apple (pre-converted CoreML catalog); YOLOv3-Tiny trained on COCO by Redmon/Farhadi, U. Washington | Photo | On-device (CoreML) | No — used as-is; optional, see below |
-| Bird call ID | Cornell Lab of Ornithology (BirdNET) | Audio | Server-side (`birdnetlib`) | No — used as-is |
-| Annotation moderation | `sentence-transformers` (`all-MiniLM-L6-v2`) | Text | Server-side | No — zero-shot classification via exemplar phrases, no training |
+| Bird species ID | Google (AIY Projects), Apache 2.0 | Photo | On-device (CoreML) | Not yet — planned as part of a combined detector+classifier model, see below |
+| Multi-bird photo detector (Tier 2) | Apple (pre-converted CoreML catalog); YOLOv3-Tiny trained on COCO by Redmon/Farhadi, U. Washington | Photo | On-device (CoreML) | Not yet — same combined-model plan as above; optional, see below |
+| Bird call ID | Cornell Lab of Ornithology (BirdNET) | Audio | Server-side (`birdnetlib`) | No fine-tuning planned — used as-is |
+| Annotation moderation | `sentence-transformers` (`all-MiniLM-L6-v2`) | Text | Server-side | Not yet — planned as a trained classifier over the same embeddings, replacing the current hand-written exemplar heuristic |
 
 The citizen-science feedback loop:
 
 1. User uploads a photo or recording → the relevant model predicts a species (or, for photos/audio with more than one bird, several) and shows a reference photo per species.
 2. User confirms (Right), corrects (Wrong), or says Unsure for each suggestion, optionally adding behavior/plumage details, which becomes an annotation in Firestore.
 3. A moderation pass classifies each new annotation as genuine or a "shitpost" (silly/joke content).
-4. Annotations accumulate as a community dataset (plurality-voted "top species" shown per sighting, leaderboard, etc.) — but **do not retrain any model**. Recognition quality comes entirely from the upstream publisher's own pretrained model(s).
+4. Annotations accumulate as a community dataset (plurality-voted "top species" shown per sighting, leaderboard, etc.) and now also count toward the training trigger described below — `ml_pipeline/check_training_trigger.py` checks every 20 minutes whether 500 more processed annotations have accumulated since the last training run. Today that check only logs; it doesn't yet kick off training or change what any model predicts (see below for what's still planned).
 
 **Firestore** (`birdmap-citizenscience` project) is the database for all of this. **Blob storage (photos/audio/model files) is Supabase Storage, not Firebase Storage** — Firebase Storage now requires a linked billing account (Blaze) for any usage, and the whole point of this pipeline's hosting is to stay free with no card required anywhere; see `docs/DEPLOYMENT.md`. Uploads go through the `backend/` FastAPI service (`app/api/media.py`), which verifies the app's Firebase ID token before writing to Supabase Storage on the user's behalf; downloads are direct public Supabase URLs, no backend involved.
 
@@ -134,7 +134,7 @@ source .venv/bin/activate
 python publish_model.py --input ./output_detector
 ```
 
-**Verified:** the download, spec-level structural verification (pipeline shape, embedded 80-class COCO label list, `bird` present), zip, and manifest steps have all been run and confirmed end-to-end, and the iOS side (`BirdDetector.swift` + `ModelManager`'s second model slot) builds cleanly against it. Not yet verified: an actual on-device inference run against a real multi-bird photo (needs a device/simulator with the model downloaded, and `publish_model.py` needs Supabase/Firebase credentials not present in this environment — see `docs/DEPLOYMENT.md`). Until `publish_model.py` is run against real credentials, no `photo_detector` `model_versions` doc exists, `ModelManager.isDetectorModelAvailable` stays false for every install, and the app correctly runs on Tier 1 saliency alone — nothing breaks by this model simply not being published yet.
+**Verified:** the download, spec-level structural verification (pipeline shape, embedded 80-class COCO label list, `bird` present), zip, and manifest steps have all been run and confirmed end-to-end, and the iOS side (`BirdDetector.swift` + `ModelManager`'s second model slot) builds cleanly against it. Not yet verified: an actual on-device inference run against a real multi-bird photo, and **the publish step itself cannot run at all yet — no Supabase project has ever actually been provisioned for this app** (confirmed: `backend/.env` only has local Docker-Compose dev placeholders, no `backend/.env.supabase` exists anywhere; `provision-supabase.sh` would create one but needs an interactive `supabase login` first). This also means Storage-backed features generally (photo/audio upload via the backend's media broker, and any `publish_model.py` run) have likely never worked in production — this is a pre-existing gap, not something introduced by the training-policy change above. Until a real Supabase project exists and `publish_model.py` is run against it, no `photo_detector` `model_versions` doc exists, `ModelManager.isDetectorModelAvailable` stays false for every install, and the app correctly runs on Tier 1 saliency alone — nothing breaks by this model simply not being published yet.
 
 ---
 
@@ -175,12 +175,18 @@ Only one model version is active per `mediaType` at a time (`"photo"` for the cl
 
 ---
 
-## Why no in-house training
+## Our in-house training policy
 
-Earlier iterations of this pipeline fine-tuned an EfficientNet-B0/ImageNet backbone on community annotations. That's been deliberately replaced with fully static, ready-made models from vetted American organizations for both photo and audio, and the moderation model was never trained in the first place (zero-shot). Reasons this is preferable here:
-- No risk of a small, early-stage annotation dataset producing a *worse* model than a well-resourced publisher's release.
-- No ongoing training infrastructure, GPU time, or accuracy monitoring to maintain.
-- A clean, auditable provenance chain per model (`source`/`license` fields on `model_versions` docs) — useful if there's ever a compliance review of what AI is running in the app and where its weights came from.
+Earlier iterations of this pipeline fine-tuned an EfficientNet-B0/ImageNet backbone on community annotations. That was deliberately replaced with fully static, ready-made models — no risk of a small, early-stage annotation dataset producing a *worse* model than a well-resourced publisher's release; no training/GPU/monitoring infrastructure to maintain; a clean, auditable provenance chain per model (`source`/`license` fields on `model_versions` docs) for compliance purposes.
+
+That reasoning held while the annotation dataset was small. It no longer reflects company policy: **we now spend resources fine-tuning existing pretrained weights (and quantizing them for on-device use) for better on-device bird identification**, funded by and triggered on community annotation volume rather than run continuously. Two things are true at once, and both matter:
+
+- **The trigger mechanism is live.** `ml_pipeline/check_training_trigger.py` runs every 20 minutes (`.github/workflows/live-poll.yml`'s `check-training-trigger` job), counting newly-processed annotations against a per-model `lastTrainedCount` stored in Firestore (`meta/combinedModelTraining`, `meta/moderationModelTraining`), and logs when 500 new annotations have accumulated since the last training run.
+- **No training or publishing code exists yet.** The trigger currently only observes and logs — it doesn't train anything, doesn't call `publish_model.py`, and doesn't advance `lastTrainedCount`. Two follow-on pieces are designed but deliberately not yet built, so real annotation volume can inform their parameters first:
+  - A trained classifier for annotation moderation (replacing the hand-written exemplar heuristic below with a model trained on accumulated `moderation` verdicts).
+  - A combined detector+classifier model — a single fine-tuned model that outputs bounding box + species in one pass, replacing today's two-stage Tier 1/2 detector → classifier pipeline, using the existing MobileNetV2/YOLOv3-Tiny models' own outputs as pseudo-labels where no ground truth exists.
+
+Until those land, recognition quality still comes entirely from the upstream publishers' pretrained models, same as before this policy changed.
 
 ---
 
@@ -190,7 +196,8 @@ Earlier iterations of this pipeline fine-tuned an EfficientNet-B0/ImageNet backb
 |---|---|
 | Species coverage is whatever the upstream model covers | Google's model covers 964 species (global, not North-America-specific); BirdNET covers a large global species list too. Neither can be extended without switching to a different upstream model. |
 | Tier 2 photo detector only knows "bird", not species | COCO's `bird` class is generic — it localizes bird-shaped regions, then the existing species classifier runs on each crop. A misclassified crop (e.g. two birds close together merged into one box) is a species-classifier limitation, not something more detector confidence fixes. |
-| Tier 2 photo detector not yet published | `publish_model.py` hasn't been run against real Supabase/Firebase credentials in this environment — every install currently runs photo multi-bird detection on Tier 1 saliency only, until someone with credentials runs the publish step once. |
-| Moderation uses hand-written exemplar phrases | Could move to a supervised classifier if enough human-reviewed `moderation` verdicts accumulate — would still need to be sourced/trained in a way consistent with the no-in-house-training decision above, or reconsidered explicitly. |
+| Tier 2 photo detector not yet published | No Supabase project has been provisioned for this app yet, so `publish_model.py` cannot upload/register anything — every install currently runs photo multi-bird detection on Tier 1 saliency only. Blocked on Supabase provisioning, not a code issue. |
+| Moderation still uses hand-written exemplar phrases | Planned to move to a trained classifier over accumulated `moderation` verdicts (self-distilled from this heuristic, not human-corrected ground truth — no admin override UI exists yet either) once the 500-annotation trigger fires and that training script is built. Not yet built — see "Our in-house training policy" above. |
+| Combined detector+classifier model not yet built | Designed (pseudo-labels from Tier 2's own boxes + community-confirmed species, MobileNetV2 backbone trained from scratch — not continuing from the deployed classifier's exact weights, which aren't available as loadable PyTorch weights), scoped to land after real annotation volume from the trigger above informs its species-coverage thresholds. |
 | No per-region models | Single global model each for photo and audio. |
 | Polling, not real-time | `live_poll.py` runs on a 20-minute GitHub Actions schedule in production, not a persistent listener — audio ID and moderation land within one interval, not instantly. Deliberate trade for staying on free CI minutes with no always-on machine; see `docs/DEPLOYMENT.md`. |
