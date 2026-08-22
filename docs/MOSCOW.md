@@ -2,6 +2,8 @@
 
 MoSCoW prioritization for the BirdMap citizen science platform (MVP scope = v1.0).
 
+> **Requirements below referencing the ML training pipeline, `train.py`, or webhook-triggered retraining describe the original REST/Postgres-backed design**, not the live app's current architecture (Firebase-based — see `CLAUDE.md`). The live app's actual training policy has separately shifted from "no in-house training" to fine-tuning pretrained weights on community annotations, triggered every 500 new annotations — see `docs/ML_PIPELINE.md`'s "Our in-house training policy". The trigger mechanism (`ml_pipeline/check_training_trigger.py`) is live; the training/publish code it would call is not yet built.
+
 ---
 
 ## Must Have

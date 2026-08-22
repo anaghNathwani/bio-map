@@ -1,5 +1,7 @@
 # Citizen Science & Biosphere Mapping
 
+> **The "Self-Learning Loop" and training-pipeline details below describe the original REST/Postgres-backed design**, not the live app (see `CLAUDE.md`'s Architecture section for the current Firebase-based system). The live app's actual training approach is different and is documented in `docs/ML_PIPELINE.md`'s "Our in-house training policy": fine-tuning the current pretrained models (not training from scratch) once 500 new community annotations accumulate since the last run, checked every 20 minutes via `ml_pipeline/check_training_trigger.py` — not this doc's `--min-annotations` continuous-flywheel design. As of this writing that trigger only logs; no training code consumes it yet.
+
 ## The Model
 
 BirdMap follows the **VGI (Volunteered Geographic Information)** model pioneered by projects like OpenStreetMap, iNaturalist, and eBird. Users contribute observations; the community validates them; the aggregated dataset becomes a scientific resource.

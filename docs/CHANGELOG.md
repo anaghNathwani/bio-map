@@ -4,6 +4,8 @@ All notable changes to BirdMap are documented here.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+> Entries below referencing the ML training pipeline, `train.py`, or EfficientNet-B0 describe the original REST/Postgres-backed design, not the live Firebase-based app (see `CLAUDE.md`). The live app's actual training policy and trigger mechanism are documented in `docs/ML_PIPELINE.md`'s "Our in-house training policy" — a 500-annotation trigger now runs live via `ml_pipeline/check_training_trigger.py`, superseding the "webhook-triggered retraining" item below, which was never built under that name.
+
 ---
 
 ## [Unreleased]
@@ -12,7 +14,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Species autocomplete via a curated species list endpoint
 - Annotation offline queue (mirrors the sighting upload queue)
 - Layer-freezing strategy in ML pipeline for small-dataset training runs
-- Webhook-triggered retraining when annotation count crosses a threshold
+- ~~Webhook-triggered retraining when annotation count crosses a threshold~~ — superseded: a polling-based trigger (not a webhook) now runs live every 20 minutes, see `docs/ML_PIPELINE.md`
 
 ---
 

@@ -2,6 +2,8 @@
 
 This guide gets you from zero to a running BirdMap stack in under 15 minutes.
 
+> **This guide covers the original REST/Postgres-backed stack** (`backend/`'s separate, self-contained legacy system — see `CLAUDE.md`'s Architecture section for the live Firebase-based app and its actual setup commands). Any "Train the ML model" / `train.py` step below is stale — no such script currently exists; see `docs/ML_PIPELINE.md`'s "Our in-house training policy" for how training actually works today.
+
 ## Prerequisites
 
 | Tool | Version | Purpose |

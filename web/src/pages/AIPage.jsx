@@ -44,11 +44,11 @@ export default function AIPage() {
 
         <div className="static-page-card">
           <div className="static-page-card-title">Architecture</div>
-          <div className="static-page-card-body">Google's AIY Birds V1 (MobileNetV2), a complete pre-trained model converted to Apple's CoreML format (.mlpackage) for fast, low-power inference on-device. Nothing is trained or fine-tuned in-house.</div>
+          <div className="static-page-card-body">Built on Google's AIY Birds V1 (MobileNetV2), a pre-trained model converted to Apple's CoreML format (.mlpackage) for fast, low-power inference on-device. We periodically fine-tune on top of pretrained weights like these using community annotations, rather than training a model from scratch.</div>
         </div>
         <div className="static-page-card">
-          <div className="static-page-card-title">Versioned, not retrained on your data</div>
-          <div className="static-page-card-body">Community annotations build a dataset and flag likely mistakes, but they don't retrain this model. A newer model version only ships when the team converts and publishes one.</div>
+          <div className="static-page-card-title">Versioned, fine-tuned in batches — not retrained live</div>
+          <div className="static-page-card-body">Community annotations build a dataset, flag likely mistakes, and — once enough new annotations accumulate — feed a periodic fine-tuning pass. A newer model version only ships when that pass completes and the team publishes it; nothing changes what your app suggests in between.</div>
         </div>
         <div className="static-page-card">
           <div className="static-page-card-title">Over-the-air updates</div>
@@ -60,9 +60,9 @@ export default function AIPage() {
           The model performs best on clear, well-lit photos where the bird is the
           main subject. Distant, blurry, or partially obscured birds may yield lower
           confidence scores or incorrect suggestions. That's why community
-          annotation exists — human expertise corrects what the AI gets wrong, even
-          when that correction doesn't change how the model itself identifies the
-          next photo.
+          annotation exists — human expertise corrects what the AI gets wrong
+          immediately, and in aggregate feeds the periodic fine-tuning passes that
+          improve the model itself over time.
         </p>
       </div>
 

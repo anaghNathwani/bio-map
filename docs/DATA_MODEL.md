@@ -1,5 +1,7 @@
 # Data Model
 
+> **This describes the original Postgres schema** (`backend/`'s separate, self-contained legacy system per `CLAUDE.md` — not called by the live app). The live app's actual schema is Firestore-based: see `CLAUDE.md`'s Architecture section, and `firestore.rules` for the authoritative `users`/`sightings`/`sightings/{id}/annotations`/`model_versions` shapes. Training-time majority-vote label computation described below matches the live app's `topSpecies` field conceptually, but there is no Postgres `model_versions.accuracy` field in the live system — see `docs/ML_PIPELINE.md`'s "Our in-house training policy" for the current (different) training design.
+
 ## Entity Relationship Diagram
 
 ```

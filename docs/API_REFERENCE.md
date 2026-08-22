@@ -1,5 +1,7 @@
 # API Reference
 
+> **This documents `backend/`'s REST API** — the separate, self-contained legacy Postgres-backed system per `CLAUDE.md`, not called by the live app (which talks to Firestore directly, plus the backend's media-upload broker only). The `/model/register` endpoint below being "called by the ML training pipeline" refers to that legacy pipeline, not the live app's current training design — see `docs/ML_PIPELINE.md`'s "Our in-house training policy".
+
 Base URL: `http://localhost:8000` (development) | `https://api.birdmap.app` (production)
 
 All protected endpoints require a `Bearer` token in the `Authorization` header obtained from `/auth/login` or `/auth/register`.

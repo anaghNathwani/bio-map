@@ -1,5 +1,7 @@
 # Architecture Overview
 
+> **This document describes the original REST/Postgres-backed design** (FastAPI + PostgreSQL/PostGIS + MinIO + a `train.py` EfficientNet-B0 pipeline), not the live app. The live iOS app now runs on Firebase (Auth/Firestore) with Supabase Storage for blobs and on-device/server-side pretrained CoreML models — see `CLAUDE.md`'s Architecture section for the current system, and `docs/ML_PIPELINE.md`'s "Our in-house training policy" for the current (different) training approach: fine-tuning the current pretrained models on community annotations once enough accumulate, triggered every 500 annotations, rather than this doc's from-scratch EfficientNet-B0 `train.py --min-annotations 50` design. No `train.py` currently exists in the codebase. The Postgres-backed `backend/` service described below still exists as a separate, self-contained legacy system the live app doesn't call (per `CLAUDE.md`) — kept deployable on request, not actively developed.
+
 ## System Diagram
 
 ```

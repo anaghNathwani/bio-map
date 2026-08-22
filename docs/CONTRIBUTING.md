@@ -1,5 +1,7 @@
 # Contributing
 
+> **This guide describes setting up the original REST/Postgres-backed stack** (`backend/`'s separate, self-contained legacy system per `CLAUDE.md`). To work on the live app, see `CLAUDE.md`'s Commands section instead (iOS: `xcodebuild` from Terminal; `ml_pipeline/`: two-venv setup per `docs/ML_PIPELINE.md`). Any reference to `ml_pipeline/train.py` below is stale — that script doesn't currently exist; see `docs/ML_PIPELINE.md`'s "Our in-house training policy" for the current training design.
+
 ## Development Setup
 
 Follow the [Getting Started guide](GETTING_STARTED.md) to get the full stack running locally.
