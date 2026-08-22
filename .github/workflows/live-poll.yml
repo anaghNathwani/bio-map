@@ -37,7 +37,7 @@ jobs:
           cache-dependency-path: ml_pipeline/requirements.txt
 
       - name: Install dependencies
-        run: pip install -r ml_pipeline/requirements.txt
+        run: pip install -r requirements.txt
         working-directory: ml_pipeline
 
       - name: Write Firebase service account key

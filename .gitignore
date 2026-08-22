@@ -18,6 +18,8 @@ __pycache__/
 dist/
 build/
 .venv/
+.venv-convert/
+.venv-train/
 venv/
 env/
 
@@ -28,6 +30,7 @@ env/
 *.mlpackage
 *.mlmodel
 ml_pipeline/data/
+ml_pipeline/output*/
 ml_pipeline/checkpoints/
 
 # Xcode
