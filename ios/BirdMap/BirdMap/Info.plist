@@ -35,6 +35,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>GCSupportsGameMode</key>
+	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>BirdMap needs camera access to photograph bird sightings.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
