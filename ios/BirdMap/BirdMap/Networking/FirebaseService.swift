@@ -35,25 +35,6 @@ final class FirebaseService {
 
     // MARK: - Social Sign-In
 
-    func signInWithApple(idToken: String, nonce: String, displayName: String?) async throws {
-        let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idToken, rawNonce: nonce)
-        let result = try await Auth.auth().signIn(with: credential)
-        // Ensure user document exists
-        let uid = result.user.uid
-        let email = result.user.email ?? ""
-        let name = displayName ?? result.user.displayName ?? email.components(separatedBy: "@").first ?? "User"
-        let ref = db.collection("users").document(uid)
-        let doc = try? await ref.getDocument()
-        if doc?.exists != true {
-            try await ref.setData([
-                "username": name,
-                "email": email,
-                "annotationCount": 0,
-                "createdAt": Timestamp(),
-            ])
-        }
-    }
-
     func signInWithGoogle() async throws {
         guard let rootVC = await UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
