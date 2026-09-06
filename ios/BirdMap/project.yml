@@ -37,9 +37,6 @@ targets:
               - com.googleusercontent.apps.857243141648-8l5f0go14vg8iqj9lbg73csrhsb5c9jo
     entitlements:
       path: BirdMap/BirdMap.entitlements
-      properties:
-        com.apple.developer.applesignin:
-          - Default
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.birdmap.BirdMap
