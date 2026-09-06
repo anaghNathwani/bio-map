@@ -27,6 +27,7 @@ targets:
       properties:
         API_BASE_URL: $(API_BASE_URL)
         GCSupportsGameMode: false
+        UILaunchScreen: {}
         NSCameraUsageDescription: BirdMap needs camera access to photograph bird sightings.
         NSMicrophoneUsageDescription: BirdMap records bird calls to identify species by sound.
         NSLocationWhenInUseUsageDescription: BirdMap attaches your GPS location to each sighting so it can be placed on the map.

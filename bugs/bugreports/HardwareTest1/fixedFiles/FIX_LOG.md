@@ -100,3 +100,37 @@ Mac:
 The four `.HEIC` files were converted to `.png` for review (same folder) —
 these are just decoded copies for readability and weren't otherwise
 modified.
+
+## Follow-up: app rendering "squashed" on hardware
+
+After this fix landed, the reporter noted the app still looks squashed on
+their physical device — content confined to a smaller, letterboxed
+rectangle with black bars, rather than filling the real screen. That's a
+second, unrelated bug, also visible (in hindsight) in all four HardwareTest1
+screenshots: the black bars top and the compressed content are not the
+Performance HUD.
+
+**Root cause:** `Info.plist` never declared `UILaunchScreen` (or a launch
+storyboard). Without one, iOS doesn't treat the app as opted into the
+device's actual screen — it launches the app in a fixed legacy compatibility
+resolution and then scales/letterboxes that fixed-size buffer to fit the
+real screen, instead of laying out at native resolution. That scaling is
+exactly what reads as "squashed": black bars, and everything inside them
+compressed to the wrong aspect ratio.
+
+**Fix:** added an empty `UILaunchScreen` dictionary — the modern (iOS
+14+), storyboard-free way to opt in to a normal system-provided launch
+screen and native full-screen layout:
+
+- `ios/BirdMap/BirdMap/Info.plist`
+  ```xml
+  <key>UILaunchScreen</key>
+  <dict/>
+  ```
+- `ios/BirdMap/project.yml` — matching `UILaunchScreen: {}` under
+  `info.properties`, so it survives `xcodegen generate`.
+
+No other file references a `LaunchScreen` storyboard, so there was nothing
+to conflict with. After regenerating the project and reinstalling on
+hardware, the app should render pixel-for-pixel at the device's native
+resolution — no black bars, no squashing.
