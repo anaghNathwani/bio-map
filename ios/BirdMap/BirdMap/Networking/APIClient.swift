@@ -52,21 +52,26 @@ private struct MediaUploadResponse: Decodable {
 final class APIClient {
     static let shared = APIClient()
 
+    // No backend is actually deployed anywhere right now (no Supabase project
+    // provisioned, no Render/Cloud Run/self-host target stood up — see
+    // docs/DEPLOYMENT.md) — including the project.yml Release value, which is
+    // update-api-url.sh's original placeholder string, never a live host. So
+    // there's no real "production" URL to fall back to. The only backend that
+    // can work today is the local Docker Compose stack (`docker compose up -d`
+    // from the repo root); "localhost" reaches it from the Simulator (shares
+    // the Mac's network) but not from a physical device, which has no route
+    // to the Mac's loopback interface at all. For hardware testing, run the
+    // app with a launch argument pointing at the Mac's LAN IP instead of
+    // editing checked-in config, e.g. in the scheme's "Arguments Passed On
+    // Launch": -API_BASE_URL_OVERRIDE "http://192.168.1.23:8000"
+    // (find the IP with `ipconfig getifaddr en0` on the Mac).
     let baseURL: String = {
-        let configured = Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String
-            ?? "http://localhost:8000"
-        #if targetEnvironment(simulator)
-        return configured
-        #else
-        // A physical device is not the machine running the local Docker
-        // Compose backend — "localhost"/"127.0.0.1" there means the device
-        // itself, so a Debug build installed on hardware can never reach it.
-        // Fall back to the deployed API instead of failing every request.
-        if configured.contains("localhost") || configured.contains("127.0.0.1") {
-            return "https://birdmap-api.fly.dev"
+        if let override = UserDefaults.standard.string(forKey: "API_BASE_URL_OVERRIDE"),
+           !override.isEmpty {
+            return override
         }
-        return configured
-        #endif
+        return Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String
+            ?? "http://localhost:8000"
     }()
 
     private func request(_ path: String) throws -> URLRequest {

@@ -153,31 +153,48 @@ the most likely explanation is the build on-device predates commits
 `68bdc16`/`44c6376` — confirm with `xcodegen generate` + a clean rebuild
 (Product → Clean Build Folder) before re-testing.
 
-### 2. Reporting can't connect — real bug, fixed
+### 2. Reporting can't connect
 
-`APIClient.baseURL` (`ios/BirdMap/BirdMap/Networking/APIClient.swift`) read
-`API_BASE_URL` from `Info.plist`, which for a Debug build is
-`http://localhost:8000` (`project.yml`'s `Debug` config — intended for the
-Simulator, which shares the Mac's network namespace). On a **physical
-device** "localhost" resolves to the phone itself, not the Mac running
-`docker-compose`, so every report/upload request failed outright — this is
-what read as "can't connect to Firebase" (the media broker call happens
-before the Firestore write in `CameraViewModel`/`AudioRecorderViewModel`, so
-the whole submission aborts before Firestore is ever touched).
+**Correction — the first attempt at this fix was wrong and has been
+reverted.** It fell back to `https://birdmap-api.fly.dev` on a real device,
+reasoning that it was "the deployed production API" because it's what
+`project.yml`'s `Release` config holds. That was never actually checked
+against this repo's own deployment docs, which say the opposite:
+`docs/DEPLOYMENT.md` line 16 — *"Fly.io is not used. As of 2024-2025 it
+discontinued its free tier entirely — a card is required almost
+immediately."* `update-api-url.sh` confirms it directly — its sed patterns
+treat `birdmap-api.fly.dev` as `# Fly.io (original)`, i.e. the placeholder
+string every real deploy script searches-and-replaces once a real backend
+exists. It was never a live host. Redirecting hardware builds to it was
+trading one dead endpoint for another, just with a slower failure (DNS
+instead of connection-refused) — which is consistent with the retest still
+not working.
 
-**Fix:** `APIClient.baseURL` now checks `#if targetEnvironment(simulator)`.
-On a real device, if the configured URL still points at
-`localhost`/`127.0.0.1`, it falls back to the deployed API
-(`https://birdmap-api.fly.dev`) instead of trying to reach the phone itself.
-Simulator builds are unaffected and still use the local Docker backend as
-before.
+**What's actually true, per `docs/DEPLOYMENT.md`'s own "confirmed directly"
+status:** no backend is deployed anywhere for this project right now.
+Render rejected the project's account for a free-tier service
+(`need_payment_info`); Cloud Run needs GCP billing enabled; self-host needs
+a spare always-on machine; Fly.io is ruled out entirely. So there is
+currently no URL — real or guessable — that reporting can succeed against
+on its own. The only backend that works today is the **local Docker Compose
+stack** (`docker compose up -d` from the repo root), and only for whoever
+can actually reach it on the network.
 
-Caveat: this sandbox's network egress is locked down and could not reach
-`birdmap-api.fly.dev` to confirm the deployed backend itself is currently up
-and correctly wired to Supabase — that needs verifying from a normal
-network. If it turns out that deployment isn't live/working, reporting will
-still fail on device, just with a real HTTP error instead of a bogus
-"can't connect," which at least makes the next failure diagnosable.
+**Fix (partial, honest about the remaining limit):** reverted the fly.dev
+guess. `APIClient.baseURL` now also checks a `UserDefaults` key,
+`API_BASE_URL_OVERRIDE`, before falling back to the configured
+`Info.plist` value. This is the standard iOS pattern for a
+launch-argument-driven override — add `-API_BASE_URL_OVERRIDE
+"http://<mac-lan-ip>:8000"` to the scheme's **Arguments Passed On Launch**
+(Product → Scheme → Edit Scheme → Run → Arguments) to point a hardware
+build at the Mac's actual LAN IP (`ipconfig getifaddr en0` on the Mac)
+while `docker compose up -d` is running there and both devices are on the
+same Wi-Fi. That's a real, working path to test reporting on hardware
+today — it's just a per-session local setting rather than something a
+commit to this repo can fix outright, since there is no stable URL to bake
+in until a real backend is actually deployed (needs either billing on
+Render/Cloud Run or a spare self-hosted machine — see
+`docs/DEPLOYMENT.md`).
 
 ### 3. On-device model won't auto-download — not a code bug, infra gap
 
@@ -214,3 +231,17 @@ This isn't fixable by changing app code — it needs, in order:
 
 Once step 3 succeeds, `ModelManager` will pick up the new version on the
 next app launch with no further code changes.
+
+Re-verified this is still accurate before writing this section: the same
+public Firestore query returned `{}` again just now — unchanged.
+
+### 4. Now two warning triangles instead of one — needs a fresh screenshot
+
+Not diagnosable from code alone. Nothing changed between the two builds
+that would explain a *second* HUD warning appearing on its own — the only
+Info.plist keys touched are `GCSupportsGameMode` and `UILaunchScreen`,
+neither of which has a known second failure mode that would surface as an
+additional triangle. Rather than guess, this needs the same treatment as
+the original report: a fresh `.HEIC`/screenshot of the Map screen showing
+both triangles, so the actual text of each warning can be read instead of
+assumed.
