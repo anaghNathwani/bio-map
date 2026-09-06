@@ -134,3 +134,83 @@ No other file references a `LaunchScreen` storyboard, so there was nothing
 to conflict with. After regenerating the project and reinstalling on
 hardware, the app should render pixel-for-pixel at the device's native
 resolution — no black bars, no squashing.
+
+## Follow-up round 2: HUD still showing, reporting can't connect, model won't download
+
+Three more reports came in after the above fixes. Investigated each — one is
+a rebuild/device-setting issue, one was a real code bug (fixed), one is a
+pre-existing infrastructure gap that can't be closed from code.
+
+### 1. Thermal/yellow-triangle HUD still shows on Map
+
+The `GCSupportsGameMode` fix removes the "key not found" *warning banner*
+only. The FPS/thermal/Metal readout underneath it is the on-device
+**Performance HUD**, a per-device Developer Settings toggle
+(Settings → Developer → Performance HUD / Metal HUD) — turning that off on
+the test device is what makes the whole readout disappear, not something
+`Info.plist` controls. If the warning banner specifically is still showing,
+the most likely explanation is the build on-device predates commits
+`68bdc16`/`44c6376` — confirm with `xcodegen generate` + a clean rebuild
+(Product → Clean Build Folder) before re-testing.
+
+### 2. Reporting can't connect — real bug, fixed
+
+`APIClient.baseURL` (`ios/BirdMap/BirdMap/Networking/APIClient.swift`) read
+`API_BASE_URL` from `Info.plist`, which for a Debug build is
+`http://localhost:8000` (`project.yml`'s `Debug` config — intended for the
+Simulator, which shares the Mac's network namespace). On a **physical
+device** "localhost" resolves to the phone itself, not the Mac running
+`docker-compose`, so every report/upload request failed outright — this is
+what read as "can't connect to Firebase" (the media broker call happens
+before the Firestore write in `CameraViewModel`/`AudioRecorderViewModel`, so
+the whole submission aborts before Firestore is ever touched).
+
+**Fix:** `APIClient.baseURL` now checks `#if targetEnvironment(simulator)`.
+On a real device, if the configured URL still points at
+`localhost`/`127.0.0.1`, it falls back to the deployed API
+(`https://birdmap-api.fly.dev`) instead of trying to reach the phone itself.
+Simulator builds are unaffected and still use the local Docker backend as
+before.
+
+Caveat: this sandbox's network egress is locked down and could not reach
+`birdmap-api.fly.dev` to confirm the deployed backend itself is currently up
+and correctly wired to Supabase — that needs verifying from a normal
+network. If it turns out that deployment isn't live/working, reporting will
+still fail on device, just with a real HTTP error instead of a bogus
+"can't connect," which at least makes the next failure diagnosable.
+
+### 3. On-device model won't auto-download — not a code bug, infra gap
+
+Queried Firestore's public `model_versions` collection directly
+(`allow read: if true` in `firestore.rules`, so no credentials needed):
+
+```
+GET https://firestore.googleapis.com/v1/projects/birdmap-citizenscience/databases/(default)/documents/model_versions
+→ {}
+```
+
+The collection is **empty** — no model has ever been successfully
+registered. `ModelManager.checkForUpdate()` is behaving correctly: it finds
+no active `"photo"` doc and logs `No active photo model published yet`,
+then does nothing. There's no bundled fallback model in the app (confirmed
+in `BirdClassifier.swift`), so on-device photo ID is simply unavailable
+until one is published.
+
+This matches the pre-existing gap already documented in the project's
+`CLAUDE.md`: *"no Supabase project has actually been provisioned for this
+app... `publish_model.py` ... can't work until `provision-supabase.sh` is
+run against a real Supabase account."* `publish_model.py` only writes the
+Firestore `model_versions` doc **after** the model zip successfully uploads
+to Supabase Storage — with no Supabase project, that upload never happens,
+so nothing is ever registered for `ModelManager` to find.
+
+This isn't fixable by changing app code — it needs, in order:
+1. `provision-supabase.sh` run against a real (free-tier) Supabase account
+   to create the storage bucket and populate `backend/.env.supabase`.
+2. `convert_photo_model.py` (already implemented) run once to produce the
+   model zip.
+3. `publish_model.py` run against the now-real Supabase credentials to
+   upload the zip and register it in Firestore.
+
+Once step 3 succeeds, `ModelManager` will pick up the new version on the
+next app launch with no further code changes.

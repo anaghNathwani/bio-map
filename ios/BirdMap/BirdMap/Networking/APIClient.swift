@@ -53,8 +53,20 @@ final class APIClient {
     static let shared = APIClient()
 
     let baseURL: String = {
-        Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String
+        let configured = Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String
             ?? "http://localhost:8000"
+        #if targetEnvironment(simulator)
+        return configured
+        #else
+        // A physical device is not the machine running the local Docker
+        // Compose backend — "localhost"/"127.0.0.1" there means the device
+        // itself, so a Debug build installed on hardware can never reach it.
+        // Fall back to the deployed API instead of failing every request.
+        if configured.contains("localhost") || configured.contains("127.0.0.1") {
+            return "https://birdmap-api.fly.dev"
+        }
+        return configured
+        #endif
     }()
 
     private func request(_ path: String) throws -> URLRequest {
