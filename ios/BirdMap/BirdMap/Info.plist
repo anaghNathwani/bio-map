@@ -37,6 +37,8 @@
 	<string>1</string>
 	<key>GCSupportsGameMode</key>
 	<false/>
+	<key>UILaunchScreen</key>
+	<dict/>
 	<key>NSCameraUsageDescription</key>
 	<string>BirdMap needs camera access to photograph bird sightings.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
