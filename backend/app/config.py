@@ -1,4 +1,3 @@
-import os
 from pydantic import model_validator
 from pydantic_settings import BaseSettings
 
@@ -9,6 +8,7 @@ _INSECURE_DEFAULTS = {
 
 
 class Settings(BaseSettings):
+    environment: str = "development"
     database_url: str = ""
     secret_key: str = "change-me-in-production"
     s3_endpoint: str = ""
@@ -47,13 +47,13 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def check_production_secrets(self) -> "Settings":
-        if os.getenv("ENVIRONMENT") == "production":
+        if self.environment.lower() == "production":
             for field, default in _INSECURE_DEFAULTS.items():
                 if getattr(self, field) == default:
                     raise ValueError(
                         f"{field.upper()} must be set to a secure value in production"
                     )
-            if self.cors_origins == "*":
+            if not self.cors_origins.strip() or self.cors_origins.strip() == "*":
                 raise ValueError(
                     "CORS_ORIGINS must be set to explicit origins in production"
                 )

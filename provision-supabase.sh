@@ -25,6 +25,7 @@ warn() { echo -e "${YELLOW}WARN:${NC} $*"; }
 
 : "${SUPABASE_PROJECT_NAME:?SUPABASE_PROJECT_NAME must be set before sourcing provision-supabase.sh}"
 : "${REPO_ROOT:?REPO_ROOT must be set before sourcing provision-supabase.sh}"
+: "${CORS_ORIGINS:?Set CORS_ORIGINS to the deployed web app origins before provisioning}"
 ENV_FILE="$REPO_ROOT/backend/.env.supabase"
 
 # Reuse a previous run's credentials outright if they're already on disk —
@@ -125,7 +126,8 @@ info "Writing $ENV_FILE (all three compute targets read from this one file)..."
   echo "MODEL_BUCKET=birdmap-models"
   echo "PUBLIC_S3_URL=$PUBLIC_S3_URL"
   echo "MODEL_REGISTER_SECRET=$MODEL_REGISTER_SECRET"
-  echo "CORS_ORIGINS=*"
+  echo "ENVIRONMENT=production"
+  echo "CORS_ORIGINS=${CORS_ORIGINS:-}"
   if [ -n "${FIREBASE_SERVICE_ACCOUNT_JSON:-}" ]; then
     echo "FIREBASE_SERVICE_ACCOUNT_JSON=$FIREBASE_SERVICE_ACCOUNT_JSON"
   fi

@@ -43,6 +43,7 @@ if [ ! -f "$FIREBASE_KEY_PATH" ]; then
   exit 1
 fi
 FIREBASE_SERVICE_ACCOUNT_JSON="$(cat "$FIREBASE_KEY_PATH")"
+: "${CORS_ORIGINS:?Set CORS_ORIGINS to the deployed web app origins before deploying (for example: https://your-project.web.app)}"
 
 # ── 1. Build web app ──────────────────────────────────────────────────────────
 if [ ! -f "$WEB_DIR/.env.local" ]; then
@@ -101,6 +102,7 @@ if [ -z "$SERVICE_ID" ]; then
     --branch main \
     --plan free \
     --env-var "DATABASE_URL=$DB_URL" \
+    --env-var "ENVIRONMENT=production" \
     --env-var "SECRET_KEY=$SECRET_KEY" \
     --env-var "S3_ENDPOINT=$S3_ENDPOINT" \
     --env-var "S3_ACCESS_KEY=$PROJECT_REF" \
@@ -110,7 +112,7 @@ if [ -z "$SERVICE_ID" ]; then
     --env-var "PUBLIC_S3_URL=$PUBLIC_S3_URL" \
     --env-var "MODEL_REGISTER_SECRET=$MODEL_REGISTER_SECRET" \
     --env-var "FIREBASE_SERVICE_ACCOUNT_JSON=$FIREBASE_SERVICE_ACCOUNT_JSON" \
-    --env-var "CORS_ORIGINS=*" \
+    --env-var "CORS_ORIGINS=$CORS_ORIGINS" \
     --confirm \
     --output json)
   SERVICE_ID=$(echo "$SERVICE_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")

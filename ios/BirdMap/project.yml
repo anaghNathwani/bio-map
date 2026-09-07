@@ -50,7 +50,7 @@ targets:
         Debug:
           API_BASE_URL: http://localhost:8000
         Release:
-          API_BASE_URL: https://birdmap-api.fly.dev
+          API_BASE_URL: https://birdmap-api.onrender.com
     dependencies:
       - package: ZIPFoundation
       - package: FirebaseSDK

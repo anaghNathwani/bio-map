@@ -1,87 +1,88 @@
 # BirdMap
 
-Citizen science iOS app for bird sighting collection, community annotation, and on-device ML bird identification. Modeled after the Stanford mosquito-tracking citizen science concept.
+BirdMap is a citizen-science iOS app and web map for bird sightings, community
+annotations, and bird identification.
 
-## How it works
+## Production architecture
 
-1. **Capture** — Users photograph a bird; GPS coordinates are automatically attached.
-2. **Upload** — Photo + geolocation are sent to the backend and stored in PostGIS-enabled PostgreSQL.
-3. **Annotate** — Other users label sightings (species, confidence, behavior) to build a training dataset.
-4. **Retrain** — When enough new annotations accumulate, a Python pipeline retrains an EfficientNet classifier and exports it to CoreML format.
-5. **Update** — The app checks a model-version endpoint and silently downloads the new `.mlpackage` in the background.
-6. **Identify** — On-device CoreML inference gives instant bird ID suggestions, even offline.
+- **iOS app:** SwiftUI, Firebase Auth/Firestore, on-device Core ML photo
+  classification, and server-side BirdNET audio analysis.
+- **Web map:** React/Vite, Firebase client SDK, and Leaflet.
+- **Media broker:** FastAPI verifies Firebase ID tokens and stores photo/audio
+  blobs in Supabase Storage. It also contains a separate legacy
+  Postgres-backed API.
+- **ML operations:** `ml_pipeline/live_poll.py` runs from GitHub Actions every
+  20 minutes for audio identification and annotation moderation.
 
-## Tech stack
+Firebase Storage is intentionally not used. See `CLAUDE.md` and
+`docs/DEPLOYMENT.md` for the full architecture and hosting tradeoffs.
 
-| Layer | Technology |
-|---|---|
-| iOS | SwiftUI, MapKit, AVFoundation, CoreLocation, CoreML + Vision |
-| Backend API | FastAPI (Python 3.11) |
-| Database | PostgreSQL 15 + PostGIS |
-| Object storage | MinIO (S3-compatible) |
-| ML training | PyTorch + `coremltools` export |
-| Infrastructure | Docker Compose |
+## Local development
 
-## Quick start
-
-### Prerequisites
-- Docker + Docker Compose
-- Xcode 15+
-- Python 3.11 (for local ML work)
-
-### 1. Start backend services
+### Web
 
 ```bash
-cd birdmap
-cp backend/.env.example backend/.env   # fill in secrets
-docker-compose up -d
+cd web
+cp .env.example .env.local
+# Fill in the Firebase web app values in .env.local.
+npm ci
+npm run dev
 ```
 
-This starts:
-- PostgreSQL + PostGIS on port 5432
-- MinIO on ports 9000/9001
-- FastAPI on port 8000
-
-### 2. Run database migrations
+### Backend
 
 ```bash
-docker-compose exec api python -m alembic upgrade head
+cp backend/.env.example backend/.env
+docker compose up -d
+docker compose exec api alembic upgrade head
 ```
 
-### 3. Open iOS app
+The local stack uses PostGIS and MinIO. The media broker additionally needs a
+Firebase service-account JSON value in `FIREBASE_SERVICE_ACCOUNT_JSON`.
 
-```
-open ios/BirdMap/BirdMap.xcodeproj
-```
-
-Set `APIClient.baseURL` in `APIClient.swift` to your machine's LAN IP (e.g. `http://192.168.1.x:8000`) for simulator/device testing.
-
-Build and run on a real device or simulator.
-
-### 4. Trigger model retraining (manual)
+### iOS
 
 ```bash
-cd ml_pipeline
-pip install -r requirements.txt
-python train.py --min-annotations 50
+xcodebuild -project ios/BirdMap/BirdMap.xcodeproj \
+  -scheme BirdMap \
+  -destination 'platform=iOS Simulator,name=iPhone 17' \
+  -configuration Debug build
 ```
 
-The script fetches annotated sightings from the API, trains, exports to CoreML, and uploads the new model — the app picks it up automatically on next launch.
+For a physical device, set the API base URL to the reachable backend address
+with the `API_BASE_URL_OVERRIDE` launch argument or update the generated
+project configuration.
 
-## API overview
+## Production deployment
 
-| Method | Path | Description |
-|---|---|---|
-| POST | `/auth/register` | Register user |
-| POST | `/auth/login` | Get JWT |
-| POST | `/sightings` | Upload sighting (multipart) |
-| GET | `/sightings` | List sightings (bbox filter) |
-| GET | `/sightings/{id}` | Sighting detail |
-| POST | `/sightings/{id}/annotations` | Submit annotation |
-| GET | `/leaderboard` | Top annotators |
-| GET | `/model/version` | Latest model metadata |
-| GET | `/model/download` | Download `.mlpackage` zip |
+Provision Supabase first, then choose a compute target:
 
-## Biosphere mapping
+```bash
+# Render
+CORS_ORIGINS="https://your-project.web.app,https://your-project.firebaseapp.com" \
+  ./deploy.sh /path/to/firebase-service-account.json
 
-All sightings are stored with PostGIS geometry. Use the `/sightings` endpoint with `bbox` query params to pull heatmap data for any region. The backend exposes a GeoJSON endpoint suitable for feeding into QGIS, Mapbox, or any mapping tool.
+# Google Cloud Run
+CORS_ORIGINS="https://your-project.web.app,https://your-project.firebaseapp.com" \
+  ./deploy-gcp.sh <gcp-project-id> /path/to/firebase-service-account.json
+```
+
+Both targets require their respective account setup and use the same Supabase
+Postgres and Storage data layer. Production deployments reject wildcard CORS
+and insecure secret defaults. Configure the
+`FIREBASE_SERVICE_ACCOUNT_JSON` GitHub secret before enabling the scheduled
+live-poll workflow.
+
+See `docs/DEPLOYMENT.md` for provisioning, GitHub Actions secrets,
+self-hosting, monitoring, and rollback procedures.
+
+## Validation
+
+```bash
+cd web && npm ci && npm run build
+python3 -m compileall backend/app ml_pipeline
+xcodebuild -project ios/BirdMap/BirdMap.xcodeproj \
+  -scheme BirdMap \
+  -destination 'platform=iOS Simulator,name=iPhone 17' \
+  -configuration Debug build
+```
