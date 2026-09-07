@@ -94,7 +94,8 @@ For a pitch/demo period before Cloud Run funding comes through: run the exact sa
 
 **On your Mac**, generate the shared credentials first if you haven't already (this alone doesn't need Render or GCP to succeed):
 ```bash
-SUPABASE_PROJECT_NAME=birdmap-app REPO_ROOT="$(pwd)" source ./provision-supabase.sh
+CORS_ORIGINS="https://your-project.web.app,https://your-project.firebaseapp.com" \
+  SUPABASE_PROJECT_NAME=birdmap-app REPO_ROOT="$(pwd)" source ./provision-supabase.sh
 ```
 This writes `backend/.env.supabase` — copy that one file to the PC (`scp`, a USB drive, whatever's easiest).
 

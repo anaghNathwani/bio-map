@@ -358,7 +358,7 @@
 		4E756A2C73C340478D7D6F3A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				API_BASE_URL = "https://birdmap-api.fly.dev";
+				API_BASE_URL = "https://birdmap-api.onrender.com";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BirdMap/BirdMap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

@@ -42,6 +42,7 @@ if [ ! -f "$FIREBASE_KEY_PATH" ]; then
   exit 1
 fi
 FIREBASE_SERVICE_ACCOUNT_JSON="$(cat "$FIREBASE_KEY_PATH")"
+: "${CORS_ORIGINS:?Set CORS_ORIGINS to the deployed web app origins before deploying (for example: https://your-project.web.app)}"
 
 info "Checking gcloud auth..."
 gcloud auth list --filter=status:ACTIVE --format="value(account)" 2>/dev/null | grep -q . || \
@@ -95,6 +96,7 @@ import os, sys, yaml
 path = sys.argv[1]
 env = {
     "DATABASE_URL": os.environ["DB_URL"],
+    "ENVIRONMENT": "production",
     "SECRET_KEY": os.environ["SECRET_KEY"],
     "S3_ENDPOINT": os.environ["S3_ENDPOINT"],
     "S3_ACCESS_KEY": os.environ["PROJECT_REF"],
@@ -104,7 +106,7 @@ env = {
     "PUBLIC_S3_URL": os.environ["PUBLIC_S3_URL"],
     "MODEL_REGISTER_SECRET": os.environ["MODEL_REGISTER_SECRET"],
     "FIREBASE_SERVICE_ACCOUNT_JSON": os.environ["FIREBASE_SERVICE_ACCOUNT_JSON"],
-    "CORS_ORIGINS": "*",
+    "CORS_ORIGINS": os.environ["CORS_ORIGINS"],
 }
 with open(path, "w") as f:
     yaml.safe_dump(env, f)

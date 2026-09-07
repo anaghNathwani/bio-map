@@ -21,6 +21,8 @@ services:
         sync: false
       - key: SECRET_KEY
         generateValue: true
+      - key: ENVIRONMENT
+        value: production
       - key: MODEL_REGISTER_SECRET
         generateValue: true
       - key: S3_ENDPOINT
@@ -36,7 +38,7 @@ services:
       - key: PUBLIC_S3_URL
         sync: false
       - key: CORS_ORIGINS
-        value: "*"
+        sync: false
       - key: FIREBASE_SERVICE_ACCOUNT_JSON
         sync: false
       - key: GOOGLE_CLOUD_API_KEY
