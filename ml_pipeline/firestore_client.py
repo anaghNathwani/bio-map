@@ -1,10 +1,10 @@
 """
 Shared Firebase Admin SDK init for the ML pipeline scripts. Firestore only —
-blob storage (photos/audio/model files) lives in Supabase Storage instead of
-Firebase Storage, since Firebase Storage now requires a linked billing
-account (Blaze) for every project regardless of usage, and Supabase's free
-tier needs no card. See publish_model.py and live_poll.py for the Supabase
-(boto3 S3-compatible / plain HTTPS) access this replaces.
+no Firebase Storage (which needs a linked Blaze billing account for any
+usage) and no third-party storage either. Sighting photo/audio and model
+blobs are all embedded directly as base64 in Firestore documents instead
+(chunked across a subcollection for the model, which is too large for one
+document) — see publish_model.py and live_poll.py.
 
 Credentials are resolved in this order:
   1. --service-account <path-to-json> (explicit)

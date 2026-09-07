@@ -17,6 +17,19 @@ s3 = boto3.client(
 SOUNDS_BUCKET = "birdmap-sounds"
 
 
+def _public_object_url(bucket: str, key: str) -> str:
+    """Public download URL for an object, correct for both backends this
+    project targets. Supabase Storage serves public objects under
+    /object/public/ — distinct from the S3-compatible endpoint used for
+    uploads — so a bare "{base}/{bucket}/{key}" 404s against real Supabase.
+    MinIO (local dev) has no such route and serves a public bucket directly
+    at "{base}/{bucket}/{key}", so only insert the segment for Supabase."""
+    base = settings.public_s3_url or settings.s3_endpoint
+    if "supabase.co" in base:
+        return f"{base}/object/public/{bucket}/{key}"
+    return f"{base}/{bucket}/{key}"
+
+
 def ensure_buckets() -> None:
     """Create required buckets if they don't exist. Called once at app startup."""
     try:
@@ -53,9 +66,7 @@ def upload_photo(data: bytes, content_type: str = "image/jpeg") -> tuple[str, st
         ContentType="image/jpeg",
     )
 
-    public_base = (settings.public_s3_url or settings.s3_endpoint)
-    base = f"{public_base}/{settings.s3_bucket}"
-    return f"{base}/{key}", f"{base}/{thumb_key}"
+    return _public_object_url(settings.s3_bucket, key), _public_object_url(settings.s3_bucket, thumb_key)
 
 
 def upload_audio(data: bytes, filename: str = "sound.m4a") -> str:
@@ -63,8 +74,7 @@ def upload_audio(data: bytes, filename: str = "sound.m4a") -> str:
     ext = filename.rsplit(".", 1)[-1] if "." in filename else "m4a"
     key = f"sounds/{uuid.uuid4()}.{ext}"
     s3.put_object(Bucket=SOUNDS_BUCKET, Key=key, Body=data, ContentType="audio/mp4")
-    public_base = (settings.public_s3_url or settings.s3_endpoint)
-    return f"{public_base}/{SOUNDS_BUCKET}/{key}"
+    return _public_object_url(SOUNDS_BUCKET, key)
 
 
 def upload_model(data: bytes, version: str) -> str:
@@ -93,8 +103,7 @@ def get_model_download_url(s3_key: str, expires: int = 3600) -> str:
 def _upload_sighting_object(data: bytes, sighting_id: str, filename: str, content_type: str) -> str:
     key = f"sightings/{sighting_id}/{filename}"
     s3.put_object(Bucket=settings.s3_bucket, Key=key, Body=data, ContentType=content_type)
-    public_base = (settings.public_s3_url or settings.s3_endpoint)
-    return f"{public_base}/{settings.s3_bucket}/{key}"
+    return _public_object_url(settings.s3_bucket, key)
 
 
 def upload_sighting_photo(data: bytes, sighting_id: str) -> tuple[str, str]:

@@ -85,9 +85,11 @@ struct SightingDetailView: View {
                             Image(systemName: "waveform.and.mic")
                                 .font(.system(size: 56))
                                 .foregroundStyle(.white.opacity(0.8))
-                            if let audioURLStr = detail.audioURL, let audioURL = URL(string: audioURLStr) {
+                            if let audioURLStr = detail.audioURL {
                                 Button {
-                                    if audioPlayer == nil {
+                                    if audioPlayer == nil,
+                                       let audioURL = DataURI.writeTempFile(audioURLStr, extension: "m4a")
+                                           ?? URL(string: audioURLStr) {
                                         audioPlayer = AVPlayer(url: audioURL)
                                     }
                                     audioPlayer?.play()
@@ -102,6 +104,12 @@ struct SightingDetailView: View {
                             }
                         }
                     )
+            } else if let uiImage = detail.photoURL.flatMap(DataURI.decode).flatMap(UIImage.init(data:)) {
+                Image(uiImage: uiImage)
+                    .resizable().scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 220, maxHeight: 380)
+                    .clipped()
             } else {
                 AsyncImage(url: detail.photoURL.flatMap { URL(string: $0) }) { phase in
                     switch phase {

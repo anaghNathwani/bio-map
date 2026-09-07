@@ -5,10 +5,25 @@ import GoogleSignIn
 import UIKit
 import CoreLocation
 
-// Central Firebase service — replaces APIClient for all data operations,
-// except media blobs (photo/audio), which are proxied through the backend to
-// Supabase Storage — see Networking/APIClient.swift and docs/DEPLOYMENT.md
-// for why (Firebase Storage now requires a paid Blaze plan for any usage).
+// Central Firebase service — every data operation, media blobs included, goes
+// through Firestore/Auth directly, no Storage and no backend. Photo/audio
+// bytes are compressed client-side and embedded as base64 data URIs directly
+// in the sighting document, the same pattern used in
+// github.com/ishanvi-dekate/team-efficient-epp (Profile.jsx's avatar upload,
+// ChatBot.jsx's imageToBase64) to avoid Firebase Storage's Blaze billing
+// requirement entirely — genuinely free, no card. See docs/DEPLOYMENT.md.
+private extension UIImage {
+    /// Aspect-preserving downscale, no-op if already within bounds.
+    func resized(maxDimension: CGFloat) -> UIImage {
+        let longest = max(size.width, size.height)
+        guard longest > maxDimension else { return self }
+        let scale = maxDimension / longest
+        let target = CGSize(width: size.width * scale, height: size.height * scale)
+        let renderer = UIGraphicsImageRenderer(size: target)
+        return renderer.image { _ in draw(in: CGRect(origin: .zero, size: target)) }
+    }
+}
+
 final class FirebaseService {
     static let shared = FirebaseService()
     let db = Firestore.firestore()
@@ -75,19 +90,28 @@ final class FirebaseService {
         try await db.collection("users").document(uid).setData(["username": newUsername], merge: true)
     }
 
-    // MARK: - Media Upload (proxied through the backend to Supabase Storage)
+    // MARK: - Media "upload" (compressed base64 embedded in the Firestore doc)
+
+    /// Firestore caps a document at 1 MiB total; base64 inflates raw bytes by
+    /// ~4/3, so this leaves generous headroom for the sighting doc's other
+    /// fields (species, notes, etc.) alongside the encoded media.
+    private static let maxEncodedDimension: CGFloat = 1600
+    private static let jpegQuality: CGFloat = 0.85
 
     func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?) {
-        guard let user = Auth.auth().currentUser else { throw AppError.notLoggedIn }
-        let idToken = try await user.getIDToken()
-        // Thumbnail generation happens server-side now (backend/app/services/storage.py).
-        return try await APIClient.shared.uploadPhoto(data: data, sightingID: sightingID, idToken: idToken)
+        guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
+        guard let image = UIImage(data: data) else { throw AppError.invalidImage }
+        let resized = image.resized(maxDimension: Self.maxEncodedDimension)
+        guard let jpeg = resized.jpegData(compressionQuality: Self.jpegQuality) else {
+            throw AppError.invalidImage
+        }
+        let dataURI = "data:image/jpeg;base64,\(jpeg.base64EncodedString())"
+        return (dataURI, nil)
     }
 
     func uploadAudio(_ data: Data, sightingID: String, filename: String) async throws -> String {
-        guard let user = Auth.auth().currentUser else { throw AppError.notLoggedIn }
-        let idToken = try await user.getIDToken()
-        return try await APIClient.shared.uploadAudio(data: data, sightingID: sightingID, idToken: idToken)
+        guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
+        return "data:audio/mp4;base64,\(data.base64EncodedString())"
     }
 
     // MARK: - Sightings
@@ -231,12 +255,13 @@ final class FirebaseService {
 }
 
 enum AppError: LocalizedError {
-    case notLoggedIn, notFound
+    case notLoggedIn, notFound, invalidImage
 
     var errorDescription: String? {
         switch self {
         case .notLoggedIn: return "You must be logged in"
         case .notFound: return "Not found"
+        case .invalidImage: return "Could not process photo"
         }
     }
 }

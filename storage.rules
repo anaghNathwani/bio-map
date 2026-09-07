@@ -1,9 +1,9 @@
-// VESTIGIAL — no longer used. Firebase Storage now requires a linked billing
-// account (Blaze plan) for any usage regardless of volume, so photo/audio/
-// model blobs moved to Supabase Storage (free, no card required), proxied
-// through the backend (backend/app/api/media.py) for uploads and fetched
-// directly via public Supabase URLs for reads. Kept here, unused, in case of
-// rollback — see docs/DEPLOYMENT.md and docs/ML_PIPELINE.md.
+// VESTIGIAL — no longer used. Firebase Storage requires a linked billing
+// account (Blaze plan) for any usage regardless of volume, so sighting
+// photo/audio bytes are compressed client-side and embedded as base64 data
+// URIs directly in the Firestore sighting document instead — genuinely free,
+// no card, no Storage, no backend. See FirebaseService.uploadImage/
+// uploadAudio and docs/DEPLOYMENT.md. Kept here, unused, in case of rollback.
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {

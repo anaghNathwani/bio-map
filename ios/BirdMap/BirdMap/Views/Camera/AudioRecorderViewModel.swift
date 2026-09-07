@@ -27,6 +27,12 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     @Published var analysisTimedOut = false
     @Published var lastUploadedSightingID: String?
 
+    /// Recordings are embedded as base64 directly in the Firestore sighting
+    /// doc (no Storage/backend — see FirebaseService.uploadAudio), which caps
+    /// a document at 1 MiB; 30s of mono AAC leaves generous headroom even at
+    /// a generous bitrate, while still being plenty for BirdNET's ~3s windows.
+    static let maxRecordingSeconds = 30
+
     private var recorder: AVAudioRecorder?
     private var meterTimer: Timer?
     private var countTimer: Timer?
@@ -81,7 +87,11 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
             error = nil
 
             countTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-                Task { @MainActor [weak self] in self?.recordingSeconds += 1 }
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    self.recordingSeconds += 1
+                    if self.recordingSeconds >= Self.maxRecordingSeconds { self.stopRecording() }
+                }
             }
             meterTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
                 self?.recorder?.updateMeters()
