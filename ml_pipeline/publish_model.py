@@ -56,7 +56,12 @@ def upload_and_register(manifest: dict, zip_path: Path, db):
     s3.upload_file(str(zip_path), bucket, key, ExtraArgs={"ContentType": "application/zip"})
 
     public_base = os.environ.get("PUBLIC_S3_URL") or os.environ["S3_ENDPOINT"]
-    download_url = f"{public_base}/{bucket}/{key}"
+    # Supabase Storage serves public objects under /object/public/, distinct
+    # from the S3-compatible endpoint used above for the upload itself — a
+    # bare "{public_base}/{bucket}/{key}" 404s against real Supabase (this
+    # was never caught because no Supabase project has ever actually been
+    # provisioned to publish a model against — see docs/DEPLOYMENT.md).
+    download_url = f"{public_base}/object/public/{bucket}/{key}"
     print(f"Uploaded model to {download_url}")
 
     versions_ref = db.collection("model_versions")

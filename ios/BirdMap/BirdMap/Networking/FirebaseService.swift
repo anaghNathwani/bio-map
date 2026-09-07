@@ -1,17 +1,19 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseStorage
 import GoogleSignIn
 import UIKit
 import CoreLocation
 
-// Central Firebase service — replaces APIClient for all data operations,
-// except media blobs (photo/audio), which are proxied through the backend to
-// Supabase Storage — see Networking/APIClient.swift and docs/DEPLOYMENT.md
-// for why (Firebase Storage now requires a paid Blaze plan for any usage).
+// Central Firebase service — all data operations, including media blobs
+// (photo/audio), go through Firebase directly: Firestore/Auth as before,
+// and now Storage too (Blaze billing enabled for this project). See
+// docs/DEPLOYMENT.md for the Supabase-broker path this replaced.
 final class FirebaseService {
     static let shared = FirebaseService()
     let db = Firestore.firestore()
+    private let storage = Storage.storage()
 
     private init() {}
 
@@ -75,19 +77,26 @@ final class FirebaseService {
         try await db.collection("users").document(uid).setData(["username": newUsername], merge: true)
     }
 
-    // MARK: - Media Upload (proxied through the backend to Supabase Storage)
+    // MARK: - Media Upload (direct to Firebase Storage)
 
     func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?) {
-        guard let user = Auth.auth().currentUser else { throw AppError.notLoggedIn }
-        let idToken = try await user.getIDToken()
-        // Thumbnail generation happens server-side now (backend/app/services/storage.py).
-        return try await APIClient.shared.uploadPhoto(data: data, sightingID: sightingID, idToken: idToken)
+        guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
+        let ref = storage.reference(withPath: "sightings/\(sightingID)/photo.jpg")
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        _ = try await ref.putDataAsync(data, metadata: metadata)
+        let photoURL = try await ref.downloadURL()
+        return (photoURL.absoluteString, nil)
     }
 
     func uploadAudio(_ data: Data, sightingID: String, filename: String) async throws -> String {
-        guard let user = Auth.auth().currentUser else { throw AppError.notLoggedIn }
-        let idToken = try await user.getIDToken()
-        return try await APIClient.shared.uploadAudio(data: data, sightingID: sightingID, idToken: idToken)
+        guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
+        let ref = storage.reference(withPath: "sightings/\(sightingID)/\(filename)")
+        let metadata = StorageMetadata()
+        metadata.contentType = "audio/mp4"
+        _ = try await ref.putDataAsync(data, metadata: metadata)
+        let audioURL = try await ref.downloadURL()
+        return audioURL.absoluteString
     }
 
     // MARK: - Sightings
