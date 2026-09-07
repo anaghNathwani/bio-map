@@ -28,14 +28,15 @@ struct VisionCandidate: Decodable {
 }
 
 // Talks to the backend for the optional Google Vision bird-ID proxy; media
-// blobs (photo/audio) now upload directly via FirebaseService using the
-// FirebaseStorage SDK, not this client — see docs/DEPLOYMENT.md. Wikipedia
-// bird info is fetched directly too, not proxied.
+// blobs (photo/audio) are compressed client-side and embedded as base64
+// directly in the Firestore sighting doc by FirebaseService, not this client
+// or any Storage SDK — see docs/DEPLOYMENT.md. Wikipedia bird info is
+// fetched directly too, not proxied.
 final class APIClient {
     static let shared = APIClient()
 
-    // Only gates the optional Vision proxy now that media uploads go straight
-    // through FirebaseStorage. No backend is actually deployed anywhere (see
+    // Only gates the optional Vision proxy now that media uploads no longer
+    // touch a backend at all. No backend is actually deployed anywhere (see
     // docs/DEPLOYMENT.md), so this only matters if/when that backend exists;
     // identifyImage() call sites already treat it as optional (`try?`). For
     // local testing against docker-compose from a physical device, "localhost"

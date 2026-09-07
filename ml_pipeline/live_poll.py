@@ -8,14 +8,16 @@ instead, at the cost of turning "instant" into "within one poll interval."
 Each run does two things once, then exits:
 
   1. Audio bird-call ID — finds audio sightings with no aiSpeciesSuggestion
-     yet, downloads the recording (a plain HTTPS GET — Supabase Storage
-     buckets are public for reads, no credentials needed to fetch), analyzes
-     it with BirdNET (birdnetlib, Cornell's open-weight bird-call model, used
-     as-is — not fine-tuned), and writes the prediction back onto the
-     sighting doc. BirdNET classifies each 3-second segment independently
-     with a per-species confidence (not a single argmax), so it can and does
-     already distinguish multiple distinct species in one recording — the
-     app writes the full list (aiSpeciesSuggestions), not just the top one.
+     yet, decodes the recording (embedded as a base64 data URI directly on
+     the sighting doc's audioURL field — see FirebaseService.uploadAudio in
+     the iOS app; no Storage/backend involved, so no network fetch needed
+     here either), analyzes it with BirdNET (birdnetlib, Cornell's
+     open-weight bird-call model, used as-is — not fine-tuned), and writes
+     the prediction back onto the sighting doc. BirdNET classifies each
+     3-second segment independently with a per-species confidence (not a
+     single argmax), so it can and does already distinguish multiple
+     distinct species in one recording — the app writes the full list
+     (aiSpeciesSuggestions), not just the top one.
 
   2. Annotation moderation — finds annotations with moderation == "pending"
      (set by the app at submission time — see FirebaseService.submitAnnotation
@@ -33,11 +35,11 @@ Credentials: see firestore_client.py.
 """
 
 import argparse
+import base64
 import logging
 import os
 import tempfile
 
-import requests
 from google.cloud.firestore_v1.base_query import FieldFilter
 
 import firestore_client
@@ -96,13 +98,17 @@ def _process_audio_sighting(db, doc_id: str, data: dict) -> None:
     if not audio_url:
         logger.warning("  No audioURL for %s, skipping", doc_id)
         return
+    if "," not in audio_url:
+        logger.warning("  audioURL for %s isn't a data URI, skipping", doc_id)
+        return
 
     logger.info("Analyzing audio sighting %s...", doc_id)
-    resp = requests.get(audio_url, timeout=60)
-    resp.raise_for_status()
+    # audioURL is "data:audio/mp4;base64,<...>" — decode directly, no network
+    # fetch (see FirebaseService.uploadAudio in the iOS app).
+    audio_bytes = base64.b64decode(audio_url.split(",", 1)[1])
 
     with tempfile.NamedTemporaryFile(suffix=".m4a", delete=False) as f:
-        f.write(resp.content)
+        f.write(audio_bytes)
         tmp_path = f.name
 
     try:

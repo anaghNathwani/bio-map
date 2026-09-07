@@ -1,14 +1,18 @@
 """
 Publishes a converted model artifact (produced by convert_photo_model.py, or
-any script that writes the same manifest.json + zip layout) to Supabase
-Storage + the `model_versions` Firestore collection.
+any script that writes the same manifest.json + zip layout) entirely through
+Firebase — Firestore only, no Storage, no Supabase, no backend.
 
-Why Supabase Storage and not Firebase Storage: Firebase Storage now requires
-a linked billing account (Blaze plan) for every project regardless of usage.
-Supabase Storage's free tier needs no card at all. Firestore itself stays on
-Firebase (unaffected by that policy — only Storage is gated), so this script
-still needs Firebase Admin credentials to write the `model_versions` doc; it
-just no longer uses Firebase for the blob itself.
+Firebase Storage would need a linked billing account (Blaze plan) for any
+usage regardless of volume; Firestore itself is unaffected by that and has
+never needed billing. A model file is too large for one Firestore document
+(1 MiB cap), so it's split into base64-encoded chunks and written as a
+subcollection under its model_versions doc — the same "compress client-side
+and embed as base64, skip Storage entirely" idea already used for sighting
+photo/audio (FirebaseService.uploadImage/uploadAudio), just chunked because a
+~15MB model doesn't fit in a single 1 MiB document the way a compressed photo
+does. See github.com/ishanvi-dekate/team-efficient-epp for the pattern this
+followed (Profile.jsx's avatar upload, ChatBot.jsx's imageToBase64).
 
 Deliberately has NO tensorflow/coremltools dependency — see the comment at
 the top of convert_photo_model.py for why this is a separate script/venv.
@@ -16,64 +20,51 @@ the top of convert_photo_model.py for why this is a separate script/venv.
 Usage:
     python publish_model.py --input ./output
     python publish_model.py --input ./output --service-account path/to/key.json
-
-Supabase credentials (env vars, matching backend/.env.example's convention):
-    S3_ENDPOINT      e.g. https://<project-ref>.supabase.co/storage/v1/s3
-    S3_ACCESS_KEY    the Supabase project ref
-    S3_SECRET_KEY    the service_role API key (Project Settings -> API)
-    MODEL_BUCKET     default "birdmap-models"
-    PUBLIC_S3_URL    e.g. https://<project-ref>.supabase.co/storage/v1
 """
 
 import argparse
+import base64
 import json
-import os
 from pathlib import Path
 
-import boto3
 from firebase_admin import firestore as fb_firestore
 
 import firestore_client
 
-
-def get_s3_client():
-    return boto3.client(
-        "s3",
-        endpoint_url=os.environ["S3_ENDPOINT"],
-        aws_access_key_id=os.environ["S3_ACCESS_KEY"],
-        aws_secret_access_key=os.environ["S3_SECRET_KEY"],
-        region_name="us-east-1",  # Supabase Storage doesn't use a real AWS region
-    )
+# Comfortably under Firestore's 1 MiB per-document cap after base64's ~4/3
+# inflation (650_000 raw bytes -> ~867_000 base64 chars), leaving headroom
+# for the chunk document's other fields.
+CHUNK_SIZE = 650_000
 
 
 def upload_and_register(manifest: dict, zip_path: Path, db):
     version = manifest["version"]
     media_type = manifest["mediaType"]
-    bucket = os.environ.get("MODEL_BUCKET", "birdmap-models")
-
-    key = f"models/birdmap_{media_type}_{version}.mlpackage.zip"
-    s3 = get_s3_client()
-    s3.upload_file(str(zip_path), bucket, key, ExtraArgs={"ContentType": "application/zip"})
-
-    public_base = os.environ.get("PUBLIC_S3_URL") or os.environ["S3_ENDPOINT"]
-    # Supabase Storage serves public objects under /object/public/, distinct
-    # from the S3-compatible endpoint used above for the upload itself — a
-    # bare "{public_base}/{bucket}/{key}" 404s against real Supabase (this
-    # was never caught because no Supabase project has ever actually been
-    # provisioned to publish a model against — see docs/DEPLOYMENT.md).
-    download_url = f"{public_base}/object/public/{bucket}/{key}"
-    print(f"Uploaded model to {download_url}")
+    raw = zip_path.read_bytes()
 
     versions_ref = db.collection("model_versions")
+    new_ref = versions_ref.document()
+    chunks_ref = new_ref.collection("chunks")
+
+    chunk_count = (len(raw) + CHUNK_SIZE - 1) // CHUNK_SIZE
+    print(f"Uploading {len(raw):,} bytes as {chunk_count} chunk document(s)...")
+    for i in range(chunk_count):
+        raw_chunk = raw[i * CHUNK_SIZE:(i + 1) * CHUNK_SIZE]
+        chunks_ref.document(str(i)).set({
+            "index": i,
+            "data": base64.b64encode(raw_chunk).decode("ascii"),
+        })
+        print(f"  chunk {i + 1}/{chunk_count}")
+
     batch = db.batch()
     existing = versions_ref.where("mediaType", "==", media_type).where("isActive", "==", True).stream()
     for doc in existing:
         batch.update(doc.reference, {"isActive": False})
-    new_ref = versions_ref.document()
     batch.set(new_ref, {
         "version": version,
         "mediaType": media_type,
-        "downloadURL": download_url,
+        "chunkCount": chunk_count,
+        "totalBytes": len(raw),
         "numClasses": manifest.get("numClasses"),
         "classNames": manifest.get("classNames"),
         "source": manifest.get("source"),
@@ -82,7 +73,8 @@ def upload_and_register(manifest: dict, zip_path: Path, db):
         "createdAt": fb_firestore.SERVER_TIMESTAMP,
     })
     batch.commit()
-    print(f"Registered model version {version} ({manifest.get('numClasses')} classes, mediaType={media_type})")
+    print(f"Registered model version {version} ({manifest.get('numClasses')} classes, "
+          f"mediaType={media_type}, {chunk_count} chunks)")
 
 
 def main():
@@ -91,13 +83,9 @@ def main():
                         help="Directory containing manifest.json + the model zip "
                              "(as written by convert_photo_model.py)")
     parser.add_argument("--service-account", default=None,
-                        help="Path to a Firebase service account JSON (for Firestore only). "
-                             "Falls back to GOOGLE_APPLICATION_CREDENTIALS or ADC.")
+                        help="Path to a Firebase service account JSON. Falls back to "
+                             "GOOGLE_APPLICATION_CREDENTIALS or ADC.")
     args = parser.parse_args()
-
-    missing = [v for v in ("S3_ENDPOINT", "S3_ACCESS_KEY", "S3_SECRET_KEY") if v not in os.environ]
-    if missing:
-        raise SystemExit(f"Missing required env var(s): {', '.join(missing)} — see the module docstring.")
 
     in_dir = Path(args.input)
     manifest = json.loads((in_dir / "manifest.json").read_text())

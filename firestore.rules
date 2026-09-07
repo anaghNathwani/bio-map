@@ -44,12 +44,20 @@ service cloud.firestore {
       }
     }
 
-    // Model versions: published only by the trusted server-side training pipeline
-    // (Admin SDK, bypasses these rules). Publicly readable so ModelManager can check
-    // for updates without requiring a signed-in user.
+    // Model versions: published only by the trusted server-side pipeline
+    // (Admin SDK, bypasses these rules — see ml_pipeline/publish_model.py).
+    // Publicly readable so ModelManager can check for updates and download
+    // the model without requiring a signed-in user. The model file itself is
+    // too large for one document (1 MiB cap), so it's split into base64
+    // chunk documents under the `chunks` subcollection — same rules apply.
     match /model_versions/{versionID} {
       allow read: if true;
       allow write: if false;
+
+      match /chunks/{chunkID} {
+        allow read: if true;
+        allow write: if false;
+      }
     }
   }
 }

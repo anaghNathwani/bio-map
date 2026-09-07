@@ -1,19 +1,32 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
-import FirebaseStorage
 import GoogleSignIn
 import UIKit
 import CoreLocation
 
-// Central Firebase service — all data operations, including media blobs
-// (photo/audio), go through Firebase directly: Firestore/Auth as before,
-// and now Storage too (Blaze billing enabled for this project). See
-// docs/DEPLOYMENT.md for the Supabase-broker path this replaced.
+// Central Firebase service — every data operation, media blobs included, goes
+// through Firestore/Auth directly, no Storage and no backend. Photo/audio
+// bytes are compressed client-side and embedded as base64 data URIs directly
+// in the sighting document, the same pattern used in
+// github.com/ishanvi-dekate/team-efficient-epp (Profile.jsx's avatar upload,
+// ChatBot.jsx's imageToBase64) to avoid Firebase Storage's Blaze billing
+// requirement entirely — genuinely free, no card. See docs/DEPLOYMENT.md.
+private extension UIImage {
+    /// Aspect-preserving downscale, no-op if already within bounds.
+    func resized(maxDimension: CGFloat) -> UIImage {
+        let longest = max(size.width, size.height)
+        guard longest > maxDimension else { return self }
+        let scale = maxDimension / longest
+        let target = CGSize(width: size.width * scale, height: size.height * scale)
+        let renderer = UIGraphicsImageRenderer(size: target)
+        return renderer.image { _ in draw(in: CGRect(origin: .zero, size: target)) }
+    }
+}
+
 final class FirebaseService {
     static let shared = FirebaseService()
     let db = Firestore.firestore()
-    private let storage = Storage.storage()
 
     private init() {}
 
@@ -77,26 +90,28 @@ final class FirebaseService {
         try await db.collection("users").document(uid).setData(["username": newUsername], merge: true)
     }
 
-    // MARK: - Media Upload (direct to Firebase Storage)
+    // MARK: - Media "upload" (compressed base64 embedded in the Firestore doc)
+
+    /// Firestore caps a document at 1 MiB total; base64 inflates raw bytes by
+    /// ~4/3, so this leaves generous headroom for the sighting doc's other
+    /// fields (species, notes, etc.) alongside the encoded media.
+    private static let maxEncodedDimension: CGFloat = 1600
+    private static let jpegQuality: CGFloat = 0.85
 
     func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?) {
         guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
-        let ref = storage.reference(withPath: "sightings/\(sightingID)/photo.jpg")
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
-        _ = try await ref.putDataAsync(data, metadata: metadata)
-        let photoURL = try await ref.downloadURL()
-        return (photoURL.absoluteString, nil)
+        guard let image = UIImage(data: data) else { throw AppError.invalidImage }
+        let resized = image.resized(maxDimension: Self.maxEncodedDimension)
+        guard let jpeg = resized.jpegData(compressionQuality: Self.jpegQuality) else {
+            throw AppError.invalidImage
+        }
+        let dataURI = "data:image/jpeg;base64,\(jpeg.base64EncodedString())"
+        return (dataURI, nil)
     }
 
     func uploadAudio(_ data: Data, sightingID: String, filename: String) async throws -> String {
         guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
-        let ref = storage.reference(withPath: "sightings/\(sightingID)/\(filename)")
-        let metadata = StorageMetadata()
-        metadata.contentType = "audio/mp4"
-        _ = try await ref.putDataAsync(data, metadata: metadata)
-        let audioURL = try await ref.downloadURL()
-        return audioURL.absoluteString
+        return "data:audio/mp4;base64,\(data.base64EncodedString())"
     }
 
     // MARK: - Sightings
@@ -240,12 +255,13 @@ final class FirebaseService {
 }
 
 enum AppError: LocalizedError {
-    case notLoggedIn, notFound
+    case notLoggedIn, notFound, invalidImage
 
     var errorDescription: String? {
         switch self {
         case .notLoggedIn: return "You must be logged in"
         case .notFound: return "Not found"
+        case .invalidImage: return "Could not process photo"
         }
     }
 }

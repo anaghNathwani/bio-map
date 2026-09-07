@@ -76,13 +76,37 @@ final class ModelManager {
     /// if published, the photo object detector) and downloads whichever have
     /// changed. Safe to call on any concurrency context — uses async APIs
     /// internally. Models are published by `ml_pipeline/convert_photo_model.py`
-    /// / `convert_bird_detector_model.py` + `publish_model.py` to the
-    /// `model_versions` Firestore collection and Supabase Storage (not
-    /// Firebase Storage, which now requires a paid Blaze plan for any usage)
+    /// / `convert_bird_detector_model.py` + `publish_model.py` entirely
+    /// through Firestore — no Storage, no third-party host. A model is too
+    /// big for one 1 MiB Firestore document, so it's split into base64
+    /// chunk documents under `model_versions/{id}/chunks`, reassembled here
     /// — see docs/ML_PIPELINE.md.
     func checkForUpdate() async {
         await checkForClassifierUpdate()
         await checkForDetectorUpdate()
+    }
+
+    /// Fetches every chunk doc (ordered by `index`) under a model_versions
+    /// doc and concatenates the *decoded* bytes — decoding each chunk on its
+    /// own rather than concatenating the base64 strings first, since a chunk
+    /// boundary chosen by raw byte count won't generally land on a 3-byte
+    /// base64 group boundary, so an intermediate chunk's base64 can carry
+    /// padding that would corrupt a naive string-level concatenation.
+    private func assembleModelData(from versionDoc: QueryDocumentSnapshot) async throws -> Data {
+        let chunksSnap = try await versionDoc.reference.collection("chunks")
+            .order(by: "index")
+            .getDocuments()
+        var result = Data()
+        for chunkDoc in chunksSnap.documents {
+            guard let base64 = chunkDoc.data()["data"] as? String,
+                  let chunkData = Data(base64Encoded: base64) else {
+                throw NSError(domain: "ModelManager", code: 0, userInfo: [
+                    NSLocalizedDescriptionKey: "Malformed chunk \(chunkDoc.documentID)"
+                ])
+            }
+            result.append(chunkData)
+        }
+        return result
     }
 
     private func checkForClassifierUpdate() async {
@@ -93,9 +117,7 @@ final class ModelManager {
                 .limit(to: 1)
                 .getDocuments()
             guard let doc = snap.documents.first,
-                  let version = doc.data()["version"] as? String,
-                  let downloadURLString = doc.data()["downloadURL"] as? String,
-                  let downloadURL = URL(string: downloadURLString) else {
+                  let version = doc.data()["version"] as? String else {
                 print("[ModelManager] No active photo model published yet")
                 return
             }
@@ -107,11 +129,13 @@ final class ModelManager {
             }
 
             print("[ModelManager] Downloading classifier model v\(version)…")
-            // Zip root is BirdClassifier.mlpackage/ — a public Supabase Storage URL, no auth needed.
-            let (zipTemp, _) = try await URLSession.shared.download(from: downloadURL)
+            let zipData = try await assembleModelData(from: doc)
             let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let zipTemp = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".zip")
+            try zipData.write(to: zipTemp)
             try? FileManager.default.removeItem(at: modelURL)
             try FileManager.default.unzipItem(at: zipTemp, to: docs)
+            try? FileManager.default.removeItem(at: zipTemp)
 
             UserDefaults.standard.set(version, forKey: versionKey)
             cachedModel = nil
@@ -131,9 +155,7 @@ final class ModelManager {
                 .limit(to: 1)
                 .getDocuments()
             guard let doc = snap.documents.first,
-                  let version = doc.data()["version"] as? String,
-                  let downloadURLString = doc.data()["downloadURL"] as? String,
-                  let downloadURL = URL(string: downloadURLString) else {
+                  let version = doc.data()["version"] as? String else {
                 print("[ModelManager] No active photo detector model published yet")
                 return
             }
@@ -145,11 +167,13 @@ final class ModelManager {
             }
 
             print("[ModelManager] Downloading detector model v\(version)…")
-            // Zip root is BirdDetector.mlmodel (a single file, not a package directory).
-            let (zipTemp, _) = try await URLSession.shared.download(from: downloadURL)
+            let zipData = try await assembleModelData(from: doc)
             let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let zipTemp = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".zip")
+            try zipData.write(to: zipTemp)
             try? FileManager.default.removeItem(at: detectorModelURL)
             try FileManager.default.unzipItem(at: zipTemp, to: docs)
+            try? FileManager.default.removeItem(at: zipTemp)
 
             UserDefaults.standard.set(version, forKey: detectorVersionKey)
             cachedDetectorModel = nil

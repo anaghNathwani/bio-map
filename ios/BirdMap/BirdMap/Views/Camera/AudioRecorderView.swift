@@ -118,7 +118,7 @@ struct AudioRecorderView: View {
                         HStack(spacing: 6) {
                             Circle().fill(.red).frame(width: 8, height: 8)
                                 .symbolEffect(.pulse)
-                            Text(formatTime(vm.recordingSeconds))
+                            Text("\(formatTime(vm.recordingSeconds)) / \(formatTime(AudioRecorderViewModel.maxRecordingSeconds))")
                                 .font(.caption.monospacedDigit())
                                 .foregroundStyle(.red)
                         }

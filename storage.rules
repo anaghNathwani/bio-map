@@ -1,8 +1,9 @@
-// Sighting photo/audio blobs, uploaded directly by the app via the
-// FirebaseStorage SDK (FirebaseService.uploadImage/uploadAudio) — billing
-// (Blaze) enabled on this project specifically to support this. See
-// docs/DEPLOYMENT.md for the Supabase-broker alternative this replaced,
-// kept documented there in case billing needs to come back off.
+// VESTIGIAL — no longer used. Firebase Storage requires a linked billing
+// account (Blaze plan) for any usage regardless of volume, so sighting
+// photo/audio bytes are compressed client-side and embedded as base64 data
+// URIs directly in the Firestore sighting document instead — genuinely free,
+// no card, no Storage, no backend. See FirebaseService.uploadImage/
+// uploadAudio and docs/DEPLOYMENT.md. Kept here, unused, in case of rollback.
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
