@@ -76,11 +76,14 @@ final class ModelManager {
     /// if published, the photo object detector) and downloads whichever have
     /// changed. Safe to call on any concurrency context — uses async APIs
     /// internally. Models are published by `ml_pipeline/convert_photo_model.py`
-    /// / `convert_bird_detector_model.py` + `publish_model.py` entirely
-    /// through Firestore — no Storage, no third-party host. A model is too
-    /// big for one 1 MiB Firestore document, so it's split into base64
-    /// chunk documents under `model_versions/{id}/chunks`, reassembled here
-    /// — see docs/ML_PIPELINE.md.
+    /// / `convert_bird_detector_model.py` + `publish_model.py` primarily
+    /// through Firestore — no Storage, no third-party host needed for the
+    /// primary path. A model is too big for one 1 MiB Firestore document, so
+    /// it's split into base64 chunk documents under
+    /// `model_versions/{id}/chunks`, reassembled here — see
+    /// docs/ML_PIPELINE.md. If the Firestore chunks can't be assembled for
+    /// any reason, falls back to downloading the same zip from the doc's
+    /// `fallbackURL` (a Supabase Storage public URL), when present.
     func checkForUpdate() async {
         await checkForClassifierUpdate()
         await checkForDetectorUpdate()
@@ -96,6 +99,11 @@ final class ModelManager {
         let chunksSnap = try await versionDoc.reference.collection("chunks")
             .order(by: "index")
             .getDocuments()
+        guard !chunksSnap.documents.isEmpty else {
+            throw NSError(domain: "ModelManager", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "No chunk documents found"
+            ])
+        }
         var result = Data()
         for chunkDoc in chunksSnap.documents {
             guard let base64 = chunkDoc.data()["data"] as? String,
@@ -107,6 +115,22 @@ final class ModelManager {
             result.append(chunkData)
         }
         return result
+    }
+
+    /// Firestore primary failed (missing/malformed chunks, read error, etc.)
+    /// — try the Supabase fallback URL stored on the same doc, if published.
+    private func fetchModelData(from doc: QueryDocumentSnapshot) async throws -> Data {
+        do {
+            return try await assembleModelData(from: doc)
+        } catch {
+            guard let fallbackURLString = doc.data()["fallbackURL"] as? String,
+                  let fallbackURL = URL(string: fallbackURLString) else {
+                throw error
+            }
+            print("[ModelManager] Firestore chunks unavailable (\(error)), trying fallback URL…")
+            let (data, _) = try await URLSession.shared.data(from: fallbackURL)
+            return data
+        }
     }
 
     private func checkForClassifierUpdate() async {

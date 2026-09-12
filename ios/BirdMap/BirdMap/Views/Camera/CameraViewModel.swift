@@ -81,11 +81,12 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
         error = nil
         let sightingID = UUID().uuidString
         do {
-            let (photoURL, thumbURL) = try await FirebaseService.shared.uploadImage(data, sightingID: sightingID)
+            let (photoURL, thumbURL, fallbackURL) = try await FirebaseService.shared.uploadImage(data, sightingID: sightingID)
             _ = try await FirebaseService.shared.createSighting(
                 photoURL: photoURL,
                 thumbnailURL: thumbURL,
                 audioURL: nil,
+                photoFallbackURL: fallbackURL,
                 mediaType: "photo",
                 latitude: location.coordinate.latitude,
                 longitude: location.coordinate.longitude,

@@ -6,12 +6,15 @@ import UIKit
 import CoreLocation
 
 // Central Firebase service — every data operation, media blobs included, goes
-// through Firestore/Auth directly, no Storage and no backend. Photo/audio
-// bytes are compressed client-side and embedded as base64 data URIs directly
-// in the sighting document, the same pattern used in
+// through Firestore/Auth directly, no backend. Photo/audio bytes are
+// compressed client-side and embedded as base64 data URIs directly in the
+// sighting document (primary), the same pattern used in
 // github.com/ishanvi-dekate/team-efficient-epp (Profile.jsx's avatar upload,
 // ChatBot.jsx's imageToBase64) to avoid Firebase Storage's Blaze billing
 // requirement entirely — genuinely free, no card. See docs/DEPLOYMENT.md.
+// The same bytes are also uploaded to Supabase Storage as a best-effort
+// fallback copy (SupabaseStorage.uploadFallback) — if that fails, the sighting
+// still saves fine with just the primary embedded copy.
 private extension UIImage {
     /// Aspect-preserving downscale, no-op if already within bounds.
     func resized(maxDimension: CGFloat) -> UIImage {
@@ -98,7 +101,7 @@ final class FirebaseService {
     private static let maxEncodedDimension: CGFloat = 1600
     private static let jpegQuality: CGFloat = 0.85
 
-    func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?) {
+    func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?, fallbackURL: String?) {
         guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
         guard let image = UIImage(data: data) else { throw AppError.invalidImage }
         let resized = image.resized(maxDimension: Self.maxEncodedDimension)
@@ -106,12 +109,19 @@ final class FirebaseService {
             throw AppError.invalidImage
         }
         let dataURI = "data:image/jpeg;base64,\(jpeg.base64EncodedString())"
-        return (dataURI, nil)
+        let fallbackURL = await SupabaseStorage.uploadFallback(
+            jpeg, path: "sightings/\(sightingID)/photo.jpg", contentType: "image/jpeg"
+        )
+        return (dataURI, nil, fallbackURL)
     }
 
-    func uploadAudio(_ data: Data, sightingID: String, filename: String) async throws -> String {
+    func uploadAudio(_ data: Data, sightingID: String, filename: String) async throws -> (audioURL: String, fallbackURL: String?) {
         guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
-        return "data:audio/mp4;base64,\(data.base64EncodedString())"
+        let dataURI = "data:audio/mp4;base64,\(data.base64EncodedString())"
+        let fallbackURL = await SupabaseStorage.uploadFallback(
+            data, path: "sightings/\(sightingID)/\(filename)", contentType: "audio/mp4"
+        )
+        return (dataURI, fallbackURL)
     }
 
     // MARK: - Sightings
@@ -120,6 +130,8 @@ final class FirebaseService {
         photoURL: String?,
         thumbnailURL: String?,
         audioURL: String?,
+        photoFallbackURL: String? = nil,
+        audioFallbackURL: String? = nil,
         mediaType: String,
         latitude: Double,
         longitude: Double,
@@ -143,6 +155,8 @@ final class FirebaseService {
         if let v = photoURL { data["photoURL"] = v }
         if let v = thumbnailURL { data["thumbnailURL"] = v }
         if let v = audioURL { data["audioURL"] = v }
+        if let v = photoFallbackURL { data["photoFallbackURL"] = v }
+        if let v = audioFallbackURL { data["audioFallbackURL"] = v }
         if let v = notes { data["notes"] = v }
         if let v = aiSpecies { data["aiSpeciesSuggestion"] = v }
         if let v = aiConfidence { data["aiConfidence"] = v }
@@ -195,6 +209,8 @@ final class FirebaseService {
             photoURL: data["photoURL"] as? String,
             thumbnailURL: data["thumbnailURL"] as? String,
             audioURL: data["audioURL"] as? String,
+            photoFallbackURL: data["photoFallbackURL"] as? String,
+            audioFallbackURL: data["audioFallbackURL"] as? String,
             mediaType: data["mediaType"] as? String ?? "photo",
             notes: data["notes"] as? String,
             aiSpeciesSuggestion: data["aiSpeciesSuggestion"] as? String,
