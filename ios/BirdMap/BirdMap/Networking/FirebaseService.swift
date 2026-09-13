@@ -95,19 +95,44 @@ final class FirebaseService {
 
     // MARK: - Media "upload" (compressed base64 embedded in the Firestore doc)
 
-    /// Firestore caps a document at 1 MiB total; base64 inflates raw bytes by
-    /// ~4/3, so this leaves generous headroom for the sighting doc's other
-    /// fields (species, notes, etc.) alongside the encoded media.
+    /// Firestore rejects a single string field once its encoded size exceeds
+    /// a hard cap just under 1 MiB (confirmed live: "value of property
+    /// photoURL is longer than 1048487 bytes"). A single fixed
+    /// resize+quality pass isn't safe — some photos (more detail/noise) don't
+    /// compress as well as others and blow past that cap even after
+    /// downscaling to 1600px at 0.85 quality, which is what this used to do
+    /// unconditionally. compressForEmbedding instead iterates quality then
+    /// dimension until the JPEG actually fits under maxRawBytes, so the
+    /// upload can't fail this way regardless of the source photo.
     private static let maxEncodedDimension: CGFloat = 1600
     private static let jpegQuality: CGFloat = 0.85
+    /// Raw JPEG byte budget before base64 (~4/3 inflation) is applied —
+    /// comfortably under the ~1,048,487-byte field cap with room for the
+    /// sighting doc's other fields alongside it.
+    private static let maxRawBytes = 700_000
+
+    private func compressForEmbedding(_ image: UIImage) -> Data? {
+        var dimension = Self.maxEncodedDimension
+        var quality = Self.jpegQuality
+        for _ in 0..<8 {
+            if let jpeg = image.resized(maxDimension: dimension).jpegData(compressionQuality: quality),
+               jpeg.count <= Self.maxRawBytes {
+                return jpeg
+            }
+            if quality > 0.35 {
+                quality -= 0.15
+            } else {
+                dimension *= 0.75
+            }
+        }
+        // Last-ditch minimal attempt — a low-quality thumbnail beats a failed upload.
+        return image.resized(maxDimension: 640).jpegData(compressionQuality: 0.25)
+    }
 
     func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?, fallbackURL: String?) {
         guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
         guard let image = UIImage(data: data) else { throw AppError.invalidImage }
-        let resized = image.resized(maxDimension: Self.maxEncodedDimension)
-        guard let jpeg = resized.jpegData(compressionQuality: Self.jpegQuality) else {
-            throw AppError.invalidImage
-        }
+        guard let jpeg = compressForEmbedding(image) else { throw AppError.invalidImage }
         let dataURI = "data:image/jpeg;base64,\(jpeg.base64EncodedString())"
         let fallbackURL = await SupabaseStorage.uploadFallback(
             jpeg, path: "sightings/\(sightingID)/photo.jpg", contentType: "image/jpeg"
