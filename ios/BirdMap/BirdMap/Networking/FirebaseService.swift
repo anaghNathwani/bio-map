@@ -198,14 +198,27 @@ final class FirebaseService {
     }
 
     func fetchSightings(region: (minLat: Double, maxLat: Double, minLng: Double, maxLng: Double)? = nil) async throws -> [Sighting] {
-        var query: Query = db.collection("sightings").order(by: "createdAt", descending: true).limit(to: 300)
+        var query: Query = db.collection("sightings").limit(to: 300)
         if let r = region {
-            query = query.whereField("latitude", isGreaterThan: r.minLat).whereField("latitude", isLessThan: r.maxLat)
+            // Firestore requires the first orderBy to match a range-filtered
+            // field, so this branch orders by latitude instead of createdAt
+            // — the createdAt ordering is restored client-side below. (The
+            // longitude bound can't be range-filtered server-side alongside
+            // latitude — Firestore only allows that on one field — so it's
+            // applied client-side too, same as before.)
+            query = query
+                .whereField("latitude", isGreaterThan: r.minLat)
+                .whereField("latitude", isLessThan: r.maxLat)
+                .order(by: "latitude")
+        } else {
+            query = query.order(by: "createdAt", descending: true)
         }
         let snap = try await query.getDocuments()
         var sightings = snap.documents.compactMap { try? $0.data(as: Sighting.self) }
         if let r = region {
-            sightings = sightings.filter { $0.longitude >= r.minLng && $0.longitude <= r.maxLng }
+            sightings = sightings
+                .filter { $0.longitude >= r.minLng && $0.longitude <= r.maxLng }
+                .sorted { ($0.createdAt?.dateValue() ?? .distantPast) > ($1.createdAt?.dateValue() ?? .distantPast) }
         }
         return sightings
     }

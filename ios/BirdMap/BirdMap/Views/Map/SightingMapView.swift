@@ -31,7 +31,6 @@ struct SightingMapView: View {
                 }
                 .mapControls {
                     MapUserLocationButton()
-                    MapCompass()
                     MapScaleView()
                 }
                 .onMapCameraChange(frequency: .onEnd) { ctx in
@@ -82,7 +81,7 @@ struct SightingMapView: View {
                     .frame(width: 38, height: 38)
                     .shadow(color: .black.opacity(0.22), radius: 5, y: 3)
 
-                Image(systemName: sighting.isAudio ? "waveform" : "bird.fill")
+                Image(systemName: sighting.isAudio ? "mic.fill" : "camera.fill")
                     .foregroundStyle(.white)
                     .font(.system(size: 16, weight: .semibold))
 
