@@ -17,6 +17,16 @@ actor BirdClassifier {
     private var cachedModelVersion: String?
     private var cachedVNModel: VNCoreMLModel?
 
+    /// The bundled AIY Birds V1 classifier (Google, MobileNetV2 on
+    /// iNaturalist 2017 — see ml_pipeline/convert_photo_model.py) has a
+    /// dedicated background class for exactly this, given a friendly name
+    /// at conversion time. Still, being a plain softmax over 965 classes, it
+    /// can be confidently wrong on an out-of-distribution image rather than
+    /// correctly landing on this class — the confidence floor below catches
+    /// that case too, rather than only trusting the label name.
+    private static let unknownLabel = "Unknown / Not a Bird"
+    private static let minConfidence: Float = 0.5
+
     private var vnModel: VNCoreMLModel? {
         get throws {
             let version = UserDefaults.standard.string(forKey: "model_version") ?? ""
@@ -40,10 +50,11 @@ actor BirdClassifier {
             DispatchQueue.global(qos: .userInitiated).async {
                 let request = VNCoreMLRequest(model: model) { req, _ in
                     let observations = (req.results as? [VNClassificationObservation]) ?? []
-                    let top = observations.prefix(count).map {
-                        ClassificationResult(species: $0.identifier, confidence: $0.confidence)
-                    }
-                    continuation.resume(returning: top)
+                    let top = observations
+                        .filter { $0.identifier != Self.unknownLabel && $0.confidence >= Self.minConfidence }
+                        .prefix(count)
+                        .map { ClassificationResult(species: $0.identifier, confidence: $0.confidence) }
+                    continuation.resume(returning: Array(top))
                 }
                 request.imageCropAndScaleOption = .centerCrop
                 do {

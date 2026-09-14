@@ -15,6 +15,11 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
     /// Additional distinct species found via saliency-region detection
     /// (MultiBirdDetector) — birds in the same frame beyond aiSuggestion.
     @Published var aiAdditionalSuggestions: [BirdCandidate] = []
+    /// True once on-device classification has actually finished running for
+    /// the current photo (regardless of outcome) — lets the UI distinguish
+    /// "still classifying" from "classified, but not confident it's a bird"
+    /// instead of both looking like silence.
+    @Published var didClassify = false
     @Published var notes = ""
     @Published var isUploading = false
     @Published var uploadSuccess = false
@@ -57,6 +62,7 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
         aiSuggestion = nil
         aiCandidates = []
         aiAdditionalSuggestions = []
+        didClassify = false
         Task {
             let results = await BirdClassifier.shared.classifyTopN(image: image, count: 3)
             aiCandidates = results
@@ -64,6 +70,7 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
             aiAdditionalSuggestions = await MultiBirdDetector.detectAdditional(
                 in: image, primarySpecies: results.first?.species
             )
+            didClassify = true
         }
     }
 
@@ -103,6 +110,7 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
             aiSuggestion = nil
             aiCandidates = []
             aiAdditionalSuggestions = []
+            didClassify = false
             notes = ""
         } catch {
             self.error = "Upload failed: \(error.localizedDescription)"

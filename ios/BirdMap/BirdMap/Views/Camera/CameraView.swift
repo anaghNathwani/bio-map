@@ -153,6 +153,8 @@ struct CameraView: View {
                 )
             } else if vm.capturedImage != nil && !modelAvailable {
                 noModelBanner
+            } else if vm.capturedImage != nil && modelAvailable && vm.didClassify {
+                notConfidentBanner
             }
 
             // Other birds spotted via saliency-region detection, beyond the
@@ -264,6 +266,24 @@ struct CameraView: View {
         }
         .padding(12)
         .background(Color.teal.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+        .padding(.horizontal)
+    }
+
+    private var notConfidentBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "questionmark.circle")
+                .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Couldn't confidently identify a bird")
+                    .font(.caption.weight(.semibold))
+                Text("The on-device model isn't sure this is one of the species it knows — you can still report it and add your own ID.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+        }
+        .padding(12)
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
         .padding(.horizontal)
     }
 
