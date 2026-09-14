@@ -38,6 +38,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install ffmpeg
+        # librosa/pydub (via birdnetlib) shell out to ffmpeg to decode the
+        # recorded audio (AAC/.m4a) — confirmed missing on this runner
+        # ("Couldn't find ffmpeg or avconv", then "BirdNET analysis failed:
+        # Audio format could not be opened" for every sighting). Not
+        # preinstalled on ubuntu-latest by default.
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
