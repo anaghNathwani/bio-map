@@ -7,6 +7,8 @@ firebase-admin==6.5.0
 sentence-transformers==3.0.1
 birdnetlib==0.18.1
 librosa==0.10.2.post1
+resampy==0.4.3  # librosa.load's resampler; without it, birdnetlib's audio read fails with a
+                # generic "Audio format could not be opened" that masks the real ModuleNotFoundError
 tensorflow==2.15.1
 tqdm==4.66.4
 boto3==1.34.100  # Supabase Storage fallback upload in publish_model.py (best-effort, optional)
