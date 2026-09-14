@@ -10,6 +10,22 @@ final class ModelManager {
     private var cachedModel: MLModel?
     private var cachedModelVersion: String?
 
+    /// Version of the classifier bundled directly in the app (ML/Bundled/
+    /// BundledBirdModel.mlpackage, compiled by Xcode at build time — named
+    /// distinctly from the BirdClassifier actor to avoid colliding with
+    /// Xcode's auto-generated Swift wrapper class for the model, which
+    /// otherwise takes the model file's own name) — matches
+    /// ml_pipeline/output/manifest.json's version at the time it was copied
+    /// in. Bump this string if that bundled asset is ever replaced. Having
+    /// this shipped with the install means classification works immediately
+    /// after install/before first launch even reaches the network, instead
+    /// of depending entirely on the Firestore download in checkForUpdate().
+    private let bundledModelVersion = "20260906_191026"
+
+    private var bundledModelURL: URL? {
+        Bundle.main.url(forResource: "BundledBirdModel", withExtension: "mlmodelc")
+    }
+
     /// Tier 2 photo object detector (YOLOv3-Tiny/COCO, see BirdDetector.swift)
     /// — separate model, separate cache, separate download, optional (Tier 1
     /// saliency in MultiBirdDetector.swift is used whenever this isn't
@@ -31,24 +47,39 @@ final class ModelManager {
     }
 
     var currentModel: MLModel? {
-        let version = UserDefaults.standard.string(forKey: versionKey) ?? ""
+        let version = UserDefaults.standard.string(forKey: versionKey) ?? bundledModelVersion
         if let cached = cachedModel, cachedModelVersion == version {
             return cached
         }
-        guard FileManager.default.fileExists(atPath: modelURL.path) else { return nil }
-        do {
-            let model = try MLModel(contentsOf: modelURL)
-            cachedModel = model
-            cachedModelVersion = version
-            return model
-        } catch {
-            print("[ModelManager] Failed to load model: \(error)")
-            return nil
+        // A downloaded/updated model in Documents takes priority over the
+        // bundled one — it can only get there by being a newer published
+        // version (checkForClassifierUpdate skips downloading if the active
+        // Firestore version matches what's already stored).
+        if FileManager.default.fileExists(atPath: modelURL.path) {
+            do {
+                let model = try MLModel(contentsOf: modelURL)
+                cachedModel = model
+                cachedModelVersion = version
+                return model
+            } catch {
+                print("[ModelManager] Failed to load downloaded model: \(error)")
+            }
         }
+        if let bundled = bundledModelURL {
+            do {
+                let model = try MLModel(contentsOf: bundled)
+                cachedModel = model
+                cachedModelVersion = bundledModelVersion
+                return model
+            } catch {
+                print("[ModelManager] Failed to load bundled model: \(error)")
+            }
+        }
+        return nil
     }
 
     var isModelAvailable: Bool {
-        FileManager.default.fileExists(atPath: modelURL.path)
+        FileManager.default.fileExists(atPath: modelURL.path) || bundledModelURL != nil
     }
 
     var currentDetectorModel: MLModel? {
@@ -146,7 +177,7 @@ final class ModelManager {
                 return
             }
 
-            let stored = UserDefaults.standard.string(forKey: versionKey) ?? ""
+            let stored = UserDefaults.standard.string(forKey: versionKey) ?? bundledModelVersion
             guard version != stored else {
                 print("[ModelManager] Classifier already at version \(version)")
                 return

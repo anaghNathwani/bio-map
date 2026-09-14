@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		015A7BFC3EEA778940F099D3 /* BirdInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21912C8A76A78705F8D1D49E /* BirdInfo.swift */; };
+		039965B1309209A97048B987 /* BundledBirdModel.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 0F5D38D9AEE297172683FB3B /* BundledBirdModel.mlpackage */; };
 		07020764C02F22C9D9EDEFF5 /* AIPredictionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70F68091FD6BA1A16E45D14 /* AIPredictionCard.swift */; };
 		0A8099F8923726FCD092FE1B /* SightingMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3917232B887930F8F3CC6E6 /* SightingMapView.swift */; };
 		2BA2D6E603C8F4ABF6AA5546 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F5ED1993ACE378B92FE66F /* ModelManager.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F5D38D9AEE297172683FB3B /* BundledBirdModel.mlpackage */ = {isa = PBXFileReference; path = BundledBirdModel.mlpackage; sourceTree = "<group>"; };
 		10F3F8CA4FE49B74E063B25E /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
 		21912C8A76A78705F8D1D49E /* BirdInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdInfo.swift; sourceTree = "<group>"; };
 		2A5C4C8BC99DBD814228983B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				4357DF792227991A4D10EAE1 /* BirdDetector.swift */,
 				E7F5ED1993ACE378B92FE66F /* ModelManager.swift */,
 				7B45CC53551AA86FE2A75A32 /* MultiBirdDetector.swift */,
+				5633CB07FB876BC2447DC546 /* Bundled */,
 			);
 			path = ML;
 			sourceTree = "<group>";
@@ -145,6 +148,14 @@
 				B64A428F0C6D46956DE23CBE /* BirdMap */,
 				931EBA000E477F7B40A487A9 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		5633CB07FB876BC2447DC546 /* Bundled */ = {
+			isa = PBXGroup;
+			children = (
+				0F5D38D9AEE297172683FB3B /* BundledBirdModel.mlpackage */,
+			);
+			path = Bundled;
 			sourceTree = "<group>";
 		};
 		854F0E1B4FF6657B9BA1F39B /* App */ = {
@@ -343,6 +354,7 @@
 				015A7BFC3EEA778940F099D3 /* BirdInfo.swift in Sources */,
 				D2C6D17E2E8167515BAB5AC0 /* BirdInfoView.swift in Sources */,
 				4705061240F1E707E99FFEF3 /* BirdMapApp.swift in Sources */,
+				039965B1309209A97048B987 /* BundledBirdModel.mlpackage in Sources */,
 				435B5298EB397F42E5873D8F /* CameraView.swift in Sources */,
 				D358F033227E132F4C7A104E /* CameraViewModel.swift in Sources */,
 				390447AF8E21B4D1F2A86E1C /* ContentView.swift in Sources */,

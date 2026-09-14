@@ -29,6 +29,9 @@ env/
 *.onnx
 *.mlpackage
 *.mlmodel
+# Exception: the classifier bundled into the app install itself (see
+# ModelManager.swift's bundledModelURL) — this one must be tracked.
+!ios/BirdMap/BirdMap/ML/Bundled/**
 ml_pipeline/data/
 ml_pipeline/output*/
 ml_pipeline/checkpoints/
