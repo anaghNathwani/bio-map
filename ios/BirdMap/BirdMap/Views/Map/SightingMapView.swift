@@ -27,15 +27,12 @@ struct SightingMapView: View {
                             .overlay(Circle().stroke(.white, lineWidth: 2))
                             .shadow(color: .black.opacity(0.3), radius: 2)
                     }
-                    ForEach(vm.sightings) { sighting in
+                    ForEach(displayPositions) { positioned in
                         Annotation(
-                            sighting.topSpecies ?? sighting.aiSpeciesSuggestion ?? "Unknown",
-                            coordinate: CLLocationCoordinate2D(
-                                latitude: sighting.latitude,
-                                longitude: sighting.longitude
-                            )
+                            positioned.sighting.topSpecies ?? positioned.sighting.aiSpeciesSuggestion ?? "Unknown",
+                            coordinate: positioned.coordinate
                         ) {
-                            sightingPin(sighting)
+                            sightingPin(positioned.sighting)
                         }
                     }
                 }
@@ -73,6 +70,51 @@ struct SightingMapView: View {
                 await vm.load()
             }
         }
+    }
+
+    /// Sightings reported at (or very near) the same spot would otherwise
+    /// render as fully overlapping annotations with only the top one
+    /// tappable. Groups sightings within ~1m of each other and, for any
+    /// group larger than one, fans them out in a small circle around the
+    /// shared point — display-only, doesn't touch the stored coordinates.
+    private var displayPositions: [PositionedSighting] {
+        var groups: [String: [Sighting]] = [:]
+        for sighting in vm.sightings {
+            // ~5 decimal places of lat/lng is ~1m precision — close enough
+            // to count as "the same spot" for pin-overlap purposes.
+            let key = "\(Int((sighting.latitude * 100_000).rounded())),\(Int((sighting.longitude * 100_000).rounded()))"
+            groups[key, default: []].append(sighting)
+        }
+
+        var result: [PositionedSighting] = []
+        for group in groups.values {
+            if group.count == 1 {
+                let sighting = group[0]
+                result.append(PositionedSighting(
+                    sighting: sighting,
+                    coordinate: CLLocationCoordinate2D(latitude: sighting.latitude, longitude: sighting.longitude)
+                ))
+            } else {
+                // ~0.00012deg latitude is roughly 13m — enough separation to
+                // be individually tappable at typical zoom without drifting
+                // the pins far from their real location.
+                let radius = 0.00012
+                let latRadians = group[0].latitude * .pi / 180
+                for (index, sighting) in group.enumerated() {
+                    let angle = (2 * .pi / Double(group.count)) * Double(index)
+                    let dLat = radius * cos(angle)
+                    let dLng = (radius * sin(angle)) / max(cos(latRadians), 0.01)
+                    result.append(PositionedSighting(
+                        sighting: sighting,
+                        coordinate: CLLocationCoordinate2D(
+                            latitude: sighting.latitude + dLat,
+                            longitude: sighting.longitude + dLng
+                        )
+                    ))
+                }
+            }
+        }
+        return result
     }
 
     private func sightingPin(_ sighting: Sighting) -> some View {
@@ -135,6 +177,12 @@ struct SightingMapView: View {
         .background(.ultraThinMaterial, in: Capsule())
         .padding(.bottom, 14)
     }
+}
+
+private struct PositionedSighting: Identifiable {
+    let sighting: Sighting
+    let coordinate: CLLocationCoordinate2D
+    var id: String { sighting.id ?? "\(coordinate.latitude),\(coordinate.longitude)" }
 }
 
 @MainActor

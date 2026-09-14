@@ -1,6 +1,7 @@
 import SwiftUI
 import CoreLocation
 import AVKit
+import AVFoundation
 
 struct SightingDetailView: View {
     let sightingID: String
@@ -87,6 +88,12 @@ struct SightingDetailView: View {
                                 .foregroundStyle(.white.opacity(0.8))
                             if detail.audioURL != nil || detail.audioFallbackURL != nil {
                                 Button {
+                                    // The audio session may still be in .record mode
+                                    // (input-only, no output) from a prior recording —
+                                    // switch to playback before creating the player, or
+                                    // this plays completely silently.
+                                    try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                                    try? AVAudioSession.sharedInstance().setActive(true)
                                     if audioPlayer == nil {
                                         let fromPrimary = detail.audioURL.flatMap { DataURI.writeTempFile($0, extension: "m4a") }
                                         let fromFallback = detail.audioFallbackURL.flatMap { URL(string: $0) }
