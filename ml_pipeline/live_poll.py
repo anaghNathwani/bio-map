@@ -40,6 +40,7 @@ import logging
 import os
 import tempfile
 
+from firebase_admin import firestore as fb_firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
 
 import firestore_client
@@ -127,6 +128,11 @@ def _process_audio_sighting(db, doc_id: str, data: dict) -> None:
         # "we also heard X" for genuinely distinct additional species
         # instead of only ever surfacing one bird per recording.
         "aiSpeciesSuggestions": detections,
+        # Marks this sighting as done regardless of outcome. poll_audio used
+        # to skip on aiSpeciesSuggestion alone, which is indistinguishable
+        # from "never analyzed" when BirdNET genuinely finds nothing — that
+        # silently re-ran BirdNET on the same clip every 20 minutes forever.
+        "aiAnalyzedAt": fb_firestore.SERVER_TIMESTAMP,
     })
     if len(detections) > 1:
         logger.info("  %s -> %s (+%d more: %s)", doc_id, top["species"], len(detections) - 1,
@@ -141,8 +147,8 @@ def poll_audio(db) -> int:
     processed = 0
     for doc in query.stream():
         data = doc.to_dict() or {}
-        if data.get("aiSpeciesSuggestion") is not None:
-            continue  # already analyzed
+        if data.get("aiAnalyzedAt") is not None:
+            continue  # already analyzed (regardless of whether a species was found)
         try:
             _process_audio_sighting(db, doc.id, data)
             processed += 1
