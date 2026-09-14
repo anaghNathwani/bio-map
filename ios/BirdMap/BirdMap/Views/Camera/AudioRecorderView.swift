@@ -34,7 +34,7 @@ struct AudioRecorderView: View {
         .alert("Sound Submitted!", isPresented: $vm.uploadSuccess) {
             Button("Great!") { vm.reset() }
         } message: {
-            Text("Your recording has been added to the map. We couldn't analyze it in time, but you can still annotate it from the sighting later.")
+            Text("Your recording has been added to the map. AI identification runs on a schedule and isn't instant — check back on this sighting in about 20 minutes, or annotate it yourself in the meantime.")
         }
         .sheet(isPresented: $showBirdInfo) {
             if let species = vm.aiSuggestion {

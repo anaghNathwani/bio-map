@@ -13,6 +13,10 @@ struct CameraView: View {
     @State private var showAnnotate = false
     @State private var showPlainSuccess = false
     @State private var pendingVerdict: AIVerdict?
+    // ModelManager.isModelAvailable isn't observable, so this view wouldn't
+    // otherwise notice when a download finishes — tracked locally instead.
+    @State private var modelAvailable = ModelManager.shared.isModelAvailable
+    @State private var isCheckingForModel = false
 
     var body: some View {
         ScrollView {
@@ -32,7 +36,15 @@ struct CameraView: View {
             .padding(.top)
             .padding(.bottom, 32)
         }
-        .onAppear { vm.startLocationUpdates() }
+        .onAppear {
+            vm.startLocationUpdates()
+            // BirdMapApp only ever tries this once, at cold launch, with no
+            // retry — a single transient failure there (network not up yet,
+            // etc.) would otherwise strand the app without a model forever.
+            // Retrying whenever this tab appears and the model is still
+            // missing makes that self-healing instead of permanent.
+            if !modelAvailable { retryModelDownload() }
+        }
         .onDisappear { vm.stopLocationUpdates() }
         .sheet(isPresented: $showPicker) {
             PhotoPickerView(onSelected: { img in
@@ -139,7 +151,7 @@ struct CameraView: View {
                     iconColor: .teal,
                     items: vm.aiCandidates.map { ($0.species, Double($0.confidence)) }
                 )
-            } else if vm.capturedImage != nil && !ModelManager.shared.isModelAvailable {
+            } else if vm.capturedImage != nil && !modelAvailable {
                 noModelBanner
             }
 
@@ -238,15 +250,31 @@ struct CameraView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("On-device model not yet downloaded")
                     .font(.caption.weight(.semibold))
-                Text("Connect to the backend to fetch the common-bird classifier.")
+                Text("You can still report this sighting — it just won't get an on-device AI suggestion.")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
             Spacer()
+            if isCheckingForModel {
+                ProgressView().scaleEffect(0.8)
+            } else {
+                Button("Retry", action: retryModelDownload)
+                    .font(.caption.weight(.semibold))
+            }
         }
         .padding(12)
         .background(Color.teal.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
         .padding(.horizontal)
+    }
+
+    private func retryModelDownload() {
+        guard !isCheckingForModel else { return }
+        isCheckingForModel = true
+        Task {
+            await ModelManager.shared.checkForUpdate()
+            modelAvailable = ModelManager.shared.isModelAvailable
+            isCheckingForModel = false
+        }
     }
 
     private var emptyStateSection: some View {

@@ -160,6 +160,22 @@ struct SightingDetailView: View {
                 .padding(14)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
                 .padding(12)
+            } else if detail.isAudio {
+                // Mirrors the photo tab's "on-device model not yet downloaded"
+                // banner — audio ID runs on a ~20 minute server-side schedule
+                // (ml_pipeline/live_poll.py), not instantly, so a sighting can
+                // sit here with no suggestion yet for a while; say so plainly
+                // instead of showing nothing.
+                HStack(spacing: 10) {
+                    Image(systemName: "clock.arrow.circlepath").foregroundStyle(.white.opacity(0.85))
+                    Text("AI identification pending — usually ready within 20 minutes.")
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(.white)
+                    Spacer()
+                }
+                .padding(14)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                .padding(12)
             }
         }
     }
