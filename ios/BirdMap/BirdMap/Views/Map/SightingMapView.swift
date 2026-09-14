@@ -16,7 +16,17 @@ struct SightingMapView: View {
         NavigationStack {
             ZStack(alignment: .bottom) {
                 Map(position: $cameraPosition) {
-                    UserAnnotation()
+                    UserAnnotation {
+                        // Plain dot instead of MapKit's default marker, which
+                        // draws a heading cone (a triangular wedge) whenever
+                        // the device has a compass fix — not configurable
+                        // any other way on the built-in marker.
+                        Circle()
+                            .fill(Color.blue)
+                            .frame(width: 16, height: 16)
+                            .overlay(Circle().stroke(.white, lineWidth: 2))
+                            .shadow(color: .black.opacity(0.3), radius: 2)
+                    }
                     ForEach(vm.sightings) { sighting in
                         Annotation(
                             sighting.topSpecies ?? sighting.aiSpeciesSuggestion ?? "Unknown",
@@ -141,7 +151,11 @@ final class SightingMapViewModel: ObservableObject {
 
     func load() async {
         isLoading = true
-        sightings = (try? await FirebaseService.shared.fetchSightings()) ?? []
+        // Keep whatever's already on screen if this fails (transient network
+        // errors shouldn't blank out the map) — only replace on success.
+        if let result = try? await FirebaseService.shared.fetchSightings() {
+            sightings = result
+        }
         isLoading = false
     }
 
@@ -159,9 +173,11 @@ final class SightingMapViewModel: ObservableObject {
         let lng = region.center.longitude
         let dLat = region.span.latitudeDelta / 2
         let dLng = region.span.longitudeDelta / 2
-        sightings = (try? await FirebaseService.shared.fetchSightings(region: (
+        if let result = try? await FirebaseService.shared.fetchSightings(region: (
             minLat: lat - dLat, maxLat: lat + dLat,
             minLng: lng - dLng, maxLng: lng + dLng
-        ))) ?? []
+        )) {
+            sightings = result
+        }
     }
 }
