@@ -45,7 +45,16 @@ jobs:
           cache-dependency-path: ml_pipeline/requirements.txt
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        # sentence-transformers pulls in torch as a dependency, and plain
+        # PyPI serves the CUDA-enabled build by default even on a GPU-less
+        # runner — that build alone drags in several GB of nvidia-* wheels
+        # (cudnn, cublas, cusolver, etc.) and reliably exhausts the runner's
+        # disk ("No space left on device", confirmed failing every scheduled
+        # run). Installing the CPU-only build first satisfies that dependency
+        # before pip ever considers the CUDA one.
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
         working-directory: ml_pipeline
 
       - name: Write Firebase service account key
@@ -91,7 +100,12 @@ jobs:
           cache-dependency-path: ml_pipeline/requirements.txt
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        # See the same step in the `poll` job above — CPU-only torch build
+        # must be installed before requirements.txt or pip pulls the
+        # CUDA-enabled one and exhausts the runner's disk.
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
         working-directory: ml_pipeline
 
       - name: Write Firebase service account key
