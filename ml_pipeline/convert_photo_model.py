@@ -1,18 +1,27 @@
 """
 Converts the BirdMap photo model. Does NOT touch Firebase — see publish_model.py
-for that step. Split into two scripts/two venvs deliberately: `coremltools`
-hard-requires protobuf<=4.0.0 (no protobuf release even exists between 3.20.3
-and 4.21.0, so this really means "protobuf 3.x only"), while `firebase-admin`
-requires protobuf>=4.25.8. Those cannot be installed together — pip will
-either fail to resolve them or silently install a broken combination
-(confirmed: coremltools crashes at import time with a modern protobuf).
-Run this in a venv from requirements-convert.txt, then run publish_model.py
-in a *separate* venv from requirements.txt to actually ship the result.
+for that step. Runs in the same venv as publish_model.py (requirements.txt) —
+this used to require coremltools in a separate venv (protobuf<=4.0.0, which
+conflicts with firebase-admin's protobuf>=4.25.8), but that's no longer
+needed now that this exports TFLite instead of CoreML (see below).
 
 This does NOT train anything. It takes Google's AIY "Birds V1" bird species
 classifier (MobileNetV2, trained on the iNaturalist 2017 dataset, Apache 2.0,
 published by Google on TensorFlow Hub) exactly as released and converts it to
-CoreML. No fine-tuning, no in-house training loop — see docs/ML_PIPELINE.md.
+TFLite. No fine-tuning, no in-house training loop — see docs/ML_PIPELINE.md.
+
+Why TFLite and not CoreML: CoreML conversion of this exact SavedModel is
+broken — confirmed directly (not assumed): the converted .mlpackage outputs a
+near-uniform, input-independent distribution regardless of the image fed in
+(tested black, white, random noise, and real bird photos — all identical
+output), reproduced across coremltools 7.2 and 9.0 and TensorFlow 2.13.1 and
+2.15.1, so it isn't a version fluke. Raw TensorFlow inference on the
+untouched SavedModel is excellent (>90% confidence on real test photos,
+correct species), and TFLite conversion of that same SavedModel reproduces
+those correct results almost exactly — so the model is fine, only the CoreML
+export path for this specific graph is broken. The app runs this via
+TensorFlowLiteSwift (CocoaPods) instead of Vision/CoreML — see
+BirdClassifier.swift.
 
 Steps:
   1. Download the SavedModel + official labelmap from TensorFlow Hub (Google).
@@ -22,9 +31,10 @@ Steps:
      shows "Blue Jay" rather than "Cyanocitta cristata". Cached to disk so
      repeat runs don't re-hit the API. Falls back to the scientific name for
      any species that fails to resolve.
-  3. Convert to CoreML with coremltools, embedding the (resolved) names
-     directly in the classifier so BirdClassifier.swift needs no changes.
-  4. Zip the result and write a manifest.json next to it, both under --output.
+  3. Convert to TFLite, in class-index order matching the model's output
+     tensor — BirdClassifier.swift does its own argmax + label lookup since
+     TFLite has no equivalent of CoreML's ClassifierConfig.
+  4. Write the .tflite file + a manifest.json next to it, both under --output.
 
 Usage:
     python convert_photo_model.py
@@ -39,10 +49,8 @@ import json
 import tarfile
 import tempfile
 import time
-import zipfile
 from pathlib import Path
 
-import coremltools as ct
 import requests
 import tensorflow as tf
 from tqdm import tqdm
@@ -53,7 +61,6 @@ SAVEDMODEL_URL = "https://tfhub.dev/google/aiy/vision/classifier/birds_V1/1?tf-h
 LABELMAP_URL = "https://www.gstatic.com/aihub/tfhub/labelmaps/aiy_birds_V1_labelmap.csv"
 INATURALIST_API = "https://api.inaturalist.org/v1"
 
-INPUT_SIZE = 224
 NAME_CACHE_PATH = Path(__file__).parent / "aiy_birds_common_names_cache.json"
 
 
@@ -150,46 +157,26 @@ def resolve_common_names(scientific_names: list[str]) -> list[str]:
     return [cache.get(n, n) for n in scientific_names]
 
 
-def convert_to_coreml(savedmodel_dir: Path, class_names: list[str], output_path: str):
-    print("Converting to CoreML...")
+def convert_to_tflite(savedmodel_dir: Path, output_path: str) -> None:
+    print("Converting to TFLite...")
     # The SavedModel exposes two signatures ("image_classifier" and "default")
-    # for the same underlying graph. coremltools' TF2 SavedModel loader only
-    # supports a single concrete function, so we load it ourselves and hand
-    # coremltools exactly one signature rather than the whole directory.
+    # for the same underlying graph; from_saved_model() also doesn't work
+    # directly here (this is a TF1-style hub SavedModel with no "serve" tag),
+    # so load it ourselves and convert from the concrete function instead —
+    # same approach the old CoreML path used, applied to a converter that
+    # actually lowers this graph correctly.
     loaded = tf.saved_model.load(str(savedmodel_dir))
     concrete_func = loaded.signatures["image_classifier"]
-
-    mlmodel = ct.convert(
-        [concrete_func],
-        source="tensorflow",
-        inputs=[ct.ImageType(
-            name="hub_input/images",
-            shape=(1, INPUT_SIZE, INPUT_SIZE, 3),
-            scale=1.0 / 255.0,   # model expects [0, 1] float input from raw 0-255 pixels
-            bias=[0.0, 0.0, 0.0],
-            color_layout=ct.colorlayout.RGB,
-        )],
-        classifier_config=ct.ClassifierConfig(class_names),
-        minimum_deployment_target=ct.target.iOS16,
-    )
-    mlmodel.short_description = (
-        f"BirdMap bird species classifier — {MODEL_SOURCE}, {MODEL_LICENSE}, used as-is (not fine-tuned)."
-    )
-    mlmodel.save(output_path)
-    print(f"  Saved {output_path}")
-
-
-def zip_model(model_path: str, zip_out: Path) -> None:
-    with zipfile.ZipFile(zip_out, "w", zipfile.ZIP_DEFLATED) as zf:
-        for f in Path(model_path).rglob("*"):
-            zf.write(f, f.relative_to(Path(model_path).parent))
-    print(f"  Zipped to {zip_out}")
+    converter = tf.lite.TFLiteConverter.from_concrete_functions([concrete_func], loaded)
+    tflite_model = converter.convert()
+    Path(output_path).write_bytes(tflite_model)
+    print(f"  Saved {output_path} ({len(tflite_model):,} bytes)")
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="./output",
-                        help="Directory to write BirdClassifier.mlpackage.zip + manifest.json to")
+                        help="Directory to write BirdClassifier.tflite + manifest.json to")
     parser.add_argument("--skip-name-resolution", action="store_true",
                         help="Ship scientific names as-is instead of resolving common names")
     args = parser.parse_args()
@@ -202,11 +189,8 @@ def main():
 
     with tempfile.TemporaryDirectory() as tmp:
         savedmodel_dir = download_savedmodel(Path(tmp) / "savedmodel")
-        model_path = str(Path(tmp) / "BirdClassifier.mlpackage")
-        convert_to_coreml(savedmodel_dir, class_names, model_path)
-
-        zip_path = out_dir / "BirdClassifier.mlpackage.zip"
-        zip_model(model_path, zip_path)
+        model_path = out_dir / "BirdClassifier.tflite"
+        convert_to_tflite(savedmodel_dir, str(model_path))
 
     version = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
     manifest = {
@@ -216,13 +200,12 @@ def main():
         "classNames": class_names,
         "source": MODEL_SOURCE,
         "license": MODEL_LICENSE,
-        "modelZip": zip_path.name,
+        "modelFile": model_path.name,
     }
     manifest_path = out_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2))
     print(f"  Wrote {manifest_path}")
-    print(f"\nDone. Next: in a SEPARATE venv (pip install -r requirements.txt), run:\n"
-          f"  python publish_model.py --input {out_dir}")
+    print(f"\nDone. Next: run publish_model.py --input {out_dir}")
 
 
 if __name__ == "__main__":

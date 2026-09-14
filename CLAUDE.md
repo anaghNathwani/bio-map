@@ -14,7 +14,7 @@ The self-hosted ML pipeline (`ml_pipeline/`) reads/writes Firestore via the Admi
 
 **Company policy: fine-tune, don't train from scratch.** The photo model (Google AIY Birds V1), photo object detector (Apple's pre-converted YOLOv3-Tiny/COCO CoreML model), and audio model (Cornell's BirdNET) are all complete, pre-trained, ready-to-use models from vetted American organizations — as of this writing all four models (including moderation) still run exactly as released, but policy has moved from "nothing trained in-house" to **fine-tuning (and quantizing) these pretrained weights on community-annotation data**, funded by and triggered on annotation volume rather than run continuously. `ml_pipeline/check_training_trigger.py` (run every 20 min by `.github/workflows/live-poll.yml`'s `check-training-trigger` job) checks Firestore for 500 newly-processed annotations since the last training run and logs when the threshold is crossed — it does not yet trigger any actual training, since the training/publish scripts it would call (a moderation classifier, a combined detector+classifier model) are designed but not yet built. `ml_pipeline/convert_photo_model.py` / `convert_bird_detector_model.py` + `publish_model.py` still only convert/republish the current pretrained models to CoreML. See `docs/ML_PIPELINE.md`'s "Our in-house training policy" section for what's live versus planned (and for why conversion and publishing are separate scripts — `coremltools` and `firebase-admin` can't be installed in the same environment).
 
-**Note: `model_versions` in Firestore is currently empty — no model has been published yet.** `publish_model.py` no longer depends on Supabase at all (see above), so the only remaining blocker is actually running `convert_photo_model.py` + `publish_model.py` once, from a machine with normal network access (this dev environment's network is locked to a small allowlist that excludes tfhub.dev, kaggle.com, and Firebase itself — confirmed, not assumed). Until that run happens, `ModelManager` correctly finds nothing to download and the app runs with on-device photo ID unavailable — not a bug, just the one remaining manual step.
+**The photo classifier runs on TensorFlowLiteSwift (CocoaPods), not CoreML/Vision.** CoreML conversion of the AIY Birds V1 SavedModel is broken — confirmed directly: a converted `.mlpackage` produces the same near-uniform, input-independent output for a black image, a white image, random noise, and any real photo (reproduced across coremltools 7.2/9.0 and TF 2.13.1/2.15.1, so not a version fluke). Raw TensorFlow inference on the same SavedModel is excellent (>90% confidence, correct species), and TFLite conversion of it reproduces those correct results — so `convert_photo_model.py` now exports `.tflite` instead, and `BirdClassifier.swift` runs it via `TensorFlowLiteSwift`, doing its own image preprocessing (resize/crop/normalize) and label lookup since TFLite has no Vision/ClassifierConfig equivalent. The photo object detector (Tier 2, YOLOv3-Tiny/COCO) is unaffected and still CoreML — only the classifier's conversion was broken. A copy of the classifier is bundled directly into the app install (`ML/Bundled/BundledBirdModel.tflite`) so photo ID works immediately, with the Firestore/Supabase-fallback path (below) used only for shipping updates without an app release.
 
 **Multiple birds in one sighting:** BirdNET (audio) already scores every species independently per segment, so `live_poll.py` surfaces every species clearing a confidence bar, not just the top one. Photos get the same treatment via two layered tiers: `MultiBirdDetector.swift`'s on-device Vision saliency (Tier 1, always available, no model download) crops and classifies extra salient regions; `BirdDetector.swift` (Tier 2, optional) uses a real object-detection CoreML model for far more reliable region-finding when its model has been published. Both feed the same `AdditionalBirdsSection` review UI as audio. See `docs/ML_PIPELINE.md`'s "Multiple birds in one photo/recording" section for the full detail, including why converting a TF-Hub COCO detector ourselves didn't work and what we used instead.
 
@@ -24,23 +24,27 @@ The self-hosted ML pipeline (`ml_pipeline/`) reads/writes Firestore via the Admi
 ```bash
 # Build and run from Terminal (NOT by opening the .xcodeproj — see gotchas below)
 cd birdmap/ios/BirdMap
-xcodebuild -scheme BirdMap -destination 'id=<simulator-udid>' -configuration Debug build
+# Uses CocoaPods (TensorFlowLiteSwift) alongside SPM — build the .xcworkspace,
+# NOT the .xcodeproj directly, or the Pods integration won't be there.
+xcodebuild -workspace BirdMap.xcworkspace -scheme BirdMap -destination 'id=<simulator-udid>' -configuration Debug build
+
+# After any `xcodegen generate`, project.yml's postGenCommand re-runs
+# `pod install` automatically (xcodegen wipes CocoaPods' project integration
+# every regen) — no separate manual step needed, but if `pod install` itself
+# fails, run it manually: LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 pod install
 ```
 
 ### ML Pipeline (self-hosted, talks directly to Firestore/Storage via the Admin SDK)
 ```bash
 cd birdmap/ml_pipeline
 
-# One-time photo model publish — TWO separate venvs, not one (coremltools and
-# firebase-admin require mutually incompatible protobuf ranges, confirmed —
-# see docs/ML_PIPELINE.md):
-python3 -m venv .venv-convert && source .venv-convert/bin/activate
-pip install -r requirements-convert.txt
-python convert_photo_model.py --output ./output
-deactivate
-
+# convert_photo_model.py no longer needs a separate venv/coremltools now that
+# it exports TFLite instead of CoreML (see above) — same venv as everything
+# else. convert_bird_detector_model.py (the Tier-2 detector, still CoreML)
+# still needs requirements-convert.txt's separate venv.
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+python convert_photo_model.py --output ./output
 python publish_model.py --input ./output
 
 # One-time photo *detector* publish (Tier 2 multi-bird photo detection) — no

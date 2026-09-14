@@ -53,9 +53,10 @@ import firestore_client
 CHUNK_SIZE = 650_000
 
 
-def upload_fallback_copy(zip_path: Path, media_type: str, version: str) -> str | None:
-    """Best-effort upload of the raw zip to Supabase Storage. Returns the
-    public download URL, or None if skipped/failed (never raises)."""
+def upload_fallback_copy(artifact_path: Path, media_type: str, version: str) -> str | None:
+    """Best-effort upload of the raw model artifact to Supabase Storage.
+    Returns the public download URL, or None if skipped/failed (never
+    raises)."""
     required = ("S3_ENDPOINT", "S3_ACCESS_KEY", "S3_SECRET_KEY", "SUPABASE_URL")
     missing = [v for v in required if v not in os.environ]
     if missing:
@@ -69,7 +70,12 @@ def upload_fallback_copy(zip_path: Path, media_type: str, version: str) -> str |
         return None
 
     bucket = os.environ.get("MODEL_BUCKET", "birdmap-models")
-    key = f"models/birdmap_{media_type}_{version}.mlpackage.zip"
+    # Derived from the actual artifact's own extension (.tflite for the
+    # classifier, .mlpackage.zip for the CoreML detector) rather than
+    # hardcoded, since this function serves both.
+    suffix = "".join(artifact_path.suffixes) or ".bin"
+    content_type = "application/zip" if suffix.endswith(".zip") else "application/octet-stream"
+    key = f"models/birdmap_{media_type}_{version}{suffix}"
     try:
         s3 = boto3.client(
             "s3",
@@ -78,7 +84,7 @@ def upload_fallback_copy(zip_path: Path, media_type: str, version: str) -> str |
             aws_secret_access_key=os.environ["S3_SECRET_KEY"],
             region_name="us-east-1",  # Supabase Storage doesn't use a real AWS region
         )
-        s3.upload_file(str(zip_path), bucket, key, ExtraArgs={"ContentType": "application/zip"})
+        s3.upload_file(str(artifact_path), bucket, key, ExtraArgs={"ContentType": content_type})
         # Supabase serves public objects under /storage/v1/object/public/{bucket}/{key}
         # — the bucket must be marked public or this URL 404s.
         download_url = f"{os.environ['SUPABASE_URL']}/storage/v1/object/public/{bucket}/{key}"
@@ -138,8 +144,8 @@ def upload_and_register(manifest: dict, zip_path: Path, db):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="./output",
-                        help="Directory containing manifest.json + the model zip "
-                             "(as written by convert_photo_model.py)")
+                        help="Directory containing manifest.json + the model artifact "
+                             "(as written by convert_photo_model.py or convert_bird_detector_model.py)")
     parser.add_argument("--service-account", default=None,
                         help="Path to a Firebase service account JSON. Falls back to "
                              "GOOGLE_APPLICATION_CREDENTIALS or ADC.")
@@ -147,12 +153,17 @@ def main():
 
     in_dir = Path(args.input)
     manifest = json.loads((in_dir / "manifest.json").read_text())
-    zip_path = in_dir / manifest["modelZip"]
-    if not zip_path.exists():
-        raise FileNotFoundError(f"{zip_path} not found — did convert_photo_model.py finish successfully?")
+    # "modelFile" (convert_photo_model.py, a plain .tflite — see its
+    # docstring for why this switched from CoreML) or the older "modelZip"
+    # (convert_bird_detector_model.py, still CoreML — that conversion isn't
+    # broken the way the classifier's was, so it's untouched).
+    artifact_name = manifest.get("modelFile") or manifest["modelZip"]
+    model_path = in_dir / artifact_name
+    if not model_path.exists():
+        raise FileNotFoundError(f"{model_path} not found — did the conversion script finish successfully?")
 
     db = firestore_client.get_db(args.service_account)
-    upload_and_register(manifest, zip_path, db)
+    upload_and_register(manifest, model_path, db)
 
 
 if __name__ == "__main__":

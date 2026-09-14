@@ -4,6 +4,12 @@ options:
   deploymentTarget:
     iOS: "17.0"
   xcodeVersion: "16"
+  # xcodegen regenerates project.pbxproj from scratch every run, which wipes
+  # CocoaPods' integration (added by `pod install`, needed for
+  # TensorFlowLiteSwift — see Podfile). Re-running pod install here keeps
+  # the two in sync automatically instead of relying on remembering to do it
+  # by hand. Open BirdMap.xcworkspace after this, not BirdMap.xcodeproj.
+  postGenCommand: LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 pod install
 
 packages:
   ZIPFoundation:

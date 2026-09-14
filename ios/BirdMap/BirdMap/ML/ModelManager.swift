@@ -7,23 +7,34 @@ final class ModelManager {
     static let shared = ModelManager()
 
     private let versionKey = "model_version"
-    private var cachedModel: MLModel?
-    private var cachedModelVersion: String?
 
     /// Version of the classifier bundled directly in the app (ML/Bundled/
-    /// BundledBirdModel.mlpackage, compiled by Xcode at build time — named
-    /// distinctly from the BirdClassifier actor to avoid colliding with
-    /// Xcode's auto-generated Swift wrapper class for the model, which
-    /// otherwise takes the model file's own name) — matches
+    /// BundledBirdModel.tflite — named distinctly from the BirdClassifier
+    /// actor purely for consistency with the old CoreML naming, no codegen
+    /// collision risk with a plain resource file) — matches
     /// ml_pipeline/output/manifest.json's version at the time it was copied
     /// in. Bump this string if that bundled asset is ever replaced. Having
     /// this shipped with the install means classification works immediately
     /// after install/before first launch even reaches the network, instead
     /// of depending entirely on the Firestore download in checkForUpdate().
-    private let bundledModelVersion = "20260906_191026"
+    private let bundledModelVersion = "20260914_032451"
 
     private var bundledModelURL: URL? {
-        Bundle.main.url(forResource: "BundledBirdModel", withExtension: "mlmodelc")
+        Bundle.main.url(forResource: "BundledBirdModel", withExtension: "tflite")
+    }
+
+    private var bundledLabels: [String]? {
+        guard let url = Bundle.main.url(forResource: "BundledBirdLabels", withExtension: "json"),
+              let data = try? Data(contentsOf: url) else { return nil }
+        return try? JSONDecoder().decode([String].self, from: data)
+    }
+
+    /// Everything BirdClassifier needs to run inference: a TFLite model file
+    /// path and the label list in class-index order (TFLite has no
+    /// equivalent of CoreML's ClassifierConfig, so label lookup is manual).
+    struct ClassifierModel {
+        let modelPath: String
+        let labels: [String]
     }
 
     /// Tier 2 photo object detector (YOLOv3-Tiny/COCO, see BirdDetector.swift)
@@ -37,7 +48,13 @@ final class ModelManager {
     private var modelURL: URL {
         FileManager.default
             .urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("BirdClassifier.mlpackage")
+            .appendingPathComponent("BirdClassifier.tflite")
+    }
+
+    private var labelsURL: URL {
+        FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("BirdClassifier.labels.json")
     }
 
     private var detectorModelURL: URL {
@@ -46,34 +63,18 @@ final class ModelManager {
             .appendingPathComponent("BirdDetector.mlmodel")
     }
 
-    var currentModel: MLModel? {
-        let version = UserDefaults.standard.string(forKey: versionKey) ?? bundledModelVersion
-        if let cached = cachedModel, cachedModelVersion == version {
-            return cached
-        }
+    var currentClassifierModel: ClassifierModel? {
         // A downloaded/updated model in Documents takes priority over the
         // bundled one — it can only get there by being a newer published
         // version (checkForClassifierUpdate skips downloading if the active
         // Firestore version matches what's already stored).
-        if FileManager.default.fileExists(atPath: modelURL.path) {
-            do {
-                let model = try MLModel(contentsOf: modelURL)
-                cachedModel = model
-                cachedModelVersion = version
-                return model
-            } catch {
-                print("[ModelManager] Failed to load downloaded model: \(error)")
-            }
+        if FileManager.default.fileExists(atPath: modelURL.path),
+           let labelsData = try? Data(contentsOf: labelsURL),
+           let labels = try? JSONDecoder().decode([String].self, from: labelsData) {
+            return ClassifierModel(modelPath: modelURL.path, labels: labels)
         }
-        if let bundled = bundledModelURL {
-            do {
-                let model = try MLModel(contentsOf: bundled)
-                cachedModel = model
-                cachedModelVersion = bundledModelVersion
-                return model
-            } catch {
-                print("[ModelManager] Failed to load bundled model: \(error)")
-            }
+        if let bundled = bundledModelURL, let labels = bundledLabels {
+            return ClassifierModel(modelPath: bundled.path, labels: labels)
         }
         return nil
     }
@@ -182,19 +183,20 @@ final class ModelManager {
                 print("[ModelManager] Classifier already at version \(version)")
                 return
             }
+            guard let classNames = doc.data()["classNames"] as? [String] else {
+                print("[ModelManager] Active photo model doc is missing classNames, skipping")
+                return
+            }
 
             print("[ModelManager] Downloading classifier model v\(version)…")
-            let zipData = try await assembleModelData(from: doc)
-            let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let zipTemp = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".zip")
-            try zipData.write(to: zipTemp)
-            try? FileManager.default.removeItem(at: modelURL)
-            try FileManager.default.unzipItem(at: zipTemp, to: docs)
-            try? FileManager.default.removeItem(at: zipTemp)
+            // A .tflite file is a single flat flatbuffer, not a directory
+            // bundle like .mlpackage was — no unzip step needed, just write
+            // the reassembled bytes directly.
+            let modelData = try await fetchModelData(from: doc)
+            try modelData.write(to: modelURL, options: .atomic)
+            try JSONEncoder().encode(classNames).write(to: labelsURL, options: .atomic)
 
             UserDefaults.standard.set(version, forKey: versionKey)
-            cachedModel = nil
-            cachedModelVersion = nil
             await BirdClassifier.shared.invalidateCache()
             print("[ModelManager] Classifier updated to v\(version)")
         } catch {

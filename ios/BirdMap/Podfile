@@ -1,0 +1,10 @@
+platform :ios, '17.0'
+use_frameworks!
+
+# TensorFlowLiteSwift only — Firebase/GoogleSignIn/ZIPFoundation stay on SPM
+# (managed by project.yml/xcodegen). This is the one dependency Google
+# publishes only via CocoaPods, not SPM — see ML/BirdClassifier.swift for why
+# the photo classifier needs it instead of CoreML/Vision.
+target 'BirdMap' do
+  pod 'TensorFlowLiteSwift', '~> 2.14.0'
+end
