@@ -18,6 +18,12 @@ struct ContentView: View {
                 .tabItem { Label("Profile", systemImage: "person.fill") }
         }
         .tint(.teal)
+        // Floats above every tab, just clear of the tab bar.
+        .overlay(alignment: .bottomTrailing) {
+            AssistantDot()
+                .padding(.trailing, 2)
+                .padding(.bottom, 52)
+        }
     }
 }
 
