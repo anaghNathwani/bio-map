@@ -34,6 +34,10 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     /// run as soon as recording stops — same idea as photos, which classify the
     /// moment one is picked. nil = not analyzed (still running, or it failed).
     @Published var isIdentifying = false
+    /// Converting a picked audio file into a recording (see AudioImporter).
+    @Published var isImporting = false
+    /// Shown after an import when something the user should know happened (e.g. trimmed).
+    @Published var importNotice: String?
     @Published var identification: [ClassificationResult]?
     @Published var identificationError: String?
     /// Whether the last identification could use a real GPS fix to narrow the
@@ -97,6 +101,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
             recordingURL = url
             hasRecording = false
             clearIdentification()
+            importNotice = nil
             isRecording = true
             recordingSeconds = 0
             error = nil
@@ -131,6 +136,43 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         try? AVAudioSession.sharedInstance().setActive(false)
         #endif
         if wasRecording && hasRecording { identifyRecording() }
+    }
+
+    /// Uses an existing audio file as the take instead of recording one — the
+    /// audio equivalent of picking a photo from the library. The file is
+    /// converted to the recorder's small mono AAC format and capped at
+    /// `maxRecordingSeconds` (see AudioImporter for why), then identified
+    /// exactly like a fresh recording.
+    func importAudio(from source: URL) async {
+        // Files chosen via the system picker are only readable inside this scope.
+        let scoped = source.startAccessingSecurityScopedResource()
+        defer { if scoped { source.stopAccessingSecurityScopedResource() } }
+
+        isImporting = true
+        error = nil
+        importNotice = nil
+        let destination = FileManager.default.temporaryDirectory
+            .appendingPathComponent("bird_import_\(UUID().uuidString).m4a")
+        let maxSeconds = Double(Self.maxRecordingSeconds)
+
+        do {
+            let result = try await Task.detached(priority: .userInitiated) {
+                try AudioImporter.convert(source, to: destination, maxSeconds: maxSeconds)
+            }.value
+
+            if let old = recordingURL { try? FileManager.default.removeItem(at: old) }
+            clearIdentification()
+            recordingURL = destination
+            recordingSeconds = max(1, Int(result.seconds.rounded()))
+            hasRecording = true
+            if result.wasTrimmed {
+                importNotice = "That file is longer than \(Self.maxRecordingSeconds) seconds, so only the first \(Self.maxRecordingSeconds) were kept."
+            }
+            identifyRecording()
+        } catch {
+            self.error = "Couldn't use that file: \(error.localizedDescription)"
+        }
+        isImporting = false
     }
 
     /// Runs BirdNET on the current take (see BirdNETClassifier). Only a genuine
@@ -289,10 +331,12 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         meterLevel = 0
         notes = ""
         error = nil
+        importNotice = nil
     }
 
     func reset() {
         noBirdDetected = false
+        importNotice = nil
         stopRecording()
         clearIdentification()
         sightingListener?.remove()

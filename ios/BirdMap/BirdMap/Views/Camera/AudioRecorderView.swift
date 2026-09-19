@@ -1,9 +1,11 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct AudioRecorderView: View {
     @StateObject private var vm = AudioRecorderViewModel()
     @StateObject private var playback = AudioPlayback()
     @State private var showBirdInfo = false
+    @State private var showFileImporter = false
     @State private var showAIReview = false
     @State private var showAnnotate = false
     @State private var pendingVerdict: AIVerdict?
@@ -13,6 +15,32 @@ struct AudioRecorderView: View {
             VStack(spacing: 24) {
                 waveformSection
                 controlSection
+                if vm.isImporting {
+                    HStack(spacing: 10) {
+                        ProgressView()
+                        Text("Preparing your audio file…")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                    .padding(14)
+                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal)
+                }
+                if vm.recordingURL == nil, let err = vm.error {
+                    Label(err, systemImage: "exclamationmark.triangle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                }
+                if let notice = vm.importNotice, vm.recordingURL != nil {
+                    Label(notice, systemImage: "scissors")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                }
                 if vm.recordingURL != nil && !vm.isRecording {
                     identificationSection
                 }
@@ -33,6 +61,15 @@ struct AudioRecorderView: View {
         .onDisappear {
             vm.stopLocationUpdates()
             playback.stop()
+        }
+        .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.audio]) { result in
+            switch result {
+            case .success(let url):
+                playback.stop()
+                Task { await vm.importAudio(from: url) }
+            case .failure(let error):
+                vm.error = "Couldn't open that file: \(error.localizedDescription)"
+            }
         }
         .onChange(of: vm.aiSuggestion) { _, species in
             guard species != nil, !vm.isAnalyzing else { return }
@@ -185,7 +222,9 @@ struct AudioRecorderView: View {
                         .font(.system(size: 48))
                         .foregroundStyle(Color.indigo.opacity(0.6))
                         .symbolEffect(.pulse)
-                    Text("Tap record to capture bird sounds")
+                    Text(vm.hasRecording
+                         ? "Recording ready · \(formatTime(vm.recordingSeconds))"
+                         : "Tap record to capture bird sounds, or upload a file")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -261,6 +300,20 @@ struct AudioRecorderView: View {
             Text(vm.isRecording ? "Recording… tap to stop" : "Tap to record")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            if !vm.isRecording {
+                Button {
+                    showFileImporter = true
+                } label: {
+                    Label("Upload an audio file", systemImage: "square.and.arrow.up")
+                        .font(.subheadline.weight(.medium))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 9)
+                        .background(Color.indigo.opacity(0.12), in: Capsule())
+                        .foregroundStyle(Color.indigo)
+                }
+                .disabled(vm.isImporting || vm.isUploading)
+            }
         }
     }
 

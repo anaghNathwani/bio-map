@@ -33,7 +33,6 @@
 		6D05697BD590782955E37B5F /* DataURI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB69827CDFF8D7D6E7FE646 /* DataURI.swift */; };
 		6F0CAC1B7CDBC3F192651A36 /* SupabaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BDF11DE1B245AC6A532FAE /* SupabaseStorage.swift */; };
 		6F5D5F9301354ED9124075DE /* SightingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E757D4A5D555D07AE645ABF /* SightingListView.swift */; };
-		6F7A39F45AC64DA6D3784621 /* Pods_BirdMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D01042B088D6AB91F19C02DF /* Pods_BirdMap.framework */; };
 		7005C71718E24FFB3464E205 /* BirdClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1984A64CBE5025180837531 /* BirdClassifier.swift */; };
 		74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5D5F1484B6AE767133B8F9 /* AnnotationView.swift */; };
 		8592880555382BDED3F2EE84 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5984AFA95E40AFE756D4D3 /* FirebaseService.swift */; };
@@ -41,7 +40,9 @@
 		9540F52CE0CFCBAA6AC82AE0 /* SightingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD31526D99593252A1958E58 /* SightingDetailView.swift */; };
 		9752A966EA3F8705BB1D81C0 /* BundledBirdNETLabels.json in Resources */ = {isa = PBXBuildFile; fileRef = 3C0B729EC66751A584DB6FD1 /* BundledBirdNETLabels.json */; };
 		9BC563BFCA0123B81AA09B9D /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DB12F018E31261FE1BDCE0 /* LeaderboardView.swift */; };
+		9BE579E69D5697190F4C6080 /* AudioImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2924446C0DE4D1C773946327 /* AudioImporter.swift */; };
 		9E756129ADC0855B061B9AB4 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 0BE946E6F371CB9BAB291AA5 /* ZIPFoundation */; };
+		9F6007415805D1909A2A59A0 /* Pods_BirdMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C3033F29251E6A3821D0EE /* Pods_BirdMap.framework */; };
 		A31578A8052DCF77C0164B39 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F774BC8F3476F72083FAEB /* APIClient.swift */; };
 		A3AC5C3C1C652E1A7643966A /* MultiBirdDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B45CC53551AA86FE2A75A32 /* MultiBirdDetector.swift */; };
 		BFE97DC16EA94CD22E6D05D1 /* AdditionalBirdsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77211DC0EA92575DE7CB2308 /* AdditionalBirdsSection.swift */; };
@@ -56,9 +57,10 @@
 /* Begin PBXFileReference section */
 		01BB46B5FD9872F1B713801E /* BirdNETClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdNETClassifier.swift; sourceTree = "<group>"; };
 		01DFBCD64A45A60CCBA65C18 /* BundledBirdModel.tflite */ = {isa = PBXFileReference; path = BundledBirdModel.tflite; sourceTree = "<group>"; };
+		0C13A6B5E5B5DFC8BE8C1A82 /* Pods-BirdMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BirdMap.release.xcconfig"; path = "Target Support Files/Pods-BirdMap/Pods-BirdMap.release.xcconfig"; sourceTree = "<group>"; };
 		10F3F8CA4FE49B74E063B25E /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
 		21912C8A76A78705F8D1D49E /* BirdInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdInfo.swift; sourceTree = "<group>"; };
-		285F79DB6FA1FC7A081136D5 /* Pods-BirdMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BirdMap.debug.xcconfig"; path = "Target Support Files/Pods-BirdMap/Pods-BirdMap.debug.xcconfig"; sourceTree = "<group>"; };
+		2924446C0DE4D1C773946327 /* AudioImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioImporter.swift; sourceTree = "<group>"; };
 		2A5C4C8BC99DBD814228983B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2C2E6CE6534F02A715579CEF /* BundledBirdNET.tflite */ = {isa = PBXFileReference; path = BundledBirdNET.tflite; sourceTree = "<group>"; };
 		2EB06EDE7B326433395E11D6 /* BirdMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdMapApp.swift; sourceTree = "<group>"; };
@@ -83,7 +85,9 @@
 		99DB12F018E31261FE1BDCE0 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
 		9F83C691DDE866B89843C1CE /* BundledBirdNETLocation.tflite */ = {isa = PBXFileReference; path = BundledBirdNETLocation.tflite; sourceTree = "<group>"; };
 		A3917232B887930F8F3CC6E6 /* SightingMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingMapView.swift; sourceTree = "<group>"; };
+		A9C3033F29251E6A3821D0EE /* Pods_BirdMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BirdMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD31526D99593252A1958E58 /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
+		AE97AA5CBEF5F14AF70F0932 /* Pods-BirdMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BirdMap.debug.xcconfig"; path = "Target Support Files/Pods-BirdMap/Pods-BirdMap.debug.xcconfig"; sourceTree = "<group>"; };
 		B60DD2BEE7C4B22BEF60005A /* UploadQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadQueue.swift; sourceTree = "<group>"; };
 		B785BF604D7ED67BCBF93B20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B95EE6F1D96F699764DE2531 /* BirdInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdInfoView.swift; sourceTree = "<group>"; };
@@ -91,11 +95,9 @@
 		C1984A64CBE5025180837531 /* BirdClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdClassifier.swift; sourceTree = "<group>"; };
 		C70F68091FD6BA1A16E45D14 /* AIPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPredictionCard.swift; sourceTree = "<group>"; };
 		CCD17437B9CB93B20C48C2D5 /* AudioPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayback.swift; sourceTree = "<group>"; };
-		D01042B088D6AB91F19C02DF /* Pods_BirdMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BirdMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D390E46F4442A61026B54472 /* BirdMap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BirdMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2BDF11DE1B245AC6A532FAE /* SupabaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseStorage.swift; sourceTree = "<group>"; };
 		E7F5ED1993ACE378B92FE66F /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
-		E918D83D5478B1567583725D /* Pods-BirdMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BirdMap.release.xcconfig"; path = "Target Support Files/Pods-BirdMap/Pods-BirdMap.release.xcconfig"; sourceTree = "<group>"; };
 		F0937B2AAFE2AEF5216210CB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F4F1E536E2CDF56A8FB29053 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,23 +112,13 @@
 				4D50324F3761EA585FE39A74 /* FirebaseFirestore in Frameworks */,
 				61DD6D29C94C601830F72BD9 /* GoogleSignIn in Frameworks */,
 				4F442ABEFB9E834B08A9AB11 /* GoogleSignInSwift in Frameworks */,
-				6F7A39F45AC64DA6D3784621 /* Pods_BirdMap.framework in Frameworks */,
+				9F6007415805D1909A2A59A0 /* Pods_BirdMap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		05ED14B62EFC73E84C261327 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				285F79DB6FA1FC7A081136D5 /* Pods-BirdMap.debug.xcconfig */,
-				E918D83D5478B1567583725D /* Pods-BirdMap.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		1731BBCC4188F06CA4E1725E /* Bird */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,8 +169,8 @@
 			children = (
 				B64A428F0C6D46956DE23CBE /* BirdMap */,
 				931EBA000E477F7B40A487A9 /* Products */,
-				05ED14B62EFC73E84C261327 /* Pods */,
-				E92BAFD2518D9E285F9355E0 /* Frameworks */,
+				F2977629E0506BA2DFE200E7 /* Pods */,
+				749BDFEDFE0FB3A188C8FBA2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -192,6 +184,14 @@
 				9F83C691DDE866B89843C1CE /* BundledBirdNETLocation.tflite */,
 			);
 			path = Bundled;
+			sourceTree = "<group>";
+		};
+		749BDFEDFE0FB3A188C8FBA2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A9C3033F29251E6A3821D0EE /* Pods_BirdMap.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		854F0E1B4FF6657B9BA1F39B /* App */ = {
@@ -246,6 +246,7 @@
 			children = (
 				77211DC0EA92575DE7CB2308 /* AdditionalBirdsSection.swift */,
 				C70F68091FD6BA1A16E45D14 /* AIPredictionCard.swift */,
+				2924446C0DE4D1C773946327 /* AudioImporter.swift */,
 				CCD17437B9CB93B20C48C2D5 /* AudioPlayback.swift */,
 				42DA995A54E694C1C973E5BB /* AudioRecorderView.swift */,
 				40ACB9DE0D7F2B00653C2C19 /* AudioRecorderViewModel.swift */,
@@ -282,12 +283,14 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
-		E92BAFD2518D9E285F9355E0 /* Frameworks */ = {
+		F2977629E0506BA2DFE200E7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D01042B088D6AB91F19C02DF /* Pods_BirdMap.framework */,
+				AE97AA5CBEF5F14AF70F0932 /* Pods-BirdMap.debug.xcconfig */,
+				0C13A6B5E5B5DFC8BE8C1A82 /* Pods-BirdMap.release.xcconfig */,
 			);
-			name = Frameworks;
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		FF76B282C30EB6C49FF2090E /* Views */ = {
@@ -311,7 +314,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A8B38632D487643573F92C66 /* Build configuration list for PBXNativeTarget "BirdMap" */;
 			buildPhases = (
-				E0990BAFD5B433F432167987 /* [CP] Check Pods Manifest.lock */,
+				20FB6E0624732E9959EA5DD5 /* [CP] Check Pods Manifest.lock */,
 				BAC05422FE279AEA220C230F /* Sources */,
 				C62E2CA6C086B5E00C7F959E /* Resources */,
 				E38B35A84FDCD143F0E5EF05 /* Frameworks */,
@@ -389,7 +392,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		E0990BAFD5B433F432167987 /* [CP] Check Pods Manifest.lock */ = {
+		20FB6E0624732E9959EA5DD5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -424,6 +427,7 @@
 				BFE97DC16EA94CD22E6D05D1 /* AdditionalBirdsSection.swift in Sources */,
 				74FE37D23BF1A69236FCED48 /* AnnotationView.swift in Sources */,
 				49E95791554A85BB6EAA31FC /* AppEnvironment.swift in Sources */,
+				9BE579E69D5697190F4C6080 /* AudioImporter.swift in Sources */,
 				D08DE60E2B759E09FECF39FC /* AudioPlayback.swift in Sources */,
 				5989D58E5C27D49837FF11D0 /* AudioRecorderView.swift in Sources */,
 				5504E0490661EA5C123AB491 /* AudioRecorderViewModel.swift in Sources */,
@@ -457,7 +461,7 @@
 /* Begin XCBuildConfiguration section */
 		4E756A2C73C340478D7D6F3A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E918D83D5478B1567583725D /* Pods-BirdMap.release.xcconfig */;
+			baseConfigurationReference = 0C13A6B5E5B5DFC8BE8C1A82 /* Pods-BirdMap.release.xcconfig */;
 			buildSettings = {
 				API_BASE_URL = "https://birdmap-api.onrender.com";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -598,7 +602,7 @@
 		};
 		C7EF1BC323DE882F3C104F7B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 285F79DB6FA1FC7A081136D5 /* Pods-BirdMap.debug.xcconfig */;
+			baseConfigurationReference = AE97AA5CBEF5F14AF70F0932 /* Pods-BirdMap.debug.xcconfig */;
 			buildSettings = {
 				API_BASE_URL = "http://localhost:8000";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
