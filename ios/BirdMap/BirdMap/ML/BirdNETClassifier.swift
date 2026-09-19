@@ -25,7 +25,7 @@ actor BirdNETClassifier {
     /// hallucination behaviour we don't want to ship. With a GPS fix the
     /// location filter below removes most of that, so the bar can be lower;
     /// without one there's nothing else guarding against it, so it's higher.
-    private static let minConfidenceWithLocation: Float = 0.25
+    private static let minConfidenceWithLocation: Float = 0.2
     private static let minConfidenceWithoutLocation: Float = 0.35
     private static let topPerWindow = 5
     /// BirdNET's own default for "occurs here at this time of year".
@@ -35,7 +35,17 @@ actor BirdNETClassifier {
     private var labels: [String]?
     private var locationModel: Interpreter?
 
-    enum ClassifierError: Error { case modelMissing, audioUnreadable, unexpectedOutput }
+    enum ClassifierError: LocalizedError {
+        case modelMissing, audioUnreadable, unexpectedOutput
+
+        var errorDescription: String? {
+            switch self {
+            case .modelMissing: return "the bird-call model is missing from this build"
+            case .audioUnreadable: return "the recording couldn't be read"
+            case .unexpectedOutput: return "the model returned something unexpected"
+            }
+        }
+    }
 
     private func loadIfNeeded() throws -> (Interpreter, [String]) {
         if let interpreter, let labels { return (interpreter, labels) }

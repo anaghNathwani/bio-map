@@ -30,6 +30,17 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     /// was confident about (as opposed to not being able to run at all).
     @Published var noBirdDetected = false
 
+    /// On-device identification of the take currently held (before submitting),
+    /// run as soon as recording stops — same idea as photos, which classify the
+    /// moment one is picked. nil = not analyzed (still running, or it failed).
+    @Published var isIdentifying = false
+    @Published var identification: [ClassificationResult]?
+    @Published var identificationError: String?
+    /// Whether the last identification could use a real GPS fix to narrow the
+    /// species list — surfaced in the UI since it changes how strict we are.
+    @Published var identificationUsedLocation = false
+    private var identificationTask: Task<Void, Never>?
+
     /// Recordings are embedded as base64 directly in the Firestore sighting
     /// doc (no Storage/backend — see FirebaseService.uploadAudio), which caps
     /// a document at 1 MiB; 30s of mono AAC leaves generous headroom even at
@@ -85,6 +96,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
             recorder?.record()
             recordingURL = url
             hasRecording = false
+            clearIdentification()
             isRecording = true
             recordingSeconds = 0
             error = nil
@@ -108,6 +120,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     }
 
     func stopRecording() {
+        let wasRecording = isRecording
         recorder?.stop()
         meterTimer?.invalidate()
         countTimer?.invalidate()
@@ -117,6 +130,45 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         #if canImport(UIKit)
         try? AVAudioSession.sharedInstance().setActive(false)
         #endif
+        if wasRecording && hasRecording { identifyRecording() }
+    }
+
+    /// Runs BirdNET on the current take (see BirdNETClassifier). Only a genuine
+    /// GPS fix is passed for the location filter — `upload()` falls back to a
+    /// fixed San Francisco default when there isn't one, and narrowing a
+    /// recording made elsewhere down to California species would be wrong.
+    func identifyRecording() {
+        guard let url = recordingURL else { return }
+        identificationTask?.cancel()
+        identification = nil
+        identificationError = nil
+        isIdentifying = true
+        let latitude = lastLocation?.coordinate.latitude
+        let longitude = lastLocation?.coordinate.longitude
+        identificationUsedLocation = latitude != nil && longitude != nil
+
+        identificationTask = Task { [weak self] in
+            var results: [ClassificationResult]?
+            var failure: String?
+            do {
+                results = try await BirdNETClassifier.shared.classify(fileURL: url, latitude: latitude, longitude: longitude)
+            } catch {
+                failure = error.localizedDescription
+                print("[AudioRecorderViewModel] On-device BirdNET failed: \(error)")
+            }
+            guard let self, !Task.isCancelled, self.recordingURL == url else { return }
+            self.identification = results
+            self.identificationError = failure
+            self.isIdentifying = false
+        }
+    }
+
+    private func clearIdentification() {
+        identificationTask?.cancel()
+        identificationTask = nil
+        identification = nil
+        identificationError = nil
+        isIdentifying = false
     }
 
     func upload() async {
@@ -130,22 +182,11 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         noBirdDetected = false
         let sightingID = UUID().uuidString
 
-        // Identify on-device first (BirdNET, see BirdNETClassifier) so the answer
-        // is instant rather than waiting on the scheduled server job. nil means
-        // analysis couldn't run at all — distinct from "ran and heard no bird".
-        var detections: [ClassificationResult]?
-        do {
-            // Only a genuine GPS fix goes in — `location` above falls back to a
-            // fixed San Francisco default when there isn't one, and filtering a
-            // recording made elsewhere down to California species would be wrong.
-            detections = try await BirdNETClassifier.shared.classify(
-                fileURL: url,
-                latitude: lastLocation?.coordinate.latitude,
-                longitude: lastLocation?.coordinate.longitude
-            )
-        } catch {
-            print("[AudioRecorderViewModel] On-device BirdNET failed, leaving it to the server: \(error)")
-        }
+        // Identification already ran when recording stopped; if it's still going,
+        // wait for it. nil means it couldn't run at all — distinct from "ran and
+        // heard no bird" — and leaves the sighting to the scheduled server job.
+        await identificationTask?.value
+        let detections = identification
         let top = detections?.first
         let extras = (detections ?? []).dropFirst().map {
             BirdCandidate(species: $0.species, confidence: Double($0.confidence))
@@ -171,6 +212,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
             hasRecording = false
             recordingURL = nil
             recordingSeconds = 0
+            clearIdentification()
             lastUploadedSightingID = sightingID
             if let detections {
                 aiAdditionalSuggestions = Array(extras)
@@ -239,6 +281,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     /// Throws away the current take (file included) so a fresh one can be recorded.
     func retake() {
         stopRecording()
+        clearIdentification()
         if let url = recordingURL { try? FileManager.default.removeItem(at: url) }
         recordingURL = nil
         recordingSeconds = 0
@@ -251,6 +294,7 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     func reset() {
         noBirdDetected = false
         stopRecording()
+        clearIdentification()
         sightingListener?.remove()
         sightingListener = nil
         recordingURL = nil

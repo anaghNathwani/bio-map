@@ -13,6 +13,9 @@ struct AudioRecorderView: View {
             VStack(spacing: 24) {
                 waveformSection
                 controlSection
+                if vm.recordingURL != nil && !vm.isRecording {
+                    identificationSection
+                }
                 if vm.recordingURL != nil {
                     uploadSection
                 }
@@ -79,6 +82,76 @@ struct AudioRecorderView: View {
             Spacer()
         }
         .presentationDetents([.medium])
+    }
+
+    /// What BirdNET made of the take, shown before submitting — mirrors the
+    /// photo screen's on-device suggestions panel.
+    @ViewBuilder
+    private var identificationSection: some View {
+        if vm.isIdentifying {
+            HStack(spacing: 10) {
+                ProgressView()
+                Text("Identifying bird calls…")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            .padding(14)
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+            .padding(.horizontal)
+        } else if let results = vm.identification {
+            VStack(alignment: .leading, spacing: 10) {
+                Label("On-Device AI · BirdNET", systemImage: "cpu.fill")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color.indigo)
+
+                if results.isEmpty {
+                    Label("Couldn't confidently identify a bird", systemImage: "questionmark.circle")
+                        .font(.subheadline.weight(.semibold))
+                    Text("No bird call in this recording was clear enough to name. Recording closer to the bird, away from wind and voices, helps. You can still submit it and add your own ID.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(Array(results.enumerated()), id: \.offset) { index, result in
+                        HStack {
+                            Text(result.species)
+                                .font(index == 0 ? .subheadline.weight(.semibold) : .subheadline)
+                            Spacer()
+                            Text("\(Int(result.confidence * 100))%")
+                                .font(.caption.monospacedDigit())
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
+                if !vm.identificationUsedLocation {
+                    Text("No GPS fix yet, so this was matched against every species worldwide and held to a stricter standard.")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+            .padding(.horizontal)
+        } else if let failure = vm.identificationError {
+            HStack(spacing: 10) {
+                Image(systemName: "exclamationmark.triangle.fill").symbolRenderingMode(.multicolor)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Couldn't identify this recording")
+                        .font(.subheadline.weight(.semibold))
+                    Text("\(failure). You can still submit it — our server will try again later.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Button("Retry") { vm.identifyRecording() }
+                    .font(.caption.weight(.semibold))
+            }
+            .padding(14)
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+            .padding(.horizontal)
+        }
     }
 
     private var analyzingSection: some View {
