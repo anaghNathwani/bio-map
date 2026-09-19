@@ -7,6 +7,9 @@ struct SightingMapView: View {
     @State private var selectedSighting: Sighting?
     @State private var selectedGroup: SightingGroup?
     @State private var showSaved = false
+    @State private var searchText = ""
+    @State private var isSearching = false
+    @State private var placeResults: [MKMapItem] = []
     @State private var cameraPosition = MapCameraPosition.userLocation(fallback: .region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
@@ -55,6 +58,11 @@ struct SightingMapView: View {
                 }
             }
             .navigationTitle("Bird Sightings")
+            .searchable(text: $searchText, isPresented: $isSearching,
+                        placement: .navigationBarDrawer(displayMode: .automatic),
+                        prompt: "Search species, notes, users or places")
+            .searchSuggestions { searchSuggestions }
+            .task(id: searchText) { await refreshPlaceResults() }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
@@ -90,6 +98,112 @@ struct SightingMapView: View {
                 await vm.load()
             }
         }
+    }
+
+    // MARK: - Search
+
+    private var trimmedQuery: String { searchText.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+    /// Sightings whose species, notes or reporter match the query. Searches the
+    /// full recently-loaded set rather than only the pins currently in view, so
+    /// a match can be anywhere on the map.
+    private var sightingMatches: [Sighting] {
+        let query = trimmedQuery
+        guard query.count >= 2 else { return [] }
+        return Array(vm.allSightings.filter { sighting in
+            [sighting.displaySpecies, sighting.aiSpeciesSuggestion, sighting.notes, sighting.username]
+                .compactMap { $0 }
+                .contains { $0.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil }
+        }.prefix(8))
+    }
+
+    @ViewBuilder
+    private var searchSuggestions: some View {
+        if trimmedQuery.count < 2 {
+            Text("Type a species, a note, a username or a place")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        } else {
+            let matches = sightingMatches
+            if !matches.isEmpty {
+                Section("Sightings") {
+                    ForEach(matches) { sighting in
+                        Button { open(sighting) } label: { SightingRow(sighting: sighting) }
+                            .buttonStyle(.plain)
+                    }
+                }
+            }
+            if !placeResults.isEmpty {
+                Section("Places") {
+                    ForEach(placeResults, id: \.self) { item in
+                        Button { jump(to: item) } label: {
+                            Label {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(item.name ?? "Place")
+                                    if let subtitle = item.placemark.title, subtitle != item.name {
+                                        Text(subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                                    }
+                                }
+                            } icon: {
+                                Image(systemName: "mappin.and.ellipse").foregroundStyle(Color.teal)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            if matches.isEmpty && placeResults.isEmpty {
+                Text("No sightings or places match \u{201C}\(trimmedQuery)\u{201D}")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func finishSearch() {
+        isSearching = false
+        searchText = ""
+        placeResults = []
+    }
+
+    private func open(_ sighting: Sighting) {
+        finishSearch()
+        withAnimation {
+            cameraPosition = .region(MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: sighting.latitude, longitude: sighting.longitude),
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            ))
+        }
+        // Several sightings at that spot -> pick from the list; one -> open it.
+        let group = SightingGroup.grouping(vm.allSightings)
+            .first { $0.sightings.contains { $0.id == sighting.id } }
+        if let group, group.sightings.count > 1 {
+            selectedGroup = group
+        } else {
+            selectedSighting = sighting
+        }
+    }
+
+    private func jump(to item: MKMapItem) {
+        finishSearch()
+        withAnimation {
+            cameraPosition = .region(MKCoordinateRegion(
+                center: item.placemark.coordinate,
+                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            ))
+        }
+    }
+
+    private func refreshPlaceResults() async {
+        let query = trimmedQuery
+        guard query.count >= 3 else { placeResults = []; return }
+        try? await Task.sleep(for: .milliseconds(350))      // debounce typing; cancelled by task(id:)
+        guard !Task.isCancelled else { return }
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = query
+        let response = try? await MKLocalSearch(request: request).start()
+        guard !Task.isCancelled else { return }
+        placeResults = Array((response?.mapItems ?? []).prefix(4))
     }
 
     /// One pin per place. A place with a single sighting opens it directly; a
@@ -164,6 +278,9 @@ struct SightingMapView: View {
 @MainActor
 final class SightingMapViewModel: ObservableObject {
     @Published var sightings: [Sighting] = []
+    /// The most recent sightings regardless of viewport — what search runs over,
+    /// since `sightings` is narrowed to whatever the map is currently showing.
+    @Published var allSightings: [Sighting] = []
     @Published var isLoading = false
 
     private var debounceTask: Task<Void, Never>?
@@ -179,6 +296,7 @@ final class SightingMapViewModel: ObservableObject {
         // errors shouldn't blank out the map) — only replace on success.
         if let result = try? await FirebaseService.shared.fetchSightings() {
             sightings = result
+            allSightings = result
         }
         isLoading = false
     }
