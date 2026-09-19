@@ -58,6 +58,9 @@ struct SightingDetail: Identifiable {
     /// aiSpeciesSuggestions field. Does not include the primary entry.
     var additionalSpecies: [BirdCandidate]
     var annotations: [AnnotationItem]
+    /// True once BirdNET has run on this recording (on-device at submission, or
+    /// by the server job later) — regardless of whether it heard a bird.
+    var aiAnalyzed: Bool = false
 
     var isAudio: Bool { mediaType == "audio" }
     var displaySpecies: String? { aiSpeciesSuggestion }

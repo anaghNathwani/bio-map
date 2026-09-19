@@ -163,7 +163,8 @@ final class FirebaseService {
         notes: String?,
         aiSpecies: String?,
         aiConfidence: Double?,
-        aiAdditionalSpecies: [BirdCandidate] = []
+        aiAdditionalSpecies: [BirdCandidate] = [],
+        aiAnalyzed: Bool = false
     ) async throws -> String {
         guard let uid = currentUID else { throw AppError.notLoggedIn }
         let username = await fetchUsername() ?? "unknown"
@@ -185,6 +186,9 @@ final class FirebaseService {
         if let v = notes { data["notes"] = v }
         if let v = aiSpecies { data["aiSpeciesSuggestion"] = v }
         if let v = aiConfidence { data["aiConfidence"] = v }
+        // Set when the app already ran BirdNET on-device (even if it heard
+        // nothing), so ml_pipeline/live_poll.py doesn't redo the same clip.
+        if aiAnalyzed { data["aiAnalyzedAt"] = Timestamp() }
         // Mirrors live_poll.py's format so fetchSightingDetail's parsing
         // (which drops element 0, the primary) works for photos too.
         if let species = aiSpecies {
@@ -254,7 +258,8 @@ final class FirebaseService {
             aiSpeciesSuggestion: data["aiSpeciesSuggestion"] as? String,
             aiConfidence: data["aiConfidence"] as? Double,
             additionalSpecies: additionalSpecies,
-            annotations: annotations
+            annotations: annotations,
+            aiAnalyzed: data["aiAnalyzedAt"] != nil
         )
     }
 

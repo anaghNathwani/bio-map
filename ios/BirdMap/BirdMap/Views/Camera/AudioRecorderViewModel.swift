@@ -26,6 +26,9 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
     @Published var isAnalyzing = false
     @Published var analysisTimedOut = false
     @Published var lastUploadedSightingID: String?
+    /// On-device BirdNET ran on the last submission and didn't hear a bird it
+    /// was confident about (as opposed to not being able to run at all).
+    @Published var noBirdDetected = false
 
     /// Recordings are embedded as base64 directly in the Firestore sighting
     /// doc (no Storage/backend — see FirebaseService.uploadAudio), which caps
@@ -124,7 +127,29 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
 
         isUploading = true
         error = nil
+        noBirdDetected = false
         let sightingID = UUID().uuidString
+
+        // Identify on-device first (BirdNET, see BirdNETClassifier) so the answer
+        // is instant rather than waiting on the scheduled server job. nil means
+        // analysis couldn't run at all — distinct from "ran and heard no bird".
+        var detections: [ClassificationResult]?
+        do {
+            // Only a genuine GPS fix goes in — `location` above falls back to a
+            // fixed San Francisco default when there isn't one, and filtering a
+            // recording made elsewhere down to California species would be wrong.
+            detections = try await BirdNETClassifier.shared.classify(
+                fileURL: url,
+                latitude: lastLocation?.coordinate.latitude,
+                longitude: lastLocation?.coordinate.longitude
+            )
+        } catch {
+            print("[AudioRecorderViewModel] On-device BirdNET failed, leaving it to the server: \(error)")
+        }
+        let top = detections?.first
+        let extras = (detections ?? []).dropFirst().map {
+            BirdCandidate(species: $0.species, confidence: Double($0.confidence))
+        }
 
         do {
             let (audioURL, fallbackURL) = try await FirebaseService.shared.uploadAudio(data, sightingID: sightingID, filename: url.lastPathComponent)
@@ -137,15 +162,28 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
                 latitude: location.coordinate.latitude,
                 longitude: location.coordinate.longitude,
                 notes: notes.isEmpty ? nil : notes,
-                aiSpecies: nil,
-                aiConfidence: nil
+                aiSpecies: top?.species,
+                aiConfidence: top.map { Double($0.confidence) },
+                aiAdditionalSpecies: Array(extras),
+                aiAnalyzed: detections != nil
             )
             notes = ""
             hasRecording = false
             recordingURL = nil
             recordingSeconds = 0
             lastUploadedSightingID = sightingID
-            startAnalyzing(sightingID: sightingID)
+            if let detections {
+                aiAdditionalSuggestions = Array(extras)
+                aiConfidence = top.map { Double($0.confidence) }
+                noBirdDetected = detections.isEmpty
+                if let top {
+                    aiSuggestion = top.species      // the view's onChange presents the AI review card
+                } else {
+                    uploadSuccess = true
+                }
+            } else {
+                startAnalyzing(sightingID: sightingID)
+            }
         } catch {
             self.error = "Upload failed: \(error.localizedDescription)"
         }
@@ -198,7 +236,20 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         }
     }
 
+    /// Throws away the current take (file included) so a fresh one can be recorded.
+    func retake() {
+        stopRecording()
+        if let url = recordingURL { try? FileManager.default.removeItem(at: url) }
+        recordingURL = nil
+        recordingSeconds = 0
+        hasRecording = false
+        meterLevel = 0
+        notes = ""
+        error = nil
+    }
+
     func reset() {
+        noBirdDetected = false
         stopRecording()
         sightingListener?.remove()
         sightingListener = nil

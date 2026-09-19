@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AudioRecorderView: View {
     @StateObject private var vm = AudioRecorderViewModel()
+    @StateObject private var playback = AudioPlayback()
     @State private var showBirdInfo = false
     @State private var showAIReview = false
     @State private var showAnnotate = false
@@ -26,7 +27,10 @@ struct AudioRecorderView: View {
             .padding(.bottom, 40)
         }
         .onAppear { vm.startLocationUpdates() }
-        .onDisappear { vm.stopLocationUpdates() }
+        .onDisappear {
+            vm.stopLocationUpdates()
+            playback.stop()
+        }
         .onChange(of: vm.aiSuggestion) { _, species in
             guard species != nil, !vm.isAnalyzing else { return }
             showAIReview = true
@@ -34,7 +38,11 @@ struct AudioRecorderView: View {
         .alert("Sound Submitted!", isPresented: $vm.uploadSuccess) {
             Button("Great!") { vm.reset() }
         } message: {
-            Text("Your recording has been added to the map. AI identification runs on a schedule and isn't instant — check back on this sighting in about 20 minutes, or annotate it yourself in the meantime.")
+            if vm.noBirdDetected {
+                Text("Your recording has been added to the map. The on-device model didn't hear a bird clearly enough to name one — you can still add your own ID from the sighting.")
+            } else {
+                Text("Your recording has been added to the map. Identification couldn't run on this device, so our server will fill it in the next time it processes recordings (that can take a few hours) — or add your own ID from the sighting.")
+            }
         }
         .sheet(isPresented: $showBirdInfo) {
             if let species = vm.aiSuggestion {
@@ -111,6 +119,29 @@ struct AudioRecorderView: View {
                 }
             }
 
+            if vm.hasRecording && !vm.isRecording {
+                VStack {
+                    HStack {
+                        Button {
+                            playback.stop()
+                            vm.retake()
+                        } label: {
+                            Image(systemName: "arrow.counterclockwise")
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                                .frame(width: 40, height: 40)
+                                .background(.ultraThinMaterial, in: Circle())
+                                .overlay(Circle().strokeBorder(.primary.opacity(0.12)))
+                        }
+                        .disabled(vm.isUploading)
+                        .accessibilityLabel("Discard recording and record again")
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .padding(12)
+            }
+
             if vm.isRecording {
                 VStack {
                     HStack {
@@ -138,6 +169,7 @@ struct AudioRecorderView: View {
     private var controlSection: some View {
         VStack(spacing: 16) {
             Button {
+                playback.stop()
                 if vm.isRecording { vm.stopRecording() } else { vm.startRecording() }
             } label: {
                 ZStack {
@@ -162,6 +194,27 @@ struct AudioRecorderView: View {
     @ViewBuilder
     private var uploadSection: some View {
         VStack(spacing: 14) {
+            // Listen back before submitting
+            Button {
+                if let url = vm.recordingURL { playback.toggle(fileURL: url) }
+            } label: {
+                Label(playback.isPlaying ? "Pause" : "Listen back",
+                      systemImage: playback.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color.indigo.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+                    .foregroundStyle(Color.indigo)
+            }
+            .disabled(vm.isRecording || vm.isUploading)
+            .padding(.horizontal)
+
+            if playback.failed {
+                Text("Couldn't play this recording back.")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
+
             // Notes
             TextField("Notes (optional)", text: $vm.notes, axis: .vertical)
                 .lineLimit(2...4)

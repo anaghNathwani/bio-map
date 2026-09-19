@@ -141,6 +141,22 @@ struct CameraView: View {
                     .padding(14)
                 }
             }
+            .overlay(alignment: .topLeading) {
+                Button {
+                    visionCandidates = []
+                    vm.retake()
+                } label: {
+                    Image(systemName: "arrow.counterclockwise")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .background(.ultraThinMaterial, in: Circle())
+                        .overlay(Circle().strokeBorder(.white.opacity(0.25)))
+                }
+                .disabled(vm.isUploading)
+                .padding(12)
+                .accessibilityLabel("Retake photo")
+            }
             .padding(.horizontal)
 
             // On-device AI candidates

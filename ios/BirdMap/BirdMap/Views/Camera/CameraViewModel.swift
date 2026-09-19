@@ -74,6 +74,17 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
         }
     }
 
+    /// Discards the current photo and its AI results so a new one can be taken.
+    func retake() {
+        capturedImage = nil
+        aiSuggestion = nil
+        aiCandidates = []
+        aiAdditionalSuggestions = []
+        didClassify = false
+        notes = ""
+        error = nil
+    }
+
     func upload() async {
         guard let image = capturedImage,
               let data = image.jpegData(compressionQuality: 0.85) else {

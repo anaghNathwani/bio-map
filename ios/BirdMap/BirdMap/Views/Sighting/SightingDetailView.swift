@@ -10,7 +10,7 @@ struct SightingDetailView: View {
     @State private var showAnnotate = false
     @State private var showBirdInfo = false
     @State private var locationName: String?
-    @State private var audioPlayer: AVPlayer?
+    @StateObject private var playback = AudioPlayback()
 
     var body: some View {
         NavigationStack {
@@ -48,6 +48,7 @@ struct SightingDetailView: View {
                 }
             }
             .task { await loadDetail() }
+            .onDisappear { playback.stop() }
         }
     }
 
@@ -88,27 +89,20 @@ struct SightingDetailView: View {
                                 .foregroundStyle(.white.opacity(0.8))
                             if detail.audioURL != nil || detail.audioFallbackURL != nil {
                                 Button {
-                                    // The audio session may still be in .record mode
-                                    // (input-only, no output) from a prior recording —
-                                    // switch to playback before creating the player, or
-                                    // this plays completely silently.
-                                    try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-                                    try? AVAudioSession.sharedInstance().setActive(true)
-                                    if audioPlayer == nil {
-                                        let fromPrimary = detail.audioURL.flatMap { DataURI.writeTempFile($0, extension: "m4a") }
-                                        let fromFallback = detail.audioFallbackURL.flatMap { URL(string: $0) }
-                                        if let audioURL = fromPrimary ?? fromFallback {
-                                            audioPlayer = AVPlayer(url: audioURL)
-                                        }
-                                    }
-                                    audioPlayer?.play()
+                                    Task { await togglePlayback(detail) }
                                 } label: {
-                                    Label("Play Recording", systemImage: "play.circle.fill")
+                                    Label(playback.isPlaying ? "Pause" : "Play Recording",
+                                          systemImage: playback.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                                         .font(.headline)
                                         .padding(.horizontal, 20)
                                         .padding(.vertical, 10)
                                         .background(.ultraThinMaterial, in: Capsule())
                                         .foregroundStyle(.white)
+                                }
+                                if playback.failed {
+                                    Text("Couldn't play this recording.")
+                                        .font(.caption)
+                                        .foregroundStyle(.white.opacity(0.85))
                                 }
                             }
                         }
@@ -161,14 +155,17 @@ struct SightingDetailView: View {
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
                 .padding(12)
             } else if detail.isAudio {
-                // Mirrors the photo tab's "on-device model not yet downloaded"
-                // banner — audio ID runs on a ~20 minute server-side schedule
-                // (ml_pipeline/live_poll.py), not instantly, so a sighting can
-                // sit here with no suggestion yet for a while; say so plainly
-                // instead of showing nothing.
+                // New recordings are identified on-device at submission, so
+                // "analyzed but nothing found" is a real answer; anything not yet
+                // analyzed (older sightings, or a device where analysis couldn't
+                // run) waits for the scheduled server job (ml_pipeline/live_poll.py,
+                // which GitHub runs every few hours, not on a tight interval).
                 HStack(spacing: 10) {
-                    Image(systemName: "clock.arrow.circlepath").foregroundStyle(.white.opacity(0.85))
-                    Text("AI identification pending — usually ready within 20 minutes.")
+                    Image(systemName: detail.aiAnalyzed ? "questionmark.circle" : "clock.arrow.circlepath")
+                        .foregroundStyle(.white.opacity(0.85))
+                    Text(detail.aiAnalyzed
+                         ? "No bird was identified with confidence in this recording."
+                         : "Identification pending — our server processes recordings every few hours.")
                         .font(.caption.weight(.medium))
                         .foregroundStyle(.white)
                     Spacer()
@@ -315,6 +312,20 @@ struct SightingDetailView: View {
         case 0.8...: return .green
         case 0.5...: return .orange
         default: return .red
+        }
+    }
+
+    /// Plays the embedded recording, or downloads the Supabase fallback copy
+    /// if the embedded one is missing/undecodable.
+    private func togglePlayback(_ detail: SightingDetail) async {
+        if playback.isPlaying { playback.stop(); return }
+        if let embedded = detail.audioURL, let data = DataURI.decode(embedded) {
+            playback.play(data: data)
+        } else if let fallback = detail.audioFallbackURL, let url = URL(string: fallback),
+                  let (data, _) = try? await URLSession.shared.data(from: url) {
+            playback.play(data: data)
+        } else {
+            playback.play(data: Data())     // surfaces the "couldn't play" message
         }
     }
 
