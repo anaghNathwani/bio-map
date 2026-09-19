@@ -227,6 +227,23 @@ final class FirebaseService {
         return sightings
     }
 
+    /// Loads specific sightings by id (used for the user's saved list, which
+    /// shouldn't be limited to whatever's inside the current map viewport).
+    /// Ids that no longer exist or fail to load are skipped.
+    func fetchSightings(ids: [String]) async -> [Sighting] {
+        let db = self.db
+        return await withTaskGroup(of: Sighting?.self) { group in
+            for id in ids {
+                group.addTask { try? await db.collection("sightings").document(id).getDocument(as: Sighting.self) }
+            }
+            var result: [Sighting] = []
+            for await sighting in group { if let sighting { result.append(sighting) } }
+            return result.sorted {
+                ($0.createdAt?.dateValue() ?? .distantPast) > ($1.createdAt?.dateValue() ?? .distantPast)
+            }
+        }
+    }
+
     func fetchSightingDetail(id: String) async throws -> SightingDetail {
         let doc = try await db.collection("sightings").document(id).getDocument()
         guard let data = doc.data() else { throw AppError.notFound }

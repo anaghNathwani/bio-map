@@ -5,51 +5,68 @@ import AVFoundation
 
 struct SightingDetailView: View {
     let sightingID: String
+    /// True when pushed from a list inside an existing NavigationStack (the
+    /// pin's sightings list, the saved list) — nesting a second stack there
+    /// breaks the back button, so the stack is only created when standalone.
+    var embedded = false
     @State private var detail: SightingDetail?
     @State private var isLoading = true
     @State private var showAnnotate = false
     @State private var showBirdInfo = false
     @State private var locationName: String?
     @StateObject private var playback = AudioPlayback()
+    @ObservedObject private var saved = SavedSightings.shared
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if isLoading {
-                    ProgressView("Loading…")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if let detail {
-                    detailContent(detail)
-                }
-            }
-            .navigationTitle("Sighting")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showAnnotate = true
-                    } label: {
-                        Label("Annotate", systemImage: "checklist.unchecked")
-                    }
-                    .disabled(detail == nil)
-                }
-            }
-            .sheet(isPresented: $showAnnotate) {
-                if let detail {
-                    AnnotationView(sightingID: detail.id) {
-                        showAnnotate = false
-                        Task { await loadDetail() }
-                    }
-                }
-            }
-            .sheet(isPresented: $showBirdInfo) {
-                if let species = detail?.displaySpecies {
-                    BirdInfoView(species: species)
-                }
-            }
-            .task { await loadDetail() }
-            .onDisappear { playback.stop() }
+        if embedded {
+            content
+        } else {
+            NavigationStack { content }
         }
+    }
+
+    private var content: some View {
+        Group {
+            if isLoading {
+                ProgressView("Loading…")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if let detail {
+                detailContent(detail)
+            }
+        }
+        .navigationTitle("Sighting")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+                    saved.toggle(sightingID)
+                } label: {
+                    Label(saved.isSaved(sightingID) ? "Unsave" : "Save",
+                          systemImage: saved.isSaved(sightingID) ? "bookmark.fill" : "bookmark")
+                }
+                Button {
+                    showAnnotate = true
+                } label: {
+                    Label("Annotate", systemImage: "checklist.unchecked")
+                }
+                .disabled(detail == nil)
+            }
+        }
+        .sheet(isPresented: $showAnnotate) {
+            if let detail {
+                AnnotationView(sightingID: detail.id) {
+                    showAnnotate = false
+                    Task { await loadDetail() }
+                }
+            }
+        }
+        .sheet(isPresented: $showBirdInfo) {
+            if let species = detail?.displaySpecies {
+                BirdInfoView(species: species)
+            }
+        }
+        .task { await loadDetail() }
+        .onDisappear { playback.stop() }
     }
 
     @ViewBuilder

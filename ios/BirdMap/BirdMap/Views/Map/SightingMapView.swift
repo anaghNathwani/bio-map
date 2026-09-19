@@ -5,6 +5,8 @@ import CoreLocation
 struct SightingMapView: View {
     @StateObject private var vm = SightingMapViewModel()
     @State private var selectedSighting: Sighting?
+    @State private var selectedGroup: SightingGroup?
+    @State private var showSaved = false
     @State private var cameraPosition = MapCameraPosition.userLocation(fallback: .region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
@@ -27,12 +29,14 @@ struct SightingMapView: View {
                             .overlay(Circle().stroke(.white, lineWidth: 2))
                             .shadow(color: .black.opacity(0.3), radius: 2)
                     }
-                    ForEach(displayPositions) { positioned in
+                    ForEach(SightingGroup.grouping(vm.sightings)) { group in
                         Annotation(
-                            positioned.sighting.topSpecies ?? positioned.sighting.aiSpeciesSuggestion ?? "Unknown",
-                            coordinate: positioned.coordinate
+                            group.sightings.count > 1
+                                ? "\(group.sightings.count) sightings"
+                                : (group.sightings[0].displaySpecies ?? "Unknown"),
+                            coordinate: group.coordinate
                         ) {
-                            sightingPin(positioned.sighting)
+                            groupPin(group)
                         }
                     }
                 }
@@ -52,6 +56,14 @@ struct SightingMapView: View {
             }
             .navigationTitle("Bird Sightings")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showSaved = true
+                    } label: {
+                        Image(systemName: "bookmark")
+                    }
+                    .accessibilityLabel("Saved sightings")
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         Task { await vm.load() }
@@ -65,6 +77,14 @@ struct SightingMapView: View {
                 SightingDetailView(sightingID: sighting.id ?? "")
                     .presentationDetents([.medium, .large])
             }
+            .sheet(item: $selectedGroup) { group in
+                SightingListView(title: "\(group.sightings.count) sightings here", sightings: group.sightings)
+                    .presentationDetents([.medium, .large])
+            }
+            .sheet(isPresented: $showSaved) {
+                SavedSightingsView()
+                    .presentationDetents([.medium, .large])
+            }
             .task {
                 vm.requestLocationPermission()
                 await vm.load()
@@ -72,78 +92,40 @@ struct SightingMapView: View {
         }
     }
 
-    /// Sightings reported at (or very near) the same spot would otherwise
-    /// render as fully overlapping annotations with only the top one
-    /// tappable. Groups sightings within ~1m of each other and, for any
-    /// group larger than one, fans them out in a small circle around the
-    /// shared point — display-only, doesn't touch the stored coordinates.
-    private var displayPositions: [PositionedSighting] {
-        var groups: [String: [Sighting]] = [:]
-        for sighting in vm.sightings {
-            // ~5 decimal places of lat/lng is ~1m precision — close enough
-            // to count as "the same spot" for pin-overlap purposes.
-            let key = "\(Int((sighting.latitude * 100_000).rounded())),\(Int((sighting.longitude * 100_000).rounded()))"
-            groups[key, default: []].append(sighting)
-        }
-
-        var result: [PositionedSighting] = []
-        for group in groups.values {
-            if group.count == 1 {
-                let sighting = group[0]
-                result.append(PositionedSighting(
-                    sighting: sighting,
-                    coordinate: CLLocationCoordinate2D(latitude: sighting.latitude, longitude: sighting.longitude)
-                ))
-            } else {
-                // ~0.00012deg latitude is roughly 13m — enough separation to
-                // be individually tappable at typical zoom without drifting
-                // the pins far from their real location.
-                let radius = 0.00012
-                let latRadians = group[0].latitude * .pi / 180
-                for (index, sighting) in group.enumerated() {
-                    let angle = (2 * .pi / Double(group.count)) * Double(index)
-                    let dLat = radius * cos(angle)
-                    let dLng = (radius * sin(angle)) / max(cos(latRadians), 0.01)
-                    result.append(PositionedSighting(
-                        sighting: sighting,
-                        coordinate: CLLocationCoordinate2D(
-                            latitude: sighting.latitude + dLat,
-                            longitude: sighting.longitude + dLng
-                        )
-                    ))
-                }
-            }
-        }
-        return result
-    }
-
-    private func sightingPin(_ sighting: Sighting) -> some View {
-        Button {
-            selectedSighting = sighting
+    /// One pin per place. A place with a single sighting opens it directly; a
+    /// place with several opens a list to choose from — replaces the old
+    /// approach of fanning overlapping pins out into a circle.
+    private func groupPin(_ group: SightingGroup) -> some View {
+        let count = group.sightings.count
+        let annotated = group.sightings.contains { $0.annotationCount > 0 }
+        return Button {
+            if count == 1 { selectedSighting = group.sightings[0] } else { selectedGroup = group }
         } label: {
             ZStack {
                 Circle()
                     .fill(
-                        sighting.isAudio
+                        count > 1
                             ? AnyShapeStyle(Color.indigo.gradient)
-                            : sighting.annotationCount > 0
+                            : annotated
                                 ? AnyShapeStyle(Color.teal.gradient)
                                 : AnyShapeStyle(Color.orange.gradient)
                     )
                     .frame(width: 38, height: 38)
                     .shadow(color: .black.opacity(0.22), radius: 5, y: 3)
 
-                Image(systemName: sighting.isAudio ? "mic.fill" : "camera.fill")
+                Image(systemName: "mappin")
                     .foregroundStyle(.white)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 17, weight: .semibold))
 
-                if sighting.annotationCount > 0 {
-                    Text("\(sighting.annotationCount)")
-                        .font(.system(size: 9, weight: .black))
-                        .foregroundStyle(.white)
-                        .padding(3)
-                        .background(Color.green.gradient, in: Circle())
-                        .offset(x: 13, y: -13)
+                if count > 1 {
+                    Text("\(count)")
+                        .font(.system(size: 11, weight: .heavy))
+                        .foregroundStyle(Color.indigo)
+                        .frame(minWidth: 18, minHeight: 18)
+                        .padding(.horizontal, 2)
+                        .background(.white, in: Capsule())
+                        .overlay(Capsule().stroke(Color.indigo, lineWidth: 1.5))
+                        .offset(x: 14, y: -14)
                 }
             }
         }
@@ -177,12 +159,6 @@ struct SightingMapView: View {
         .background(.ultraThinMaterial, in: Capsule())
         .padding(.bottom, 14)
     }
-}
-
-private struct PositionedSighting: Identifiable {
-    let sighting: Sighting
-    let coordinate: CLLocationCoordinate2D
-    var id: String { sighting.id ?? "\(coordinate.latitude),\(coordinate.longitude)" }
 }
 
 @MainActor
