@@ -97,6 +97,13 @@ struct AnnotationView: View {
             }
             .padding(12)
             .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+
+            if AnnotationModerator.shared.verdict(species: species, reviewOfAI: reviewOfAI).isFlagged {
+                Label("That doesn't look like a bird name we know, so it will show as flagged. Check the spelling, or leave it blank and mark it unsure.",
+                      systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
         }
         .padding(.horizontal)
     }

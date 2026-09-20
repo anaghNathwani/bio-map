@@ -289,7 +289,8 @@ struct SightingDetailView: View {
                         .font(.subheadline.bold())
                         .foregroundStyle(ann.species.isEmpty ? .secondary : .primary)
                         .italic(ann.species.isEmpty)
-                    if ann.moderation == "flagged" {
+                    // Judged on this device (see AnnotationModerator), not by the server.
+                    if AnnotationModerator.shared.verdict(species: ann.species, reviewOfAI: ann.reviewOfAI).isFlagged {
                         Label("Flagged", systemImage: "flag.fill")
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(.white)

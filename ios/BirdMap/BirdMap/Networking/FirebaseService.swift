@@ -290,10 +290,6 @@ final class FirebaseService {
             "species": species,
             "confidence": confidence,
             "createdAt": Timestamp(),
-            // Polled by ml_pipeline/live_poll.py (moderation.where("moderation", "==", "pending"))
-            // — set explicitly here since Firestore can't efficiently query for a
-            // field's absence, only its value.
-            "moderation": "pending",
         ]
         if let v = behavior { data["behavior"] = v }
         if let v = agePlumage { data["agePlumage"] = v }

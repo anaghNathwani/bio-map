@@ -19,6 +19,10 @@ struct BirdMapApp: App {
             await ModelManager.shared.checkForUpdate()
         }
 
+        // Build the bird-name lookup the annotation moderator uses now, off the
+        // main thread, so the first annotation card doesn't pay for it.
+        Task.detached(priority: .utility) { _ = AnnotationModerator.shared }
+
         Task {
             await UploadQueue.shared.flushIfNeeded { item in
                 guard let data = try? Data(contentsOf: URL(fileURLWithPath: item.imagePath)) else { return }
