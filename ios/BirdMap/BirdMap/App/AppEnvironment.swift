@@ -5,6 +5,8 @@ import FirebaseAuth
 final class AppEnvironment: ObservableObject {
     @Published var user: FirebaseAuth.User?
     @Published var username: String?
+    /// True while the guided tour is showing (auto-started once, replayable from Profile).
+    @Published var tourActive = false
 
     var isLoggedIn: Bool { user != nil }
 

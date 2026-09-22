@@ -59,7 +59,7 @@ struct SightingMapView: View {
             }
             .navigationTitle("Bird Sightings")
             .searchable(text: $searchText, isPresented: $isSearching,
-                        placement: .navigationBarDrawer(displayMode: .automatic),
+                        placement: .navigationBarDrawer(displayMode: .always),
                         prompt: "Search species, notes, users or places")
             .searchSuggestions { searchSuggestions }
             .task(id: searchText) { await refreshPlaceResults() }

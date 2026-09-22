@@ -100,6 +100,18 @@ struct ProfileView: View {
                     Text("Receive alerts when your sightings are annotated by the community.")
                 }
 
+                // MARK: - Help
+                Section {
+                    Button {
+                        env.tourActive = true
+                    } label: {
+                        Label("Take the tour", systemImage: "questionmark.circle.fill")
+                    }
+                    .foregroundStyle(.primary)
+                } header: {
+                    Text("Help")
+                }
+
                 // MARK: - About
                 Section {
                     aboutRow("Citizen science bird tracking", icon: "globe", path: "/citizen-science")
