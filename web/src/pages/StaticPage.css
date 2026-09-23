@@ -1,7 +1,7 @@
 .static-page {
   min-height: 100vh;
-  background: #0f1117;
-  color: #e8eaf0;
+  background: var(--paper);
+  color: var(--ink);
   font-family: 'Geist Variable', system-ui, sans-serif;
 }
 
@@ -9,19 +9,21 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  padding: 16px 24px;
-  background: rgba(15, 17, 23, .85);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  padding: 20px 24px;
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--rule);
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .static-page-back {
-  color: rgba(255, 255, 255, .7);
+  color: var(--ink-soft);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -29,92 +31,105 @@
 }
 
 .static-page-back:hover {
-  color: #fff;
+  color: var(--ink);
 }
 
 .static-page-logo {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #fff;
+  font-family: 'Fraunces Variable', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink);
   margin-left: auto;
   margin-right: auto;
 }
 
 .static-page-logo img {
-  height: 22px;
-  width: 22px;
+  height: 18px;
+  width: 18px;
 }
 
 .static-page-logo .static-page-back {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #fff;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: normal;
+  font-family: 'Fraunces Variable', serif;
+  font-style: italic;
+  font-size: 17px;
 }
 
 .static-page-hero {
-  padding: 60px 24px 48px;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 64px 24px 48px;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
 }
 
 .static-page-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 20px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, .15);
-  color: #5eead4;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 22px;
+  border: 1px solid var(--rule);
+  color: var(--clay);
 }
 
 .static-page-h1 {
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0 0 12px;
-  color: #fff;
+  font-family: 'Fraunces Variable', serif;
+  font-size: 38px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+  margin: 0 0 14px;
+  color: var(--ink);
 }
 
 .static-page-sub {
   font-size: 16px;
-  color: #a8b3c4;
-  max-width: 520px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 480px;
   margin: 0 auto;
 }
 
 .static-page-section {
-  max-width: 720px;
+  max-width: 640px;
   margin: 0 auto;
-  padding: 48px 24px;
+  padding: 48px 24px 64px;
+  border-top: 1px solid var(--rule);
 }
 
 .static-page-h2 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #5eead4;
-  margin: 0 0 12px;
+  font-family: 'Fraunces Variable', serif;
+  font-style: italic;
+  font-size: 21px;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0 0 14px;
 }
 
 .static-page-p {
   font-size: 15px;
-  line-height: 1.7;
-  color: #c3ccd9;
-  margin: 0 0 32px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin: 0 0 36px;
 }
 
 .static-page-card {
-  border-top: 1px solid rgba(255, 255, 255, .1);
-  padding: 20px 0;
+  border-top: 1px solid var(--rule);
+  padding: 22px 0;
 }
 
 .static-page-card:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 36px;
 }
 
 .static-page-card-title {
@@ -123,25 +138,25 @@
   gap: 8px;
   font-weight: 600;
   font-size: 15px;
-  color: #fff;
-  margin-bottom: 4px;
+  color: var(--ink);
+  margin-bottom: 5px;
 }
 
 .static-page-card-title svg {
   flex: none;
-  color: #5eead4;
+  color: var(--clay);
 }
 
 .static-page-card-body {
   font-size: 14px;
-  color: #a8b3c4;
-  line-height: 1.6;
+  color: var(--ink-soft);
+  line-height: 1.65;
 }
 
 .static-page-footer {
   text-align: center;
-  padding: 24px;
-  color: #8b95a6;
+  padding: 28px;
+  color: var(--ink-soft);
   font-size: 13px;
-  border-top: 1px solid rgba(255, 255, 255, .1);
+  border-top: 1px solid var(--rule);
 }

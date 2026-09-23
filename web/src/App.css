@@ -6,18 +6,19 @@
 
 .app-header {
   padding: 12px 20px;
-  background: linear-gradient(135deg, #0d9488, #0369a1);
+  background: var(--ink);
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
   z-index: 1000;
 }
 
 .app-logo {
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
+  font-family: 'Fraunces Variable', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--paper);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -25,14 +26,14 @@
 
 .app-subtitle {
   font-size: 12px;
-  color: rgba(255, 255, 255, .75);
+  color: rgba(244, 241, 233, .65);
   margin-top: 1px;
 }
 
 .app-badge {
   margin-left: auto;
-  background: rgba(255, 255, 255, .2);
-  color: #fff;
+  background: rgba(244, 241, 233, .12);
+  color: var(--paper);
   padding: 3px 10px;
   border-radius: 20px;
   font-size: 12px;
@@ -54,19 +55,19 @@
   bottom: 30px;
   right: 10px;
   z-index: 1000;
-  background: rgba(15, 17, 23, .85);
+  background: rgba(33, 29, 22, .88);
   -webkit-background-filter: blur(8px);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 12px;
-  color: #e8eaf0;
-  border: 1px solid rgba(255, 255, 255, .1);
+  color: var(--paper);
+  border: 1px solid rgba(244, 241, 233, .12);
 }
 
 .legend-title {
   font-weight: 600;
   margin-bottom: 6px;
-  color: #94a3b8;
+  color: rgba(244, 241, 233, .6);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -87,11 +88,11 @@
 }
 
 .legend-dot--photo {
-  background: #0d9488;
+  background: #C1602E;
 }
 
 .legend-dot--audio {
-  background: #8b5cf6;
+  background: #5B6B8C;
 }
 
 .marker-dot {
@@ -103,9 +104,9 @@
 }
 
 .marker-dot--photo {
-  background: #0d9488;
+  background: #C1602E;
 }
 
 .marker-dot--audio {
-  background: #8b5cf6;
+  background: #5B6B8C;
 }

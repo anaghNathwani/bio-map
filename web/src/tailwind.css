@@ -2,12 +2,15 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "@fontsource-variable/fraunces/standard.css";
+@import "@fontsource-variable/fraunces/wght-italic.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
+    --font-serif: 'Fraunces Variable', 'Iowan Old Style', serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -127,4 +130,29 @@
   html {
     @apply font-sans;
     }
+}
+
+/* Editorial site palette — paper/ink/clay — used on the marketing pages. */
+:root {
+  --paper: #F4F1E9;
+  --paper-dim: #ECE7DA;
+  --ink: #211D16;
+  --ink-soft: #6B6255;
+  --clay: #C1602E;
+  --clay-soft: #E4A272;
+  --rule: rgba(33, 29, 22, 0.14);
+}
+
+/* A faint, fixed paper-grain texture; layered under content, never on top of type. */
+.bg-grain {
+  position: relative;
+}
+.bg-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.13  0 0 0 0 0.11  0 0 0 0 0.09  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

@@ -24,7 +24,7 @@
 .sighting-popup-audio-placeholder {
   width: 100%;
   height: 100px;
-  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  background: #262533;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,13 +68,13 @@
 }
 
 .sighting-popup-badge--audio {
-  background: rgba(139, 92, 246, .2);
-  color: #a78bfa;
+  background: rgba(91, 107, 140, .25);
+  color: #9aabce;
 }
 
 .sighting-popup-badge--photo {
-  background: rgba(13, 148, 136, .2);
-  color: #2dd4bf;
+  background: rgba(193, 96, 46, .2);
+  color: #e4a272;
 }
 
 .sighting-popup-close-btn {
@@ -103,10 +103,10 @@
 
 .sighting-popup-link {
   font-size: 11px;
-  color: #38bdf8;
+  color: #e4a272;
   text-decoration: none;
   padding: 3px 8px;
-  background: rgba(56, 189, 248, .1);
+  background: rgba(228, 162, 114, .1);
   border-radius: 8px;
-  border: 1px solid rgba(56, 189, 248, .2);
+  border: 1px solid rgba(228, 162, 114, .2);
 }

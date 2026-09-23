@@ -6,7 +6,7 @@ export default function AppStoreBadge({ size = 'md', className = '' }) {
   return (
     <div
       aria-label="Coming soon to the App Store"
-      className={`inline-flex items-center gap-2.5 rounded-xl border border-white/15 bg-black px-4 py-2.5 text-white shadow-lg shadow-black/40 opacity-80 cursor-default ${className}`}
+      className={`inline-flex items-center gap-2.5 rounded-md bg-[var(--ink)] px-4 py-2.5 text-[var(--paper)] opacity-85 cursor-default ${className}`}
       style={{ width: dims.w, height: dims.h }}
     >
       <svg viewBox="0 0 24 24" width={size === 'lg' ? 26 : 22} height={size === 'lg' ? 26 : 22} fill="currentColor" aria-hidden="true">
