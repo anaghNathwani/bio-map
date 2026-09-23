@@ -1,0 +1,3 @@
+*The UI Process*
+
+When I went into creating the app, something I wanted to perfect was the UI of the app. I had just come from a CS class in school that focused on pleasing customers and UI/UX design: I thought that was the hardest part of software design. I was wrong by a lot. Design in the real world is much differnt than in a controlled enviorment. Out in the open, there are much more influencing factor
