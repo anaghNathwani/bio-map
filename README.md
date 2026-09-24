@@ -1,21 +1,68 @@
 # BirdMap
 
 BirdMap is a citizen-science iOS app and web map for bird sightings, community
-annotations, and bird identification.
+annotations, and on-device bird identification.
 
-## Production architecture
+## Production architecture (the live app)
 
-- **iOS app:** SwiftUI, Firebase Auth/Firestore, on-device Core ML photo
-  classification, and server-side BirdNET audio analysis.
-- **Web map:** React/Vite, Firebase client SDK, and Leaflet.
-- **Media broker:** FastAPI verifies Firebase ID tokens and stores photo/audio
-  blobs in Supabase Storage. It also contains a separate legacy
-  Postgres-backed API.
-- **ML operations:** `ml_pipeline/live_poll.py` runs from GitHub Actions every
-  20 minutes for audio identification and annotation moderation.
+- **iOS app:** SwiftUI, Firebase Auth + Firestore. On-device ML for
+  everything: photo species classification (TensorFlowLiteSwift), a
+  multi-bird photo detector (CoreML/Vision), audio call identification
+  (BirdNET via TFLite), and annotation moderation (a bundled bird-name
+  heuristic). Photo/audio bytes are compressed client-side and embedded as a
+  base64 data URI directly in the sighting's Firestore document — **no
+  Firebase Storage, no Supabase, no deployed backend of any kind is needed
+  for the live app to work.**
+- **Web map:** React/Vite, reads sightings directly from Firestore with the
+  Firebase client SDK (`web/src/firebase.js`) — no backend involved. Also
+  hosts the marketing site (`web/src/pages/LandingPage.jsx` and friends).
+- **ML operations (fallback only):** `ml_pipeline/live_poll.py` runs from
+  GitHub Actions every 20 minutes as a fallback for audio recordings the
+  on-device BirdNET model couldn't classify. Its annotation-moderation pass
+  is dormant — the app no longer writes `moderation: "pending"`, since
+  moderation moved on-device — but the code hasn't been deleted yet.
 
-Firebase Storage is intentionally not used. See `CLAUDE.md` and
-`docs/DEPLOYMENT.md` for the full architecture and hosting tradeoffs.
+Firebase Storage is intentionally not used, and neither is Supabase for the
+live app's media. See `CLAUDE.md` and `docs/DEPLOYMENT.md` for the full
+architecture and hosting tradeoffs, and `docs/ML_PIPELINE.md` for what each
+model runs on and why.
+
+## The legacy FastAPI backend (`backend/`) — optional, not required
+
+An earlier, fully separate Postgres-backed system (its own auth, sightings,
+annotations, leaderboard) that the live app **does not call**, kept around
+and deployable on request rather than because anything depends on it. The
+one thing in the live app that still touches it is an optional Google Vision
+bird-ID proxy (`APIClient.identifyImage`), and call sites already degrade
+silently without it deployed.
+
+### Running it locally
+
+```bash
+cp backend/.env.example backend/.env
+docker compose up -d
+docker compose exec api alembic upgrade head
+```
+
+The local stack uses PostGIS and MinIO. The media broker additionally needs a
+Firebase service-account JSON value in `FIREBASE_SERVICE_ACCOUNT_JSON`.
+
+### Deploying it
+
+```bash
+# Render — needs a card, confirmed live
+./deploy.sh /path/to/firebase-service-account.json
+
+# Google Cloud Run — needs GCP billing enabled
+./deploy-gcp.sh <gcp-project-id> /path/to/firebase-service-account.json
+
+# Runs on a spare machine you already have — needs backend/.env.supabase copied over
+./deploy-selfhost.sh
+```
+
+All three share the same Supabase Postgres data layer, provisioned first via
+`provision-supabase.sh`. See `docs/DEPLOYMENT.md` for provisioning, GitHub
+Actions secrets, monitoring, and rollback procedures.
 
 ## Local development
 
@@ -29,59 +76,29 @@ npm ci
 npm run dev
 ```
 
-### Backend
-
-```bash
-cp backend/.env.example backend/.env
-docker compose up -d
-docker compose exec api alembic upgrade head
-```
-
-The local stack uses PostGIS and MinIO. The media broker additionally needs a
-Firebase service-account JSON value in `FIREBASE_SERVICE_ACCOUNT_JSON`.
-
 ### iOS
 
+Uses CocoaPods (`TensorFlowLiteSwift`) alongside Swift Package Manager —
+**build the `.xcworkspace`, not the `.xcodeproj` directly**, or the Pods
+integration won't be there:
+
 ```bash
-xcodebuild -project ios/BirdMap/BirdMap.xcodeproj \
+cd ios/BirdMap
+xcodebuild -workspace BirdMap.xcworkspace \
   -scheme BirdMap \
   -destination 'platform=iOS Simulator,name=iPhone 17' \
   -configuration Debug build
 ```
 
-For a physical device, set the API base URL to the reachable backend address
-with the `API_BASE_URL_OVERRIDE` launch argument or update the generated
-project configuration.
-
-## Production deployment
-
-Provision Supabase first, then choose a compute target:
-
-```bash
-# Render
-CORS_ORIGINS="https://your-project.web.app,https://your-project.firebaseapp.com" \
-  ./deploy.sh /path/to/firebase-service-account.json
-
-# Google Cloud Run
-CORS_ORIGINS="https://your-project.web.app,https://your-project.firebaseapp.com" \
-  ./deploy-gcp.sh <gcp-project-id> /path/to/firebase-service-account.json
-```
-
-Both targets require their respective account setup and use the same Supabase
-Postgres and Storage data layer. Production deployments reject wildcard CORS
-and insecure secret defaults. Configure the
-`FIREBASE_SERVICE_ACCOUNT_JSON` GitHub secret before enabling the scheduled
-live-poll workflow.
-
-See `docs/DEPLOYMENT.md` for provisioning, GitHub Actions secrets,
-self-hosting, monitoring, and rollback procedures.
+Prefer running this from Terminal over opening the `.xcodeproj` in Xcode
+directly — see the gotchas in `CLAUDE.md`.
 
 ## Validation
 
 ```bash
 cd web && npm ci && npm run build
 python3 -m compileall backend/app ml_pipeline
-xcodebuild -project ios/BirdMap/BirdMap.xcodeproj \
+cd ios/BirdMap && xcodebuild -workspace BirdMap.xcworkspace \
   -scheme BirdMap \
   -destination 'platform=iOS Simulator,name=iPhone 17' \
   -configuration Debug build
