@@ -132,7 +132,10 @@
     }
 }
 
-/* Editorial site palette — paper/ink/clay — used on the marketing pages. */
+/* Editorial site palette — paper/ink/clay — used on the marketing pages.
+   Light values are the default; dark values apply when the OS prefers dark
+   (and the visitor hasn't explicitly picked light), or when they've
+   explicitly picked dark via the theme toggle (html[data-theme]). */
 :root {
   --paper: #F4F1E9;
   --paper-dim: #ECE7DA;
@@ -141,6 +144,31 @@
   --clay: #C1602E;
   --clay-soft: #E4A272;
   --rule: rgba(33, 29, 22, 0.14);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #17140F;
+    --paper-dim: #201C15;
+    --ink: #ECE7DA;
+    --ink-soft: #A69C8B;
+    --clay: #E2895A;
+    --clay-soft: #7A3F1E;
+    --rule: rgba(236, 231, 218, 0.14);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #17140F;
+  --paper-dim: #201C15;
+  --ink: #ECE7DA;
+  --ink-soft: #A69C8B;
+  --clay: #E2895A;
+  --clay-soft: #7A3F1E;
+  --rule: rgba(236, 231, 218, 0.14);
+  color-scheme: dark;
 }
 
 /* A faint, fixed paper-grain texture; layered under content, never on top of type. */
@@ -155,4 +183,17 @@
   opacity: 0.5;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.13  0 0 0 0 0.11  0 0 0 0 0.09  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .bg-grain::before {
+    mix-blend-mode: overlay;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.93  0 0 0 0 0.91  0 0 0 0 0.86  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+:root[data-theme="dark"] .bg-grain::before {
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.93  0 0 0 0 0.91  0 0 0 0 0.86  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

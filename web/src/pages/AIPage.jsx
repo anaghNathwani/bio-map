@@ -1,18 +1,13 @@
 import React from 'react'
 import { Cpu, Lock } from 'lucide-react'
-import birdMark from '../assets/bird-mark.svg'
+import StaticPageHeader from '../components/StaticPageHeader.jsx'
 import './StaticPage.css'
 import './AIPage.css'
 
 export default function AIPage() {
   return (
     <div className="static-page">
-      <header className="static-page-header">
-        <a href="/" className="static-page-back">← Home</a>
-        <span className="static-page-logo">
-          <a href="/" className="static-page-back"><img src={birdMark} alt="" />BirdMap</a>
-        </span>
-      </header>
+      <StaticPageHeader />
 
       <div className="static-page-hero">
         <div className="static-page-icon"><Cpu className="h-6 w-6" strokeWidth={1.75} /></div>

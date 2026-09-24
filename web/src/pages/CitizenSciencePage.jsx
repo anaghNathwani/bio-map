@@ -1,17 +1,12 @@
 import React from 'react'
 import { Globe, Camera, Mic, MapPin } from 'lucide-react'
-import birdMark from '../assets/bird-mark.svg'
+import StaticPageHeader from '../components/StaticPageHeader.jsx'
 import './StaticPage.css'
 
 export default function CitizenSciencePage() {
   return (
     <div className="static-page">
-      <header className="static-page-header">
-        <a href="/" className="static-page-back">← Home</a>
-        <span className="static-page-logo">
-          <a href="/" className="static-page-back"><img src={birdMark} alt="" />BirdMap</a>
-        </span>
-      </header>
+      <StaticPageHeader />
 
       <div className="static-page-hero">
         <div className="static-page-icon"><Globe className="h-6 w-6" strokeWidth={1.75} /></div>

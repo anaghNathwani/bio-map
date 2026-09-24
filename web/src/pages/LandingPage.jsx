@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import AppStoreBadge from '../components/AppStoreBadge.jsx'
+import ThemeToggle from '../components/ThemeToggle.jsx'
 import birdMark from '../assets/bird-mark.svg'
 
 const FEATURES = [
@@ -57,9 +58,10 @@ export default function LandingPage() {
               </Link>
             ))}
           </nav>
+          <ThemeToggle className="ml-auto sm:ml-0" />
           <Link
             to="/map"
-            className="ml-2 shrink-0 border border-[var(--ink)] px-4 py-2 text-[13px] font-medium tracking-tight text-[var(--ink)] transition-colors hover:bg-[var(--ink)] hover:text-[var(--paper)] sm:ml-0"
+            className="shrink-0 border border-[var(--ink)] px-4 py-2 text-[13px] font-medium tracking-tight text-[var(--ink)] transition-colors hover:bg-[var(--ink)] hover:text-[var(--paper)]"
           >
             Open the map
           </Link>

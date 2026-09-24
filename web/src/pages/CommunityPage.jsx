@@ -1,18 +1,13 @@
 import React from 'react'
 import { Users } from 'lucide-react'
-import birdMark from '../assets/bird-mark.svg'
+import StaticPageHeader from '../components/StaticPageHeader.jsx'
 import './StaticPage.css'
 import './CommunityPage.css'
 
 export default function CommunityPage() {
   return (
     <div className="static-page">
-      <header className="static-page-header">
-        <a href="/" className="static-page-back">← Home</a>
-        <span className="static-page-logo">
-          <a href="/" className="static-page-back"><img src={birdMark} alt="" />BirdMap</a>
-        </span>
-      </header>
+      <StaticPageHeader />
 
       <div className="static-page-hero">
         <div className="static-page-icon"><Users className="h-6 w-6" strokeWidth={1.75} /></div>
