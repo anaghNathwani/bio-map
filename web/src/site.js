@@ -86,3 +86,25 @@ export const ROUTES = [
 
 export const absoluteUrl = path => SITE_URL + (path === '/' ? '/' : path)
 export const routeFor = path => ROUTES.find(r => r.path === path)
+
+/** BreadcrumbList for a sub-page: Home > (parent) > page. */
+export function breadcrumbLd(meta) {
+  if (meta.path === '/') return null
+  const trail = [{ name: 'Home', path: '/' }, ...(meta.parents || []), { name: meta.breadcrumb || meta.title, path: meta.path }]
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((t, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: t.name,
+      item: absoluteUrl(t.path),
+    })),
+  }
+}
+
+/** Every JSON-LD block a page should emit (client hook and prerender share this). */
+export function jsonLdFor(meta) {
+  const crumbs = breadcrumbLd(meta)
+  return [...(meta.jsonLd || []), ...(crumbs ? [crumbs] : [])]
+}
