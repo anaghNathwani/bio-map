@@ -32,7 +32,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 22. [x] **Real 404 page with noindex** (R)
 23. [x] **<main> landmark + skip-to-content link** (R)
 24. [x] **Shared footer linking every page (internal linking)** (R)
-25. [ ] **Descriptive nav labels / aria on the landing page** (R)
+25. [x] **Descriptive nav labels / aria on the landing page** (R)
 26. [ ] **<noscript> fallback text for crawlers/no-JS** (R)
 27. [ ] **Code-split: map (Leaflet + Firebase) loads only on /map** (R)
 28. [ ] **Leaflet CSS from npm inside the map chunk; drop render-blocking unpkg CSS** (R)

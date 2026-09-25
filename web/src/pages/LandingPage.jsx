@@ -51,11 +51,11 @@ export default function LandingPage() {
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-[var(--ink)] focus:px-3 focus:py-2 focus:text-[var(--paper)]">Skip to content</a>
       <header className="sticky top-0 z-50 bg-[var(--paper)]/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl items-center gap-8 px-6 py-5">
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link to="/" aria-label="BirdMap home" className="flex items-center gap-2.5">
             <img src={birdMark} alt="" className="h-5 w-5" />
             <span className="font-serif text-[17px] italic tracking-tight">BirdMap</span>
           </Link>
-          <nav className="ml-auto hidden items-center gap-7 text-[13px] uppercase tracking-[0.08em] text-[var(--ink-soft)] sm:flex">
+          <nav aria-label="Primary" className="ml-auto hidden items-center gap-7 text-[13px] uppercase tracking-[0.08em] text-[var(--ink-soft)] sm:flex">
             {NAV.map(item => (
               <Link key={item.to} to={item.to} className="transition-colors hover:text-[var(--ink)]">
                 {item.label}
@@ -67,7 +67,7 @@ export default function LandingPage() {
             to="/map"
             className="shrink-0 border border-[var(--ink)] px-4 py-2 text-[13px] font-medium tracking-tight text-[var(--ink)] transition-colors hover:bg-[var(--ink)] hover:text-[var(--paper)]"
           >
-            Open the map
+            Open the live map
           </Link>
         </div>
         <Rule />
