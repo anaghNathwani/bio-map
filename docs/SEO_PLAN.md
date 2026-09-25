@@ -84,7 +84,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 74. [~] **Request indexing for each URL** (M) — [playbook](seo/manual/74-gsc-index.md)
 75. [~] **Bing Webmaster Tools (import from Search Console)** (M) — [playbook](seo/manual/75-bing.md)
 76. [~] **Run IndexNow after each deploy** (M) — [playbook](seo/manual/76-run-indexnow.md)
-77. [ ] **Rich Results Test** (M) — [playbook](seo/manual/77-rich-results.md)
+77. [~] **Rich Results Test** (M) — [playbook](seo/manual/77-rich-results.md)
 78. [ ] **PageSpeed Insights / Lighthouse pass** (M) — [playbook](seo/manual/78-pagespeed.md)
 79. [ ] **GitHub repo description, website URL, topics** (M) — [playbook](seo/manual/79-github-repo.md)
 80. [ ] **GitHub social preview image** (M) — [playbook](seo/manual/80-github-social.md)
