@@ -53,7 +53,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 43. [x] **New page: /about** (R)
 44. [x] **New page: /privacy** (R)
 45. [x] **New page: /bird-sound-identification** (R)
-46. [ ] **New page: /bird-photo-identification** (R)
+46. [x] **New page: /bird-photo-identification** (R)
 47. [ ] **Blog index page + post data model** (R)
 48. [ ] **Blog post: how BirdMap identifies birds without the internet** (R)
 49. [ ] **Blog post: what citizen science bird data is used for** (R)

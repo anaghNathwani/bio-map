@@ -157,6 +157,17 @@ export const ROUTES = [
     breadcrumb: 'Bird sound identification',
     footerLabel: 'Bird sound ID',
   },
+  {
+    path: '/bird-photo-identification',
+    title: 'Identify Birds from a Photo: On-Device AI | BirdMap',
+    description:
+      'Take or choose a bird photo and BirdMap suggests the species on your phone using Google\u2019s AIY Birds model, with honest confidence and community review.',
+    changefreq: 'monthly',
+    priority: 0.8,
+    prerender: true,
+    breadcrumb: 'Bird photo identification',
+    footerLabel: 'Bird photo ID',
+  },
 ]
 
 export const absoluteUrl = path => SITE_URL + (path === '/' ? '/' : path)
