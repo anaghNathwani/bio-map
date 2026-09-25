@@ -9,7 +9,7 @@ Site: https://birdmap-citizenscience.web.app (free Firebase Hosting subdomain).
 Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, needs you
 
 1. [x] **Write this 100-step plan** (R)
-2. [ ] **Central site config + route registry (URL, name, per-page titles/descriptions)** (R)
+2. [x] **Central site config + route registry (URL, name, per-page titles/descriptions)** (R)
 3. [ ] **usePageMeta hook: per-route title, description, canonical, robots, OG** (R)
 4. [ ] **Landing page uses the hook** (R)
 5. [ ] **About/AI/Community/Citizen-science/Terms pages use the hook** (R)
