@@ -100,7 +100,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 90. [~] **Hashnode cross-post** (M) — [playbook](seo/manual/90-hashnode.md)
 91. [~] **Bluesky (large birding community)** (M) — [playbook](seo/manual/91-bluesky.md)
 92. [~] **Mastodon #birding** (M) — [playbook](seo/manual/92-mastodon.md)
-93. [ ] **YouTube demo video** (M) — [playbook](seo/manual/93-youtube.md)
+93. [~] **YouTube demo video** (M) — [playbook](seo/manual/93-youtube.md)
 94. [ ] **LinkedIn post** (M) — [playbook](seo/manual/94-linkedin.md)
 95. [ ] **AlternativeTo listing** (M) — [playbook](seo/manual/95-alternativeto.md)
 96. [ ] **Awesome-list pull requests** (M) — [playbook](seo/manual/96-awesome-lists.md)
