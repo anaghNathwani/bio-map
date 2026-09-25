@@ -6,14 +6,14 @@ BirdMap ships four models, all originally sourced from vetted American organizat
 
 | Model | Publisher | Modality | Runs | Fine-tuned by us? |
 |---|---|---|---|---|
-| Bird species ID | Google (AIY Projects), Apache 2.0 | Photo | On-device (CoreML) | Not yet — planned as part of a combined detector+classifier model, see below |
+| Bird species ID | Google (AIY Projects), Apache 2.0 | Photo | On-device (TFLite — the CoreML conversion of this model is broken, see below) | Not yet — planned as part of a combined detector+classifier model, see below |
 | Multi-bird photo detector (Tier 2) | Apple (pre-converted CoreML catalog); YOLOv3-Tiny trained on COCO by Redmon/Farhadi, U. Washington | Photo | On-device (CoreML) | Not yet — same combined-model plan as above; optional, see below |
 | Bird call ID | Cornell Lab of Ornithology (BirdNET) | Audio | On-device (TFLite) — `birdnetlib`/`live_poll.py` is a server-side fallback for recordings the device couldn't classify | No fine-tuning planned — used as-is |
 | Annotation moderation | Bundled bird-name list (~7,400 names), hand-written heuristic | Text | On-device — a dormant server-side `sentence-transformers` pass exists but no longer receives any work (see below) | No model to fine-tune; it's a name-matching heuristic, not a trained classifier |
 
 The citizen-science feedback loop:
 
-1. User uploads a photo or recording → the relevant model predicts a species (or, for photos/audio with more than one bird, several) and shows a reference photo per species. Both photo and audio classification run on-device; audio only falls back to the server if the on-device model doesn't hear a bird.
+1. User uploads a photo or recording → the relevant model predicts a species (or, for photos/audio with more than one bird, several) and shows a reference photo per species. Both photo and audio classification run on-device; audio only falls back to the server if on-device classification fails or can't run (a recording with no bird is a normal on-device result and isn't retried).
 2. User confirms (Right), corrects (Wrong), or says Unsure for each suggestion, optionally adding behavior/plumage details, which becomes an annotation in Firestore.
 3. Each viewer's device judges whether an annotation looks like a genuine bird name or a "shitpost" (silly/joke content) the moment its card is shown — see "Annotation moderation" below.
 4. Annotations accumulate as a community dataset (plurality-voted "top species" shown per sighting, leaderboard, etc.) and now also count toward the training trigger described below — `ml_pipeline/check_training_trigger.py` checks every 20 minutes whether 500 more processed annotations have accumulated since the last training run. Today that check only logs; it doesn't yet kick off training or change what any model predicts (see below for what's still planned).

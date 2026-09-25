@@ -1,9 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Sun, Moon } from 'lucide-react'
-import { getEffectiveTheme, setTheme } from '../lib/theme.js'
+import { getEffectiveTheme, getStoredTheme, setTheme } from '../lib/theme.js'
 
 export default function ThemeToggle({ className = '' }) {
   const [theme, setThemeState] = useState(getEffectiveTheme)
+
+  // With no saved choice the page follows the OS, so keep the icon in step
+  // when the OS preference flips (e.g. at sunset).
+  useEffect(() => {
+    const mq = window.matchMedia?.('(prefers-color-scheme: dark)')
+    if (!mq) return
+    const onChange = () => { if (!getStoredTheme()) setThemeState(getEffectiveTheme()) }
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
 
   function toggle() {
     const next = theme === 'dark' ? 'light' : 'dark'
