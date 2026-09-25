@@ -12,6 +12,7 @@ export function getStoredTheme() {
 /** The theme actually in effect right now: the visitor's explicit choice, or
  *  their OS preference when they haven't picked one. */
 export function getEffectiveTheme() {
+  if (typeof window === 'undefined') return 'light' // prerender
   const stored = getStoredTheme()
   if (stored) return stored
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'

@@ -3,11 +3,14 @@ import { Sun, Moon } from 'lucide-react'
 import { getEffectiveTheme, getStoredTheme, setTheme } from '../lib/theme.js'
 
 export default function ThemeToggle({ className = '' }) {
-  const [theme, setThemeState] = useState(getEffectiveTheme)
+  // Always 'light' for the first render so server HTML and hydration agree;
+  // the effect below syncs to the real theme right after mount.
+  const [theme, setThemeState] = useState('light')
 
   // With no saved choice the page follows the OS, so keep the icon in step
   // when the OS preference flips (e.g. at sunset).
   useEffect(() => {
+    setThemeState(getEffectiveTheme())
     const mq = window.matchMedia?.('(prefers-color-scheme: dark)')
     if (!mq) return
     const onChange = () => { if (!getStoredTheme()) setThemeState(getEffectiveTheme()) }
