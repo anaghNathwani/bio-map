@@ -146,6 +146,17 @@ export const ROUTES = [
     breadcrumb: 'Privacy',
     footerLabel: 'Privacy',
   },
+  {
+    path: '/bird-sound-identification',
+    title: 'Identify Birds by Sound: On-Device BirdNET | BirdMap',
+    description:
+      'Record a bird call and BirdMap identifies it on your phone with Cornell Lab of Ornithology\u2019s BirdNET, using your location to rule out unlikely species.',
+    changefreq: 'monthly',
+    priority: 0.8,
+    prerender: true,
+    breadcrumb: 'Bird sound identification',
+    footerLabel: 'Bird sound ID',
+  },
 ]
 
 export const absoluteUrl = path => SITE_URL + (path === '/' ? '/' : path)
