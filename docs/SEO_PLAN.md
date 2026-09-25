@@ -19,7 +19,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 9. [x] **Twitter/X card tags** (R)
 10. [x] **1200x630 social share image** (R)
 11. [x] **Web app manifest** (R)
-12. [ ] **robots.txt** (R)
+12. [x] **robots.txt** (R)
 13. [ ] **sitemap.xml (static first version)** (R)
 14. [ ] **robots.txt points at the sitemap** (R)
 15. [ ] **JSON-LD: Organization + WebSite** (R)
