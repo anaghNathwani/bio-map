@@ -58,7 +58,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 48. [x] **Blog post: how BirdMap identifies birds without the internet** (R)
 49. [x] **Blog post: what citizen science bird data is used for** (R)
 50. [x] **Blog post: keeping bird ID on your phone** (R)
-51. [ ] **JSON-LD: Article on blog posts** (R)
+51. [x] **JSON-LD: Article on blog posts** (R)
 52. [ ] **Related-links block on posts and content pages** (R)
 53. [ ] **RSS feed generated at build** (R)
 54. [ ] **Landing page: deeper keyword-relevant sections** (R)

@@ -190,6 +190,21 @@ export const ROUTES = [
     breadcrumb: post.title,
     parents: [{ name: 'Blog', path: '/blog' }],
     post,
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        dateModified: post.dateModified || post.date,
+        image: SITE_URL + '/og-image.png',
+        mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
+        author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL + '/' },
+        publisher: { '@id': SITE_URL + '/#org' },
+        inLanguage: 'en',
+      },
+    ],
   })),
 ]
 
