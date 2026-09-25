@@ -4,6 +4,7 @@ import 'leaflet'
 import FilterBar from './components/FilterBar.jsx'
 import SightingPopup from './components/SightingPopup.jsx'
 import { fetchSightings } from './firebase.js'
+import usePageMeta from './lib/pageMeta.js'
 import './App.css'
 
 const photoIcon = L.divIcon({
@@ -21,6 +22,7 @@ const audioIcon = L.divIcon({
 })
 
 export default function App() {
+  usePageMeta('/map')
   const mapRef = useRef(null)
   const leafletRef = useRef(null)
   const clusterRef = useRef(null)
@@ -92,6 +94,7 @@ export default function App() {
   }, [filtered])
   return (
     <div className="app">
+      <h1 className="sr-only">BirdMap live bird sighting map</h1>
       <header className="app-header">
         <div>
           <div className="app-logo">🐦 BirdMap</div>
