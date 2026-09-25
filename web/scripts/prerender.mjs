@@ -4,6 +4,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { execSync } from 'node:child_process'
 
 const root = path.resolve(import.meta.dirname, '..')
 const dist = path.join(root, 'dist')
@@ -71,3 +72,22 @@ fs.writeFileSync(
   applyHead(template.replace(ROOT_MARKER, `<div id="root">${render('/404')}</div>`), NOT_FOUND_META, { keepNoscript: false })
 )
 console.log('prerendered 404.html')
+
+// sitemap.xml from the route registry. lastmod = the last commit that touched
+// the site's source (an honest date; Google ignores lastmod values that lie).
+function lastModified() {
+  try {
+    return execSync('git log -1 --format=%cs -- web/src web/index.html', { cwd: path.resolve(root, '..') }).toString().trim()
+  } catch {
+    return new Date().toISOString().slice(0, 10)
+  }
+}
+const lastmod = lastModified() || new Date().toISOString().slice(0, 10)
+const urls = ROUTES.filter(r => !r.noindex)
+  .map(r => `  <url>\n    <loc>${absoluteUrl(r.path)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${r.changefreq}</changefreq>\n    <priority>${r.priority.toFixed(1)}</priority>\n  </url>`)
+  .join('\n')
+fs.writeFileSync(
+  path.join(dist, 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+)
+console.log('sitemap.xml:', ROUTES.filter(r => !r.noindex).length, 'urls, lastmod', lastmod)

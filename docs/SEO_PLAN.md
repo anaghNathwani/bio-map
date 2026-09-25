@@ -46,7 +46,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 36. [x] **Wire prerender into npm run build** (R)
 37. [x] **Inject per-route title/description/canonical/OG/JSON-LD at prerender** (R)
 38. [x] **Firebase: clean URLs, no catch-all rewrite, 404.html** (R)
-39. [ ] **Generate sitemap.xml from the route registry** (R)
+39. [x] **Generate sitemap.xml from the route registry** (R)
 40. [ ] **seo-check script: lint the built HTML** (R)
 41. [ ] **New page: /how-it-works** (R)
 42. [ ] **New page: /faq (+ FAQPage JSON-LD)** (R)
