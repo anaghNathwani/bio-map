@@ -61,7 +61,69 @@
         ]
       }
     ],
-    "cleanUrls": true,
-    "trailingSlash": false
+    "cleanUrls": false,
+    "trailingSlash": false,
+    "rewrites": [
+      {
+        "source": "/map",
+        "destination": "/map.html"
+      },
+      {
+        "source": "/ai",
+        "destination": "/ai.html"
+      },
+      {
+        "source": "/community",
+        "destination": "/community.html"
+      },
+      {
+        "source": "/citizen-science",
+        "destination": "/citizen-science.html"
+      },
+      {
+        "source": "/terms",
+        "destination": "/terms.html"
+      },
+      {
+        "source": "/how-it-works",
+        "destination": "/how-it-works.html"
+      },
+      {
+        "source": "/faq",
+        "destination": "/faq.html"
+      },
+      {
+        "source": "/about",
+        "destination": "/about.html"
+      },
+      {
+        "source": "/privacy",
+        "destination": "/privacy.html"
+      },
+      {
+        "source": "/bird-sound-identification",
+        "destination": "/bird-sound-identification.html"
+      },
+      {
+        "source": "/bird-photo-identification",
+        "destination": "/bird-photo-identification.html"
+      },
+      {
+        "source": "/blog",
+        "destination": "/blog.html"
+      },
+      {
+        "source": "/blog/identify-birds-without-internet",
+        "destination": "/blog/identify-birds-without-internet.html"
+      },
+      {
+        "source": "/blog/what-is-citizen-science-bird-data-for",
+        "destination": "/blog/what-is-citizen-science-bird-data-for.html"
+      },
+      {
+        "source": "/blog/keeping-bird-id-on-your-phone",
+        "destination": "/blog/keeping-bird-id-on-your-phone.html"
+      }
+    ]
   }
 }

@@ -21,6 +21,12 @@ No one can promise a ranking. This makes the site crawlable, fast, well describe
 `npm run build` = client build, SSR build, then prerender, so `dist/ai.html`, `dist/blog/....html` etc. contain
 real content. Only the interactive map (`/map`) is a client-rendered shell (with its own title/description/JSON-LD).
 
+## Clean URLs and the Google verification file
+
+Hosting `cleanUrls` is **off** on purpose: it 301-redirects every `*.html` file, which breaks Search Console's
+HTML-file verification (`web/public/google0d5975609d262ec3.html` must return a plain 200). Instead `prerender.mjs`
+writes an explicit rewrite per route into `web/firebase.json` (`/ai` -> `/ai.html`). Don't hand-edit that list.
+
 ## Adding a page
 
 1. Add an entry to `ROUTES` in `web/src/site.js` (path, unique title 10-65 chars, description 70-170 chars, `prerender: true`).

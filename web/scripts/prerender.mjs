@@ -135,3 +135,14 @@ if (CONTACT_EMAIL) {
   )
   console.log('security.txt written')
 }
+
+// Clean URLs via explicit rewrites instead of hosting `cleanUrls`. `cleanUrls` 301-redirects every
+// *.html file, which breaks Google Search Console's HTML-file verification (it needs a plain 200 at
+// /googleXXXX.html). Rewrites serve /ai from ai.html without redirecting anything else.
+const firebaseJson = path.join(root, 'firebase.json')
+const config = JSON.parse(fs.readFileSync(firebaseJson, 'utf8'))
+config.hosting.cleanUrls = false
+config.hosting.rewrites = ROUTES.filter(r => r.path !== '/').map(r => ({ source: r.path, destination: `${r.path}.html` }))
+const next = JSON.stringify(config, null, 2) + '\n'
+if (next !== fs.readFileSync(firebaseJson, 'utf8')) fs.writeFileSync(firebaseJson, next)
+console.log('firebase.json rewrites:', config.hosting.rewrites.length)
