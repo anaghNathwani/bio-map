@@ -9,6 +9,7 @@ import CitizenSciencePage from './pages/CitizenSciencePage.jsx'
 import CommunityPage from './pages/CommunityPage.jsx'
 import AIPage from './pages/AIPage.jsx'
 import TermsPage from './pages/TermsPage.jsx'
+import NotFoundPage from './pages/NotFoundPage.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path="/community" element={<CommunityPage />} />
       <Route path="/ai" element={<AIPage />} />
       <Route path="/terms" element={<TermsPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   </BrowserRouter>
 )
