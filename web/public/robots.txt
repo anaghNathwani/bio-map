@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://birdmap-citizenscience.web.app/sitemap.xml
