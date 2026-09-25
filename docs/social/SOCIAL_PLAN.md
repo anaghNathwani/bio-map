@@ -5,9 +5,10 @@ I can write and design the content, but I can't log in and post it for you, so p
 
 ## Read this first: two things to fix before you promote
 
-1. **The live map shows "0 sightings."** When I loaded https://birdmap-citizenscience.web.app/map it was empty. Every post sends people there, and an empty
-   "live" map makes visitors leave. Before posting, add some real sightings (from the iOS app or the simulator) and check the
-   map in a normal browser. If it should already show data, tell me and I'll debug the web map.
+1. **The live map now holds 500 clearly-labelled SAMPLE sightings** across California (plus the 8 real ones), added with
+   `ml_pipeline/seed_demo_sightings.py`. Each is flagged `isDemo`, credited to `sample_birder_N`, and its note reads "Sample data
+   (not a real observation)". **Don't present them as real community sightings**: in posts and videos, say "sample data" or
+   show the map as a preview. Remove them with `python seed_demo_sightings.py --remove` once real sightings arrive.
 2. **The iOS app isn't installable yet.** Every post says "iOS app coming soon; live map works in your browser today",
    which is true now. Change that line the day TestFlight or the App Store goes live, and add the link.
 

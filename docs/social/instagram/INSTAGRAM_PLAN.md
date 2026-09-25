@@ -18,7 +18,9 @@ Files (all in `docs/social/instagram/`):
 
 ## Before you post anything
 
-1. **The web map shows "0 sightings."** "Link in bio" sends people to it. Add real sightings first (or tell me and I'll debug it).
+1. **The web map now has 500 clearly-labelled SAMPLE sightings** (see `ml_pipeline/seed_demo_sightings.py`). "Link in bio" sends
+   people there, so don't describe it as real community activity: say "sample data" or "preview". Remove the samples with
+   `python seed_demo_sightings.py --remove` when real sightings arrive.
 2. Everything says "iOS app coming soon." Change it when TestFlight/App Store is live (edit `build.py`, re-run, re-upload).
 3. Credit BirdNET/Cornell properly in the app and check its license before promoting.
 
