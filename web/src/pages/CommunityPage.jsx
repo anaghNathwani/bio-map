@@ -11,6 +11,7 @@ export default function CommunityPage() {
     <div className="static-page">
       <StaticPageHeader />
 
+      <main id="main">
       <div className="static-page-hero">
         <div className="static-page-icon"><Users className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">Community Annotations</h1>
@@ -69,6 +70,8 @@ export default function CommunityPage() {
           verified record that's more reliable than any single AI guess.
         </p>
       </div>
+
+      </main>
 
       <footer className="static-page-footer">© 2026 BirdMap · Citizen Science</footer>
     </div>

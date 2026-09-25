@@ -10,6 +10,7 @@ export default function CitizenSciencePage() {
     <div className="static-page">
       <StaticPageHeader />
 
+      <main id="main">
       <div className="static-page-hero">
         <div className="static-page-icon"><Globe className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">Citizen Science Bird Tracking</h1>
@@ -52,6 +53,8 @@ export default function CitizenSciencePage() {
           <div className="static-page-card-body">Every sighting is tagged with GPS coordinates, making it possible to map species distributions across the country in real time.</div>
         </div>
       </div>
+
+      </main>
 
       <footer className="static-page-footer">© 2026 BirdMap · Citizen Science</footer>
     </div>

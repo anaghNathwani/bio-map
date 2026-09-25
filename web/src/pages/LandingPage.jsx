@@ -47,6 +47,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[var(--paper)] font-sans text-[var(--ink)] antialiased selection:bg-[var(--clay-soft)] selection:text-[var(--ink)]">
       {/* Nav */}
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-[var(--ink)] focus:px-3 focus:py-2 focus:text-[var(--paper)]">Skip to content</a>
       <header className="sticky top-0 z-50 bg-[var(--paper)]/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl items-center gap-8 px-6 py-5">
           <Link to="/" className="flex items-center gap-2.5">
@@ -71,6 +72,7 @@ export default function LandingPage() {
         <Rule />
       </header>
 
+      <main id="main">
       {/* Hero */}
       <section className="mx-auto max-w-5xl px-6 pb-16 pt-16 md:pb-24 md:pt-20">
         <p className="text-[13px] uppercase tracking-[0.14em] text-[var(--clay)]">
@@ -161,6 +163,8 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      </main>
 
       <footer className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-8 text-[13px] text-[var(--ink-soft)]">
         <span>© 2026 BirdMap · Citizen Science</span>

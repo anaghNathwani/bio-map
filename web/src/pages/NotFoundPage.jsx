@@ -16,6 +16,7 @@ export default function NotFoundPage() {
   return (
     <div className="static-page">
       <StaticPageHeader />
+      <main id="main">
       <div className="static-page-hero">
         <h1 className="static-page-h1">Page not found</h1>
         <p className="static-page-sub">
@@ -23,6 +24,7 @@ export default function NotFoundPage() {
           <Link to="/map" className="underline">live sighting map</Link>.
         </p>
       </div>
+      </main>
     </div>
   )
 }

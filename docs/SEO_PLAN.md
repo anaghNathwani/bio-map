@@ -30,7 +30,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 20. [x] **Security headers (HSTS, nosniff, referrer policy, frame options)** (R)
 21. [x] **.firebaserc project alias** (R)
 22. [x] **Real 404 page with noindex** (R)
-23. [ ] **<main> landmark + skip-to-content link** (R)
+23. [x] **<main> landmark + skip-to-content link** (R)
 24. [ ] **Shared footer linking every page (internal linking)** (R)
 25. [ ] **Descriptive nav labels / aria on the landing page** (R)
 26. [ ] **<noscript> fallback text for crawlers/no-JS** (R)

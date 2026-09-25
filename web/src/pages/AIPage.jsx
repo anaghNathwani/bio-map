@@ -11,6 +11,7 @@ export default function AIPage() {
     <div className="static-page">
       <StaticPageHeader />
 
+      <main id="main">
       <div className="static-page-hero">
         <div className="static-page-icon"><Cpu className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">On-Device AI Identification</h1>
@@ -62,6 +63,8 @@ export default function AIPage() {
           improve the model itself over time.
         </p>
       </div>
+
+      </main>
 
       <footer className="static-page-footer">© 2026 BirdMap · Citizen Science</footer>
     </div>

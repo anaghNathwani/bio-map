@@ -11,6 +11,7 @@ export default function TermsPage() {
     <div className="static-page">
       <StaticPageHeader />
 
+      <main id="main">
       <div className="static-page-hero">
         <div className="static-page-icon"><FileText className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">Terms of Service</h1>
@@ -45,6 +46,8 @@ export default function TermsPage() {
           <div className="static-page-card-body">These terms may be updated at any time. Continued use of the app constitutes acceptance of the updated terms.</div>
         </div>
       </div>
+
+      </main>
 
       <footer className="static-page-footer">© 2025 BirdMap · Citizen Science for Everyone</footer>
     </div>
