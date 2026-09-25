@@ -77,7 +77,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 67. [x] **seo-check: heading hierarchy** (R)
 68. [x] **<link rel=alternate> for the RSS feed** (R)
 69. [x] **Search Console verification placeholder + docs** (R)
-70. [ ] **og:image:alt + image dimensions meta** (R)
+70. [x] **og:image:alt + image dimensions meta** (R)
 71. [ ] **Deploy to Firebase Hosting** (M) — [playbook](seo/manual/71-deploy.md)
 72. [ ] **Verify the site in Google Search Console** (M) — [playbook](seo/manual/72-gsc-verify.md)
 73. [ ] **Submit the sitemap in Search Console** (M) — [playbook](seo/manual/73-gsc-sitemap.md)
