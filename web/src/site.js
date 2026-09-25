@@ -10,6 +10,9 @@ export const CONTACT_EMAIL = ''
 // Public profiles for the project (Bluesky, Mastodon, YouTube...). Empty until they exist:
 // once filled, they appear in the footer and as Organization `sameAs` in the JSON-LD.
 export const SOCIAL_PROFILES = []
+// Paste the content= value of the <meta name="google-site-verification"> tag that Search Console
+// offers under "HTML tag" verification. Empty = no tag is emitted. See docs/seo/manual/72-gsc-verify.md.
+export const GOOGLE_SITE_VERIFICATION = ''
 export const DEFAULT_DESCRIPTION =
   'BirdMap is a citizen science app and live map for bird sightings. Identify birds from photos and calls on your phone, then let the community verify them.'
 
