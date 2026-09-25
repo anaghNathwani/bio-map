@@ -34,7 +34,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 24. [x] **Shared footer linking every page (internal linking)** (R)
 25. [x] **Descriptive nav labels / aria on the landing page** (R)
 26. [x] **<noscript> fallback text for crawlers/no-JS** (R)
-27. [ ] **Code-split: map (Leaflet + Firebase) loads only on /map** (R)
+27. [x] **Code-split: map (Leaflet + Firebase) loads only on /map** (R)
 28. [ ] **Leaflet CSS from npm inside the map chunk; drop render-blocking unpkg CSS** (R)
 29. [ ] **Vendor chunk splitting** (R)
 30. [ ] **Latin-only font subsets (fewer font requests)** (R)
