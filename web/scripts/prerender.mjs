@@ -10,7 +10,7 @@ const root = path.resolve(import.meta.dirname, '..')
 const dist = path.join(root, 'dist')
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8')
 const { render } = await import(pathToFileURL(path.join(root, 'dist-ssr/entry-server.js')).href)
-const { ROUTES, SOCIAL_PROFILES, SITE_NAME, absoluteUrl, jsonLdFor } = await import(pathToFileURL(path.join(root, 'src/site.js')).href)
+const { ROUTES, CONTACT_EMAIL, SOCIAL_PROFILES, SITE_NAME, absoluteUrl, jsonLdFor } = await import(pathToFileURL(path.join(root, 'src/site.js')).href)
 const { POSTS } = await import(pathToFileURL(path.join(root, 'src/content/posts.js')).href)
 const { NOT_FOUND_META } = await import(pathToFileURL(path.join(root, 'src/notFoundMeta.js')).href)
 
@@ -120,3 +120,15 @@ ${items}
 `
 )
 console.log('feed.xml:', POSTS.length, 'items')
+
+// /.well-known/security.txt (RFC 9116). Requires a Contact, so it is only
+// written once CONTACT_EMAIL is set in src/site.js.
+if (CONTACT_EMAIL) {
+  const expires = new Date(Date.now() + 300 * 24 * 3600 * 1000).toISOString()
+  fs.mkdirSync(path.join(dist, '.well-known'), { recursive: true })
+  fs.writeFileSync(
+    path.join(dist, '.well-known/security.txt'),
+    `Contact: mailto:${CONTACT_EMAIL}\nExpires: ${expires}\nPreferred-Languages: en\nCanonical: ${absoluteUrl('/.well-known/security.txt')}\n`
+  )
+  console.log('security.txt written')
+}
