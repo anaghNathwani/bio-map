@@ -11,6 +11,7 @@ const dist = path.join(root, 'dist')
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8')
 const { render } = await import(pathToFileURL(path.join(root, 'dist-ssr/entry-server.js')).href)
 const { ROUTES, SITE_NAME, absoluteUrl, jsonLdFor } = await import(pathToFileURL(path.join(root, 'src/site.js')).href)
+const { POSTS } = await import(pathToFileURL(path.join(root, 'src/content/posts.js')).href)
 const { NOT_FOUND_META } = await import(pathToFileURL(path.join(root, 'src/notFoundMeta.js')).href)
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
@@ -91,3 +92,27 @@ fs.writeFileSync(
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 )
 console.log('sitemap.xml:', ROUTES.filter(r => !r.noindex).length, 'urls, lastmod', lastmod)
+
+// RSS feed for the blog (feed readers, aggregators and some crawlers pick this up).
+const items = POSTS.map(p => `    <item>
+      <title>${esc(p.title)}</title>
+      <link>${absoluteUrl('/blog/' + p.slug)}</link>
+      <guid isPermaLink="true">${absoluteUrl('/blog/' + p.slug)}</guid>
+      <pubDate>${new Date(p.date).toUTCString()}</pubDate>
+      <description>${esc(p.description)}</description>
+    </item>`).join('\n')
+fs.writeFileSync(
+  path.join(dist, 'feed.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>${SITE_NAME} blog</title>
+    <link>${absoluteUrl('/blog')}</link>
+    <description>Bird identification, on-device AI and citizen science.</description>
+    <language>en</language>
+${items}
+  </channel>
+</rss>
+`
+)
+console.log('feed.xml:', POSTS.length, 'items')
