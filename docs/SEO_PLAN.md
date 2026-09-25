@@ -50,7 +50,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 40. [x] **seo-check script: lint the built HTML** (R)
 41. [x] **New page: /how-it-works** (R)
 42. [x] **New page: /faq (+ FAQPage JSON-LD)** (R)
-43. [ ] **New page: /about** (R)
+43. [x] **New page: /about** (R)
 44. [ ] **New page: /privacy** (R)
 45. [ ] **New page: /bird-sound-identification** (R)
 46. [ ] **New page: /bird-photo-identification** (R)

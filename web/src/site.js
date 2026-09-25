@@ -122,6 +122,17 @@ export const ROUTES = [
       },
     ],
   },
+  {
+    path: '/about',
+    title: 'About BirdMap: Citizen Science for Bird Lovers',
+    description:
+      'BirdMap turns everyday bird sightings into a shared, community-verified dataset. Learn what we are building and the principles behind it.',
+    changefreq: 'yearly',
+    priority: 0.5,
+    prerender: true,
+    breadcrumb: 'About',
+    footerLabel: 'About',
+  },
 ]
 
 export const absoluteUrl = path => SITE_URL + (path === '/' ? '/' : path)
