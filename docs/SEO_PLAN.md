@@ -63,7 +63,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 53. [x] **RSS feed generated at build** (R)
 54. [x] **Landing page: deeper keyword-relevant sections** (R)
 55. [x] **Landing page: FAQ teaser + links** (R)
-56. [ ] **Organization sameAs (GitHub)** (R)
+56. [x] **Social profile links (sameAs) from one list; empty until profiles exist** (R)
 57. [ ] **GitHub Action: build + seo-check on every push** (R)
 58. [ ] **GitHub Action: deploy to Firebase Hosting (needs a secret)** (R)
 59. [ ] **seo-check: internal link checker** (R)

@@ -7,6 +7,9 @@ export const SITE_URL = 'https://birdmap-citizenscience.web.app'
 export const SITE_NAME = 'BirdMap'
 // Set this to a real inbox and the privacy page shows a contact line. Left empty on purpose.
 export const CONTACT_EMAIL = ''
+// Public profiles for the project (Bluesky, Mastodon, YouTube...). Empty until they exist:
+// once filled, they appear in the footer and as Organization `sameAs` in the JSON-LD.
+export const SOCIAL_PROFILES = []
 export const DEFAULT_DESCRIPTION =
   'BirdMap is a citizen science app and live map for bird sightings. Identify birds from photos and calls on your phone, then let the community verify them.'
 

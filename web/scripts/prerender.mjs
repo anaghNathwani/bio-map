@@ -10,7 +10,7 @@ const root = path.resolve(import.meta.dirname, '..')
 const dist = path.join(root, 'dist')
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8')
 const { render } = await import(pathToFileURL(path.join(root, 'dist-ssr/entry-server.js')).href)
-const { ROUTES, SITE_NAME, absoluteUrl, jsonLdFor } = await import(pathToFileURL(path.join(root, 'src/site.js')).href)
+const { ROUTES, SOCIAL_PROFILES, SITE_NAME, absoluteUrl, jsonLdFor } = await import(pathToFileURL(path.join(root, 'src/site.js')).href)
 const { POSTS } = await import(pathToFileURL(path.join(root, 'src/content/posts.js')).href)
 const { NOT_FOUND_META } = await import(pathToFileURL(path.join(root, 'src/notFoundMeta.js')).href)
 
@@ -43,6 +43,10 @@ function applyHead(html, meta, { keepNoscript }) {
     .join('')
   html = html.replace('</head>', ld + '  </head>')
   // The <noscript> block is only useful where #root is empty (the map shell).
+  if (SOCIAL_PROFILES.length) {
+    // Add sameAs to the site-wide Organization block in index.html.
+    html = html.replace(/("@type": "Organization",)/, `$1\n      "sameAs": ${JSON.stringify(SOCIAL_PROFILES)},`)
+  }
   if (!keepNoscript) html = html.replace(NOSCRIPT, '')
   return html
 }

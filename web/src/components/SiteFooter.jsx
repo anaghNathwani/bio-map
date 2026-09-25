@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ROUTES } from '../site.js'
+import { ROUTES, SOCIAL_PROFILES } from '../site.js'
 
 // Internal linking: every page links to every other public page (labels come
 // from the route registry, so new pages show up here automatically).
@@ -21,6 +21,15 @@ export default function SiteFooter() {
             </Link>
           ))}
         </nav>
+        {SOCIAL_PROFILES.length > 0 && (
+          <nav aria-label="Social profiles" className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+            {SOCIAL_PROFILES.map(url => (
+              <a key={url} href={url} rel="me noopener" className="underline decoration-[var(--rule)] underline-offset-4 hover:text-[var(--ink)]">
+                {new URL(url).hostname.replace(/^www\./, '')}
+              </a>
+            ))}
+          </nav>
+        )}
         <p className="mt-5">© 2026 BirdMap · Citizen Science</p>
       </div>
     </footer>
