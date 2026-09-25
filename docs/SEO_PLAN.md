@@ -105,6 +105,6 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 95. [~] **AlternativeTo listing** (M) — [playbook](seo/manual/95-alternativeto.md)
 96. [~] **Awesome-list pull requests** (M) — [playbook](seo/manual/96-awesome-lists.md)
 97. [~] **Audubon chapters, birding clubs, schools** (M) — [playbook](seo/manual/97-outreach.md)
-98. [ ] **Free press release + local media** (M) — [playbook](seo/manual/98-press.md)
+98. [~] **Free press release + local media** (M) — [playbook](seo/manual/98-press.md)
 99. [ ] **Monthly blog cadence** (M) — [playbook](seo/manual/99-blog-cadence.md)
 100. [ ] **Weekly Search Console review + 90-day review** (M) — [playbook](seo/manual/100-weekly-review.md)
