@@ -44,4 +44,43 @@ export const POSTS = [
     }
   ]
 },
+{
+  "slug": "what-is-citizen-science-bird-data-for",
+  "title": "What is citizen science bird data actually for?",
+  "description": "How everyday bird sightings become useful data, why verification matters, and how BirdMap approaches it.",
+  "date": "2026-09-25",
+  "body": [
+    {
+      "p": "A single sighting is a small fact: a species, a place and a time. Thousands of them, collected carefully, can show things that no single observer could see."
+    },
+    {
+      "h2": "What sightings can reveal"
+    },
+    {
+      "ul": [
+        "Migration timing: when a species arrives and leaves a region.",
+        "Population shifts: whether a species is becoming more or less common.",
+        "Range changes: birds appearing in places they were not seen before."
+      ]
+    },
+    {
+      "h2": "Why verification matters"
+    },
+    {
+      "p": "Data is only as useful as it is trustworthy. A misidentified bird is worse than no record. In BirdMap every sighting can be reviewed by other birders who confirm or correct the species, and several annotations on one sighting form a consensus. Annotations that do not look like a real bird name are flagged instead of counted."
+    },
+    {
+      "h2": "Geotagged by design"
+    },
+    {
+      "p": "Each BirdMap sighting carries GPS coordinates and a timestamp, which is what makes it possible to map species over space and time."
+    },
+    {
+      "h2": "Be part of the bigger picture"
+    },
+    {
+      "p": "BirdMap is a young project. Established programs such as eBird from the Cornell Lab of Ornithology have far larger datasets, and contributing there as well is a great idea. BirdMap’s aim is to make it easy to identify and share what you see, right from your phone."
+    }
+  ]
+},
 ]
