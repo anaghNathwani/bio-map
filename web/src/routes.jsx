@@ -8,6 +8,7 @@ import TermsPage from './pages/TermsPage.jsx'
 import HowItWorksPage from './pages/HowItWorksPage.jsx'
 import FaqPage from './pages/FaqPage.jsx'
 import AboutPage from './pages/AboutPage.jsx'
+import PrivacyPage from './pages/PrivacyPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 
 // The map pulls in Leaflet + Firebase; keep them out of every other page's bundle.
@@ -26,6 +27,7 @@ export default function AppRoutes() {
       <Route path="/how-it-works" element={<HowItWorksPage />} />
       <Route path="/faq" element={<FaqPage />} />
       <Route path="/about" element={<AboutPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )

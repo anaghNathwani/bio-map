@@ -4,6 +4,8 @@ import { FAQ } from './content/faq.js'
 // client (usePageMeta), the prerender script, the sitemap and the seo-check.
 export const SITE_URL = 'https://birdmap-citizenscience.web.app'
 export const SITE_NAME = 'BirdMap'
+// Set this to a real inbox and the privacy page shows a contact line. Left empty on purpose.
+export const CONTACT_EMAIL = ''
 export const DEFAULT_DESCRIPTION =
   'BirdMap is a citizen science app and live map for bird sightings. Identify birds from photos and calls on your phone, then let the community verify them.'
 
@@ -132,6 +134,17 @@ export const ROUTES = [
     prerender: true,
     breadcrumb: 'About',
     footerLabel: 'About',
+  },
+  {
+    path: '/privacy',
+    title: 'Privacy Notice | BirdMap',
+    description:
+      'What BirdMap stores when you use it, who can see it, and how identification on your device keeps photos and recordings private until you share them.',
+    changefreq: 'yearly',
+    priority: 0.3,
+    prerender: true,
+    breadcrumb: 'Privacy',
+    footerLabel: 'Privacy',
   },
 ]
 
