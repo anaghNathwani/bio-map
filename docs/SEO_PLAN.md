@@ -87,7 +87,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 77. [~] **Rich Results Test** (M) — [playbook](seo/manual/77-rich-results.md)
 78. [~] **PageSpeed Insights / Lighthouse pass** (M) — [playbook](seo/manual/78-pagespeed.md)
 79. [~] **GitHub repo description, website URL, topics** (M) — [playbook](seo/manual/79-github-repo.md)
-80. [ ] **GitHub social preview image** (M) — [playbook](seo/manual/80-github-social.md)
+80. [~] **GitHub social preview image** (M) — [playbook](seo/manual/80-github-social.md)
 81. [ ] **Post on r/birding** (M) — [playbook](seo/manual/81-reddit-birding.md)
 82. [ ] **Post on r/citizenscience** (M) — [playbook](seo/manual/82-reddit-citsci.md)
 83. [ ] **Show on r/SwiftUI / r/iOSProgramming** (M) — [playbook](seo/manual/83-reddit-swift.md)
