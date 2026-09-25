@@ -1,0 +1,29 @@
+name: Deploy web to Firebase Hosting
+
+# Manual on purpose: run it from the Actions tab when you want to publish.
+# Change `on:` to `push` (branches: [main], paths: ['web/**']) for auto-deploys.
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci && npm run build && npm run seo:check
+        working-directory: web
+      # Needs the FIREBASE_SERVICE_ACCOUNT_JSON repo secret (the same one live-poll.yml
+      # uses) with the "Firebase Hosting Admin" role added to that service account.
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          projectId: birdmap-citizenscience
+          channelId: live
+          entryPoint: web
