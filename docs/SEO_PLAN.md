@@ -91,7 +91,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 81. [~] **Post on r/birding** (M) — [playbook](seo/manual/81-reddit-birding.md)
 82. [~] **Post on r/citizenscience** (M) — [playbook](seo/manual/82-reddit-citsci.md)
 83. [~] **Show on r/SwiftUI / r/iOSProgramming** (M) — [playbook](seo/manual/83-reddit-swift.md)
-84. [ ] **Show HN** (M) — [playbook](seo/manual/84-show-hn.md)
+84. [~] **Show HN** (M) — [playbook](seo/manual/84-show-hn.md)
 85. [ ] **Product Hunt** (M) — [playbook](seo/manual/85-product-hunt.md)
 86. [ ] **Indie Hackers / BetaList / Uneed** (M) — [playbook](seo/manual/86-indie-directories.md)
 87. [ ] **SciStarter project listing** (M) — [playbook](seo/manual/87-scistarter.md)
