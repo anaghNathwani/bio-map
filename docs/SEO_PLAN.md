@@ -27,7 +27,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 17. [x] **JSON-LD: BreadcrumbList on every sub-page** (R)
 18. [x] **firebase.json hosting config (was missing from the repo)** (R)
 19. [x] **Long-cache immutable assets, short-cache HTML** (R)
-20. [ ] **Security headers (HSTS, nosniff, referrer policy, frame options)** (R)
+20. [x] **Security headers (HSTS, nosniff, referrer policy, frame options)** (R)
 21. [ ] **.firebaserc project alias** (R)
 22. [ ] **Real 404 page with noindex** (R)
 23. [ ] **<main> landmark + skip-to-content link** (R)
