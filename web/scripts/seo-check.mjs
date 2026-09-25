@@ -48,6 +48,11 @@ for (const route of ROUTES) {
   }
   const h1s = (html.match(/<h1[\s>]/g) || []).length
   if (h1s !== 1) fail(where, `${h1s} <h1> elements (want exactly 1)`)
+  // Heading levels must not skip (h1 -> h3 without an h2 in between).
+  const levels = [...html.replace(/<noscript>[\s\S]*?<\/noscript>/g, '').matchAll(/<h([1-6])[\s>]/g)].map(m => Number(m[1]))
+  levels.forEach((lvl, i) => {
+    if (i > 0 && lvl > levels[i - 1] + 1) fail(where, `heading jumps from h${levels[i - 1]} to h${lvl}`)
+  })
   if (route.prerender && /<div id="root"><\/div>/.test(html)) fail(where, 'prerendered page has an empty #root')
 }
 

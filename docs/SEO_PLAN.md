@@ -74,7 +74,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 64. [x] **README: website + SEO section (repo discoverability)** (R)
 65. [x] **Explicit image dimensions (avoid layout shift)** (R)
 66. [x] **seo-check: validate JSON-LD parses** (R)
-67. [ ] **seo-check: heading hierarchy** (R)
+67. [x] **seo-check: heading hierarchy** (R)
 68. [ ] **<link rel=alternate> for the RSS feed** (R)
 69. [ ] **Search Console verification placeholder + docs** (R)
 70. [ ] **og:image:alt + image dimensions meta** (R)
