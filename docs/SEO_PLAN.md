@@ -15,7 +15,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 5. [x] **About/AI/Community/Citizen-science/Terms pages use the hook** (R)
 6. [x] **Map page: metadata + a real (visually hidden) h1** (R)
 7. [x] **index.html: keyword title, description, robots, theme-color, canonical** (R)
-8. [ ] **Open Graph tags** (R)
+8. [x] **Open Graph tags** (R)
 9. [ ] **Twitter/X card tags** (R)
 10. [ ] **1200x630 social share image** (R)
 11. [ ] **Web app manifest** (R)
