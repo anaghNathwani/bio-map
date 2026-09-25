@@ -59,7 +59,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 49. [x] **Blog post: what citizen science bird data is used for** (R)
 50. [x] **Blog post: keeping bird ID on your phone** (R)
 51. [x] **JSON-LD: Article on blog posts** (R)
-52. [ ] **Related-links block on posts and content pages** (R)
+52. [x] **Related-links block on posts and content pages** (R)
 53. [ ] **RSS feed generated at build** (R)
 54. [ ] **Landing page: deeper keyword-relevant sections** (R)
 55. [ ] **Landing page: FAQ teaser + links** (R)

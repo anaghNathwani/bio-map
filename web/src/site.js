@@ -208,8 +208,26 @@ export const ROUTES = [
   })),
 ]
 
+/** Hand-picked cross-links for content pages (blog posts get the other posts + how-it-works). */
+export const RELATED = {
+  '/how-it-works': ['/bird-photo-identification', '/bird-sound-identification', '/faq'],
+  '/faq': ['/how-it-works', '/privacy', '/about'],
+  '/about': ['/how-it-works', '/citizen-science', '/community'],
+  '/privacy': ['/terms', '/faq'],
+  '/bird-sound-identification': ['/bird-photo-identification', '/how-it-works', '/community'],
+  '/bird-photo-identification': ['/bird-sound-identification', '/ai', '/how-it-works'],
+}
+
 export const absoluteUrl = path => SITE_URL + (path === '/' ? '/' : path)
 export const routeFor = path => ROUTES.find(r => r.path === path)
+
+export function relatedFor(meta) {
+  if (RELATED[meta.path]) return RELATED[meta.path]
+  if (meta.post) {
+    return [...POSTS.filter(p => p.slug !== meta.post.slug).map(p => `/blog/${p.slug}`), '/how-it-works'].slice(0, 3)
+  }
+  return []
+}
 
 /** BreadcrumbList for a sub-page: Home > (parent) > page. */
 export function breadcrumbLd(meta) {
