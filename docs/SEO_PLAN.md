@@ -66,7 +66,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 56. [x] **Social profile links (sameAs) from one list; empty until profiles exist** (R)
 57. [x] **GitHub Action: build + seo-check on every push** (R)
 58. [x] **GitHub Action: deploy to Firebase Hosting (needs a secret)** (R)
-59. [ ] **seo-check: internal link checker** (R)
+59. [x] **seo-check: internal link checker** (R)
 60. [ ] **/.well-known/security.txt** (R)
 61. [ ] **IndexNow key file + submit script** (R)
 62. [ ] **docs/SEO.md: how the SEO setup works** (R)

@@ -49,6 +49,23 @@ for (const r of ROUTES.filter(r => !r.noindex)) {
   if (!sitemap.includes(`<loc>${absoluteUrl(r.path)}</loc>`)) fail('sitemap.xml', 'missing ' + r.path)
 }
 
+// Every internal link on every built page must point at a real file.
+function htmlFiles(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap(e =>
+    e.isDirectory() ? (e.name === 'assets' ? [] : htmlFiles(path.join(dir, e.name))) : e.name.endsWith('.html') ? [path.join(dir, e.name)] : []
+  )
+}
+for (const file of htmlFiles(dist)) {
+  const html = fs.readFileSync(file, 'utf8')
+  for (const [, href] of html.matchAll(/<a [^>]*href="([^"]+)"/g)) {
+    if (!href.startsWith('/') || href.startsWith('//')) continue // external, mailto, #anchor
+    const clean = href.split('#')[0].split('?')[0]
+    const target = clean === '/' ? 'index.html' : clean.replace(/^\//, '')
+    const ok = [target, target + '.html'].some(t => fs.existsSync(path.join(dist, t)) && fs.statSync(path.join(dist, t)).isFile())
+    if (!ok) fail(path.relative(dist, file), `broken internal link ${href}`)
+  }
+}
+
 if (problems.length) {
   console.error('SEO check failed:\n - ' + problems.join('\n - '))
   process.exit(1)
