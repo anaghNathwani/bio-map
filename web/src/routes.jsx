@@ -11,6 +11,8 @@ import AboutPage from './pages/AboutPage.jsx'
 import PrivacyPage from './pages/PrivacyPage.jsx'
 import SoundIdPage from './pages/SoundIdPage.jsx'
 import PhotoIdPage from './pages/PhotoIdPage.jsx'
+import BlogIndexPage from './pages/BlogIndexPage.jsx'
+import BlogPostPage from './pages/BlogPostPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 
 // The map pulls in Leaflet + Firebase; keep them out of every other page's bundle.
@@ -32,6 +34,8 @@ export default function AppRoutes() {
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/bird-sound-identification" element={<SoundIdPage />} />
       <Route path="/bird-photo-identification" element={<PhotoIdPage />} />
+      <Route path="/blog" element={<BlogIndexPage />} />
+      <Route path="/blog/:slug" element={<BlogPostPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )

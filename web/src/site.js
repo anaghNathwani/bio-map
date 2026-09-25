@@ -1,4 +1,5 @@
 import { FAQ } from './content/faq.js'
+import { POSTS } from './content/posts.js'
 
 // Single source of truth for the marketing site's SEO metadata. Read by the
 // client (usePageMeta), the prerender script, the sitemap and the seo-check.
@@ -168,6 +169,28 @@ export const ROUTES = [
     breadcrumb: 'Bird photo identification',
     footerLabel: 'Bird photo ID',
   },
+  {
+    path: '/blog',
+    title: 'BirdMap Blog: Bird ID, AI and Citizen Science',
+    description:
+      'Articles on how BirdMap identifies birds on your phone, what citizen science bird data is for, and how to get better sightings.',
+    changefreq: 'weekly',
+    priority: 0.6,
+    prerender: true,
+    breadcrumb: 'Blog',
+    footerLabel: 'Blog',
+  },
+  ...POSTS.map(post => ({
+    path: `/blog/${post.slug}`,
+    title: `${post.title} | BirdMap`,
+    description: post.description,
+    changefreq: 'yearly',
+    priority: 0.6,
+    prerender: true,
+    breadcrumb: post.title,
+    parents: [{ name: 'Blog', path: '/blog' }],
+    post,
+  })),
 ]
 
 export const absoluteUrl = path => SITE_URL + (path === '/' ? '/' : path)
