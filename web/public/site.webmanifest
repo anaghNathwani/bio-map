@@ -1,0 +1,27 @@
+{
+  "name": "BirdMap",
+  "short_name": "BirdMap",
+  "description": "Citizen science bird sightings, identified on your phone.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#F4F1E9",
+  "theme_color": "#F4F1E9",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
