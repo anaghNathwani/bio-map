@@ -61,7 +61,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 51. [x] **JSON-LD: Article on blog posts** (R)
 52. [x] **Related-links block on posts and content pages** (R)
 53. [x] **RSS feed generated at build** (R)
-54. [ ] **Landing page: deeper keyword-relevant sections** (R)
+54. [x] **Landing page: deeper keyword-relevant sections** (R)
 55. [ ] **Landing page: FAQ teaser + links** (R)
 56. [ ] **Organization sameAs (GitHub)** (R)
 57. [ ] **GitHub Action: build + seo-check on every push** (R)

@@ -143,6 +143,35 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <div className="mx-auto max-w-5xl px-6"><Rule /></div>
+
+      {/* Photo & sound */}
+      <section className="mx-auto max-w-5xl px-6 py-20">
+        <h2 className="font-serif text-[26px] italic">Identify a bird by photo or by sound</h2>
+        <div className="mt-10 grid gap-10 md:grid-cols-2">
+          <div>
+            <h3 className="text-[17px] font-medium tracking-tight">By photo</h3>
+            <p className="mt-2 max-w-md text-[14.5px] leading-relaxed text-[var(--ink-soft)]">
+              Take or choose a picture and a model on your phone suggests the species. If it is not confident, it says so
+              instead of guessing.
+            </p>
+            <Link to="/bird-photo-identification" className="mt-3 inline-block text-[14px] underline decoration-[var(--rule)] underline-offset-4 hover:decoration-[var(--ink)]">
+              How photo identification works
+            </Link>
+          </div>
+          <div>
+            <h3 className="text-[17px] font-medium tracking-tight">By sound</h3>
+            <p className="mt-2 max-w-md text-[14.5px] leading-relaxed text-[var(--ink-soft)]">
+              Record a call and BirdNET, from the Cornell Lab of Ornithology, identifies it on your phone, using your
+              location to rule out birds that do not live nearby.
+            </p>
+            <Link to="/bird-sound-identification" className="mt-3 inline-block text-[14px] underline decoration-[var(--rule)] underline-offset-4 hover:decoration-[var(--ink)]">
+              How sound identification works
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="border-t border-[var(--rule)] bg-[var(--paper-dim)] bg-grain">
         <div className="mx-auto max-w-5xl px-6 py-24 text-center">
