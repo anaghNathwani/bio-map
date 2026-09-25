@@ -20,7 +20,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 10. [x] **1200x630 social share image** (R)
 11. [x] **Web app manifest** (R)
 12. [x] **robots.txt** (R)
-13. [ ] **sitemap.xml (static first version)** (R)
+13. [x] **sitemap.xml (static first version)** (R)
 14. [ ] **robots.txt points at the sitemap** (R)
 15. [ ] **JSON-LD: Organization + WebSite** (R)
 16. [ ] **JSON-LD: WebApplication for the live map** (R)
