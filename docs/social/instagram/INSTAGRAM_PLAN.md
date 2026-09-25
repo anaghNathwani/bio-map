@@ -1,6 +1,6 @@
 # BirdMap on Instagram
 
-Yes, I can make videos. These are **motion-graphics Reels** (animated type, shapes and a waveform, rendered from code).
+Yes, I can make videos. These are **motion-graphics Reels** (animated type, shapes and a waveform, rendered from code) with an **original soundtrack I synthesized** (soft pad, a pluck on each scene change, and stylized bird-like chirps; these are synthesized whistles, not recordings of real birds, and there's nothing to license).
 I can't film real footage or screen-record your phone. Once the iOS app is installable, record 10-15 seconds of the real app
 and I can cut it into these. Until then, everything here is honest about what exists: an animated explainer, no fake app screens.
 
@@ -8,7 +8,7 @@ Files (all in `docs/social/instagram/`):
 
 | Folder | What | Format |
 |---|---|---|
-| `reels/` | 4 Reels, silent, 12-17 seconds | MP4 1080x1920, 30 fps, H.264 |
+| `reels/` | 4 Reels with original synthesized audio, 12-17 seconds | MP4 1080x1920, 30 fps, H.264 + AAC stereo (~-16 LUFS) |
 | `reels/covers/` | a cover image for each Reel | PNG 1080x1920 |
 | `carousels/` | 3 swipe posts (6, 8 and 6 slides) | PNG 1080x1350 (4:5) |
 | `stories/` | 3 question/poll backgrounds | PNG 1080x1920 |
@@ -59,7 +59,7 @@ After week 4, repeat with new content: reuse `build.py`, and turn each new blog 
 1. AirDrop the MP4 to your iPhone (or use *Meta Business Suite* on the web, which can post Reels for free).
 2. Instagram -> **+** -> **Reel** -> pick the file -> **Next**.
 3. **Edit cover** -> *Add from camera roll* -> pick the matching PNG from `reels/covers/`.
-4. Paste the caption from `captions.md`. Leave audio off, or add music from Instagram's own library inside the app.
+4. Paste the caption from `captions.md`. The audio is already in the file. To swap it for Instagram's own music, tap the audio and turn the original volume down or off.
    (Business/professional accounts can be limited to a royalty-free library; don't upload outside music you don't have rights to.)
 5. Share.
 

@@ -5,9 +5,11 @@ deterministic. Playwright (system Chrome) screenshots each frame; ffmpeg encodes
 
   python3 build.py            # everything
   python3 build.py reels      # or: carousels | stories | profile
+  python3 build.py audio      # re-mux the synthesized soundtrack into the existing reels (no re-render)
 Needs: pip install playwright, ffmpeg, Google Chrome.
 """
 import pathlib, shutil, subprocess, sys, tempfile
+import audio
 
 HERE = pathlib.Path(__file__).parent
 SRC = HERE / 'src'
@@ -239,6 +241,9 @@ def render_reel(pg, name, html, dur, out):
     print('reel', out.name, f'{dur}s', f'{out.stat().st_size/1e6:.1f} MB')
 
 def main(which):
+    if which == 'audio':
+        for f in sorted((HERE / 'reels').glob('*.mp4')): audio.add_audio(f)
+        return
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         b = p.chromium.launch(channel='chrome')
@@ -246,6 +251,7 @@ def main(which):
         if which in ('all', 'reels'):
             for name, fn in REELS.items():
                 html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')
+                audio.add_audio(HERE / 'reels' / f'{name}.mp4')
         if which in ('all', 'carousels'):
             for cname, slides in CAROUSELS.items():
                 d = HERE / 'carousels' / cname; d.mkdir(exist_ok=True)
