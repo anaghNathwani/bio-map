@@ -16,10 +16,10 @@ SRC = HERE / 'src'
 FPS = 30
 
 BIRD_PATH = "M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2"
-def bird(size, cls='', draw=False):
+def bird(size, cls='', draw=False, color='#1B1812', sw=2.1):
     p = f'<path d="{BIRD_PATH}" {"pathLength=\"1\" class=\"draw\"" if draw else ""}/>'
-    return (f'<svg class="{cls}" viewBox="0 0 48 48" width="{size}" height="{size}" fill="none" stroke="#1B1812" '
-            f'stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">{p}<circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="#1B1812" stroke="none"/></svg>')
+    return (f'<svg class="{cls}" viewBox="0 0 48 48" width="{size}" height="{size}" fill="none" stroke="{color}" '
+            f'stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round">{p}<circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="{color}" stroke="none"/></svg>')
 
 BASE_CSS = """
 @font-face{font-family:G;src:url(fonts/geist-latin-wght-normal.woff2);font-weight:100 900}
@@ -202,15 +202,15 @@ STORIES = {
  '03-trust-an-id': story('Question', 'What would make you <em>trust</em> a bird ID?', 'Add a Question sticker here'),
 }
 
-def profile_pic():
-    body = f'<div class="abs" style="left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center">{bird(620)}</div>'
-    return page(body.replace('<div class="frame"></div>', '')), (1080, 1080)
+def profile_pic(bg, fg):
+    body = f'<div class="abs" style="left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;padding-bottom:18px">{bird(830, color=fg, sw=3.3)}</div>'
+    return page(body.replace('<div class="frame"></div>', ''), css=f'html,body{{background:{bg}}}.frame{{display:none}}'), (1080, 1080)
 
 def highlight(label):
     body = f'<div class="abs" style="left:0;right:0;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:60px">{bird(380)}<div style="font-family:F,serif;font-style:italic;font-size:110px">{label}</div></div>'
     return page(body), (1080, 1920)
 
-PROFILE = {'profile-picture': profile_pic(), 'highlight-how-it-works': highlight('How it works'), 'highlight-tips': highlight('Tips'), 'highlight-faq': highlight('FAQ'), 'highlight-sightings': highlight('Sightings')}
+PROFILE = {'profile-picture': profile_pic('#C1602E', '#F4F1E9'), 'profile-picture-paper': profile_pic('#F4F1E9', '#1B1812'), 'profile-picture-ink': profile_pic('#211D16', '#F4F1E9'), 'highlight-how-it-works': highlight('How it works'), 'highlight-tips': highlight('Tips'), 'highlight-faq': highlight('FAQ'), 'highlight-sightings': highlight('Sightings')}
 
 # ------------------------------------------------------------------ RENDER
 def write_html(name, html):

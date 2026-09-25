@@ -36,7 +36,10 @@ Files (all in `docs/social/instagram/`):
   iOS app coming soon. Live map below.
   ```
 - **Link:** https://birdmap-citizenscience.web.app
-- **Profile picture:** `profile/profile-picture.png` (Instagram crops it to a circle; the bird is centred).
+- **Profile picture:** `profile/profile-picture.png` (paper-coloured bird on the brand clay; 1080x1080, Instagram crops it to a circle).
+  It's the one that stays readable on both light and dark Instagram, even at 40px. Alternatives if you prefer:
+  `profile-picture-paper.png` (dark bird on cream; fades into a white feed) and `profile-picture-ink.png` (cream bird on dark;
+  disappears in dark mode).
 - **Highlights:** create four (How it works, Tips, FAQ, Sightings) and use the covers in `profile/`. Fill each by posting the
   related Story and tapping *Highlight*. (Highlights need something in them before they show.)
 
