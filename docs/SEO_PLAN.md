@@ -80,7 +80,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 70. [x] **og:image:alt + image dimensions meta** (R)
 71. [~] **Deploy to Firebase Hosting** (M) — [playbook](seo/manual/71-deploy.md)
 72. [~] **Verify the site in Google Search Console** (M) — [playbook](seo/manual/72-gsc-verify.md)
-73. [ ] **Submit the sitemap in Search Console** (M) — [playbook](seo/manual/73-gsc-sitemap.md)
+73. [~] **Submit the sitemap in Search Console** (M) — [playbook](seo/manual/73-gsc-sitemap.md)
 74. [ ] **Request indexing for each URL** (M) — [playbook](seo/manual/74-gsc-index.md)
 75. [ ] **Bing Webmaster Tools (import from Search Console)** (M) — [playbook](seo/manual/75-bing.md)
 76. [ ] **Run IndexNow after each deploy** (M) — [playbook](seo/manual/76-run-indexnow.md)
