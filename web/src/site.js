@@ -87,6 +87,17 @@ export const ROUTES = [
     footerLabel: 'Terms of Service',
     breadcrumb: 'Terms of Service',
   },
+  {
+    path: '/how-it-works',
+    title: 'How BirdMap Works: Photo, Sound & Community ID',
+    description:
+      'From capturing a bird photo or call to on-device identification and community review: a step-by-step look at how BirdMap works.',
+    changefreq: 'monthly',
+    priority: 0.8,
+    prerender: true,
+    breadcrumb: 'How it works',
+    footerLabel: 'How it works',
+  },
 ]
 
 export const absoluteUrl = path => SITE_URL + (path === '/' ? '/' : path)

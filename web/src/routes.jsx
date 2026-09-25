@@ -5,6 +5,7 @@ import CitizenSciencePage from './pages/CitizenSciencePage.jsx'
 import CommunityPage from './pages/CommunityPage.jsx'
 import AIPage from './pages/AIPage.jsx'
 import TermsPage from './pages/TermsPage.jsx'
+import HowItWorksPage from './pages/HowItWorksPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 
 // The map pulls in Leaflet + Firebase; keep them out of every other page's bundle.
@@ -20,6 +21,7 @@ export default function AppRoutes() {
       <Route path="/community" element={<CommunityPage />} />
       <Route path="/ai" element={<AIPage />} />
       <Route path="/terms" element={<TermsPage />} />
+      <Route path="/how-it-works" element={<HowItWorksPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
