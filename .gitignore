@@ -16,6 +16,7 @@ __pycache__/
 .Python
 *.egg-info/
 dist/
+dist-ssr/
 build/
 .venv/
 .venv-convert/
