@@ -1,3 +1,5 @@
+import { FAQ } from './content/faq.js'
+
 // Single source of truth for the marketing site's SEO metadata. Read by the
 // client (usePageMeta), the prerender script, the sitemap and the seo-check.
 export const SITE_URL = 'https://birdmap-citizenscience.web.app'
@@ -97,6 +99,28 @@ export const ROUTES = [
     prerender: true,
     breadcrumb: 'How it works',
     footerLabel: 'How it works',
+  },
+  {
+    path: '/faq',
+    title: 'BirdMap FAQ: Bird ID, Privacy & How It Works',
+    description:
+      'Answers to common questions about BirdMap: how bird identification works on your phone, accuracy, privacy, cost and availability.',
+    changefreq: 'monthly',
+    priority: 0.7,
+    prerender: true,
+    breadcrumb: 'FAQ',
+    footerLabel: 'FAQ',
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: FAQ.map(item => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      },
+    ],
   },
 ]
 
