@@ -83,4 +83,39 @@ export const POSTS = [
     }
   ]
 },
+{
+  "slug": "keeping-bird-id-on-your-phone",
+  "title": "Why we keep bird identification on your phone",
+  "description": "Privacy, speed and reliability: the reasons BirdMap runs its identification models on the device instead of a server.",
+  "date": "2026-09-25",
+  "body": [
+    {
+      "p": "It would have been simpler to upload every photo and recording to a server and run bigger models there. We chose not to, for three reasons."
+    },
+    {
+      "h2": "Privacy"
+    },
+    {
+      "p": "A photo of your garden or a recording near your home can reveal a lot. With on-device identification, nothing is uploaded just to get a suggestion. A sighting is only shared when you decide to submit it."
+    },
+    {
+      "h2": "Speed and reliability"
+    },
+    {
+      "p": "Birds do not wait. On-device models answer right away and work without a signal, which is exactly when you are outdoors."
+    },
+    {
+      "h2": "Keeping it sustainable"
+    },
+    {
+      "p": "Running models on the phone means there is no per-request server cost to pay for, which lets a community project stay free to use."
+    },
+    {
+      "h2": "What it costs us"
+    },
+    {
+      "p": "On-device models have to be compact, so they cannot match the largest server models. We are open about that: BirdMap reports low confidence honestly and relies on the community to correct mistakes. Read more about the limits on the on-device AI page."
+    }
+  ]
+},
 ]
