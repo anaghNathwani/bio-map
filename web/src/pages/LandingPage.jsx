@@ -60,7 +60,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 bg-[var(--paper)]/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl items-center gap-8 px-6 py-5">
           <Link to="/" aria-label="BirdMap home" className="flex items-center gap-2.5">
-            <img src={birdMark} alt="" className="h-5 w-5" />
+            <img src={birdMark} alt="" width="20" height="20" className="h-5 w-5" />
             <span className="font-serif text-[17px] italic tracking-tight">BirdMap</span>
           </Link>
           <nav aria-label="Primary" className="ml-auto hidden items-center gap-7 text-[13px] uppercase tracking-[0.08em] text-[var(--ink-soft)] sm:flex">

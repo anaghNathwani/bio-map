@@ -72,7 +72,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 62. [x] **docs/SEO.md: how the SEO setup works** (R)
 63. [x] **CLAUDE.md: SEO section** (R)
 64. [x] **README: website + SEO section (repo discoverability)** (R)
-65. [ ] **Explicit image dimensions (avoid layout shift)** (R)
+65. [x] **Explicit image dimensions (avoid layout shift)** (R)
 66. [ ] **seo-check: validate JSON-LD parses** (R)
 67. [ ] **seo-check: heading hierarchy** (R)
 68. [ ] **<link rel=alternate> for the RSS feed** (R)
