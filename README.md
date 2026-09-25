@@ -27,6 +27,16 @@ live app's media. See `CLAUDE.md` and `docs/DEPLOYMENT.md` for the full
 architecture and hosting tradeoffs, and `docs/ML_PIPELINE.md` for what each
 model runs on and why.
 
+## Website
+
+The marketing site and live map (`web/`) is prerendered at build time for search engines and deploys to Firebase
+Hosting: https://birdmap-citizenscience.web.app. See `docs/SEO.md` for how discoverability is set up and
+`docs/SEO_PLAN.md` for the full checklist.
+
+```bash
+cd web && npm run build && npm run seo:check && firebase deploy --only hosting
+```
+
 ## The legacy FastAPI backend (`backend/`) — optional, not required
 
 An earlier, fully separate Postgres-backed system (its own auth, sightings,
