@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import AppStoreBadge from '../components/AppStoreBadge.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
 import birdMark from '../assets/bird-mark.svg'
+import usePageMeta from '../lib/pageMeta.js'
 
 const FEATURES = [
   {
@@ -42,6 +43,7 @@ function Rule({ className = '' }) {
 }
 
 export default function LandingPage() {
+  usePageMeta('/')
   return (
     <div className="min-h-screen bg-[var(--paper)] font-sans text-[var(--ink)] antialiased selection:bg-[var(--clay-soft)] selection:text-[var(--ink)]">
       {/* Nav */}
