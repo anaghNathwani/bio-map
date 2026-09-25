@@ -25,7 +25,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 15. [x] **JSON-LD: Organization + WebSite** (R)
 16. [x] **JSON-LD: WebApplication for the live map** (R)
 17. [x] **JSON-LD: BreadcrumbList on every sub-page** (R)
-18. [ ] **firebase.json hosting config (was missing from the repo)** (R)
+18. [x] **firebase.json hosting config (was missing from the repo)** (R)
 19. [ ] **Long-cache immutable assets, short-cache HTML** (R)
 20. [ ] **Security headers (HSTS, nosniff, referrer policy, frame options)** (R)
 21. [ ] **.firebaserc project alias** (R)
