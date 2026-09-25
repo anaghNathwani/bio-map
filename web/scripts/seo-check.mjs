@@ -38,6 +38,14 @@ for (const route of ROUTES) {
   for (const p of ['og:title', 'og:description', 'og:url', 'og:image']) {
     if (!html.includes(`property="${p}"`)) fail(where, 'missing ' + p)
   }
+  for (const [, raw] of html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+    try {
+      const data = JSON.parse(raw)
+      if (!data['@context'] && !data['@graph']) fail(where, 'JSON-LD block without @context')
+    } catch (e) {
+      fail(where, 'invalid JSON-LD: ' + e.message)
+    }
+  }
   const h1s = (html.match(/<h1[\s>]/g) || []).length
   if (h1s !== 1) fail(where, `${h1s} <h1> elements (want exactly 1)`)
   if (route.prerender && /<div id="root"><\/div>/.test(html)) fail(where, 'prerendered page has an empty #root')
