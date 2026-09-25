@@ -6,7 +6,7 @@ import { POSTS } from './content/posts.js'
 export const SITE_URL = 'https://birdmap-citizenscience.web.app'
 export const SITE_NAME = 'BirdMap'
 // Set this to a real inbox and the privacy page shows a contact line. Left empty on purpose.
-export const CONTACT_EMAIL = ''
+export const CONTACT_EMAIL = 'anaghnathwani@gmail.com'
 // Public profiles for the project (Bluesky, Mastodon, YouTube...). Empty until they exist:
 // once filled, they appear in the footer and as Organization `sameAs` in the JSON-LD.
 export const SOCIAL_PROFILES = []
