@@ -37,7 +37,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 27. [x] **Code-split: map (Leaflet + Firebase) loads only on /map** (R)
 28. [x] **Leaflet CSS from npm inside the map chunk; drop render-blocking unpkg CSS** (R)
 29. [x] **Vendor chunk splitting** (R)
-30. [ ] **Latin-only font subsets (fewer font requests)** (R)
+30. [x] **Latin-only font subsets (fewer font requests)** (R)
 31. [ ] **Optimise SVG assets** (R)
 32. [ ] **Shared routes + server entry for prerendering** (R)
 33. [ ] **Make theme code SSR/hydration safe** (R)
