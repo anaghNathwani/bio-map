@@ -49,3 +49,11 @@ struct ReportTabView: View {
         }
     }
 }
+
+#Preview("ContentView") {
+    FirebasePreview { ContentView().environmentObject(AppEnvironment()) }
+}
+
+#Preview("ReportTabView") {
+    FirebasePreview { ReportTabView() }
+}

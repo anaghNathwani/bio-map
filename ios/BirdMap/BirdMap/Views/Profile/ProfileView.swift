@@ -237,3 +237,6 @@ struct ProfileView: View {
     }
 }
 
+#Preview {
+    FirebasePreview { ProfileView().environmentObject(AppEnvironment()) }
+}

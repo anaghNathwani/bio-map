@@ -155,3 +155,7 @@ struct LeaderboardView: View {
         isLoading = false
     }
 }
+
+#Preview {
+    FirebasePreview { LeaderboardView() }
+}

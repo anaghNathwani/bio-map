@@ -511,3 +511,7 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
         }
     }
 }
+
+#Preview {
+    FirebasePreview { CameraView() }
+}

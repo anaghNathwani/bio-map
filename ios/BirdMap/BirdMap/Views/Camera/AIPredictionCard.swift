@@ -116,3 +116,10 @@ struct AIPredictionCard: View {
         referenceImageURL = url
     }
 }
+
+#Preview {
+    FirebasePreview {
+        AIPredictionCard(species: "American Robin", confidence: 0.92, onVerdict: { _ in })
+            .padding()
+    }
+}

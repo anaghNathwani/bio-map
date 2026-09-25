@@ -248,3 +248,7 @@ struct LoginView: View {
         isLoading = false
     }
 }
+
+#Preview {
+    FirebasePreview { LoginView().environmentObject(AppEnvironment()) }
+}

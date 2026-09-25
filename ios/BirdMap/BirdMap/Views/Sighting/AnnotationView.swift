@@ -229,3 +229,9 @@ struct AnnotationView: View {
         isSubmitting = false
     }
 }
+
+#Preview {
+    FirebasePreview {
+        AnnotationView(sightingID: "preview", initialSpecies: "American Robin", onDone: {})
+    }
+}

@@ -164,3 +164,7 @@ struct SafariView: UIViewControllerRepresentable {
 extension URL: @retroactive Identifiable {
     public var id: String { absoluteString }
 }
+
+#Preview {
+    BirdInfoView(species: "American Robin")
+}

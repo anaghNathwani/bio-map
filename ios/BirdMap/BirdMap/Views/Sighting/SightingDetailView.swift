@@ -363,3 +363,7 @@ struct SightingDetailView: View {
         if !parts.isEmpty { locationName = parts.joined(separator: ", ") }
     }
 }
+
+#Preview {
+    FirebasePreview { SightingDetailView(sightingID: "preview") }
+}

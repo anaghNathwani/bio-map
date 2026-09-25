@@ -400,3 +400,13 @@ struct WaveformView: View {
         }
     }
 }
+
+#Preview("AudioRecorderView") {
+    FirebasePreview { AudioRecorderView() }
+}
+
+#Preview("WaveformView") {
+    WaveformView(level: 0.6)
+        .frame(height: 60)
+        .padding()
+}

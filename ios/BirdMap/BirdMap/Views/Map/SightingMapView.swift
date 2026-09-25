@@ -323,3 +323,7 @@ final class SightingMapViewModel: ObservableObject {
         }
     }
 }
+
+#Preview {
+    FirebasePreview { SightingMapView() }
+}

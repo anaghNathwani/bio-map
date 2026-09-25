@@ -131,3 +131,14 @@ struct AdditionalBirdsSection: View {
         }
     }
 }
+
+#Preview {
+    FirebasePreview {
+        AdditionalBirdsSection(
+            sightingID: "preview",
+            candidates: [BirdCandidate(species: "House Finch", confidence: 0.71),
+                         BirdCandidate(species: "Song Sparrow", confidence: 0.55)]
+        )
+        .padding()
+    }
+}

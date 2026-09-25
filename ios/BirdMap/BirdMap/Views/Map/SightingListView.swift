@@ -188,3 +188,17 @@ struct SavedSightingsView: View {
         }
     }
 }
+
+#Preview("SightingListView") {
+    FirebasePreview {
+        SightingListView(title: "2 sightings here", sightings: [PreviewSupport.sighting, PreviewSupport.sighting])
+    }
+}
+
+#Preview("SightingRow") {
+    FirebasePreview { SightingRow(sighting: PreviewSupport.sighting) }
+}
+
+#Preview("SavedSightingsView") {
+    FirebasePreview { SavedSightingsView() }
+}
