@@ -16,7 +16,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 6. [x] **Map page: metadata + a real (visually hidden) h1** (R)
 7. [x] **index.html: keyword title, description, robots, theme-color, canonical** (R)
 8. [x] **Open Graph tags** (R)
-9. [ ] **Twitter/X card tags** (R)
+9. [x] **Twitter/X card tags** (R)
 10. [ ] **1200x630 social share image** (R)
 11. [ ] **Web app manifest** (R)
 12. [ ] **robots.txt** (R)
