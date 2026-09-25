@@ -69,7 +69,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 59. [x] **seo-check: internal link checker** (R)
 60. [x] **/.well-known/security.txt (generated once a contact address is set)** (R)
 61. [x] **IndexNow key file + submit script** (R)
-62. [ ] **docs/SEO.md: how the SEO setup works** (R)
+62. [x] **docs/SEO.md: how the SEO setup works** (R)
 63. [ ] **CLAUDE.md: SEO section** (R)
 64. [ ] **README: website + SEO section (repo discoverability)** (R)
 65. [ ] **Explicit image dimensions (avoid layout shift)** (R)
