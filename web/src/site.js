@@ -27,6 +27,7 @@ export const ROUTES = [
     changefreq: 'hourly',
     priority: 0.9,
     prerender: false,
+    footerLabel: 'Live map',
     breadcrumb: 'Live map',
     jsonLd: [
       {
@@ -51,6 +52,7 @@ export const ROUTES = [
     changefreq: 'monthly',
     priority: 0.7,
     prerender: true,
+    footerLabel: 'On-device AI',
     breadcrumb: 'On-device AI',
   },
   {
@@ -61,6 +63,7 @@ export const ROUTES = [
     changefreq: 'monthly',
     priority: 0.7,
     prerender: true,
+    footerLabel: 'Community',
     breadcrumb: 'Community annotations',
   },
   {
@@ -71,6 +74,7 @@ export const ROUTES = [
     changefreq: 'monthly',
     priority: 0.7,
     prerender: true,
+    footerLabel: 'Citizen science',
     breadcrumb: 'Citizen science',
   },
   {
@@ -80,6 +84,7 @@ export const ROUTES = [
     changefreq: 'yearly',
     priority: 0.3,
     prerender: true,
+    footerLabel: 'Terms of Service',
     breadcrumb: 'Terms of Service',
   },
 ]

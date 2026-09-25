@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import AppStoreBadge from '../components/AppStoreBadge.jsx'
+import SiteFooter from '../components/SiteFooter.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
 import birdMark from '../assets/bird-mark.svg'
 import usePageMeta from '../lib/pageMeta.js'
@@ -166,12 +167,7 @@ export default function LandingPage() {
 
       </main>
 
-      <footer className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-8 text-[13px] text-[var(--ink-soft)]">
-        <span>© 2026 BirdMap · Citizen Science</span>
-        <Link to="/terms" className="underline decoration-[var(--rule)] underline-offset-4 transition-colors hover:text-[var(--ink)] hover:decoration-[var(--ink)]">
-          Terms of Service
-        </Link>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

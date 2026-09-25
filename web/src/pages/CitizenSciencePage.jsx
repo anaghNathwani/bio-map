@@ -1,6 +1,7 @@
 import React from 'react'
 import { Globe, Camera, Mic, MapPin } from 'lucide-react'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import SiteFooter from '../components/SiteFooter.jsx'
 import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 
@@ -56,7 +57,7 @@ export default function CitizenSciencePage() {
 
       </main>
 
-      <footer className="static-page-footer">© 2026 BirdMap · Citizen Science</footer>
+      <SiteFooter />
     </div>
   )
 }

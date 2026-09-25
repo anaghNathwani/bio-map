@@ -1,6 +1,7 @@
 import React from 'react'
 import { Cpu, Lock } from 'lucide-react'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import SiteFooter from '../components/SiteFooter.jsx'
 import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 import './AIPage.css'
@@ -66,7 +67,7 @@ export default function AIPage() {
 
       </main>
 
-      <footer className="static-page-footer">© 2026 BirdMap · Citizen Science</footer>
+      <SiteFooter />
     </div>
   )
 }

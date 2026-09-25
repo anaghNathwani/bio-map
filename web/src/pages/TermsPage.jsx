@@ -1,6 +1,7 @@
 import React from 'react'
 import { FileText } from 'lucide-react'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import SiteFooter from '../components/SiteFooter.jsx'
 import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 import './TermsPage.css'
@@ -49,7 +50,7 @@ export default function TermsPage() {
 
       </main>
 
-      <footer className="static-page-footer">© 2025 BirdMap · Citizen Science for Everyone</footer>
+      <SiteFooter />
     </div>
   )
 }

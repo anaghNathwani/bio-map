@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import SiteFooter from '../components/SiteFooter.jsx'
 import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 
@@ -25,6 +26,7 @@ export default function NotFoundPage() {
         </p>
       </div>
       </main>
+      <SiteFooter />
     </div>
   )
 }

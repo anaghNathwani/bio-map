@@ -1,6 +1,7 @@
 import React from 'react'
 import { Users } from 'lucide-react'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import SiteFooter from '../components/SiteFooter.jsx'
 import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 import './CommunityPage.css'
@@ -73,7 +74,7 @@ export default function CommunityPage() {
 
       </main>
 
-      <footer className="static-page-footer">© 2026 BirdMap · Citizen Science</footer>
+      <SiteFooter />
     </div>
   )
 }
