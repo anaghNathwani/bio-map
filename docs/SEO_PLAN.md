@@ -44,7 +44,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 34. [x] **hydrateRoot for prerendered pages** (R)
 35. [x] **Build-time prerender script (real HTML for every page)** (R)
 36. [x] **Wire prerender into npm run build** (R)
-37. [ ] **Inject per-route title/description/canonical/OG/JSON-LD at prerender** (R)
+37. [x] **Inject per-route title/description/canonical/OG/JSON-LD at prerender** (R)
 38. [ ] **Firebase: clean URLs, no catch-all rewrite, 404.html** (R)
 39. [ ] **Generate sitemap.xml from the route registry** (R)
 40. [ ] **seo-check script: lint the built HTML** (R)

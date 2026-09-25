@@ -2,15 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
 import SiteFooter from '../components/SiteFooter.jsx'
+import { NOT_FOUND_META } from '../notFoundMeta.js'
 import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
-
-export const NOT_FOUND_META = {
-  path: '/404',
-  title: 'Page not found | BirdMap',
-  description: 'The page you were looking for does not exist. Head back to the BirdMap home page or the live sighting map.',
-  noindex: true,
-}
 
 export default function NotFoundPage() {
   usePageMeta(NOT_FOUND_META)
