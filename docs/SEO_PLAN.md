@@ -39,7 +39,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 29. [x] **Vendor chunk splitting** (R)
 30. [x] **Latin-only font subsets (fewer font requests)** (R)
 31. [x] **Optimise SVG assets** (R)
-32. [ ] **Shared routes + server entry for prerendering** (R)
+32. [x] **Shared routes + server entry for prerendering** (R)
 33. [ ] **Make theme code SSR/hydration safe** (R)
 34. [ ] **hydrateRoot for prerendered pages** (R)
 35. [ ] **Build-time prerender script (real HTML for every page)** (R)
