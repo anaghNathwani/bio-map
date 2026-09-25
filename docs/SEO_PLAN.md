@@ -82,7 +82,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 72. [~] **Verify the site in Google Search Console** (M) — [playbook](seo/manual/72-gsc-verify.md)
 73. [~] **Submit the sitemap in Search Console** (M) — [playbook](seo/manual/73-gsc-sitemap.md)
 74. [~] **Request indexing for each URL** (M) — [playbook](seo/manual/74-gsc-index.md)
-75. [ ] **Bing Webmaster Tools (import from Search Console)** (M) — [playbook](seo/manual/75-bing.md)
+75. [~] **Bing Webmaster Tools (import from Search Console)** (M) — [playbook](seo/manual/75-bing.md)
 76. [ ] **Run IndexNow after each deploy** (M) — [playbook](seo/manual/76-run-indexnow.md)
 77. [ ] **Rich Results Test** (M) — [playbook](seo/manual/77-rich-results.md)
 78. [ ] **PageSpeed Insights / Lighthouse pass** (M) — [playbook](seo/manual/78-pagespeed.md)
