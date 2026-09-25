@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import AppStoreBadge from '../components/AppStoreBadge.jsx'
+import { FAQ } from '../content/faq.js'
 import SiteFooter from '../components/SiteFooter.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
 import birdMark from '../assets/bird-mark.svg'
@@ -32,6 +33,13 @@ const FEATURES = [
     body: 'Photo and audio sightings from the whole community, plotted in real time as they come in.',
   },
 ]
+
+const FAQ_TEASER = [
+  'Is BirdMap free?',
+  'Where can I get the app?',
+  'Do I need an internet connection to identify a bird?',
+  'Who can see my photos and location?',
+].map(q => FAQ.find(item => item.q === q)).filter(Boolean)
 
 const NAV = [
   { to: '/ai', label: 'AI' },
@@ -170,6 +178,24 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
+      </section>
+
+      <div className="mx-auto max-w-5xl px-6"><Rule /></div>
+
+      {/* FAQ teaser */}
+      <section className="mx-auto max-w-5xl px-6 py-20">
+        <h2 className="font-serif text-[26px] italic">Common questions</h2>
+        <div className="mt-10 grid gap-x-12 gap-y-8 md:grid-cols-2">
+          {FAQ_TEASER.map(item => (
+            <div key={item.q}>
+              <h3 className="text-[16px] font-medium tracking-tight">{item.q}</h3>
+              <p className="mt-2 text-[14.5px] leading-relaxed text-[var(--ink-soft)]">{item.a}</p>
+            </div>
+          ))}
+        </div>
+        <Link to="/faq" className="mt-8 inline-block text-[14px] underline decoration-[var(--rule)] underline-offset-4 hover:decoration-[var(--ink)]">
+          Read all the questions
+        </Link>
       </section>
 
       {/* CTA */}
