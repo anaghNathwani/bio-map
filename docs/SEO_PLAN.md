@@ -42,7 +42,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 32. [x] **Shared routes + server entry for prerendering** (R)
 33. [x] **Make theme code SSR/hydration safe** (R)
 34. [x] **hydrateRoot for prerendered pages** (R)
-35. [ ] **Build-time prerender script (real HTML for every page)** (R)
+35. [x] **Build-time prerender script (real HTML for every page)** (R)
 36. [ ] **Wire prerender into npm run build** (R)
 37. [ ] **Inject per-route title/description/canonical/OG/JSON-LD at prerender** (R)
 38. [ ] **Firebase: clean URLs, no catch-all rewrite, 404.html** (R)
