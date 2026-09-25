@@ -1,10 +1,12 @@
 import React from 'react'
 import { Cpu, Lock } from 'lucide-react'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 import './AIPage.css'
 
 export default function AIPage() {
+  usePageMeta('/ai')
   return (
     <div className="static-page">
       <StaticPageHeader />

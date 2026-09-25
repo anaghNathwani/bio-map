@@ -12,7 +12,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 2. [x] **Central site config + route registry (URL, name, per-page titles/descriptions)** (R)
 3. [x] **usePageMeta hook: per-route title, description, canonical, robots, OG** (R)
 4. [x] **Landing page uses the hook** (R)
-5. [ ] **About/AI/Community/Citizen-science/Terms pages use the hook** (R)
+5. [x] **About/AI/Community/Citizen-science/Terms pages use the hook** (R)
 6. [ ] **Map page: metadata + a real (visually hidden) h1** (R)
 7. [ ] **index.html: keyword title, description, robots, theme-color, canonical** (R)
 8. [ ] **Open Graph tags** (R)

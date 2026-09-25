@@ -1,10 +1,12 @@
 import React from 'react'
 import { Users } from 'lucide-react'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 import './CommunityPage.css'
 
 export default function CommunityPage() {
+  usePageMeta('/community')
   return (
     <div className="static-page">
       <StaticPageHeader />

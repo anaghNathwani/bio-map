@@ -1,10 +1,12 @@
 import React from 'react'
 import { FileText } from 'lucide-react'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 import './TermsPage.css'
 
 export default function TermsPage() {
+  usePageMeta('/terms')
   return (
     <div className="static-page">
       <StaticPageHeader />

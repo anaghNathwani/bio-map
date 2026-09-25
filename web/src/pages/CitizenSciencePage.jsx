@@ -1,9 +1,11 @@
 import React from 'react'
 import { Globe, Camera, Mic, MapPin } from 'lucide-react'
 import StaticPageHeader from '../components/StaticPageHeader.jsx'
+import usePageMeta from '../lib/pageMeta.js'
 import './StaticPage.css'
 
 export default function CitizenSciencePage() {
+  usePageMeta('/citizen-science')
   return (
     <div className="static-page">
       <StaticPageHeader />
