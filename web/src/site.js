@@ -28,6 +28,20 @@ export const ROUTES = [
     priority: 0.9,
     prerender: false,
     breadcrumb: 'Live map',
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'BirdMap live sighting map',
+        url: SITE_URL + '/map',
+        applicationCategory: 'EducationalApplication',
+        operatingSystem: 'Any (web browser)',
+        description:
+          'A live map of bird sightings (photos and audio) reported by the BirdMap community.',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        isPartOf: { '@id': SITE_URL + '/#website' },
+      },
+    ],
   },
   {
     path: '/ai',

@@ -23,7 +23,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 13. [x] **sitemap.xml (static first version)** (R)
 14. [x] **robots.txt points at the sitemap** (R)
 15. [x] **JSON-LD: Organization + WebSite** (R)
-16. [ ] **JSON-LD: WebApplication for the live map** (R)
+16. [x] **JSON-LD: WebApplication for the live map** (R)
 17. [ ] **JSON-LD: BreadcrumbList on every sub-page** (R)
 18. [ ] **firebase.json hosting config (was missing from the repo)** (R)
 19. [ ] **Long-cache immutable assets, short-cache HTML** (R)

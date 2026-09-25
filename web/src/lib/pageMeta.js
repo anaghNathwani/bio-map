@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { SITE_NAME, absoluteUrl, routeFor } from '../site.js'
+import { SITE_NAME, absoluteUrl, routeFor, jsonLdFor } from '../site.js'
 
 function upsert(selector, tag, attrs) {
   let el = document.head.querySelector(selector)
@@ -20,6 +20,19 @@ export function applyPageMeta(meta) {
   upsert('meta[property="og:description"]', 'meta', { property: 'og:description', content: meta.description })
   upsert('meta[property="og:url"]', 'meta', { property: 'og:url', content: absoluteUrl(meta.path) })
   upsert('meta[property="og:site_name"]', 'meta', { property: 'og:site_name', content: SITE_NAME })
+  setJsonLd(jsonLdFor(meta))
+}
+
+/** Replaces this page's JSON-LD blocks (site-wide Organization/WebSite lives in index.html). */
+function setJsonLd(items) {
+  document.head.querySelectorAll('script[data-seo="jsonld"]').forEach(el => el.remove())
+  for (const item of items) {
+    const el = document.createElement('script')
+    el.type = 'application/ld+json'
+    el.setAttribute('data-seo', 'jsonld')
+    el.textContent = JSON.stringify(item)
+    document.head.appendChild(el)
+  }
 }
 
 /** usePageMeta('/ai') looks the route up in the registry; usePageMeta({ path, title, description }) sets it directly. */
