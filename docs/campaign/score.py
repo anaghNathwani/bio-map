@@ -32,6 +32,8 @@ def pad_chord(dur, midis, amp=0.05, attack=2.5, release=2.5):
 
 
 def build(dur, start, swell, peak, end):
+    start, swell = max(0.3, start), max(0.3, swell)      # short cuts: never schedule before the film begins
+    peak = max(peak, swell + 0.8)
     b = np.zeros((int(dur * SR), 2))
     for k, ch in enumerate(CHORDS * 20):                      # continuous pad
         at = k * 6.0
@@ -55,21 +57,45 @@ def build(dur, start, swell, peak, end):
     return b
 
 
-def render(dur, start, swell, peak, end, out_wav):
+import soundfile as sf
+
+
+def vo_track(dur, events):
+    """Narration lines placed at their start times: mono, 44.1 kHz, gently high-passed and levelled."""
+    v = np.zeros(int(dur * SR))
+    for at, path in events:
+        s, sr = sf.read(str(path), dtype='float32')
+        if s.ndim > 1: s = s.mean(axis=1)
+        if sr != SR: s = np.interp(np.arange(int(len(s) * SR / sr)) * sr / SR, np.arange(len(s)), s)
+        s = s - np.convolve(s, np.ones(500) / 500, mode='same')      # ~90 Hz high-pass: no room rumble
+        s = s / (np.abs(s).max() + 1e-9) * 0.75
+        n = int(0.02 * SR); s[:n] *= np.linspace(0, 1, n); s[-n:] *= np.linspace(1, 0, n)
+        i = int(at * SR); v[i:i + len(s)] += s[:len(v) - i]
+    return v
+
+
+def render(dur, start, swell, peak, end, out_wav, vo=None):
     b = A.reverb(build(dur, start, swell, peak, end), 0.32)
     t = A.t_axis(dur)
     b *= (np.minimum(1, t / 1.5) * np.minimum(1, (dur - t) / 2.5))[:, None]
+    if vo is not None:
+        w = int(.14 * SR); env = np.convolve(np.abs(vo), np.ones(w) / w, mode='same'); env /= env.max() + 1e-9
+        duck = 1 - .5 * np.clip(env / .22, 0, 1)
+        w2 = int(.4 * SR); duck = np.convolve(duck, np.ones(w2) / w2, mode='same')      # music breathes under the voice
+        voice = A.reverb(np.stack([vo, vo], axis=1), 0.10)
+        b = b * duck[:, None] * 0.7 + voice
     b /= max(1e-9, np.abs(b).max()) / 0.8
     pcm = (np.clip(b, -1, 1) * 32767).astype('<i2')
     with wave.open(str(out_wav), 'wb') as w:
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes(pcm.tobytes())
 
 
-def mux(video, dur, cues):
+def mux(video, dur, cues, events=None):
+    vo = vo_track(dur, events) if events else None
     with tempfile.TemporaryDirectory() as d:
-        wav = pathlib.Path(d) / 'a.wav'; render(dur, *cues, wav)
+        wav = pathlib.Path(d) / 'a.wav'; render(dur, *cues, wav, vo)
         tmp = pathlib.Path(d) / 'o.mp4'
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(video), '-i', str(wav), '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'copy',
-                        '-af', 'loudnorm=I=-18:TP=-2.5:LRA=14', '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', '-shortest', str(tmp)], check=True)
+                        '-af', 'loudnorm=I=-16:TP=-2.5:LRA=12', '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', '-shortest', str(tmp)], check=True)
         tmp.replace(video)
     print('score added:', pathlib.Path(video).name)
