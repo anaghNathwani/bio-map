@@ -8,8 +8,9 @@ Files (all in `docs/social/instagram/`):
 
 | Folder | What | Format |
 |---|---|---|
-| `reels/` | 4 Reels with original synthesized audio, 12-17 seconds | MP4 1080x1920, 30 fps, H.264 + AAC stereo (~-16 LUFS) |
-| `reels/covers/` | a cover image for each Reel | PNG 1080x1920 |
+| `reels/01`-`04` | 4 calm, on-brand Reels (serif type, soft pad) | MP4 1080x1920, 30 fps, H.264 + AAC stereo (~-16 LUFS) |
+| `reels/05`-`08` | 4 **Gen Z-style** Reels (bold captions, hard cuts on the beat, emoji stickers, original beat), 12-15 s | same |
+| `reels/covers/` | a cover image for each of the 8 Reels | PNG 1080x1920 |
 | `carousels/` | 3 swipe posts (6, 8 and 6 slides) | PNG 1080x1350 (4:5) |
 | `stories/` | 3 question/poll backgrounds | PNG 1080x1920 |
 | `profile/` | profile picture + 4 highlight covers | PNG |
@@ -49,10 +50,13 @@ Aim for **3 posts a week** for 4 weeks, plus a Story or two. Consistency beats v
 
 | Week | Mon | Wed | Fri |
 |---|---|---|---|
-| 1 | Reel 01: how it works | Carousel 01: how it works | Story: question 01 |
-| 2 | Reel 02: sound tips | Carousel 02: 6 tips | Story: poll 02 |
-| 3 | Reel 03: stays on your phone | Carousel 03: citizen science | Story: question 03 |
-| 4 | Reel 04: says when unsure | Re-share your best post as a Story | Post a reply Reel/Story answering a real question you got |
+| 1 | Reel 05: POV you hear a bird | Carousel 01: how it works | Reel 06: 3 signs you're a birder |
+| 2 | Reel 07: speedrun | Carousel 02: 6 tips | Reel 01: how it works (calm) |
+| 3 | Reel 08: not sure is valid | Carousel 03: citizen science | Reel 03: stays on your phone |
+| 4 | Reel 02: sound tips | Story Q&A from real replies | Reel 04: says when unsure |
+
+Lead with the Gen Z Reels (05-08): they're built for shares and the hook lands in the first second. The calm ones (01-04)
+work as the "what is this?" explainers people find on your profile. Pin your best-performing Reel to the top of the grid.
 
 After week 4, repeat with new content: reuse `build.py`, and turn each new blog post into a carousel.
 
@@ -69,6 +73,18 @@ After week 4, repeat with new content: reuse `build.py`, and turn each new blog 
 **Carousel:** AirDrop the slide PNGs, **+** -> **Post** -> select multiple (in order) -> caption. First slide is the hook.
 
 **Story:** open the PNG in Stories, add the sticker named in the file name (Question or Poll) in the empty space, share.
+
+## About the Gen Z Reels (05-08)
+
+- **Formula:** a one-second hook, a cut every 1.5-2.5 seconds on the beat, words popping in like CapCut captions, one
+  emoji sticker per scene, and a CTA end card. Relatable humor first, product second.
+- **Honest by design:** the phone notification in Reel 05 and the chat bubble in Reel 08 are labelled *dramatization*. Nothing
+  claims accuracy, and "works with no signal" is true for identification (you still need signal to post a sighting; the caption says so).
+- **The beat is original** (synthesized in code), so there's nothing to license. If you want a trending sound for reach, turn this
+  track down in the app and add one from Instagram's library (availability can be limited on business accounts).
+- **Make your own versions:** edit the text in `genz.py` (it's plain strings), run `python3 build.py genz`. Good ideas to steal:
+  "birds be like" jokes, "things birders say," and replies to real comments as video replies.
+- No one can promise a video will take off. Post consistently, watch **saves and shares** in Insights, and make more of the winners.
 
 ## What works on Instagram (and what doesn't)
 

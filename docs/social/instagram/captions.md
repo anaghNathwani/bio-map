@@ -53,6 +53,55 @@ Would you trust an app more if it admitted when it wasn't sure?
 #birding #citizenscience #birdid #birdwatching
 ```
 
+### 05: POV you hear a bird (`reels/05-pov-you-hear-a-bird.mp4`)
+```
+pov: you hear a bird and have zero idea what it is 😭
+
+BirdMap IDs it on your phone, even with no signal (you still need signal to post it). live map in bio, iOS app coming soon.
+
+what's the bird you can never ID? 👇
+
+#birdwatching #birdsofinstagram #birdnerd #birding #citizenscience
+```
+
+### 06: 3 signs you're a birder (`reels/06-3-signs-youre-a-birder.mp4`)
+```
+3 signs you're becoming a birder 🔭
+
+which one are you? 1, 2 or 3? 👇
+
+log them all with BirdMap. iOS app coming soon, live map in bio.
+
+#birder #birdnerd #birdwatching #birdsofinstagram #birding
+```
+
+### 07: How it works, speedrun (`reels/07-how-it-works-speedrun.mp4`)
+```
+how BirdMap works, speedrun ⚡
+
+1. take a photo or record a call
+2. your phone IDs it (no upload needed)
+3. other birders confirm or correct it
+4. it lands on the map
+
+iOS app coming soon. live map in bio.
+
+#birding #citizenscience #birdwatching #buildinpublic
+```
+
+### 08: Not sure is valid (`reels/08-not-sure-is-valid.mp4`)
+```
+the bravest thing an app can do is say "not sure" 🫶
+
+when BirdMap isn't confident it tells you instead of guessing, and other birders can confirm or correct it. (the chat bubble is a dramatization)
+
+would you trust an app more if it admitted when it wasn't sure?
+
+#birding #birdwatching #birdsofinstagram #citizenscience
+```
+
+Pinned comment for any of them: `what bird would you most want an app to get right? 🐦`
+
 ## Carousels
 
 ### 01: How BirdMap works (`carousels/01-how-birdmap-works/`, 6 slides)

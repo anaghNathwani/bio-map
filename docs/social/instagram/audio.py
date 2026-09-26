@@ -170,7 +170,7 @@ def add_audio(mp4):
         render_wav(name, dur, wav)
         tmp = pathlib.Path(d) / 'out.mp4'
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(mp4), '-i', str(wav), '-map', '0:v:0', '-map', '1:a:0',
-                        '-c:v', 'copy', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=7', '-c:a', 'aac', '-b:a', '192k', '-ar', '44100',
+                        '-c:v', 'copy', '-af', 'loudnorm=I=-16:TP=-2.5:LRA=7', '-c:a', 'aac', '-b:a', '192k', '-ar', '44100',
                         '-movflags', '+faststart', '-shortest', str(tmp)], check=True)
         tmp.replace(mp4)
     print('audio added:', mp4.name)

@@ -5,11 +5,13 @@ deterministic. Playwright (system Chrome) screenshots each frame; ffmpeg encodes
 
   python3 build.py            # everything
   python3 build.py reels      # or: carousels | stories | profile
+  python3 build.py genz       # the Gen Z-style beat-synced reels (05-08)
   python3 build.py audio      # re-mux the synthesized soundtrack into the existing reels (no re-render)
 Needs: pip install playwright, ffmpeg, Google Chrome.
 """
 import pathlib, shutil, subprocess, sys, tempfile
 import audio
+import genz
 
 HERE = pathlib.Path(__file__).parent
 SRC = HERE / 'src'
@@ -250,6 +252,10 @@ def main(which):
         pg = b.new_page(viewport={'width': 1080, 'height': 1920})
         if which in ('all', 'reels'):
             for name, fn in REELS.items():
+                html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')
+                audio.add_audio(HERE / 'reels' / f'{name}.mp4')
+        if which in ('all', 'genz'):
+            for name, fn in genz.REELS.items():
                 html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')
                 audio.add_audio(HERE / 'reels' / f'{name}.mp4')
         if which in ('all', 'carousels'):
