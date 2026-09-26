@@ -86,6 +86,12 @@ After week 4, repeat with new content: reuse `build.py`, and turn each new blog 
   "birds be like" jokes, "things birders say," and replies to real comments as video replies.
 - No one can promise a video will take off. Post consistently, watch **saves and shares** in Insights, and make more of the winners.
 
+## The brand campaign ("Look up.")
+
+Separate from the feature Reels above: a quiet black-and-white brand film and four posters live in `docs/campaign/`
+(see `docs/campaign/CAMPAIGN.md`). They are **about the thought, not the app**: no product, no features, no "coming soon",
+no call to action. Post them alongside the feature content, not instead of it, and don't add app copy to their captions.
+
 ## What works on Instagram (and what doesn't)
 
 - The **first 1-2 seconds** decide if someone keeps watching; each Reel opens on its point, not a logo.
