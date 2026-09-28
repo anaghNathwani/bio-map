@@ -198,16 +198,32 @@ def reel_trailer(dur):
 def reel_showcase(dur):
     b = np.zeros((int(dur * SR), 2))
     b[:, 0] += (p := pad(dur, [A3, E4, B4], 0.03)); b[:, 1] += p
-    place(b, click(2400, .05, .17), 2.35); place(b, click(2000, .05, .15), 2.65)   # the double-click
-    place(b, whoosh(0.8, 0.14), 2.85)                                                # the swash wipe
-    beats = [3.9, 6.3, 8.7, 11.1, 13.5]
-    for i, at in enumerate(beats):
-        pan = [-0.4, 0.3, 0.0, 0.4, -0.3][i]
-        phrase(at + 0.1, [CH(3000 + i * 60, 4200 - i * 40), CH(3600, 4600, .16)], b, 0.10, pan)   # a bird call on each perch
-    form_a = beats[-1] + 2.5
-    place(b, glide(260, 640, 2.4, 0.07), form_a - 0.2)                # the gathering swell
-    place(b, pluck(A5, 2.4, 0.18), form_a + 3.3); place(b, pluck(E6, 2.4, 0.12), form_a + 3.35)   # the mark settles
-    phrase(form_a + 4.1, [CH(3300, 4500), CH(3900, 3100, .18), CH(3600, 4800, .16)], b, 0.10, 0.0)
+    place(b, click(2400, .05, .17), 2.35); place(b, click(2000, .05, .15), 2.65)      # the double-click
+    place(b, whoosh(0.8, 0.14), 2.85)                                                   # the swash wipe
+    for at, f in [(3.9, E5), (7.7, G5)]: place(b, pluck(f, 1.1, 0.15), at)              # dawn, then the bird lands
+    for k, at in enumerate([4.3, 5.4, 6.5]): phrase(at, [CH(3000 + k * 80, 4200), CH(3600, 4500, .14)], b, 0.05, [-0.5, 0.4, -0.2][k])   # distant flyers
+    for k in range(5):                                                                  # the singer: a repeating song
+        at = 9.0 + k * 0.72
+        phrase(at, [CH(3200, 4600), CH(3800, 4900, .15), CH(3400, 4100, .12), CH(4300, 3300, .2)], b, 0.12, [0.2, -0.1, 0.3, -0.2, 0.1][k])
+    place(b, glide(220, 560, 1.1, 0.06), 12.3)                                          # the phone rises
+    place(b, click(1800, .06, .18), 13.5)                                               # tap record
+    for k in range(4): place(b, ping(660 if k % 2 == 0 else 880, 1.2, 0.07), 13.7 + k * 0.7)   # recording pulses
+    for k in range(8): place(b, click(1400 + k * 150, .04, .08), 16.6 + k * 0.16)       # "listening" ticks
+    place(b, pluck(E5, 1.2, 0.16), 17.9); place(b, pluck(A5, 1.4, 0.15), 18.05)         # the suggestion lands
+    place(b, pluck(C6, 1.6, 0.14), 19.0); place(b, click(1800, .06, .16), 19.3)         # check, then tap "Right"
+    place(b, whoosh(0.7, 0.10), 19.8)                                                   # the map phone arrives
+    for k in range(7): place(b, click(1600, .03, .06), 20.3 + k * 0.1)                   # typing "sparrow"
+    for at, f in zip([21.0, 21.6, 21.8, 22.0, 22.3, 22.5, 22.7, 22.9, 23.1], [E5, G5, A5, C6, A5, G5, E5, G5, A5]):
+        place(b, pluck(f, 0.9, 0.12), at)                                               # pins pop, one note each
+    place(b, glide(300, 700, 1.2, 0.06), 21.9)                                          # the arcs draw
+    place(b, pluck(E6, 1.4, 0.10), 22.7)                                                # the confirmation toast
+    for k in range(26):                                                                 # the flood: accelerating shimmer
+        at = 23.3 + 2.5 * (k / 26) ** 1.7
+        place(b, ping(2200 + (k % 5) * 260, 0.5, 0.045), at, [-0.6, 0.6][k % 2])
+    form_a = 26.2
+    place(b, glide(240, 700, 2.8, 0.07), form_a - 0.2)                                  # the gathering swell
+    place(b, pluck(A5, 2.6, 0.18), form_a + 3.0); place(b, pluck(E6, 2.6, 0.12), form_a + 3.05)   # the mark settles
+    phrase(form_a + 4.2, [CH(3300, 4500), CH(3900, 3100, .18), CH(3600, 4800, .16)], b, 0.10, 0.0)
     return b
 
 
