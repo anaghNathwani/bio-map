@@ -66,9 +66,9 @@ FULL = [
          show=('Wings are its punctuation.<br><em>Migration is the<br>long sentence, written<br>across the seasons.</em>',
                'Wings are its punctuation.<br><em>Migration is the long sentence,<br>written across the seasons.</em>'), gap=1.7),
     dict(say='One bird is a small fact. A thousand of them move like a single thought.',
-         show='One bird is a small fact.<br>A thousand of them<br><em>move like a single thought.</em>', gap=1.8),
+         show='One bird is a small fact.<br>A thousand of them<br><em>move like a single thought.</em>', gap=2.8),
     dict(say='Nobody asked them to write it down. Someone should.',
-         show='Nobody asked them<br>to write it down.<br><em>Someone should.</em>', gap=2.0),
+         show='Nobody asked them<br>to write it down.<br><em>Someone should.</em>', gap=3.8, hold=2.4),
     dict(say='To the ones who look up. The world keeps a diary. You are its handwriting.',
          show='To the ones who <em>look up.</em><br>The world keeps a diary.<br>You are its handwriting.', gap=0.4),
 ]
@@ -101,7 +101,7 @@ def plan(script, intro, form_dur):
 
 def film_html(w, h, pl):
     portrait = h > w
-    size = (w * 0.078) if portrait else (h * 0.072)
+    size = (w * 0.054) if portrait else (h * 0.050)
     S = min(w, h)
     logo_px = S * (.44 if portrait else .50)
     cy = .35 if portrait else .41
