@@ -1,0 +1,71 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:G;src:url(fonts/geist-latin-wght-normal.woff2);font-weight:100 900}
+@font-face{font-family:F;src:url(fonts/fraunces-latin-standard-normal.woff2);font-weight:100 900}
+@font-face{font-family:F;font-style:italic;src:url(fonts/fraunces-latin-wght-italic.woff2);font-weight:100 900}
+:root{--paper:#F4F1E9;--ink:#211D16;--soft:#6B6255;--clay:#C1602E;--rule:rgba(33,29,22,.14)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:var(--paper);color:var(--ink);font-family:G,sans-serif;overflow:hidden}
+.frame{position:absolute;inset:36px;border:3px solid var(--rule)}
+.safe{position:absolute;left:100px;right:100px;display:flex;flex-direction:column;justify-content:center}
+.eb{font-size:34px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);margin-bottom:34px}
+h1{font-family:F,serif;font-weight:500;font-size:118px;line-height:1.06;letter-spacing:-.012em}
+h1 em,h2 em{color:var(--clay);font-style:italic}
+h2{font-family:F,serif;font-weight:500;font-size:96px;line-height:1.1}
+.num{font-family:F,serif;font-style:italic;font-size:210px;line-height:1;color:var(--clay);font-weight:400}
+.sub{font-size:48px;line-height:1.42;color:var(--soft);margin-top:34px}
+.pill{display:inline-block;margin-top:52px;padding:26px 44px;border:3px solid var(--ink);font-size:38px;letter-spacing:.01em}
+.brandbar{position:absolute;left:100px;right:100px;display:flex;align-items:center;justify-content:space-between;font-size:30px;color:var(--soft)}
+.brand{display:flex;align-items:center;gap:14px;font-family:F,serif;font-style:italic;font-size:42px;color:var(--ink)}
+.abs{position:absolute}
+.draw{stroke-dasharray:1;stroke-dashoffset:1}
+[data-a]{opacity:0}
+</style></head><body><div class="frame"></div><div id="desktop" class="abs" style="inset:0"><div id="win" class="abs" style="left:190px;top:560px;width:700px;height:460px;background:#fff;border:3px solid #211D16;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.2)"></div><div class="abs" style="left:190px;top:560px;width:700px;height:64px;border-bottom:2px solid rgba(33,29,22,.14);display:flex;align-items:center;padding:0 26px;font-size:26px;color:#6B6255;font-family:G,sans-serif">Downloads</div><div id="icon" class="abs" style="left:440px;top:672px;width:200px;transform-origin:center"><div style="display:flex;flex-direction:column;align-items:center;gap:16px"><svg viewBox="0 0 64 48" width="96" height="72" fill="none" stroke="#211D16" stroke-width="3" stroke-linejoin="round"><rect x="2" y="2" width="60" height="44" rx="8"/><path d="M26 15 L26 33 L43 24 Z" fill="#C1602E" stroke="none"/></svg><div style="font-size:28px;color:#211D16;font-family:G,sans-serif">BirdMap.mp4</div></div></div><div id="cur" class="abs" style="left:0;top:0"><svg viewBox="0 0 24 24" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))"><path d="M4 2 L4 20 L9 15.4 L12.2 22 L15.3 20.6 L12.1 14 L19 14 Z" fill="#111" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg></div></div><svg id="swash" class="abs" style="left:-160px;top:-140px" viewBox="0 0 1400 2200" width="1400" height="2200" fill="#211D16"><path d="M0 60 C120 -30 260 130 400 40 C560 -50 700 110 860 30 C1020 -40 1180 100 1400 40 L1400 2160 C1180 2100 1020 2240 860 2170 C700 2250 560 2090 400 2160 C260 2250 120 2090 0 2160 Z"/></svg><div id="video" class="abs" style="inset:0;opacity:0"><div id="forest" class="abs" style="inset:0;opacity:0"><svg class="abs" style="left:60px;top:1420px" viewBox="0 0 60 120" width="117" height="234" fill="none" stroke="#211D16" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="70" x2="30" y2="118"/><path d="M30 8C14 8 6 24 10 38 2 42 2 58 12 62 8 74 18 86 32 82 46 88 56 74 50 62 60 58 60 42 50 38 54 24 46 8 30 8Z"/></svg><svg class="abs" style="left:760px;top:1500px" viewBox="0 0 60 120" width="144" height="288" fill="none" stroke="#211D16" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="70" x2="30" y2="118"/><path d="M30 8C14 8 6 24 10 38 2 42 2 58 12 62 8 74 18 86 32 82 46 88 56 74 50 62 60 58 60 42 50 38 54 24 46 8 30 8Z"/></svg><svg class="abs" style="left:900px;top:1300px" viewBox="0 0 60 120" width="90" height="180" fill="none" stroke="#211D16" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="70" x2="30" y2="118"/><path d="M30 8C14 8 6 24 10 38 2 42 2 58 12 62 8 74 18 86 32 82 46 88 56 74 50 62 60 58 60 42 50 38 54 24 46 8 30 8Z"/></svg><svg class="abs" style="left:-40px;top:1250px" viewBox="0 0 60 120" width="81" height="162" fill="none" stroke="#211D16" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="70" x2="30" y2="118"/><path d="M30 8C14 8 6 24 10 38 2 42 2 58 12 62 8 74 18 86 32 82 46 88 56 74 50 62 60 58 60 42 50 38 54 24 46 8 30 8Z"/></svg><svg class="abs" style="left:960px;top:1620px" viewBox="0 0 60 120" width="99" height="198" fill="none" stroke="#211D16" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="70" x2="30" y2="118"/><path d="M30 8C14 8 6 24 10 38 2 42 2 58 12 62 8 74 18 86 32 82 46 88 56 74 50 62 60 58 60 42 50 38 54 24 46 8 30 8Z"/></svg></div><div class="abs" data-a="3.90" data-b="5.90" data-y="0" style="left:185px;top:485px"><div style="transform:none"><svg class="" viewBox="0 0 48 48" width="150" height="150" fill="none" stroke="#1B1812" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2" pathLength="1" class="draw" data-a="3.90" data-d=".9"/><circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="#1B1812" stroke="none"/></svg></div></div><div class="safe" style="top:850px;bottom:300px;"><h1 data-a="4.05" data-b="5.90" data-d=".8">Every bird you see becomes <em>data that matters.</em></h1></div><div class="abs" data-a="6.10" data-b="8.10" data-y="0" style="left:685px;top:545px"><div style="transform:scaleX(-1)"><svg class="" viewBox="0 0 48 48" width="150" height="150" fill="none" stroke="#1B1812" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2" pathLength="1" class="draw" data-a="6.10" data-d=".9"/><circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="#1B1812" stroke="none"/></svg></div></div><div class="safe" style="top:850px;bottom:300px;"><h1 data-a="6.25" data-b="8.10" data-d=".8">Identify birds <em>by sound.</em></h1></div><div class="abs" data-a="8.30" data-b="10.30" data-y="0" style="left:385px;top:445px"><div style="transform:none"><svg class="" viewBox="0 0 48 48" width="150" height="150" fill="none" stroke="#1B1812" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2" pathLength="1" class="draw" data-a="8.30" data-d=".9"/><circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="#1B1812" stroke="none"/></svg></div></div><div class="safe" style="top:850px;bottom:300px;"><h1 data-a="8.45" data-b="10.30" data-d=".8">Identified right here, <em>on your phone.</em></h1></div><div class="abs" data-a="10.50" data-b="12.50" data-y="0" style="left:785px;top:525px"><div style="transform:scaleX(-1)"><svg class="" viewBox="0 0 48 48" width="150" height="150" fill="none" stroke="#1B1812" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2" pathLength="1" class="draw" data-a="10.50" data-d=".9"/><circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="#1B1812" stroke="none"/></svg></div></div><div class="safe" style="top:850px;bottom:300px;"><h1 data-a="10.65" data-b="12.50" data-d=".8">BirdMap <em>doesn't guess.</em></h1></div><div class="abs" data-a="12.70" data-b="14.70" data-y="0" style="left:265px;top:565px"><div style="transform:none"><svg class="" viewBox="0 0 48 48" width="150" height="150" fill="none" stroke="#1B1812" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2" pathLength="1" class="draw" data-a="12.70" data-d=".9"/><circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="#1B1812" stroke="none"/></svg></div></div><div class="safe" style="top:850px;bottom:300px;"><h1 data-a="12.85" data-b="14.70" data-d=".8">One pin per place. <em>Works with no signal.</em></h1></div><div class="safe" style="top:1040px;bottom:300px;"><h1 data-a="18.60" style="text-align:center">Bird<em>Map</em></h1></div><div class="safe" style="top:1260px;bottom:140px;" data-a="19.2"><div class="sub" style="text-align:center">iOS app coming soon. Link in bio.</div><div style="display:flex;justify-content:center"><span class="pill">Link in bio</span></div></div><div class="brandbar" style="top:1780px" data-a="19.6" data-d="0.5" data-y="0"><div class="brand"><svg class="" viewBox="0 0 48 48" width="52" height="52" fill="none" stroke="#1B1812" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2" /><circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="#1B1812" stroke="none"/></svg>BirdMap</div><div>birdmap-citizenscience.web.app</div></div><canvas id="logo-cv" class="abs" style="inset:0" width="1080" height="1920"></canvas></div><script>
+const ease=t=>1-Math.pow(1-t,3);
+const clamp=x=>Math.min(1,Math.max(0,x));
+const seg=(t,a,d)=>clamp((t-a)/d);
+window.seg=seg;window.ease=ease;
+window.render=function(t){
+  document.querySelectorAll('[data-a]').forEach(el=>{
+    const a=+el.dataset.a,b=el.dataset.b?+el.dataset.b:Infinity;
+    const inn=ease(seg(t,a,+(el.dataset.d||.6))),out=ease(seg(t,b,.4));
+    const y=(1-inn)*(+(el.dataset.y||44))-out*24;
+    el.style.opacity=inn*(1-out);
+    el.style.transform=`translateY(${y}px)`;
+  });
+  document.querySelectorAll('.draw').forEach(p=>{
+    const a=+p.dataset.a||0,d=+p.dataset.d||1.4;
+    const prog=ease(seg(t,a,d));
+    p.style.strokeDashoffset=1-prog;
+    const eye=p.closest('svg').querySelector('.eye');
+    if(eye)eye.style.opacity=clamp((prog-.85)/.15);
+  });
+  if(window.custom)window.custom(t);
+};
+
+function pulse(t,at,d){return 1+0.07*clamp(1-Math.abs(t-(at+d/2))/(d/2),0,1)}
+const _cv=document.getElementById('logo-cv'), _ctx=_cv.getContext('2d');
+const _p=document.createElementNS('http://www.w3.org/2000/svg','path'); _p.setAttribute('d','M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2');
+const _len=_p.getTotalLength(), _n=240, _targets=[], _seeds=[[260,560],[760,620],[460,520],[860,600],[340,640]];
+for(let i=0;i<_n;i++){const pt=_p.getPointAtLength((i/_n)*_len); _targets.push({x:540+(pt.x-24)/48*420,y:760+(pt.y-24)/48*420})}
+const _starts=_targets.map((_,i)=>{const s=_seeds[i%_seeds.length];return {x:s[0]+(Math.random()-.5)*260,y:s[1]+(Math.random()-.5)*260}});
+const FORM_A=15.20, FORM_D=2.6;
+window.custom=function(t){
+  const p0={x:900,y:1500}, p1={x:540,y:747};
+  const cp=ease(seg(t,0.2,2.0));
+  const cx=p0.x+(p1.x-p0.x)*cp, cy=p0.y+(p1.y-p0.y)*cp-Math.sin(cp*Math.PI)*90;
+  document.getElementById('cur').style.transform=`translate(${cx}px,${cy}px)`;
+  const icon=document.getElementById('icon');
+  icon.style.transform=`scale(${Math.max(pulse(t,2.35,.2),pulse(t,2.65,.2))})`;
+  document.getElementById('desktop').style.opacity=1-ease(seg(t,2.9,0.3));
+  document.getElementById('swash').style.transform=`translateX(${-1600+ease(seg(t,2.85,0.7))*3200}px)`;
+  document.getElementById('forest').style.opacity=ease(seg(t,3.1,0.4))*(1-ease(seg(t,15.6,0.4)));
+  document.getElementById('video').style.opacity=ease(seg(t,3.0,0.3));
+  if(t<FORM_A-0.15) return;
+  _ctx.clearRect(0,0,1080,1920);
+  for(let i=0;i<_n;i++){
+    const g=ease(seg(t,FORM_A+(i/_n)*0.6,FORM_D));
+    const x=_starts[i].x+(_targets[i].x-_starts[i].x)*g, y=_starts[i].y+(_targets[i].y-_starts[i].y)*g;
+    _ctx.globalAlpha=0.35+0.55*g; _ctx.fillStyle='#211D16';
+    _ctx.beginPath(); _ctx.arc(x,y,1.6+0.6*g,0,Math.PI*2); _ctx.fill();
+  }
+};</script></body></html>
