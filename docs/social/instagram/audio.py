@@ -164,8 +164,39 @@ def reel_offline(dur):
     return b
 
 
+def click(freq=2200, dur=0.05, amp=0.16):
+    """A short, dry percussive tick for a mock UI click (not a musical note)."""
+    t = t_axis(dur)
+    env = np.minimum(1, t / 0.002) * np.exp(-t / 0.012)
+    return amp * env * np.sin(2 * np.pi * freq * t)
+
+def whoosh(dur, amp=0.11):
+    """A rising filtered-noise swell, for a "file opening" transition."""
+    n = rng.standard_normal(int(dur * SR))
+    k = np.ones(60) / 60
+    hi = np.convolve(n, k, mode='same')
+    t = t_axis(dur)
+    env = np.sin(np.pi * np.clip(t / dur, 0, 1)) ** 1.5
+    return amp * env * hi
+
+
+def reel_trailer(dur):
+    b = np.zeros((int(dur * SR), 2))
+    b[:, 0] += (p := pad(dur, [A3, E4, B4], 0.03)); b[:, 1] += p
+    place(b, click(2400, .05, .17), 2.35); place(b, click(2000, .05, .15), 2.65)   # the double-click
+    place(b, whoosh(0.9, 0.13), 2.85)                                                # the file opening
+    for at, f in [(3.7, E5), (6.0, G5), (8.4, A5), (10.8, C6), (13.2, G5), (15.6, A5)]:
+        place(b, pluck(f, 1.1, 0.15), at)
+    phrase(4.0, [CH(3000, 4200), CH(3600, 4600)], b, 0.07, -0.4)
+    phrase(8.7, [CH(3100, 4400), CH(3800, 4800)], b, 0.07, 0.3)
+    phrase(13.5, [CH(3300, 4500), CH(3900, 3100, .18)], b, 0.07, -0.2)
+    place(b, pluck(A5, 2.6, 0.18), 17.8); place(b, pluck(E6, 2.6, 0.12), 17.85)
+    phrase(18.6, [CH(3400, 4600), CH(4200, 3200, .2), CH(3600, 4800, .16)], b, 0.10, 0.0)
+    return b
+
+
 BUILDERS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
-            '09-the-map': reel_map, '10-works-offline': reel_offline}
+            '09-the-map': reel_map, '10-works-offline': reel_offline, '11-see-it-in-action': reel_trailer}
 
 
 def render_wav(name, dur, out):

@@ -181,6 +181,56 @@ def reel_offline():
 REELS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
          '09-the-map': reel_map, '10-works-offline': reel_offline}
 
+# ------------------------------------------------------------------ TRAILER (mock cursor opens "BirdMap.mp4", then a recap montage)
+CURSOR_SVG = '<svg viewBox="0 0 24 24" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))"><path d="M4 2 L4 20 L9 15.4 L12.2 22 L15.3 20.6 L12.1 14 L19 14 Z" fill="#111" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>'
+
+def file_icon():
+    return ('<div style="display:flex;flex-direction:column;align-items:center;gap:16px">'
+            '<svg viewBox="0 0 64 48" width="96" height="72" fill="none" stroke="#211D16" stroke-width="3" stroke-linejoin="round">'
+            '<rect x="2" y="2" width="60" height="44" rx="8"/><path d="M26 15 L26 33 L43 24 Z" fill="#C1602E" stroke="none"/></svg>'
+            '<div style="font-size:28px;color:#211D16;font-family:G,sans-serif">BirdMap.mp4</div></div>')
+
+def reel_trailer():
+    dur = 19.6
+    desktop = (f'<div id="desktop" class="abs" style="inset:0">'
+               f'<div id="win" class="abs" style="left:190px;top:560px;width:700px;height:460px;background:#fff;border:3px solid #211D16;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.2)"></div>'
+               f'<div class="abs" style="left:190px;top:560px;width:700px;height:64px;border-bottom:2px solid rgba(33,29,22,.14);display:flex;align-items:center;padding:0 26px;font-size:26px;color:#6B6255;font-family:G,sans-serif">Downloads</div>'
+               f'<div id="icon" class="abs" style="left:440px;top:672px;width:200px;transform-origin:center">{file_icon()}</div>'
+               f'<div id="cur" class="abs" style="left:0;top:0">{CURSOR_SVG}</div></div>')
+    openrect = '<div id="openrect" class="abs" style="left:440px;top:672px;width:200px;height:150px;background:#211D16;border-radius:18px;transform-origin:top left;opacity:0"></div>'
+    # recap montage: one beat lifted from each existing reel, compressed
+    video = safe('<div class="eb" data-a="3.5" data-b="5.9">BirdMap, <em>in brief</em></div>', top=300, bottom=420, a=None)
+    video += f'<div class="abs" data-a="3.7" data-b="5.9" data-y="0" style="left:0;right:0;top:900px;display:flex;justify-content:center">{bird(340, draw=True).replace("class=\"draw\"", "class=\"draw\" data-a=\"3.8\" data-d=\"1.3\"")}</div>'
+    video += safe('<h1 data-a="6.0" data-b="8.2" data-d=".7">Every bird you see becomes <em>data that matters.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="8.4" data-b="10.6" data-d=".7">Identify birds <em>by sound.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="10.8" data-b="13.0" data-d=".7">Identified right here, <em>on your phone.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="13.2" data-b="15.4" data-d=".7">BirdMap <em>doesn\'t guess.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="15.6" data-b="17.6" data-d=".7">One pin per place. <em>Works with no signal.</em></h1>', top=300, bottom=420)
+    video += safe('<div class="eb">BirdMap</div><h1>See it for <em>yourself.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=17.8)
+    video += brandbar(1450, a=18.2)
+    body = desktop + openrect + f'<div id="video" class="abs" style="inset:0;opacity:0">{video}</div>'
+    js = """
+function pulse(t,at,d){return 1+0.07*clamp(1-Math.abs(t-(at+d/2))/(d/2),0,1)}
+window.custom=function(t){
+  const p0={x:900,y:1500}, p1={x:540,y:747};
+  const cp=ease(seg(t,0.2,2.0));
+  const cx=p0.x+(p1.x-p0.x)*cp, cy=p0.y+(p1.y-p0.y)*cp-Math.sin(cp*Math.PI)*90;
+  document.getElementById('cur').style.transform=`translate(${cx}px,${cy}px)`;
+  const icon=document.getElementById('icon');
+  const s=Math.max(pulse(t,2.35,.2),pulse(t,2.65,.2));
+  icon.style.transform=`scale(${s})`;
+  const desktop=document.getElementById('desktop');
+  desktop.style.opacity=1-ease(seg(t,3.0,0.4));
+  const or_=document.getElementById('openrect');
+  const grow=ease(seg(t,2.85,0.7));
+  or_.style.opacity=grow>0?Math.min(1,grow*3)*(1-ease(seg(t,3.5,0.3))):0;
+  or_.style.transform=`scale(${1+grow*7},${1+grow*14})`;
+  document.getElementById('video').style.opacity=ease(seg(t,3.2,0.6));
+};"""
+    return page(body, js=js), dur
+
+TRAILER = {'11-see-it-in-action': reel_trailer}
+
 # ------------------------------------------------------------------ CAROUSELS (1080x1350)
 def slide_cover(title, eyebrow, hint=True, n=1, total=1):
     body = safe(f'<div class="eb">{eyebrow}</div><h1 style="font-size:116px">{title}</h1>' + ('<div class="sub" style="margin-top:60px">Swipe &rarr;</div>' if hint else ''), top=120, bottom=200)
@@ -278,7 +328,7 @@ def render_reel(pg, name, html, dur, out):
     shutil.rmtree(tmp)
     print('reel', out.name, f'{dur}s', f'{out.stat().st_size/1e6:.1f} MB')
 
-def main(which):
+def main(which, filt=None):
     if which == 'audio':
         for f in sorted((HERE / 'reels').glob('*.mp4')): audio.add_audio(f)
         return
@@ -288,6 +338,12 @@ def main(which):
         pg = b.new_page(viewport={'width': 1080, 'height': 1920})
         if which in ('all', 'reels'):
             for name, fn in REELS.items():
+                if filt and filt not in name: continue
+                html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')
+                audio.add_audio(HERE / 'reels' / f'{name}.mp4')
+        if which in ('all', 'trailer'):
+            for name, fn in TRAILER.items():
+                if filt and filt not in name: continue
                 html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')
                 audio.add_audio(HERE / 'reels' / f'{name}.mp4')
         if which in ('all', 'genz'):
@@ -311,4 +367,4 @@ def main(which):
         b.close()
 
 if __name__ == '__main__':
-    main(sys.argv[1] if len(sys.argv) > 1 else 'all')
+    main(sys.argv[1] if len(sys.argv) > 1 else 'all', sys.argv[2] if len(sys.argv) > 2 else None)
