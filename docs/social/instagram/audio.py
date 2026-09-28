@@ -141,7 +141,31 @@ def reel_unsure(dur):
     return b
 
 
-BUILDERS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure}
+def reel_map(dur):
+    b = np.zeros((int(dur * SR), 2))
+    b[:, 0] += (p := pad(dur, [A3, E4, C5], 0.03)); b[:, 1] += p
+    for at, f in [(0.3, E5), (3.4, G5), (7.0, A5)]: place(b, pluck(f), at)
+    place(b, pluck(A5, 2.2, 0.16), 10.4); place(b, pluck(E6, 2.2, 0.10), 10.45)
+    phrase(1.0, [CH(3000, 4200), CH(3600, 4600)], b, 0.08, -0.4)
+    phrase(4.2, [CH(3300, 4500), CH(3900, 3100, .18)], b, 0.10, 0.3)   # the badge counting up
+    phrase(7.8, [CH(3100, 4300), CH(3700, 4700)], b, 0.08, 0.0)         # the search reveal
+    phrase(11.4, [CH(3400, 4600), CH(4200, 3200, .2)], b, 0.08, 0.3)
+    return b
+
+
+def reel_offline(dur):
+    b = np.zeros((int(dur * SR), 2))
+    b[:, 0] += (p := pad(dur, [A3, E4, G4], 0.03)); b[:, 1] += p
+    place(b, pluck(E5), 0.2); place(b, pluck(D5 / 2, 1.4, 0.16), 3.4)   # the crossed-out signal: a dampened note
+    place(b, glide(300, 620, 1.6, 0.07), 6.6)                            # the queue sliding toward the cloud
+    place(b, pluck(C6, 1.6, 0.14), 8.7)                                  # the checkmark lands
+    place(b, pluck(A5, 2.2, 0.16), 10.0); place(b, pluck(E6, 2.2, 0.10), 10.05)
+    phrase(11.0, [CH(3300, 4500), CH(3900, 3100, .2)], b, 0.07, -0.3)
+    return b
+
+
+BUILDERS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
+            '09-the-map': reel_map, '10-works-offline': reel_offline}
 
 
 def render_wav(name, dur, out):

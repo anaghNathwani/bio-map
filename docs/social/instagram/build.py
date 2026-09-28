@@ -143,7 +143,43 @@ def reel_unsure():
     js = "window.custom=function(t){document.getElementById('fill').style.width=(ease(seg(t,6.0,1.6))*34)+'%'}"
     return page(body, js=js), dur
 
-REELS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure}
+def pin(size=90, badge=None):
+    p = f'<svg viewBox="0 0 24 32" width="{size}" height="{size*32/24:.0f}" fill="none" stroke="#211D16" stroke-width="2" stroke-linejoin="round"><path pathLength="1" class="draw" data-a="3.4" data-d="1.1" d="M12 1C6.5 1 2 5.6 2 11c0 7 10 19 10 19s10-12 10-19c0-5.4-4.5-10-10-10z"/><circle cx="12" cy="11" r="4" fill="#211D16" stroke="none"/></svg>'
+    b = f'<div id="badge" class="abs" style="left:{size*.66:.0f}px;top:-10px;width:54px;height:54px;border-radius:50%;background:#C1602E;color:#F4F1E9;display:flex;align-items:center;justify-content:center;font-size:30px;font-family:G,sans-serif;font-weight:600;opacity:0">1</div>' if badge else ''
+    return f'<div class="abs" style="position:relative">{p}{b}</div>'
+
+def reel_map():
+    dur = 13.6
+    body = safe('<div class="eb" data-a=".1" data-b="3.2">The map</div><h1 data-a=".5" data-b="3.2" data-d=".9">Ten sightings, same tree? <em>One pin.</em></h1>', top=300, bottom=420)
+    body += f'<div class="abs" data-a="3.4" data-b="6.8" data-y="0" style="left:0;right:0;top:520px;display:flex;justify-content:center">{pin(160, badge=True)}</div>'
+    body += safe('<h2 style="text-align:center;font-size:78px" data-a="4.6" data-b="6.8">A number means <em>more than one.</em></h2>', top=1000, bottom=420, a=None)
+    bar = '<div style="width:880px;height:96px;border:3px solid #211D16;border-radius:48px;display:flex;align-items:center;padding:0 40px;gap:20px"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#211D16" stroke-width="3"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="21" y2="21"/></svg><span id="q" style="font-size:40px;color:#211D16"></span></div>'
+    body += safe(f'<div class="eb">Search</div>{bar}<div class="sub" style="margin-top:44px">Species, notes, or usernames.</div>', a=7.0, b=10.2, top=300, bottom=420)
+    body += safe('<div class="eb">BirdMap</div><h1>See every sighting, <em>mapped.</em></h1><div class="sub">Bookmark the ones you want to find again. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=10.4)
+    body += brandbar(1450, a=0.4)
+    js = """window.custom=function(t){
+  const badge=document.getElementById('badge'); if(badge){badge.style.opacity=ease(seg(t,4.0,0.5)); badge.textContent=t<5.3?'2':t<6.4?'5':'9'}
+  const q=document.getElementById('q'); if(q){const word='sparrow';const n=Math.floor(clamp((t-7.6)/0.9,0,1)*word.length);q.textContent=word.slice(0,n)+(t>7.6&&t<9.0&&n<word.length?'|':'')}
+};"""
+    return page(body, js=js), dur
+
+def reel_offline():
+    dur = 13.0
+    nosig = '<svg viewBox="0 0 64 48" width="140" height="105" fill="none" stroke="#211D16" stroke-width="3" stroke-linecap="round"><rect x="18" y="8" width="28" height="40" rx="6"/><path d="M26 6 L38 42 M38 6 L26 42" stroke="#C1602E" stroke-width="4"/></svg>'
+    queue = ''.join(f'<div class="abs" style="left:{i*40}px;top:{-i*10}px;width:180px;height:110px;background:#F4F1E9;border:3px solid #211D16;border-radius:14px"></div>' for i in range(3))
+    cloud = '<svg viewBox="0 0 120 90" width="300" height="225" fill="none" stroke="#211D16" stroke-width="3" stroke-linejoin="round"><path d="M30 72a20 20 0 0 1 3-40 28 28 0 0 1 55 6 18 18 0 0 1 2 34z"/></svg>'
+    check = '<svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="#C1602E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" class="draw" data-a="8.6" data-d=".6" d="M4 13 L10 19 L20 6"/></svg>'
+    body = safe('<h1 data-a=".2" data-b="3.0" data-d=".9">No signal doesn\'t mean <em>no sighting.</em></h1>', top=300, bottom=420)
+    body += f'<div class="abs" data-a="3.2" data-b="6.4" data-y="0" style="left:0;right:0;top:560px;display:flex;justify-content:center">{nosig}</div>'
+    body += safe('<h2 style="text-align:center;font-size:76px" data-a="3.6" data-b="6.4">It saves right where <em>you are.</em></h2>', top=980, bottom=420, a=None)
+    body += f'<div class="abs" data-a="6.6" data-b="9.8" data-y="0" style="left:0;right:0;top:520px;display:flex;justify-content:center;align-items:center;gap:60px"><div style="position:relative;width:260px;height:130px">{queue}</div><div style="position:relative">{cloud}<div style="position:absolute;left:30px;top:15px">{check}</div></div></div>'
+    body += safe('<h2 style="text-align:center;font-size:72px" data-a="7.2" data-b="9.8">And sends the moment <em>you\'re back.</em></h2>', top=980, bottom=420, a=None)
+    body += safe('<div class="eb">BirdMap</div><h1>Nothing gets lost in a <em>dead zone.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=10.0)
+    body += brandbar(1450, a=0.4)
+    return page(body), dur
+
+REELS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
+         '09-the-map': reel_map, '10-works-offline': reel_offline}
 
 # ------------------------------------------------------------------ CAROUSELS (1080x1350)
 def slide_cover(title, eyebrow, hint=True, n=1, total=1):
