@@ -197,7 +197,7 @@ def reel_trailer():
                f'<div class="abs" style="left:190px;top:560px;width:700px;height:64px;border-bottom:2px solid rgba(33,29,22,.14);display:flex;align-items:center;padding:0 26px;font-size:26px;color:#6B6255;font-family:G,sans-serif">Downloads</div>'
                f'<div id="icon" class="abs" style="left:440px;top:672px;width:200px;transform-origin:center">{file_icon()}</div>'
                f'<div id="cur" class="abs" style="left:0;top:0">{CURSOR_SVG}</div></div>')
-    openrect = '<div id="openrect" class="abs" style="left:440px;top:672px;width:200px;height:150px;background:#211D16;border-radius:18px;transform-origin:top left;opacity:0"></div>'
+    openrect = '<div id="openrect" class="abs" style="inset:0;background:#211D16;transform-origin:540px 747px;transform:scale(0.001);opacity:0"></div>'
     # recap montage: one beat lifted from each existing reel, compressed
     video = safe('<div class="eb" data-a="3.5" data-b="5.9">BirdMap, <em>in brief</em></div>', top=300, bottom=420, a=None)
     video += f'<div class="abs" data-a="3.7" data-b="5.9" data-y="0" style="left:0;right:0;top:900px;display:flex;justify-content:center">{bird(340, draw=True).replace("class=\"draw\"", "class=\"draw\" data-a=\"3.8\" data-d=\"1.3\"")}</div>'
@@ -222,10 +222,10 @@ window.custom=function(t){
   const desktop=document.getElementById('desktop');
   desktop.style.opacity=1-ease(seg(t,3.0,0.4));
   const or_=document.getElementById('openrect');
-  const grow=ease(seg(t,2.85,0.7));
-  or_.style.opacity=grow>0?Math.min(1,grow*3)*(1-ease(seg(t,3.5,0.3))):0;
-  or_.style.transform=`scale(${1+grow*7},${1+grow*14})`;
-  document.getElementById('video').style.opacity=ease(seg(t,3.2,0.6));
+  const grow=ease(seg(t,2.85,0.55));
+  or_.style.transform=`scale(${Math.max(0.001,grow*1.3)})`;
+  or_.style.opacity=Math.min(1,grow*3)*(1-ease(seg(t,3.65,0.35)));
+  document.getElementById('video').style.opacity=ease(seg(t,3.55,0.6));
 };"""
     return page(body, js=js), dur
 
