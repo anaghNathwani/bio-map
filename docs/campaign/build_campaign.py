@@ -53,14 +53,14 @@ def page(cfg, body='', css_extra='', dark=True):
 # ------------------------------------------------------------------ the script (original writing; abstract, tied to the living world)
 # say = what is spoken, show = what is on screen, gap = silence after the line (seconds)
 FULL = [
-    dict(say='Above the stone, and below the stars, there is a thin, bright layer where everything is alive.',
+    dict(say='Above the stone, below the stars, a thin bright layer where everything is alive.',
          show=('Above the stone,<br>below the stars,<br>a thin bright layer<br>where everything is <em>alive.</em>',
                'Above the stone, below the stars,<br>a thin bright layer<br>where everything is <em>alive.</em>'), gap=1.6),
     dict(say='We call it the biosphere. The birds call it home.',
          show='We call it the biosphere.<br><em>The birds call it home.</em>', gap=1.5),
     dict(say='Every morning, it clears its throat.', show='Every morning,<br>it <em>clears its throat.</em>', gap=0.8),
     dict(say='And a few of us stop mid-sentence.', show='And a few of us<br>stop mid-sentence.', gap=1.8),
-    dict(say='They are the listeners. The ones who know the sky is a language.',
+    dict(say='They are the listeners. The sky is a language.',
          show='They are the listeners.<br><em>The sky is a language.</em>', gap=1.6),
     dict(say='Wings are its punctuation. Migration is the long sentence, written across the seasons.',
          show=('Wings are its punctuation.<br><em>Migration is the<br>long sentence, written<br>across the seasons.</em>',
