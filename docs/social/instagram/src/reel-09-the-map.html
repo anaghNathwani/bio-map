@@ -1,0 +1,47 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:G;src:url(fonts/geist-latin-wght-normal.woff2);font-weight:100 900}
+@font-face{font-family:F;src:url(fonts/fraunces-latin-standard-normal.woff2);font-weight:100 900}
+@font-face{font-family:F;font-style:italic;src:url(fonts/fraunces-latin-wght-italic.woff2);font-weight:100 900}
+:root{--paper:#F4F1E9;--ink:#211D16;--soft:#6B6255;--clay:#C1602E;--rule:rgba(33,29,22,.14)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:var(--paper);color:var(--ink);font-family:G,sans-serif;overflow:hidden}
+.frame{position:absolute;inset:36px;border:3px solid var(--rule)}
+.safe{position:absolute;left:100px;right:100px;display:flex;flex-direction:column;justify-content:center}
+.eb{font-size:34px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);margin-bottom:34px}
+h1{font-family:F,serif;font-weight:500;font-size:118px;line-height:1.06;letter-spacing:-.012em}
+h1 em,h2 em{color:var(--clay);font-style:italic}
+h2{font-family:F,serif;font-weight:500;font-size:96px;line-height:1.1}
+.num{font-family:F,serif;font-style:italic;font-size:210px;line-height:1;color:var(--clay);font-weight:400}
+.sub{font-size:48px;line-height:1.42;color:var(--soft);margin-top:34px}
+.pill{display:inline-block;margin-top:52px;padding:26px 44px;border:3px solid var(--ink);font-size:38px;letter-spacing:.01em}
+.brandbar{position:absolute;left:100px;right:100px;display:flex;align-items:center;justify-content:space-between;font-size:30px;color:var(--soft)}
+.brand{display:flex;align-items:center;gap:14px;font-family:F,serif;font-style:italic;font-size:42px;color:var(--ink)}
+.abs{position:absolute}
+.draw{stroke-dasharray:1;stroke-dashoffset:1}
+[data-a]{opacity:0}
+</style></head><body><div class="frame"></div><div class="safe" style="top:300px;bottom:420px;"><div class="eb" data-a=".1" data-b="3.2">The map</div><h1 data-a=".5" data-b="3.2" data-d=".9">Ten sightings, same tree? <em>One pin.</em></h1></div><div class="abs" data-a="3.4" data-b="6.8" data-y="0" style="left:0;right:0;top:520px;display:flex;justify-content:center"><div class="abs" style="position:relative"><svg viewBox="0 0 24 32" width="160" height="213" fill="none" stroke="#211D16" stroke-width="2" stroke-linejoin="round"><path pathLength="1" class="draw" data-a="3.4" data-d="1.1" d="M12 1C6.5 1 2 5.6 2 11c0 7 10 19 10 19s10-12 10-19c0-5.4-4.5-10-10-10z"/><circle cx="12" cy="11" r="4" fill="#211D16" stroke="none"/></svg><div id="badge" class="abs" style="left:106px;top:-10px;width:54px;height:54px;border-radius:50%;background:#C1602E;color:#F4F1E9;display:flex;align-items:center;justify-content:center;font-size:30px;font-family:G,sans-serif;font-weight:600;opacity:0">1</div></div></div><div class="safe" style="top:1000px;bottom:420px;"><h2 style="text-align:center;font-size:78px" data-a="4.6" data-b="6.8">A number means <em>more than one.</em></h2></div><div class="safe" style="top:300px;bottom:420px;" data-a="7.0" data-b="10.2"><div class="eb">Search</div><div style="width:880px;height:96px;border:3px solid #211D16;border-radius:48px;display:flex;align-items:center;padding:0 40px;gap:20px"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#211D16" stroke-width="3"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="21" y2="21"/></svg><span id="q" style="font-size:40px;color:#211D16"></span></div><div class="sub" style="margin-top:44px">Species, notes, or usernames.</div></div><div class="safe" style="top:300px;bottom:420px;" data-a="10.4"><div class="eb">BirdMap</div><h1>See every sighting, <em>mapped.</em></h1><div class="sub">Bookmark the ones you want to find again. Link in bio.</div><div><span class="pill">Link in bio</span></div></div><div class="brandbar" style="top:1450px" data-a="0.4" data-d="0.5" data-y="0"><div class="brand"><svg class="" viewBox="0 0 48 48" width="52" height="52" fill="none" stroke="#1B1812" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 27C11 14 21 7 34 7c2.7 0 5 .4 7 1.1-1.8 1-3.3 2.3-4.4 4C40 12.4 43 13.4 45 15.3c-3 .3-5.6 1.4-7.7 3.2 1 6.7-1.2 13-6.4 17.6C25.8 41.4 18.8 43.6 11 42.4c3.6-1 6.6-2.9 8.8-5.5-5-.4-9.4-3-12.2-7.1 2.6.7 5.1.6 7.4-.4C11 27.8 7.9 25 6 21.2" /><circle class="eye" cx="33.5" cy="14.5" r="1.4" fill="#1B1812" stroke="none"/></svg>BirdMap</div><div>birdmap-citizenscience.web.app</div></div><script>
+const ease=t=>1-Math.pow(1-t,3);
+const clamp=x=>Math.min(1,Math.max(0,x));
+const seg=(t,a,d)=>clamp((t-a)/d);
+window.seg=seg;window.ease=ease;
+window.render=function(t){
+  document.querySelectorAll('[data-a]').forEach(el=>{
+    const a=+el.dataset.a,b=el.dataset.b?+el.dataset.b:Infinity;
+    const inn=ease(seg(t,a,+(el.dataset.d||.6))),out=ease(seg(t,b,.4));
+    const y=(1-inn)*(+(el.dataset.y||44))-out*24;
+    el.style.opacity=inn*(1-out);
+    el.style.transform=`translateY(${y}px)`;
+  });
+  document.querySelectorAll('.draw').forEach(p=>{
+    const a=+p.dataset.a||0,d=+p.dataset.d||1.4;
+    const prog=ease(seg(t,a,d));
+    p.style.strokeDashoffset=1-prog;
+    const eye=p.closest('svg').querySelector('.eye');
+    if(eye)eye.style.opacity=clamp((prog-.85)/.15);
+  });
+  if(window.custom)window.custom(t);
+};
+window.custom=function(t){
+  const badge=document.getElementById('badge'); if(badge){badge.style.opacity=ease(seg(t,4.0,0.5)); badge.textContent=t<5.3?'2':t<6.4?'5':'9'}
+  const q=document.getElementById('q'); if(q){const word='sparrow';const n=Math.floor(clamp((t-7.6)/0.9,0,1)*word.length);q.textContent=word.slice(0,n)+(t>7.6&&t<9.0&&n<word.length?'|':'')}
+};</script></body></html>

@@ -13,7 +13,8 @@ import soundfile as sf
 HERE = pathlib.Path(__file__).parent
 LINES = HERE / 'vo' / 'lines'
 CACHE = pathlib.Path.home() / '.cache' / 'birdmap-tts'
-VOICE = 'af_heart'
+VOICE = 'qwen3-soft-v1'
+REF_TEXT = 'The world keeps a diary. You are its handwriting.'
 SPEED = 0.80          # slow, close, unhurried
 _k = None
 
@@ -29,9 +30,10 @@ def synth(text):
     p = LINES / f'{slug(text)}.wav'
     if not p.exists():
         if _k is None:
-            from kokoro_onnx import Kokoro
-            _k = Kokoro(str(CACHE / 'kokoro-v1.0.onnx'), str(CACHE / 'voices-v1.0.bin'))
-        s, sr = _k.create(text, voice=VOICE, speed=SPEED, lang='en-us')
+            from mlx_audio.tts.utils import load_model
+            _k = load_model(str(CACHE / 'qwen3-base'))
+        r = list(_k.generate(text=text, ref_audio=str(HERE / 'vo' / 'ref-voice.wav'), ref_text=REF_TEXT, lang_code='english'))
+        s, sr = np.concatenate([np.array(x.audio).astype('float32') for x in r]), _k.sample_rate
         sf.write(str(p), s.astype('float32'), sr)
     s, sr = sf.read(str(p), dtype='float32')
     if s.ndim > 1: s = s.mean(axis=1)

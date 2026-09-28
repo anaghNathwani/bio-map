@@ -143,7 +143,163 @@ def reel_unsure():
     js = "window.custom=function(t){document.getElementById('fill').style.width=(ease(seg(t,6.0,1.6))*34)+'%'}"
     return page(body, js=js), dur
 
-REELS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure}
+def pin(size=90, badge=None):
+    p = f'<svg viewBox="0 0 24 32" width="{size}" height="{size*32/24:.0f}" fill="none" stroke="#211D16" stroke-width="2" stroke-linejoin="round"><path pathLength="1" class="draw" data-a="3.4" data-d="1.1" d="M12 1C6.5 1 2 5.6 2 11c0 7 10 19 10 19s10-12 10-19c0-5.4-4.5-10-10-10z"/><circle cx="12" cy="11" r="4" fill="#211D16" stroke="none"/></svg>'
+    b = f'<div id="badge" class="abs" style="left:{size*.66:.0f}px;top:-10px;width:54px;height:54px;border-radius:50%;background:#C1602E;color:#F4F1E9;display:flex;align-items:center;justify-content:center;font-size:30px;font-family:G,sans-serif;font-weight:600;opacity:0">1</div>' if badge else ''
+    return f'<div class="abs" style="position:relative">{p}{b}</div>'
+
+def reel_map():
+    dur = 13.6
+    body = safe('<div class="eb" data-a=".1" data-b="3.2">The map</div><h1 data-a=".5" data-b="3.2" data-d=".9">Ten sightings, same tree? <em>One pin.</em></h1>', top=300, bottom=420)
+    body += f'<div class="abs" data-a="3.4" data-b="6.8" data-y="0" style="left:0;right:0;top:520px;display:flex;justify-content:center">{pin(160, badge=True)}</div>'
+    body += safe('<h2 style="text-align:center;font-size:78px" data-a="4.6" data-b="6.8">A number means <em>more than one.</em></h2>', top=1000, bottom=420, a=None)
+    bar = '<div style="width:880px;height:96px;border:3px solid #211D16;border-radius:48px;display:flex;align-items:center;padding:0 40px;gap:20px"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#211D16" stroke-width="3"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="21" y2="21"/></svg><span id="q" style="font-size:40px;color:#211D16"></span></div>'
+    body += safe(f'<div class="eb">Search</div>{bar}<div class="sub" style="margin-top:44px">Species, notes, or usernames.</div>', a=7.0, b=10.2, top=300, bottom=420)
+    body += safe('<div class="eb">BirdMap</div><h1>See every sighting, <em>mapped.</em></h1><div class="sub">Bookmark the ones you want to find again. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=10.4)
+    body += brandbar(1450, a=0.4)
+    js = """window.custom=function(t){
+  const badge=document.getElementById('badge'); if(badge){badge.style.opacity=ease(seg(t,4.0,0.5)); badge.textContent=t<5.3?'2':t<6.4?'5':'9'}
+  const q=document.getElementById('q'); if(q){const word='sparrow';const n=Math.floor(clamp((t-7.6)/0.9,0,1)*word.length);q.textContent=word.slice(0,n)+(t>7.6&&t<9.0&&n<word.length?'|':'')}
+};"""
+    return page(body, js=js), dur
+
+def reel_offline():
+    dur = 13.0
+    nosig = '<svg viewBox="0 0 64 48" width="140" height="105" fill="none" stroke="#211D16" stroke-width="3" stroke-linecap="round"><rect x="18" y="8" width="28" height="40" rx="6"/><path d="M26 6 L38 42 M38 6 L26 42" stroke="#C1602E" stroke-width="4"/></svg>'
+    queue = ''.join(f'<div class="abs" style="left:{i*40}px;top:{-i*10}px;width:180px;height:110px;background:#F4F1E9;border:3px solid #211D16;border-radius:14px"></div>' for i in range(3))
+    cloud = '<svg viewBox="0 0 120 90" width="300" height="225" fill="none" stroke="#211D16" stroke-width="3" stroke-linejoin="round"><path d="M30 72a20 20 0 0 1 3-40 28 28 0 0 1 55 6 18 18 0 0 1 2 34z"/></svg>'
+    check = '<svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="#C1602E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" class="draw" data-a="8.6" data-d=".6" d="M4 13 L10 19 L20 6"/></svg>'
+    body = safe('<h1 data-a=".2" data-b="3.0" data-d=".9">No signal doesn\'t mean <em>no sighting.</em></h1>', top=300, bottom=420)
+    body += f'<div class="abs" data-a="3.2" data-b="6.4" data-y="0" style="left:0;right:0;top:560px;display:flex;justify-content:center">{nosig}</div>'
+    body += safe('<h2 style="text-align:center;font-size:76px" data-a="3.6" data-b="6.4">It saves right where <em>you are.</em></h2>', top=980, bottom=420, a=None)
+    body += f'<div class="abs" data-a="6.6" data-b="9.8" data-y="0" style="left:0;right:0;top:520px;display:flex;justify-content:center;align-items:center;gap:60px"><div style="position:relative;width:260px;height:130px">{queue}</div><div style="position:relative">{cloud}<div style="position:absolute;left:30px;top:15px">{check}</div></div></div>'
+    body += safe('<h2 style="text-align:center;font-size:72px" data-a="7.2" data-b="9.8">And sends the moment <em>you\'re back.</em></h2>', top=980, bottom=420, a=None)
+    body += safe('<div class="eb">BirdMap</div><h1>Nothing gets lost in a <em>dead zone.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=10.0)
+    body += brandbar(1450, a=0.4)
+    return page(body), dur
+
+REELS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
+         '09-the-map': reel_map, '10-works-offline': reel_offline}
+
+# ------------------------------------------------------------------ TRAILER (mock cursor opens "BirdMap.mp4", then a recap montage)
+CURSOR_SVG = '<svg viewBox="0 0 24 24" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))"><path d="M4 2 L4 20 L9 15.4 L12.2 22 L15.3 20.6 L12.1 14 L19 14 Z" fill="#111" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>'
+
+def file_icon():
+    return ('<div style="display:flex;flex-direction:column;align-items:center;gap:16px">'
+            '<svg viewBox="0 0 64 48" width="96" height="72" fill="none" stroke="#211D16" stroke-width="3" stroke-linejoin="round">'
+            '<rect x="2" y="2" width="60" height="44" rx="8"/><path d="M26 15 L26 33 L43 24 Z" fill="#C1602E" stroke="none"/></svg>'
+            '<div style="font-size:28px;color:#211D16;font-family:G,sans-serif">BirdMap.mp4</div></div>')
+
+def reel_trailer():
+    dur = 19.6
+    desktop = (f'<div id="desktop" class="abs" style="inset:0">'
+               f'<div id="win" class="abs" style="left:190px;top:560px;width:700px;height:460px;background:#fff;border:3px solid #211D16;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.2)"></div>'
+               f'<div class="abs" style="left:190px;top:560px;width:700px;height:64px;border-bottom:2px solid rgba(33,29,22,.14);display:flex;align-items:center;padding:0 26px;font-size:26px;color:#6B6255;font-family:G,sans-serif">Downloads</div>'
+               f'<div id="icon" class="abs" style="left:440px;top:672px;width:200px;transform-origin:center">{file_icon()}</div>'
+               f'<div id="cur" class="abs" style="left:0;top:0">{CURSOR_SVG}</div></div>')
+    openrect = '<div id="openrect" class="abs" style="inset:0;background:#211D16;transform-origin:540px 747px;transform:scale(0.001);opacity:0"></div>'
+    # recap montage: one beat lifted from each existing reel, compressed
+    video = safe('<div class="eb" data-a="3.5" data-b="5.9">BirdMap, <em>in brief</em></div>', top=300, bottom=420, a=None)
+    video += f'<div class="abs" data-a="3.7" data-b="5.9" data-y="0" style="left:0;right:0;top:900px;display:flex;justify-content:center">{bird(340, draw=True).replace("class=\"draw\"", "class=\"draw\" data-a=\"3.8\" data-d=\"1.3\"")}</div>'
+    video += safe('<h1 data-a="6.0" data-b="8.2" data-d=".7">Every bird you see becomes <em>data that matters.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="8.4" data-b="10.6" data-d=".7">Identify birds <em>by sound.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="10.8" data-b="13.0" data-d=".7">Identified right here, <em>on your phone.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="13.2" data-b="15.4" data-d=".7">BirdMap <em>doesn\'t guess.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="15.6" data-b="17.6" data-d=".7">One pin per place. <em>Works with no signal.</em></h1>', top=300, bottom=420)
+    video += safe('<div class="eb">BirdMap</div><h1>See it for <em>yourself.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=17.8)
+    video += brandbar(1450, a=18.2)
+    body = desktop + openrect + f'<div id="video" class="abs" style="inset:0;opacity:0">{video}</div>'
+    js = """
+function pulse(t,at,d){return 1+0.07*clamp(1-Math.abs(t-(at+d/2))/(d/2),0,1)}
+window.custom=function(t){
+  const p0={x:900,y:1500}, p1={x:540,y:747};
+  const cp=ease(seg(t,0.2,2.0));
+  const cx=p0.x+(p1.x-p0.x)*cp, cy=p0.y+(p1.y-p0.y)*cp-Math.sin(cp*Math.PI)*90;
+  document.getElementById('cur').style.transform=`translate(${cx}px,${cy}px)`;
+  const icon=document.getElementById('icon');
+  const s=Math.max(pulse(t,2.35,.2),pulse(t,2.65,.2));
+  icon.style.transform=`scale(${s})`;
+  const desktop=document.getElementById('desktop');
+  desktop.style.opacity=1-ease(seg(t,3.0,0.4));
+  const or_=document.getElementById('openrect');
+  const grow=ease(seg(t,2.85,0.55));
+  or_.style.transform=`scale(${Math.max(0.001,grow*1.3)})`;
+  or_.style.opacity=Math.min(1,grow*3)*(1-ease(seg(t,3.65,0.35)));
+  document.getElementById('video').style.opacity=ease(seg(t,3.55,0.6));
+};"""
+    return page(body, js=js), dur
+
+def tree(x, y, s=1.0):
+    return (f'<svg class="abs" style="left:{x}px;top:{y}px" viewBox="0 0 60 120" width="{90*s:.0f}" height="{180*s:.0f}" fill="none" stroke="#211D16" '
+            f'stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="70" x2="30" y2="118"/>'
+            f'<path d="M30 8C14 8 6 24 10 38 2 42 2 58 12 62 8 74 18 86 32 82 46 88 56 74 50 62 60 58 60 42 50 38 54 24 46 8 30 8Z"/></svg>')
+
+# five perches the recap birds hop between (also the seed points the closing gather flies in from)
+BIRD_SPOTS = [(260, 560), (760, 620), (460, 520), (860, 600), (340, 640)]
+LOGO_CX, LOGO_CY, LOGO_SIZE = 540, 760, 420
+
+def reel_showcase():
+    """A version of reel_trailer(): same file-open intro, a swash wipe into a forest of hopping birds for the
+    recap, then the birds gather into the BirdMap mark and the wordmark settles."""
+    dur = 22.4
+    desktop = (f'<div id="desktop" class="abs" style="inset:0">'
+               f'<div id="win" class="abs" style="left:190px;top:560px;width:700px;height:460px;background:#fff;border:3px solid #211D16;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.2)"></div>'
+               f'<div class="abs" style="left:190px;top:560px;width:700px;height:64px;border-bottom:2px solid rgba(33,29,22,.14);display:flex;align-items:center;padding:0 26px;font-size:26px;color:#6B6255;font-family:G,sans-serif">Downloads</div>'
+               f'<div id="icon" class="abs" style="left:440px;top:672px;width:200px;transform-origin:center">{file_icon()}</div>'
+               f'<div id="cur" class="abs" style="left:0;top:0">{CURSOR_SVG}</div></div>')
+    # the "swashy" transition: a wide ink brush-stroke swept across the frame, not a plain wipe
+    swash_path = 'M0 60 C120 -30 260 130 400 40 C560 -50 700 110 860 30 C1020 -40 1180 100 1400 40 L1400 2160 C1180 2100 1020 2240 860 2170 C700 2250 560 2090 400 2160 C260 2250 120 2090 0 2160 Z'
+    swash = f'<svg id="swash" class="abs" style="left:-160px;top:-140px" viewBox="0 0 1400 2200" width="1400" height="2200" fill="#211D16"><path d="{swash_path}"/></svg>'
+    forest = f'<div id="forest" class="abs" style="inset:0;opacity:0">' + ''.join(tree(x, y, s) for x, y, s in [(60, 1420, 1.3), (760, 1500, 1.6), (900, 1300, 1.0), (-40, 1250, 0.9), (960, 1620, 1.1)]) + '</div>'
+    lines = ['Every bird you see becomes <em>data that matters.</em>', 'Identify birds <em>by sound.</em>',
+             'Identified right here, <em>on your phone.</em>', 'BirdMap <em>doesn\'t guess.</em>', 'One pin per place. <em>Works with no signal.</em>']
+    video = ''
+    t0 = 3.9
+    for i, (line, (bx, by)) in enumerate(zip(lines, BIRD_SPOTS)):
+        a, b = t0, t0 + 2.0
+        flip = 'scaleX(-1)' if i % 2 else 'none'
+        icon = bird(150, draw=True).replace('class="draw"', f'class="draw" data-a="{a:.2f}" data-d=".9"')
+        video += f'<div class="abs" data-a="{a:.2f}" data-b="{b:.2f}" data-y="0" style="left:{bx-75}px;top:{by-75}px"><div style="transform:{flip}">{icon}</div></div>'
+        video += safe(f'<h1 data-a="{a+.15:.2f}" data-b="{b:.2f}" data-d=".8">{line}</h1>', top=850, bottom=300)
+        t0 = b + 0.2
+    form_start = t0 + 0.3   # ~16.0
+    gather = f'<canvas id="logo-cv" class="abs" style="inset:0" width="1080" height="1920"></canvas>'
+    video += safe(f'<h1 data-a="{form_start+3.4:.2f}" style="text-align:center">Bird<em>Map</em></h1>', top=1040, bottom=300)
+    video += safe(f'<div class="sub" style="text-align:center">iOS app coming soon. Link in bio.</div><div style="display:flex;justify-content:center"><span class="pill">Link in bio</span></div>', a=form_start + 4.0, top=1260, bottom=140)
+    video += brandbar(1780, a=form_start + 4.4)
+    body = desktop + swash + f'<div id="video" class="abs" style="inset:0;opacity:0">{forest}{video}{gather}</div>'
+    seeds = ','.join(f'[{x},{y}]' for x, y in BIRD_SPOTS)
+    js = f"""
+function pulse(t,at,d){{return 1+0.07*clamp(1-Math.abs(t-(at+d/2))/(d/2),0,1)}}
+const _cv=document.getElementById('logo-cv'), _ctx=_cv.getContext('2d');
+const _p=document.createElementNS('http://www.w3.org/2000/svg','path'); _p.setAttribute('d','{BIRD_PATH}');
+const _len=_p.getTotalLength(), _n=240, _targets=[], _seeds=[{seeds}];
+for(let i=0;i<_n;i++){{const pt=_p.getPointAtLength((i/_n)*_len); _targets.push({{x:{LOGO_CX}+(pt.x-24)/48*{LOGO_SIZE},y:{LOGO_CY}+(pt.y-24)/48*{LOGO_SIZE}}})}}
+const _starts=_targets.map((_,i)=>{{const s=_seeds[i%_seeds.length];return {{x:s[0]+(Math.random()-.5)*260,y:s[1]+(Math.random()-.5)*260}}}});
+const FORM_A={form_start:.2f}, FORM_D=2.6;
+window.custom=function(t){{
+  const p0={{x:900,y:1500}}, p1={{x:540,y:747}};
+  const cp=ease(seg(t,0.2,2.0));
+  const cx=p0.x+(p1.x-p0.x)*cp, cy=p0.y+(p1.y-p0.y)*cp-Math.sin(cp*Math.PI)*90;
+  document.getElementById('cur').style.transform=`translate(${{cx}}px,${{cy}}px)`;
+  const icon=document.getElementById('icon');
+  icon.style.transform=`scale(${{Math.max(pulse(t,2.35,.2),pulse(t,2.65,.2))}})`;
+  document.getElementById('desktop').style.opacity=1-ease(seg(t,2.9,0.3));
+  document.getElementById('swash').style.transform=`translateX(${{-1600+ease(seg(t,2.85,0.7))*3200}}px)`;
+  document.getElementById('forest').style.opacity=ease(seg(t,3.1,0.4))*(1-ease(seg(t,15.6,0.4)));
+  document.getElementById('video').style.opacity=ease(seg(t,3.0,0.3));
+  if(t<FORM_A-0.15) return;
+  _ctx.clearRect(0,0,1080,1920);
+  for(let i=0;i<_n;i++){{
+    const g=ease(seg(t,FORM_A+(i/_n)*0.6,FORM_D));
+    const x=_starts[i].x+(_targets[i].x-_starts[i].x)*g, y=_starts[i].y+(_targets[i].y-_starts[i].y)*g;
+    _ctx.globalAlpha=0.35+0.55*g; _ctx.fillStyle='#211D16';
+    _ctx.beginPath(); _ctx.arc(x,y,1.6+0.6*g,0,Math.PI*2); _ctx.fill();
+  }}
+}};"""
+    return page(body, js=js), dur
+
+TRAILER = {'11-see-it-in-action': reel_trailer, '12-birds-in-the-wild': reel_showcase}
 
 # ------------------------------------------------------------------ CAROUSELS (1080x1350)
 def slide_cover(title, eyebrow, hint=True, n=1, total=1):
@@ -242,7 +398,7 @@ def render_reel(pg, name, html, dur, out):
     shutil.rmtree(tmp)
     print('reel', out.name, f'{dur}s', f'{out.stat().st_size/1e6:.1f} MB')
 
-def main(which):
+def main(which, filt=None):
     if which == 'audio':
         for f in sorted((HERE / 'reels').glob('*.mp4')): audio.add_audio(f)
         return
@@ -252,6 +408,12 @@ def main(which):
         pg = b.new_page(viewport={'width': 1080, 'height': 1920})
         if which in ('all', 'reels'):
             for name, fn in REELS.items():
+                if filt and filt not in name: continue
+                html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')
+                audio.add_audio(HERE / 'reels' / f'{name}.mp4')
+        if which in ('all', 'trailer'):
+            for name, fn in TRAILER.items():
+                if filt and filt not in name: continue
                 html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')
                 audio.add_audio(HERE / 'reels' / f'{name}.mp4')
         if which in ('all', 'genz'):
@@ -275,4 +437,4 @@ def main(which):
         b.close()
 
 if __name__ == '__main__':
-    main(sys.argv[1] if len(sys.argv) > 1 else 'all')
+    main(sys.argv[1] if len(sys.argv) > 1 else 'all', sys.argv[2] if len(sys.argv) > 2 else None)

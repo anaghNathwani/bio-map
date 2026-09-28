@@ -53,22 +53,22 @@ def page(cfg, body='', css_extra='', dark=True):
 # ------------------------------------------------------------------ the script (original writing; abstract, tied to the living world)
 # say = what is spoken, show = what is on screen, gap = silence after the line (seconds)
 FULL = [
-    dict(say='Above the stone, and below the stars, there is a thin, bright layer where everything is alive.',
+    dict(say='Above the stone, below the stars, a thin bright layer where everything is alive.',
          show=('Above the stone,<br>below the stars,<br>a thin bright layer<br>where everything is <em>alive.</em>',
                'Above the stone, below the stars,<br>a thin bright layer<br>where everything is <em>alive.</em>'), gap=1.6),
     dict(say='We call it the biosphere. The birds call it home.',
          show='We call it the biosphere.<br><em>The birds call it home.</em>', gap=1.5),
     dict(say='Every morning, it clears its throat.', show='Every morning,<br>it <em>clears its throat.</em>', gap=0.8),
     dict(say='And a few of us stop mid-sentence.', show='And a few of us<br>stop mid-sentence.', gap=1.8),
-    dict(say='They are the listeners. The ones who know the sky is a language.',
+    dict(say='They are the listeners. The sky is a language.',
          show='They are the listeners.<br><em>The sky is a language.</em>', gap=1.6),
     dict(say='Wings are its punctuation. Migration is the long sentence, written across the seasons.',
          show=('Wings are its punctuation.<br><em>Migration is the<br>long sentence, written<br>across the seasons.</em>',
                'Wings are its punctuation.<br><em>Migration is the long sentence,<br>written across the seasons.</em>'), gap=1.7),
     dict(say='One bird is a small fact. A thousand of them move like a single thought.',
-         show='One bird is a small fact.<br>A thousand of them<br><em>move like a single thought.</em>', gap=1.8),
+         show='One bird is a small fact.<br>A thousand of them<br><em>move like a single thought.</em>', gap=2.8),
     dict(say='Nobody asked them to write it down. Someone should.',
-         show='Nobody asked them<br>to write it down.<br><em>Someone should.</em>', gap=2.0),
+         show='Nobody asked them<br>to write it down.<br><em>Someone should.</em>', gap=3.8, hold=2.4),
     dict(say='To the ones who look up. The world keeps a diary. You are its handwriting.',
          show='To the ones who <em>look up.</em><br>The world keeps a diary.<br>You are its handwriting.', gap=0.4),
 ]
@@ -90,18 +90,17 @@ def plan(script, intro, form_dur):
     for L in script:
         d = vo.duration(L['say']); p = vo.synth(L['say'])[0]
         a = t; vs = a + 0.55; ve = vs + d
-        items.append((a, ve + 0.9, L['show'])); events.append((vs, p))
+        items.append((a, ve + L.get('hold', 0.9), L['show'])); events.append((vs, p))
         t = ve + L['gap']
     form_a = t + 0.2
-    fin_p = vo.synth(FINAL)[0]; fin_d = vo.duration(FINAL)
+    fin_d = 1.1     # the end card is silent: the mark appears without a spoken line
     fin_at = form_a + form_dur * 0.78
-    events.append((fin_at, fin_p))
     dur = fin_at + fin_d + 5.0
     return dict(items=items, events=events, form_a=form_a, form_dur=form_dur, fin_at=fin_at, dur=dur)
 
 def film_html(w, h, pl):
     portrait = h > w
-    size = (w * 0.078) if portrait else (h * 0.072)
+    size = (w * 0.054) if portrait else (h * 0.050)
     S = min(w, h)
     logo_px = S * (.44 if portrait else .50)
     cy = .35 if portrait else .41
@@ -109,9 +108,10 @@ def film_html(w, h, pl):
     ln = [dict(a=a, b=b, html=pick(t), fi=1.4, fo=1.3) for a, b, t in pl['items']]
     text_top = int(cy * h + logo_px * .47 + size * .35)
     css = f'.line{{top:{(.70 if portrait else .74)*100:.0f}%;font-size:{size:.0f}px}}'
-    css += f'.mark .lu{{font-family:F,serif;font-style:italic;font-size:{size*1.9:.0f}px;color:#fff;letter-spacing:-.02em}}'
-    css += f'.mark .wm{{font-family:G,sans-serif;font-weight:500;letter-spacing:.42em;font-size:{size*.36:.0f}px;color:#fff;margin-top:{size*.5:.0f}px;text-indent:.42em}}'
-    body = f'<div class="mark" id="end" style="top:{text_top}px"><div class="lu">Look up.</div><div class="wm">BIRDMAP</div></div>'
+    big = size * (1.9 * 0.078 / 0.054 if portrait else 1.9 * 0.072 / 0.050)     # BIRDMAP takes Look up's original size
+    css += f'.mark .wm{{font-family:G,sans-serif;font-weight:500;letter-spacing:.12em;font-size:{big:.0f}px;color:#fff;text-indent:.12em;line-height:1}}'
+    css += f'.mark .lu{{font-family:F,serif;font-style:italic;font-size:{size*1.5:.0f}px;color:#fff;letter-spacing:-.02em;margin-top:{size*.6:.0f}px}}'
+    body = f'<div class="mark" id="end" style="top:{text_top}px"><div class="wm">BIRDMAP</div></div>'
     fin = pl['fin_at']
     cfg = dict(seed=11, n=3000 if portrait else 3400, warm=500, cy=cy, frame=.30 if portrait else .27, lines=ln, **DARK, **LOOK,
                form=dict(a=pl['form_a'], dur=pl['form_dur'], cx=.5, cy=cy, size=logo_px),
