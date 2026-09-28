@@ -22,6 +22,10 @@ The practical lesson embedded in the deploy scripts themselves: every platform's
 
 ## Production deployment
 
+**Update: `firebase.json`/`.firebaserc` now live at the repo root, versioned.** They didn't before — `deploy.sh`/`deploy-gcp.sh` looked for them one directory *above* the repo, which by construction meant they could never be committed. This is almost certainly why the live web map was showing ~500 fake "Sample data (not a real observation)" sightings that don't exist in Firestore (confirmed: the real `sightings` collection has 5 real documents) and didn't budge no matter what got pushed to `main` — whoever deployed that build had a local, uncommitted `firebase.json` pointing at some other/older build output, and `firebase deploy` was never reproducible from a fresh clone of this repo to begin with. Fixed by moving both files into the repo and pointing the deploy scripts at `REPO_ROOT` instead of its parent. `web/seed.mjs`, a leftover fake-sightings generator (and one that would fail outright under the current `firestore.rules`, which require auth it never provided), was removed for the same reason — there should be no code path that writes non-real data into this collection.
+
+**Also new: `.github/workflows/deploy-web.yml` auto-deploys the web app to Hosting on every push to `main`** that touches `web/`, `firebase.json`, or `.firebaserc` — closing the gap where pushing code and deploying the site were two disconnected actions. It needs a `FIREBASE_SERVICE_ACCOUNT_BIRDMAP_CITIZENSCIENCE` repo secret (Firebase Console → Project Settings → Service Accounts → Generate new private key → paste the whole JSON as the secret value) before it'll actually deploy; until that secret exists the workflow will fail loudly rather than silently no-op.
+
 Run once, from the repo root:
 
 ```bash
