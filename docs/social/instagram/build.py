@@ -229,7 +229,77 @@ window.custom=function(t){
 };"""
     return page(body, js=js), dur
 
-TRAILER = {'11-see-it-in-action': reel_trailer}
+def tree(x, y, s=1.0):
+    return (f'<svg class="abs" style="left:{x}px;top:{y}px" viewBox="0 0 60 120" width="{90*s:.0f}" height="{180*s:.0f}" fill="none" stroke="#211D16" '
+            f'stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="70" x2="30" y2="118"/>'
+            f'<path d="M30 8C14 8 6 24 10 38 2 42 2 58 12 62 8 74 18 86 32 82 46 88 56 74 50 62 60 58 60 42 50 38 54 24 46 8 30 8Z"/></svg>')
+
+# five perches the recap birds hop between (also the seed points the closing gather flies in from)
+BIRD_SPOTS = [(260, 560), (760, 620), (460, 520), (860, 600), (340, 640)]
+LOGO_CX, LOGO_CY, LOGO_SIZE = 540, 760, 420
+
+def reel_showcase():
+    """A version of reel_trailer(): same file-open intro, a swash wipe into a forest of hopping birds for the
+    recap, then the birds gather into the BirdMap mark and the wordmark settles."""
+    dur = 22.4
+    desktop = (f'<div id="desktop" class="abs" style="inset:0">'
+               f'<div id="win" class="abs" style="left:190px;top:560px;width:700px;height:460px;background:#fff;border:3px solid #211D16;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.2)"></div>'
+               f'<div class="abs" style="left:190px;top:560px;width:700px;height:64px;border-bottom:2px solid rgba(33,29,22,.14);display:flex;align-items:center;padding:0 26px;font-size:26px;color:#6B6255;font-family:G,sans-serif">Downloads</div>'
+               f'<div id="icon" class="abs" style="left:440px;top:672px;width:200px;transform-origin:center">{file_icon()}</div>'
+               f'<div id="cur" class="abs" style="left:0;top:0">{CURSOR_SVG}</div></div>')
+    # the "swashy" transition: a wide ink brush-stroke swept across the frame, not a plain wipe
+    swash_path = 'M0 60 C120 -30 260 130 400 40 C560 -50 700 110 860 30 C1020 -40 1180 100 1400 40 L1400 2160 C1180 2100 1020 2240 860 2170 C700 2250 560 2090 400 2160 C260 2250 120 2090 0 2160 Z'
+    swash = f'<svg id="swash" class="abs" style="left:-160px;top:-140px" viewBox="0 0 1400 2200" width="1400" height="2200" fill="#211D16"><path d="{swash_path}"/></svg>'
+    forest = f'<div id="forest" class="abs" style="inset:0;opacity:0">' + ''.join(tree(x, y, s) for x, y, s in [(60, 1420, 1.3), (760, 1500, 1.6), (900, 1300, 1.0), (-40, 1250, 0.9), (960, 1620, 1.1)]) + '</div>'
+    lines = ['Every bird you see becomes <em>data that matters.</em>', 'Identify birds <em>by sound.</em>',
+             'Identified right here, <em>on your phone.</em>', 'BirdMap <em>doesn\'t guess.</em>', 'One pin per place. <em>Works with no signal.</em>']
+    video = ''
+    t0 = 3.9
+    for i, (line, (bx, by)) in enumerate(zip(lines, BIRD_SPOTS)):
+        a, b = t0, t0 + 2.0
+        flip = 'scaleX(-1)' if i % 2 else 'none'
+        icon = bird(150, draw=True).replace('class="draw"', f'class="draw" data-a="{a:.2f}" data-d=".9"')
+        video += f'<div class="abs" data-a="{a:.2f}" data-b="{b:.2f}" data-y="0" style="left:{bx-75}px;top:{by-75}px"><div style="transform:{flip}">{icon}</div></div>'
+        video += safe(f'<h1 data-a="{a+.15:.2f}" data-b="{b:.2f}" data-d=".8">{line}</h1>', top=850, bottom=300)
+        t0 = b + 0.2
+    form_start = t0 + 0.3   # ~16.0
+    gather = f'<canvas id="logo-cv" class="abs" style="inset:0" width="1080" height="1920"></canvas>'
+    video += safe(f'<h1 data-a="{form_start+3.4:.2f}" style="text-align:center">Bird<em>Map</em></h1>', top=1040, bottom=300)
+    video += safe(f'<div class="sub" style="text-align:center">iOS app coming soon. Link in bio.</div><div style="display:flex;justify-content:center"><span class="pill">Link in bio</span></div>', a=form_start + 4.0, top=1260, bottom=140)
+    video += brandbar(1780, a=form_start + 4.4)
+    body = desktop + swash + f'<div id="video" class="abs" style="inset:0;opacity:0">{forest}{video}{gather}</div>'
+    seeds = ','.join(f'[{x},{y}]' for x, y in BIRD_SPOTS)
+    js = f"""
+function pulse(t,at,d){{return 1+0.07*clamp(1-Math.abs(t-(at+d/2))/(d/2),0,1)}}
+const _cv=document.getElementById('logo-cv'), _ctx=_cv.getContext('2d');
+const _p=document.createElementNS('http://www.w3.org/2000/svg','path'); _p.setAttribute('d','{BIRD_PATH}');
+const _len=_p.getTotalLength(), _n=240, _targets=[], _seeds=[{seeds}];
+for(let i=0;i<_n;i++){{const pt=_p.getPointAtLength((i/_n)*_len); _targets.push({{x:{LOGO_CX}+(pt.x-24)/48*{LOGO_SIZE},y:{LOGO_CY}+(pt.y-24)/48*{LOGO_SIZE}}})}}
+const _starts=_targets.map((_,i)=>{{const s=_seeds[i%_seeds.length];return {{x:s[0]+(Math.random()-.5)*260,y:s[1]+(Math.random()-.5)*260}}}});
+const FORM_A={form_start:.2f}, FORM_D=2.6;
+window.custom=function(t){{
+  const p0={{x:900,y:1500}}, p1={{x:540,y:747}};
+  const cp=ease(seg(t,0.2,2.0));
+  const cx=p0.x+(p1.x-p0.x)*cp, cy=p0.y+(p1.y-p0.y)*cp-Math.sin(cp*Math.PI)*90;
+  document.getElementById('cur').style.transform=`translate(${{cx}}px,${{cy}}px)`;
+  const icon=document.getElementById('icon');
+  icon.style.transform=`scale(${{Math.max(pulse(t,2.35,.2),pulse(t,2.65,.2))}})`;
+  document.getElementById('desktop').style.opacity=1-ease(seg(t,2.9,0.3));
+  document.getElementById('swash').style.transform=`translateX(${{-1600+ease(seg(t,2.85,0.7))*3200}}px)`;
+  document.getElementById('forest').style.opacity=ease(seg(t,3.1,0.4))*(1-ease(seg(t,15.6,0.4)));
+  document.getElementById('video').style.opacity=ease(seg(t,3.0,0.3));
+  if(t<FORM_A-0.15) return;
+  _ctx.clearRect(0,0,1080,1920);
+  for(let i=0;i<_n;i++){{
+    const g=ease(seg(t,FORM_A+(i/_n)*0.6,FORM_D));
+    const x=_starts[i].x+(_targets[i].x-_starts[i].x)*g, y=_starts[i].y+(_targets[i].y-_starts[i].y)*g;
+    _ctx.globalAlpha=0.35+0.55*g; _ctx.fillStyle='#211D16';
+    _ctx.beginPath(); _ctx.arc(x,y,1.6+0.6*g,0,Math.PI*2); _ctx.fill();
+  }}
+}};"""
+    return page(body, js=js), dur
+
+TRAILER = {'11-see-it-in-action': reel_trailer, '12-birds-in-the-wild': reel_showcase}
 
 # ------------------------------------------------------------------ CAROUSELS (1080x1350)
 def slide_cover(title, eyebrow, hint=True, n=1, total=1):

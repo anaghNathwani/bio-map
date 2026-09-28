@@ -195,8 +195,24 @@ def reel_trailer(dur):
     return b
 
 
+def reel_showcase(dur):
+    b = np.zeros((int(dur * SR), 2))
+    b[:, 0] += (p := pad(dur, [A3, E4, B4], 0.03)); b[:, 1] += p
+    place(b, click(2400, .05, .17), 2.35); place(b, click(2000, .05, .15), 2.65)   # the double-click
+    place(b, whoosh(0.8, 0.14), 2.85)                                                # the swash wipe
+    beats = [3.9, 6.3, 8.7, 11.1, 13.5]
+    for i, at in enumerate(beats):
+        pan = [-0.4, 0.3, 0.0, 0.4, -0.3][i]
+        phrase(at + 0.1, [CH(3000 + i * 60, 4200 - i * 40), CH(3600, 4600, .16)], b, 0.10, pan)   # a bird call on each perch
+    form_a = beats[-1] + 2.5
+    place(b, glide(260, 640, 2.4, 0.07), form_a - 0.2)                # the gathering swell
+    place(b, pluck(A5, 2.4, 0.18), form_a + 3.3); place(b, pluck(E6, 2.4, 0.12), form_a + 3.35)   # the mark settles
+    phrase(form_a + 4.1, [CH(3300, 4500), CH(3900, 3100, .18), CH(3600, 4800, .16)], b, 0.10, 0.0)
+    return b
+
+
 BUILDERS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
-            '09-the-map': reel_map, '10-works-offline': reel_offline, '11-see-it-in-action': reel_trailer}
+            '09-the-map': reel_map, '10-works-offline': reel_offline, '11-see-it-in-action': reel_trailer, '12-birds-in-the-wild': reel_showcase}
 
 
 def render_wav(name, dur, out):
