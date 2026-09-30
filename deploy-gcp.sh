@@ -19,7 +19,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-FIREBASE_ROOT="$(dirname "$REPO_ROOT")"
+FIREBASE_ROOT="$REPO_ROOT"   # firebase.json/.firebaserc live at the repo root, versioned
 WEB_DIR="$REPO_ROOT/web"
 APP_NAME="birdmap-api"
 REGION="us-central1"
