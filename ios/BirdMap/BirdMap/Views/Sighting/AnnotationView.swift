@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct AnnotationView: View {
+    @Environment(\.colorScheme) private var scheme
     let sightingID: String
     /// Set when this form was opened from the post-upload AI review card —
     /// "confirmed" (Right), "rejected" (Wrong), or "unsure". Nil for a normal,
@@ -50,19 +51,19 @@ struct AnnotationView: View {
                     confidenceSection
 
                     if let error {
-                        HStack(spacing: 6) {
+                        HStack(alignment: .top, spacing: 6) {
                             Image(systemName: "exclamationmark.triangle.fill")
                             Text(error)
                         }
-                        .font(.caption)
-                        .foregroundStyle(.red)
+                        .font(Theme.sans(13))
+                        .foregroundStyle(ThemeColors(scheme: scheme).clay)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                     }
                 }
                 .padding(.vertical, 16)
             }
-            .background(Color(.systemGroupedBackground))
+            .background(ThemeColors(scheme: scheme).paper)
             .navigationTitle("Annotate Sighting")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -76,9 +77,10 @@ struct AnnotationView: View {
                         if isSubmitting {
                             ProgressView().scaleEffect(0.8)
                         } else {
-                            Text("Save").bold()
+                            Text("Save").fontWeight(.semibold)
                         }
                     }
+                    .tint(ThemeColors(scheme: scheme).clay)
                     .disabled(!canSubmit)
                 }
             }
@@ -86,23 +88,25 @@ struct AnnotationView: View {
     }
 
     private var speciesSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            sectionHeader("Species", icon: "bird.fill", required: reviewOfAI != "unsure")
+        let c = ThemeColors(scheme: scheme)
+        return VStack(alignment: .leading, spacing: 10) {
+            sectionHeader("Species", required: reviewOfAI != "unsure")
 
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(c.inkSoft)
                 TextField(reviewOfAI == "unsure" ? "Leave blank if you're not sure" : "e.g. American Robin", text: $species)
+                    .font(Theme.sans(15))
                     .autocorrectionDisabled()
             }
             .padding(12)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+            .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
 
             if AnnotationModerator.shared.verdict(species: species, reviewOfAI: reviewOfAI).isFlagged {
                 Label("That doesn't look like a bird name we know, so it will show as flagged. Check the spelling, or leave it blank and mark it unsure.",
                       systemImage: "exclamationmark.triangle.fill")
-                    .font(.caption)
-                    .foregroundStyle(.orange)
+                    .font(Theme.sans(12))
+                    .foregroundStyle(c.clay)
             }
         }
         .padding(.horizontal)
@@ -110,7 +114,7 @@ struct AnnotationView: View {
 
     private var behaviorSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            sectionHeader("Behavior", icon: "figure.walk", required: false)
+            sectionHeader("Behavior", required: false)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -126,7 +130,7 @@ struct AnnotationView: View {
 
     private var plumageSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            sectionHeader("Age / Plumage", icon: "feather", required: false)
+            sectionHeader("Age / Plumage", required: false)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -141,17 +145,18 @@ struct AnnotationView: View {
     }
 
     private var confidenceSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            sectionHeader("Your Confidence", icon: "percent", required: false)
+        let c = ThemeColors(scheme: scheme)
+        return VStack(alignment: .leading, spacing: 10) {
+            sectionHeader("Your confidence", required: false)
 
             VStack(spacing: 12) {
                 HStack {
                     Text("How sure are you?")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .font(Theme.sans(14))
+                        .foregroundStyle(c.inkSoft)
                     Spacer()
                     Text("\(Int(confidence * 100))%")
-                        .font(.title2.bold())
+                        .font(Theme.display(22, medium: true))
                         .foregroundStyle(confidenceColor)
                         .animation(.easeInOut(duration: 0.15), value: confidence)
                         .contentTransition(.numericText())
@@ -162,51 +167,43 @@ struct AnnotationView: View {
                     .animation(.easeInOut(duration: 0.15), value: confidence)
 
                 HStack {
-                    Text("Unsure")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                    Text("Unsure").font(Theme.sans(11)).foregroundStyle(c.inkSoft)
                     Spacer()
-                    Text("Certain")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                    Text("Certain").font(Theme.sans(11)).foregroundStyle(c.inkSoft)
                 }
             }
             .padding(14)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+            .background(c.paper, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
             .padding(.horizontal)
         }
     }
 
-    private func sectionHeader(_ title: String, icon: String, required: Bool) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: icon)
-                .foregroundStyle(Color.teal)
-                .font(.subheadline)
-            Text(title)
-                .font(.subheadline.bold())
+    private func sectionHeader(_ title: String, required: Bool) -> some View {
+        let c = ThemeColors(scheme: scheme)
+        return HStack(spacing: 8) {
+            Eyebrow(text: title)
             if required {
                 Text("required")
-                    .font(.caption2)
-                    .foregroundStyle(.white)
+                    .font(Theme.sansSemibold(10))
+                    .foregroundStyle(c.paper)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Color.teal, in: Capsule())
+                    .background(c.clay, in: Capsule())
             }
         }
         .padding(.horizontal)
     }
 
     private func chipButton(_ label: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
+        let c = ThemeColors(scheme: scheme)
+        return Button(action: action) {
             Text(label)
-                .font(.subheadline)
+                .font(Theme.sansMedium(14))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
-                .background(
-                    selected ? Color.teal : Color(.secondarySystemGroupedBackground),
-                    in: Capsule()
-                )
-                .foregroundStyle(selected ? .white : .primary)
+                .background(selected ? c.ink : c.paperDim, in: Capsule())
+                .foregroundStyle(selected ? c.paper : c.ink)
                 .animation(.easeInOut(duration: 0.15), value: selected)
         }
     }

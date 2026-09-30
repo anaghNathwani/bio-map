@@ -5,6 +5,7 @@ private let baseURL = "https://birdmap-citizenscience.web.app"
 
 struct ProfileView: View {
     @EnvironmentObject var env: AppEnvironment
+    @Environment(\.colorScheme) private var scheme
     @AppStorage("appearanceMode") private var appearanceMode: String = "system"
     @State private var notificationsEnabled = false
     @State private var isEditingUsername = false
@@ -15,30 +16,31 @@ struct ProfileView: View {
     @State private var safariURL: URL?
 
     var body: some View {
+        let c = ThemeColors(scheme: scheme)
         NavigationStack {
             List {
                 // MARK: - Account header
                 Section {
                     HStack(spacing: 14) {
                         ZStack {
-                            Circle()
-                                .fill(Color.teal.opacity(0.15))
-                                .frame(width: 56, height: 56)
-                            Image(systemName: "bird.fill")
-                                .font(.system(size: 24, weight: .medium))
-                                .foregroundStyle(.teal)
+                            Circle().strokeBorder(c.rule, lineWidth: 1.5).frame(width: 56, height: 56)
+                            BirdMark()
+                                .stroke(c.clay, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                                .frame(width: 26, height: 26)
                         }
                         VStack(alignment: .leading, spacing: 2) {
                             Text(env.username ?? "No username set")
-                                .font(.headline)
+                                .font(Theme.sansSemibold(16))
+                                .foregroundStyle(c.ink)
                             if let email = env.user?.email {
                                 Text(email)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .font(Theme.sans(12))
+                                    .foregroundStyle(c.inkSoft)
                             }
                         }
                     }
                     .padding(.vertical, 6)
+                    .listRowBackground(c.paper)
                 } header: {
                     Text("Account")
                 }
@@ -61,6 +63,7 @@ struct ProfileView: View {
                         }
                     }
                     .foregroundStyle(.primary)
+                    .listRowBackground(c.paper)
                 } header: {
                     Text("Profile")
                 }
@@ -75,6 +78,8 @@ struct ProfileView: View {
                         Label("Appearance", systemImage: "circle.lefthalf.filled")
                     }
                     .pickerStyle(.menu)
+                    .tint(c.clay)
+                    .listRowBackground(c.paper)
                 } header: {
                     Text("Display")
                 }
@@ -86,6 +91,7 @@ struct ProfileView: View {
                         Spacer()
                         Toggle("", isOn: $notificationsEnabled)
                             .labelsHidden()
+                            .tint(c.clay)
                             .onChange(of: notificationsEnabled) { _, enabled in
                                 if enabled {
                                     requestNotificationPermission()
@@ -94,6 +100,7 @@ struct ProfileView: View {
                                 }
                             }
                     }
+                    .listRowBackground(c.paper)
                 } header: {
                     Text("Notifications")
                 } footer: {
@@ -117,8 +124,11 @@ struct ProfileView: View {
                     } label: {
                         Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
                     }
+                    .listRowBackground(c.paper)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(c.paper)
             .navigationTitle("Profile")
             .sheet(isPresented: $isEditingUsername) {
                 editUsernameSheet
@@ -143,12 +153,14 @@ struct ProfileView: View {
     // MARK: - Edit username sheet
 
     private var editUsernameSheet: some View {
-        NavigationStack {
+        let c = ThemeColors(scheme: scheme)
+        return NavigationStack {
             Form {
                 Section {
                     TextField("Username", text: $draftUsername)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
+                        .listRowBackground(c.paper)
                 } header: {
                     Text("Choose a username")
                 } footer: {
@@ -158,13 +170,17 @@ struct ProfileView: View {
                 if let saveError {
                     Section {
                         Text(saveError)
-                            .foregroundStyle(.red)
-                            .font(.caption)
+                            .foregroundStyle(c.clay)
+                            .font(Theme.sans(12))
+                            .listRowBackground(c.paper)
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(c.paper)
             .navigationTitle("Edit Username")
             .navigationBarTitleDisplayMode(.inline)
+            .tint(c.clay)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { isEditingUsername = false }
@@ -234,6 +250,7 @@ struct ProfileView: View {
             }
         }
         .foregroundStyle(.primary)
+        .listRowBackground(ThemeColors(scheme: scheme).paper)
     }
 }
 

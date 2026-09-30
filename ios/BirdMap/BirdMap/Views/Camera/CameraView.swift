@@ -5,6 +5,7 @@ import UIKit
 #endif
 
 struct CameraView: View {
+    @Environment(\.colorScheme) private var scheme
     @StateObject private var vm = CameraViewModel()
     @State private var showPicker = false
     @State private var showBirdInfo = false
@@ -36,6 +37,7 @@ struct CameraView: View {
             .padding(.top)
             .padding(.bottom, 32)
         }
+        .background(ThemeColors(scheme: scheme).paper)
         .onAppear {
             vm.startLocationUpdates()
             // BirdMapApp only ever tries this once, at cold launch, with no
@@ -110,34 +112,33 @@ struct CameraView: View {
 
     @ViewBuilder
     private func capturedImageSection(_ img: UIImage) -> some View {
+        let c = ThemeColors(scheme: scheme)
         VStack(spacing: 16) {
             ZStack(alignment: .bottomLeading) {
                 Image(uiImage: img)
                     .resizable()
                     .scaledToFit()
-                    .clipShape(RoundedRectangle(cornerRadius: 18))
-                    .shadow(color: .black.opacity(0.18), radius: 10, y: 5)
+                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
 
                 if let suggestion = vm.aiSuggestion {
                     HStack(spacing: 8) {
-                        Image(systemName: "sparkles")
-                            .symbolRenderingMode(.multicolor)
-                        Text("**\(suggestion.species)**")
+                        Text(suggestion.species).font(Theme.sansSemibold(13))
                         Text("· \(Int(suggestion.confidence * 100))%")
-                            .foregroundStyle(.white.opacity(0.75))
+                            .font(Theme.sans(13))
+                            .foregroundStyle(c.paper.opacity(0.75))
                         Spacer()
-                        Button("Learn More") { showBirdInfo = true }
-                            .font(.caption.weight(.semibold))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.teal.opacity(0.8), in: Capsule())
-                            .foregroundStyle(.white)
+                        Button("Learn more") { showBirdInfo = true }
+                            .font(Theme.sansSemibold(12))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(c.paper.opacity(0.16), in: Capsule())
+                            .overlay(Capsule().strokeBorder(c.paper.opacity(0.4), lineWidth: 1))
                     }
-                    .font(.caption)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .background(.ultraThinMaterial, in: Capsule())
+                    .foregroundStyle(c.paper)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(c.ink.opacity(0.88), in: Capsule())
                     .padding(14)
                 }
             }
@@ -148,10 +149,9 @@ struct CameraView: View {
                 } label: {
                     Image(systemName: "arrow.counterclockwise")
                         .font(.headline)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(c.paper)
                         .frame(width: 40, height: 40)
-                        .background(.ultraThinMaterial, in: Circle())
-                        .overlay(Circle().strokeBorder(.white.opacity(0.25)))
+                        .background(c.ink.opacity(0.72), in: Circle())
                 }
                 .disabled(vm.isUploading)
                 .padding(12)
@@ -162,9 +162,7 @@ struct CameraView: View {
             // On-device AI candidates
             if !vm.aiCandidates.isEmpty {
                 candidatesPanel(
-                    title: "On-Device AI · Common Birds",
-                    icon: "cpu.fill",
-                    iconColor: .teal,
+                    title: "On-device · common birds",
                     items: vm.aiCandidates.map { ($0.species, Double($0.confidence)) }
                 )
             } else if vm.capturedImage != nil && !modelAvailable {
@@ -178,9 +176,7 @@ struct CameraView: View {
             // this is just a preview of what will be offered then.
             if !vm.aiAdditionalSuggestions.isEmpty {
                 candidatesPanel(
-                    title: "Also Spotted in Frame",
-                    icon: "bird.fill",
-                    iconColor: .orange,
+                    title: "Also spotted in frame",
                     items: vm.aiAdditionalSuggestions.map { ($0.species, $0.confidence) }
                 )
             }
@@ -189,27 +185,25 @@ struct CameraView: View {
             if !visionCandidates.isEmpty {
                 candidatesPanel(
                     title: "Google Vision",
-                    icon: "eye.fill",
-                    iconColor: .indigo,
                     items: visionCandidates.prefix(3).map { ($0.species, $0.confidence) }
                 )
             }
 
             VStack(spacing: 12) {
                 TextField("Notes (optional)", text: $vm.notes, axis: .vertical)
+                    .font(Theme.sans(15))
                     .lineLimit(3...6)
                     .padding(12)
-                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+                    .background(ThemeColors(scheme: scheme).paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                     .padding(.horizontal)
 
                 if let error = vm.error {
-                    HStack(spacing: 6) {
+                    HStack(alignment: .top, spacing: 6) {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .symbolRenderingMode(.multicolor)
                         Text(error)
                     }
-                    .font(.caption)
-                    .foregroundStyle(.orange)
+                    .font(Theme.sans(13))
+                    .foregroundStyle(ThemeColors(scheme: scheme).clay)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
                 }
@@ -219,19 +213,14 @@ struct CameraView: View {
                 } label: {
                     HStack(spacing: 8) {
                         if vm.isUploading {
-                            ProgressView().tint(.white)
+                            ProgressView()
                         } else {
                             Image(systemName: "paperplane.fill")
-                                .symbolEffect(.bounce, value: vm.isUploading)
                         }
-                        Text(vm.isUploading ? "Uploading…" : "Submit Sighting")
-                            .fontWeight(.semibold)
+                        Text(vm.isUploading ? "Uploading…" : "Submit sighting")
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(vm.isUploading ? Color.gray : Color.teal, in: RoundedRectangle(cornerRadius: 14))
-                    .foregroundStyle(.white)
                 }
+                .buttonStyle(ClayButtonStyle())
                 .disabled(vm.isUploading)
                 .padding(.horizontal)
                 .animation(.easeInOut(duration: 0.2), value: vm.isUploading)
@@ -240,66 +229,64 @@ struct CameraView: View {
     }
 
     @ViewBuilder
-    private func candidatesPanel(title: String, icon: String, iconColor: Color,
-                                  items: [(String, Double)]) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Label(title, systemImage: icon)
-                .font(.caption2.bold())
-                .foregroundStyle(iconColor)
+    private func candidatesPanel(title: String, items: [(String, Double)]) -> some View {
+        let c = ThemeColors(scheme: scheme)
+        VStack(alignment: .leading, spacing: 8) {
+            Eyebrow(text: title)
             ForEach(items, id: \.0) { species, confidence in
                 HStack {
-                    Text(species).font(.caption)
+                    Text(species).font(Theme.sans(14)).foregroundStyle(c.ink)
                     Spacer()
                     Text("\(Int(confidence * 100))%")
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(.secondary)
+                        .font(Theme.sansMedium(13))
+                        .foregroundStyle(c.inkSoft)
                 }
             }
         }
-        .padding(12)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+        .padding(14)
+        .background(c.paper, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
         .padding(.horizontal)
     }
 
     private var noModelBanner: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "arrow.down.circle")
-                .foregroundStyle(.teal)
+        let c = ThemeColors(scheme: scheme)
+        return HStack(spacing: 10) {
+            Image(systemName: "arrow.down.circle").foregroundStyle(c.clay)
             VStack(alignment: .leading, spacing: 2) {
-                Text("On-device model not yet downloaded")
-                    .font(.caption.weight(.semibold))
+                Text("On-device model not yet downloaded").font(Theme.sansSemibold(13)).foregroundStyle(c.ink)
                 Text("You can still report this sighting — it just won't get an on-device AI suggestion.")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .font(Theme.sans(12))
+                    .foregroundStyle(c.inkSoft)
             }
             Spacer()
             if isCheckingForModel {
-                ProgressView().scaleEffect(0.8)
+                ProgressView().scaleEffect(0.8).tint(c.clay)
             } else {
                 Button("Retry", action: retryModelDownload)
-                    .font(.caption.weight(.semibold))
+                    .font(Theme.sansSemibold(13))
+                    .foregroundStyle(c.clay)
             }
         }
         .padding(12)
-        .background(Color.teal.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+        .background(c.claySoft.opacity(0.18), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .padding(.horizontal)
     }
 
     private var notConfidentBanner: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "questionmark.circle")
-                .foregroundStyle(.secondary)
+        let c = ThemeColors(scheme: scheme)
+        return HStack(spacing: 10) {
+            Image(systemName: "questionmark.circle").foregroundStyle(c.inkSoft)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Couldn't confidently identify a bird")
-                    .font(.caption.weight(.semibold))
+                Text("Couldn't confidently identify a bird").font(Theme.sansSemibold(13)).foregroundStyle(c.ink)
                 Text("The on-device model isn't sure this is one of the species it knows — you can still report it and add your own ID.")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .font(Theme.sans(12))
+                    .foregroundStyle(c.inkSoft)
             }
             Spacer()
         }
         .padding(12)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+        .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .padding(.horizontal)
     }
 
@@ -314,28 +301,25 @@ struct CameraView: View {
     }
 
     private var emptyStateSection: some View {
-        VStack(spacing: 16) {
+        let c = ThemeColors(scheme: scheme)
+        return VStack(spacing: 16) {
             ZStack {
-                RoundedRectangle(cornerRadius: 22)
-                    .fill(LinearGradient(
-                        colors: [Color.teal.opacity(0.13), Color.teal.opacity(0.04)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ))
+                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    .fill(c.paperDim)
+                    .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
                     .proportionalHeight(0.34, min: 200, max: 320)
 
                 VStack(spacing: 14) {
-                    let iconSize = ScreenSize.current.scale(60, compact: 46, large: 68)
-                    Image(systemName: "bird")
-                        .font(.system(size: iconSize))
-                        .foregroundStyle(Color.teal.opacity(0.65))
-                        .symbolEffect(.pulse)
-                    Text("No Photo Yet")
-                        .font(.title3.bold())
-                        .foregroundStyle(.primary)
+                    let markSize = ScreenSize.current.scale(56, compact: 44, large: 64)
+                    BirdMark()
+                        .stroke(c.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                        .frame(width: markSize, height: markSize)
+                    Text("No photo yet")
+                        .font(Theme.display(20, medium: true))
+                        .foregroundStyle(c.ink)
                     Text("Take a photo or choose from your library\nto identify and report a sighting")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .font(Theme.sans(14))
+                        .foregroundStyle(c.inkSoft)
                         .multilineTextAlignment(.center)
                 }
                 .padding()
@@ -345,22 +329,21 @@ struct CameraView: View {
     }
 
     private var captureButtons: some View {
-        HStack(spacing: 12) {
+        let c = ThemeColors(scheme: scheme)
+        return HStack(spacing: 12) {
             Button {
                 showPicker = true
             } label: {
                 VStack(spacing: 6) {
-                    Image(systemName: "photo.stack")
-                        .font(.title2)
-                        .symbolRenderingMode(.hierarchical)
-                    Text("Library")
-                        .font(.caption.weight(.medium))
+                    Image(systemName: "photo.stack").font(.title2)
+                    Text("Library").font(Theme.sansMedium(12))
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 18)
-                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+                .foregroundStyle(c.ink)
+                .background(c.paperDim, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
             }
-            .foregroundStyle(.primary)
 
             NavigationLink {
                 LiveCameraView(vm: vm, onVisionResults: { candidates in
@@ -368,15 +351,13 @@ struct CameraView: View {
                 })
             } label: {
                 VStack(spacing: 6) {
-                    Image(systemName: "camera.fill")
-                        .font(.title2)
-                    Text("Camera")
-                        .font(.caption.weight(.medium))
+                    Image(systemName: "camera.fill").font(.title2)
+                    Text("Camera").font(Theme.sansMedium(12))
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 18)
-                .background(Color.teal, in: RoundedRectangle(cornerRadius: 16))
-                .foregroundStyle(.white)
+                .background(c.ink, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .foregroundStyle(c.paper)
             }
         }
         .padding(.horizontal)
@@ -448,7 +429,7 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
     private lazy var shutterButton: UIButton = {
         let b = UIButton(type: .system)
         b.setImage(UIImage(systemName: "camera.shutter.button.fill"), for: .normal)
-        b.tintColor = .white
+        b.tintColor = UIColor(red: 0.76, green: 0.54, blue: 0.35, alpha: 1)   // Theme.clay, dark scheme
         b.contentVerticalAlignment = .fill
         b.contentHorizontalAlignment = .fill
         b.addTarget(self, action: #selector(snap), for: .touchUpInside)

@@ -38,6 +38,16 @@ targets:
         NSMicrophoneUsageDescription: BirdMap records bird calls to identify species by sound.
         NSLocationWhenInUseUsageDescription: BirdMap attaches your GPS location to each sighting so it can be placed on the map.
         NSPhotoLibraryUsageDescription: BirdMap can use photos from your library to report sightings.
+        # Brand type (matches the marketing site and social assets — see Theme.swift): Fraunces
+        # for display serif, Geist for UI sans. Bundled as static instances of the same variable
+        # webfonts used in docs/social and web/, converted with fontTools (see Resources/Fonts).
+        UIAppFonts:
+          - FrauncesBirdMap-Regular.ttf
+          - FrauncesBirdMapDisplay-Medium.ttf
+          - FrauncesBirdMap-Italic.ttf
+          - GeistBirdMap-Regular.ttf
+          - GeistBirdMap-Medium.ttf
+          - GeistBirdMap-SemiBold.ttf
         CFBundleURLTypes:
           - CFBundleURLSchemes:
               - com.birdmap.app

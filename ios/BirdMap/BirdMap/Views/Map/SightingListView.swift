@@ -60,15 +60,28 @@ final class SavedSightings: ObservableObject {
 /// The list shown when a pin holds more than one sighting: pick one to read
 /// about it, annotate it, or save it.
 struct SightingListView: View {
+    @Environment(\.colorScheme) private var scheme
     let title: String
     var emptyMessage = "Nothing here yet."
     let sightings: [Sighting]
 
     var body: some View {
+        let c = ThemeColors(scheme: scheme)
         NavigationStack {
             Group {
                 if sightings.isEmpty {
-                    ContentUnavailableView(emptyMessage, systemImage: "bookmark")
+                    VStack(spacing: 10) {
+                        BirdMark()
+                            .stroke(c.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                            .frame(width: 48, height: 48)
+                        Text(emptyMessage)
+                            .font(Theme.sans(14))
+                            .foregroundStyle(c.inkSoft)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 40)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(c.paper)
                 } else {
                     List(sightings) { sighting in
                         NavigationLink {
@@ -76,7 +89,10 @@ struct SightingListView: View {
                         } label: {
                             SightingRow(sighting: sighting)
                         }
+                        .listRowBackground(c.paper)
                     }
+                    .scrollContentBackground(.hidden)
+                    .background(c.paper)
                 }
             }
             .navigationTitle(title)
@@ -86,19 +102,22 @@ struct SightingListView: View {
 }
 
 struct SightingRow: View {
+    @Environment(\.colorScheme) private var scheme
     let sighting: Sighting
     @ObservedObject private var saved = SavedSightings.shared
     @State private var thumbnail: UIImage?
 
     var body: some View {
+        let c = ThemeColors(scheme: scheme)
         HStack(spacing: 12) {
             thumbnailView
                 .frame(width: 52, height: 52)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(sighting.displaySpecies ?? "Unidentified")
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.sansSemibold(15))
+                    .foregroundStyle(c.ink)
                     .lineLimit(1)
                 HStack(spacing: 6) {
                     Label(sighting.isAudio ? "Recording" : "Photo",
@@ -108,12 +127,12 @@ struct SightingRow: View {
                         Text(date, format: .relative(presentation: .named))
                     }
                 }
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(Theme.sans(12))
+                .foregroundStyle(c.inkSoft)
                 if let username = sighting.username {
                     Text("by \(username)")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                        .font(Theme.sans(11))
+                        .foregroundStyle(c.inkSoft.opacity(0.75))
                 }
             }
 
@@ -121,14 +140,14 @@ struct SightingRow: View {
 
             if sighting.annotationCount > 0 {
                 Text("\(sighting.annotationCount)")
-                    .font(.caption2.weight(.bold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 6)
+                    .font(Theme.sansSemibold(11))
+                    .foregroundStyle(c.paper)
+                    .padding(.horizontal, 7)
                     .padding(.vertical, 2)
-                    .background(Color.teal, in: Capsule())
+                    .background(c.clay, in: Capsule())
             }
             if saved.isSaved(sighting.id) {
-                Image(systemName: "bookmark.fill").foregroundStyle(Color.teal)
+                Image(systemName: "bookmark.fill").foregroundStyle(c.clay)
             }
         }
         .padding(.vertical, 2)
@@ -146,18 +165,18 @@ struct SightingRow: View {
 
     @ViewBuilder
     private var thumbnailView: some View {
+        let c = ThemeColors(scheme: scheme)
         if sighting.isAudio {
             ZStack {
-                LinearGradient(colors: [Color.indigo.opacity(0.7), Color.purple.opacity(0.5)],
-                               startPoint: .topLeading, endPoint: .bottomTrailing)
-                Image(systemName: "waveform").foregroundStyle(.white)
+                c.ink
+                Image(systemName: "waveform").foregroundStyle(c.paper)
             }
         } else if let thumbnail {
             Image(uiImage: thumbnail).resizable().scaledToFill()
         } else {
             ZStack {
-                Color(.secondarySystemBackground)
-                Image(systemName: "photo").foregroundStyle(.secondary)
+                c.paperDim
+                Image(systemName: "photo").foregroundStyle(c.inkSoft)
             }
         }
     }
@@ -166,6 +185,7 @@ struct SightingRow: View {
 /// Everything the user has bookmarked, fetched by id so it isn't limited to
 /// whatever happens to be inside the current map viewport.
 struct SavedSightingsView: View {
+    @Environment(\.colorScheme) private var scheme
     @ObservedObject private var saved = SavedSightings.shared
     @State private var loaded: [Sighting] = []
     @State private var isLoading = true
@@ -174,6 +194,7 @@ struct SavedSightingsView: View {
         Group {
             if isLoading {
                 ProgressView("Loading saved sightings…")
+                    .tint(ThemeColors(scheme: scheme).clay)
             } else {
                 SightingListView(
                     title: "Saved",

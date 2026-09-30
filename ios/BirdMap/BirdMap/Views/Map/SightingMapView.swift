@@ -3,6 +3,7 @@ import MapKit
 import CoreLocation
 
 struct SightingMapView: View {
+    @Environment(\.colorScheme) private var scheme
     @StateObject private var vm = SightingMapViewModel()
     @State private var selectedSighting: Sighting?
     @State private var selectedGroup: SightingGroup?
@@ -26,11 +27,11 @@ struct SightingMapView: View {
                         // draws a heading cone (a triangular wedge) whenever
                         // the device has a compass fix — not configurable
                         // any other way on the built-in marker.
+                        let c = ThemeColors(scheme: scheme)
                         Circle()
-                            .fill(Color.blue)
+                            .fill(c.clay)
                             .frame(width: 16, height: 16)
-                            .overlay(Circle().stroke(.white, lineWidth: 2))
-                            .shadow(color: .black.opacity(0.3), radius: 2)
+                            .overlay(Circle().stroke(c.paper, lineWidth: 2.5))
                     }
                     ForEach(SightingGroup.grouping(vm.sightings)) { group in
                         Annotation(
@@ -145,7 +146,7 @@ struct SightingMapView: View {
                                     }
                                 }
                             } icon: {
-                                Image(systemName: "mappin.and.ellipse").foregroundStyle(Color.teal)
+                                Image(systemName: "mappin.and.ellipse").foregroundStyle(ThemeColors(scheme: scheme).clay)
                             }
                         }
                         .buttonStyle(.plain)
@@ -211,35 +212,27 @@ struct SightingMapView: View {
     /// approach of fanning overlapping pins out into a circle.
     private func groupPin(_ group: SightingGroup) -> some View {
         let count = group.sightings.count
-        let annotated = group.sightings.contains { $0.annotationCount > 0 }
+        let c = ThemeColors(scheme: scheme)
         return Button {
             if count == 1 { selectedSighting = group.sightings[0] } else { selectedGroup = group }
         } label: {
             ZStack {
+                MapPinShape()
+                    .fill(c.clay)
+                    .overlay(MapPinShape().stroke(c.ink, lineWidth: 1.6))
+                    .frame(width: 30, height: 40)
                 Circle()
-                    .fill(
-                        count > 1
-                            ? AnyShapeStyle(Color.indigo.gradient)
-                            : annotated
-                                ? AnyShapeStyle(Color.teal.gradient)
-                                : AnyShapeStyle(Color.orange.gradient)
-                    )
-                    .frame(width: 38, height: 38)
-                    .shadow(color: .black.opacity(0.22), radius: 5, y: 3)
-
-                Image(systemName: "mappin")
-                    .foregroundStyle(.white)
-                    .font(.system(size: 17, weight: .semibold))
+                    .fill(c.paper)
+                    .frame(width: 11, height: 11)
+                    .offset(y: -9)
 
                 if count > 1 {
                     Text("\(count)")
-                        .font(.system(size: 11, weight: .heavy))
-                        .foregroundStyle(Color.indigo)
-                        .frame(minWidth: 18, minHeight: 18)
-                        .padding(.horizontal, 2)
-                        .background(.white, in: Capsule())
-                        .overlay(Capsule().stroke(Color.indigo, lineWidth: 1.5))
-                        .offset(x: 14, y: -14)
+                        .font(Theme.sansSemibold(13))
+                        .foregroundStyle(c.paper)
+                        .frame(minWidth: 22, minHeight: 22)
+                        .background(c.ink, in: Circle())
+                        .offset(x: 15, y: -20)
                 }
             }
         }
@@ -247,31 +240,57 @@ struct SightingMapView: View {
     }
 
     private var countBadge: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "binoculars.fill")
-                .symbolRenderingMode(.hierarchical)
-                .font(.caption)
+        let c = ThemeColors(scheme: scheme)
+        return HStack(spacing: 6) {
+            Circle().fill(c.clay).frame(width: 7, height: 7)
             Text("\(vm.sightings.count) sighting\(vm.sightings.count == 1 ? "" : "s") in view")
-                .font(.caption.weight(.medium))
+                .font(Theme.sansMedium(13))
         }
-        .foregroundStyle(.primary)
+        .foregroundStyle(c.ink)
         .padding(.horizontal, 16)
         .padding(.vertical, 9)
-        .background(.ultraThinMaterial, in: Capsule())
+        .background(c.paper, in: Capsule())
+        .overlay(Capsule().strokeBorder(c.rule, lineWidth: 1.5))
         .padding(.bottom, 14)
     }
 
     private var loadingBadge: some View {
-        HStack(spacing: 8) {
-            ProgressView().scaleEffect(0.8)
+        let c = ThemeColors(scheme: scheme)
+        return HStack(spacing: 8) {
+            ProgressView().scaleEffect(0.8).tint(c.clay)
             Text("Loading sightings…")
-                .font(.caption.weight(.medium))
+                .font(Theme.sansMedium(13))
         }
-        .foregroundStyle(.primary)
+        .foregroundStyle(c.ink)
         .padding(.horizontal, 16)
         .padding(.vertical, 9)
-        .background(.ultraThinMaterial, in: Capsule())
+        .background(c.paper, in: Capsule())
+        .overlay(Capsule().strokeBorder(c.rule, lineWidth: 1.5))
         .padding(.bottom, 14)
+    }
+}
+
+/// The teardrop pin used on the map — the same silhouette as the one in the Instagram reels'
+/// "the map" illustration (docs/social/instagram/build.py's `pin()`).
+private struct MapPinShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        let w = rect.width, h = rect.height
+        p.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        p.addCurve(to: CGPoint(x: rect.minX, y: rect.minY + h * 0.34),
+                    control1: CGPoint(x: rect.midX - w * 0.30, y: rect.minY),
+                    control2: CGPoint(x: rect.minX, y: rect.minY + h * 0.14))
+        p.addCurve(to: CGPoint(x: rect.midX, y: rect.maxY),
+                    control1: CGPoint(x: rect.minX, y: rect.minY + h * 0.62),
+                    control2: CGPoint(x: rect.midX, y: rect.maxY))
+        p.addCurve(to: CGPoint(x: rect.maxX, y: rect.minY + h * 0.34),
+                    control1: CGPoint(x: rect.midX, y: rect.maxY),
+                    control2: CGPoint(x: rect.maxX, y: rect.minY + h * 0.62))
+        p.addCurve(to: CGPoint(x: rect.midX, y: rect.minY),
+                    control1: CGPoint(x: rect.maxX, y: rect.minY + h * 0.14),
+                    control2: CGPoint(x: rect.midX + w * 0.30, y: rect.minY))
+        p.closeSubpath()
+        return p
     }
 }
 

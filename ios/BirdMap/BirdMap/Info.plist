@@ -45,6 +45,15 @@
 	<string>BirdMap records bird calls to identify species by sound.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>BirdMap can use photos from your library to report sightings.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>FrauncesBirdMap-Regular.ttf</string>
+		<string>FrauncesBirdMapDisplay-Medium.ttf</string>
+		<string>FrauncesBirdMap-Italic.ttf</string>
+		<string>GeistBirdMap-Regular.ttf</string>
+		<string>GeistBirdMap-Medium.ttf</string>
+		<string>GeistBirdMap-SemiBold.ttf</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 </dict>

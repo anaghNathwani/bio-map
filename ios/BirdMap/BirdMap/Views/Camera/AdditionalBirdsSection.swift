@@ -21,6 +21,7 @@ struct BirdCandidate: Identifiable {
 /// with no species. Used by both AudioRecorderView (today) and CameraView
 /// (once photo multi-bird detection is wired in).
 struct AdditionalBirdsSection: View {
+    @Environment(\.colorScheme) private var scheme
     let sightingID: String
     let candidates: [BirdCandidate]
 
@@ -30,11 +31,10 @@ struct AdditionalBirdsSection: View {
     @State private var submitError: String?
 
     var body: some View {
+        let c = ThemeColors(scheme: scheme)
         if !candidates.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
-                Label("Also detected", systemImage: "bird.fill")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
+                Eyebrow(text: "Also detected")
 
                 ForEach(candidates) { candidate in
                     row(for: candidate)
@@ -42,30 +42,32 @@ struct AdditionalBirdsSection: View {
 
                 if let submitError {
                     Text(submitError)
-                        .font(.caption2)
-                        .foregroundStyle(.red)
+                        .font(Theme.sans(11))
+                        .foregroundStyle(c.clay)
                 }
             }
             .padding(14)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+            .background(c.paper, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
             .padding(.horizontal)
         }
     }
 
     @ViewBuilder
     private func row(for candidate: BirdCandidate) -> some View {
+        let c = ThemeColors(scheme: scheme)
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 10) {
                 if let img = candidate.croppedImage {
                     Image(uiImage: img)
                         .resizable().scaledToFill()
                         .frame(width: 36, height: 36)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(candidate.species).font(.subheadline.weight(.medium))
+                    Text(candidate.species).font(Theme.sansMedium(14)).foregroundStyle(c.ink)
                     Text("\(Int(candidate.confidence * 100))% confident")
-                        .font(.caption2).foregroundStyle(.secondary)
+                        .font(Theme.sans(11)).foregroundStyle(c.inkSoft)
                 }
                 Spacer()
 
@@ -81,7 +83,7 @@ struct AdditionalBirdsSection: View {
                             correctingID = candidate.id
                             correctionText = ""
                         }
-                        smallButton("questionmark", .orange) {
+                        smallButton("questionmark", c.inkSoft) {
                             Task { await submit(candidate, species: "", verdict: .unsure) }
                         }
                     }
@@ -91,13 +93,15 @@ struct AdditionalBirdsSection: View {
             if correctingID == candidate.id {
                 HStack(spacing: 8) {
                     TextField("What is it actually?", text: $correctionText)
+                        .font(Theme.sans(14))
                         .autocorrectionDisabled()
                         .padding(8)
-                        .background(Color(.tertiarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+                        .background(c.paperDim, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     Button("Save") {
                         Task { await submit(candidate, species: correctionText.trimmingCharacters(in: .whitespaces), verdict: .rejected) }
                     }
-                    .font(.caption.weight(.semibold))
+                    .font(Theme.sansSemibold(13))
+                    .foregroundStyle(c.clay)
                     .disabled(correctionText.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }

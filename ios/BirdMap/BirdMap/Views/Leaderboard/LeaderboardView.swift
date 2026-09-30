@@ -1,21 +1,28 @@
 import SwiftUI
 
 struct LeaderboardView: View {
+    @Environment(\.colorScheme) private var scheme
     @State private var entries: [LeaderboardEntry] = []
     @State private var isLoading = true
 
     var body: some View {
+        let c = ThemeColors(scheme: scheme)
         NavigationStack {
             Group {
                 if isLoading {
                     ProgressView("Loading leaderboard…")
+                        .tint(c.clay)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if entries.isEmpty {
-                    ContentUnavailableView(
-                        "No Entries Yet",
-                        systemImage: "trophy.fill",
-                        description: Text("Start annotating sightings to appear here!")
-                    )
+                    VStack(spacing: 10) {
+                        BirdMark()
+                            .stroke(c.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                            .frame(width: 56, height: 56)
+                        Text("No entries yet").font(Theme.display(20, medium: true)).foregroundStyle(c.ink)
+                        Text("Start annotating sightings to appear here.")
+                            .font(Theme.sans(14)).foregroundStyle(c.inkSoft)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     ScrollView {
                         VStack(spacing: 0) {
@@ -25,20 +32,24 @@ struct LeaderboardView: View {
                                 .padding(.bottom, 24)
 
                             if entries.count > 3 {
-                                VStack(spacing: 1) {
+                                VStack(spacing: 0) {
                                     ForEach(Array(entries.dropFirst(3).enumerated()), id: \.element.id) { index, entry in
+                                        if index > 0 { HairlineRule() }
                                         rankRow(entry: entry, rank: index + 4)
                                     }
                                 }
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .background(c.paper)
+                                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 .padding(.horizontal)
                             }
                         }
                         .padding(.bottom, 32)
                     }
-                    .background(Color(.systemGroupedBackground))
+                    .background(c.paper)
                 }
             }
+            .background(c.paper)
             .navigationTitle("Top Observers")
             .task { await loadLeaderboard() }
             .refreshable { await loadLeaderboard() }
@@ -64,90 +75,63 @@ struct LeaderboardView: View {
     }
 
     private func podiumCard(entry: LeaderboardEntry, rank: Int, height: CGFloat) -> some View {
-        VStack(spacing: 8) {
-            Image(systemName: rankSymbol(rank))
-                .font(.system(size: ScreenSize.current.scale(rank == 1 ? 34 : 26, compact: rank == 1 ? 26 : 20)))
-                .symbolRenderingMode(.multicolor)
+        let c = ThemeColors(scheme: scheme)
+        return VStack(spacing: 8) {
+            Text(rank == 1 ? "1st" : rank == 2 ? "2nd" : "3rd")
+                .font(Theme.displayItalic(rank == 1 ? 28 : 22))
+                .foregroundStyle(c.clay)
 
             Text(entry.username)
-                .font(rank == 1 ? .headline : .subheadline)
-                .fontWeight(.semibold)
+                .font(Theme.sansSemibold(rank == 1 ? 15 : 14))
+                .foregroundStyle(c.ink)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
 
             Text("\(entry.annotationCount)")
-                .font(.title3.bold())
-                .foregroundStyle(podiumColor(rank: rank))
+                .font(Theme.display(20, medium: true))
+                .foregroundStyle(c.ink)
 
             Text("annotations")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+                .font(Theme.sans(11))
+                .foregroundStyle(c.inkSoft)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
         .padding(.horizontal, 8)
         .frame(height: height)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18)
-                .strokeBorder(podiumColor(rank: rank).opacity(0.35), lineWidth: 1)
-        )
+        .background(c.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(rank == 1 ? c.clay.opacity(0.7) : c.rule, lineWidth: rank == 1 ? 1.8 : 1.5))
     }
 
     private func rankRow(entry: LeaderboardEntry, rank: Int) -> some View {
-        HStack(spacing: 14) {
-            Text("#\(rank)")
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(.secondary)
+        let c = ThemeColors(scheme: scheme)
+        return HStack(spacing: 14) {
+            Text("\(rank)")
+                .font(Theme.displayItalic(16))
+                .foregroundStyle(c.inkSoft)
                 .frame(width: 28, alignment: .trailing)
 
             ZStack {
-                Circle()
-                    .fill(Color.teal.opacity(0.15))
-                    .frame(width: 36, height: 36)
+                Circle().strokeBorder(c.rule, lineWidth: 1.5).frame(width: 36, height: 36)
                 Text(String(entry.username.prefix(1)).uppercased())
-                    .font(.headline)
-                    .foregroundStyle(Color.teal)
+                    .font(Theme.sansSemibold(15))
+                    .foregroundStyle(c.clay)
             }
 
             Text(entry.username)
-                .font(.body)
+                .font(Theme.sans(15))
+                .foregroundStyle(c.ink)
 
             Spacer()
 
-            HStack(spacing: 4) {
-                Image(systemName: "checklist.checked")
-                    .symbolRenderingMode(.hierarchical)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("\(entry.annotationCount)")
-                    .font(.subheadline.monospacedDigit())
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
-            }
+            Text("\(entry.annotationCount)")
+                .font(Theme.sansSemibold(14))
+                .foregroundStyle(c.ink)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(Color(.secondarySystemGroupedBackground))
     }
 
-    private func podiumColor(rank: Int) -> Color {
-        switch rank {
-        case 1: return Color(hue: 0.12, saturation: 0.85, brightness: 0.8)
-        case 2: return Color(hue: 0.6, saturation: 0.1, brightness: 0.65)
-        case 3: return Color(hue: 0.07, saturation: 0.65, brightness: 0.65)
-        default: return .teal
-        }
-    }
-
-    private func rankSymbol(_ rank: Int) -> String {
-        switch rank {
-        case 1: return "trophy.fill"
-        case 2: return "medal.fill"
-        case 3: return "medal"
-        default: return "bird.fill"
-        }
-    }
 
     private func loadLeaderboard() async {
         isLoading = true

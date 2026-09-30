@@ -2,6 +2,7 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject var env: AppEnvironment
+    @Environment(\.colorScheme) private var scheme
     @State private var email = ""
     @State private var username = ""
     @State private var password = ""
@@ -12,22 +13,14 @@ struct LoginView: View {
     private let screen = ScreenSize.current
 
     var body: some View {
+        let c = ThemeColors(scheme: scheme)
         ZStack {
-            LinearGradient(
-                colors: [
-                    Color(hue: 0.48, saturation: 0.72, brightness: 0.42),
-                    Color(hue: 0.52, saturation: 0.60, brightness: 0.26),
-                    Color(hue: 0.56, saturation: 0.50, brightness: 0.18)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            c.paper.ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 0) {
                     heroSection
-                        .padding(.bottom, screen.scale(32, compact: 20, large: 40))
+                        .padding(.bottom, screen.scale(40, compact: 26, large: 48))
 
                     formCard
                         .padding(.horizontal, 24)
@@ -41,26 +34,21 @@ struct LoginView: View {
     // MARK: - Hero
 
     private var heroSection: some View {
-        VStack(spacing: 14) {
-            let iconSize = screen.scale(96, compact: 76, large: 108)
-            ZStack {
-                Circle()
-                    .background(.ultraThinMaterial, in: Circle())
-                    .frame(width: iconSize, height: iconSize)
-                Image(systemName: "bird.fill")
-                    .font(.system(size: iconSize * 0.46, weight: .medium))
-                    .foregroundStyle(.white)
-                    .symbolEffect(.pulse)
-            }
-            .padding(.top, screen.scale(56, compact: 32, large: 68))
+        let c = ThemeColors(scheme: scheme)
+        return VStack(spacing: 16) {
+            let markSize = screen.scale(84, compact: 66, large: 96)
+            BirdMark()
+                .stroke(c.ink, style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
+                .frame(width: markSize, height: markSize)
+                .padding(.top, screen.scale(64, compact: 40, large: 76))
 
             Text("BirdMap")
-                .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                .foregroundStyle(.white)
+                .font(Theme.displayItalic(screen.scale(42, compact: 34, large: 46)))
+                .foregroundStyle(c.ink)
 
             Text("Citizen science, one sighting at a time")
-                .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.78))
+                .font(Theme.sans(15))
+                .foregroundStyle(c.inkSoft)
                 .multilineTextAlignment(.center)
         }
     }
@@ -68,90 +56,82 @@ struct LoginView: View {
     // MARK: - Form card
 
     private var formCard: some View {
-        VStack(spacing: 16) {
+        let c = ThemeColors(scheme: scheme)
+        return VStack(spacing: 16) {
             fieldsStack
 
             if let error {
-                HStack(spacing: 6) {
+                HStack(alignment: .top, spacing: 8) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .symbolRenderingMode(.multicolor)
                     Text(error)
                 }
-                .font(.caption)
-                .foregroundStyle(.white)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(.red.opacity(0.7), in: RoundedRectangle(cornerRadius: 10))
+                .font(Theme.sans(13))
+                .foregroundStyle(c.ink)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .background(c.claySoft.opacity(0.28), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(c.clay.opacity(0.5), lineWidth: 1))
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
 
             submitButton
             toggleButton
 
-            HStack {
-                Rectangle().fill(.white.opacity(0.25)).frame(height: 1)
-                Text("or").font(.caption).foregroundStyle(.white.opacity(0.6)).padding(.horizontal, 8)
-                Rectangle().fill(.white.opacity(0.25)).frame(height: 1)
+            HStack(spacing: 10) {
+                HairlineRule()
+                Text("or").font(Theme.sans(12)).foregroundStyle(c.inkSoft)
+                HairlineRule()
             }
+            .padding(.vertical, 2)
 
             googleSignInButton
         }
         .padding(22)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24))
+        .background(c.paper, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
     }
 
     // MARK: - Fields
 
     private var fieldsStack: some View {
         VStack(spacing: 10) {
-            glassField {
-                Image(systemName: "envelope.fill")
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(.white.opacity(0.7))
-                    .frame(width: 22)
+            paperField {
+                Image(systemName: "envelope").frame(width: 20)
                 TextField("Email", text: $email)
                     .keyboardType(.emailAddress)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
-                    .foregroundStyle(.white)
-                    .tint(.white)
             }
 
             if isRegistering {
-                glassField {
-                    Image(systemName: "person.fill")
-                        .symbolRenderingMode(.hierarchical)
-                        .foregroundStyle(.white.opacity(0.7))
-                        .frame(width: 22)
+                paperField {
+                    Image(systemName: "person").frame(width: 20)
                     TextField("Username", text: $username)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
-                        .foregroundStyle(.white)
-                        .tint(.white)
                 }
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
 
-            glassField {
-                Image(systemName: "lock.fill")
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(.white.opacity(0.7))
-                    .frame(width: 22)
+            paperField {
+                Image(systemName: "lock").frame(width: 20)
                 SecureField("Password", text: $password)
-                    .foregroundStyle(.white)
-                    .tint(.white)
             }
         }
         .animation(.spring(duration: 0.35), value: isRegistering)
     }
 
     @ViewBuilder
-    private func glassField<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+    private func paperField<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        let c = ThemeColors(scheme: scheme)
         HStack(spacing: 10) { content() }
+            .font(Theme.sans(16))
+            .foregroundStyle(c.ink)
+            .tint(c.clay)
             .padding(.horizontal, 14)
             .padding(.vertical, 13)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+            .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     // MARK: - Buttons
@@ -163,35 +143,30 @@ struct LoginView: View {
         } label: {
             HStack(spacing: 8) {
                 if isLoading {
-                    ProgressView().tint(.white)
+                    ProgressView()
                 } else {
-                    Image(systemName: isRegistering ? "person.badge.plus" : "arrow.right.circle.fill")
-                        .symbolRenderingMode(.hierarchical)
+                    Image(systemName: isRegistering ? "person.badge.plus" : "arrow.right")
                 }
-                Text(isLoading ? "Please wait…" : (isRegistering ? "Create Account" : "Sign In"))
-                    .fontWeight(.semibold)
+                Text(isLoading ? "Please wait…" : (isRegistering ? "Create account" : "Sign in"))
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .foregroundStyle(.white)
-            .background(Color.teal, in: RoundedRectangle(cornerRadius: 14))
         }
+        .buttonStyle(ClayButtonStyle())
         .disabled(isLoading)
         .animation(.easeInOut(duration: 0.2), value: isLoading)
     }
 
     private var toggleButton: some View {
-        Button {
+        let c = ThemeColors(scheme: scheme)
+        return Button {
             withAnimation(.spring(duration: 0.35)) {
                 isRegistering.toggle()
                 error = nil
             }
         } label: {
-            Text(isRegistering
-                 ? "Already have an account? **Sign in**"
-                 : "New here? **Create account**")
-                .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.88))
+            (Text(isRegistering ? "Already have an account? " : "New here? ")
+                + Text(isRegistering ? "Sign in" : "Create account").italic().foregroundStyle(c.clay))
+                .font(Theme.sans(14))
+                .foregroundStyle(c.inkSoft)
         }
         .padding(.top, 2)
     }
@@ -201,17 +176,11 @@ struct LoginView: View {
             Task { await signInWithGoogle() }
         } label: {
             HStack(spacing: 10) {
-                Text("G")
-                    .font(.system(size: 17, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.26, green: 0.52, blue: 0.96))
-                Text("Sign in with Google")
-                    .fontWeight(.semibold)
+                Text("G").font(Theme.sansSemibold(16))
+                Text("Sign in with Google").font(Theme.sansMedium(16))
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
-            .foregroundStyle(.white)
         }
+        .buttonStyle(ClayButtonStyle(prominent: false))
         .disabled(isLoading)
     }
 
