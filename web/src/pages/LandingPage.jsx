@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import AppStoreBadge from '../components/AppStoreBadge.jsx'
+import WaitlistButton from '../components/WaitlistButton.jsx'
 import { FAQ } from '../content/faq.js'
 import SiteFooter from '../components/SiteFooter.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
@@ -103,7 +103,7 @@ export default function LandingPage() {
             Open the live map
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
           </Link>
-          <AppStoreBadge />
+          <WaitlistButton />
         </div>
       </section>
 
@@ -205,7 +205,7 @@ export default function LandingPage() {
             Ready to see what's flying nearby?
           </h2>
           <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-[var(--ink-soft)]">
-            Explore the live community map, or grab the app and start contributing sightings today.
+            Explore the live community map, or join the waitlist for early access to the app.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-5">
             <Link
@@ -215,7 +215,7 @@ export default function LandingPage() {
               Open the map
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </Link>
-            <AppStoreBadge size="lg" />
+            <WaitlistButton size="lg" />
           </div>
         </div>
       </section>

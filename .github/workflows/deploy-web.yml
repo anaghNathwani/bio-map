@@ -30,6 +30,11 @@ jobs:
 
       - run: npm run build
         working-directory: web
+        env:
+          # Set this repo variable once web/scripts/waitlist-apps-script.gs is deployed (see its
+          # header) — Settings -> Secrets and variables -> Actions -> Variables. Left unset, the
+          # build still succeeds; the waitlist button just tells visitors it isn't connected yet.
+          VITE_WAITLIST_SCRIPT_URL: "${{ vars.VITE_WAITLIST_SCRIPT_URL }}"
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
