@@ -59,5 +59,21 @@ service cloud.firestore {
         allow write: if false;
       }
     }
+
+    // "Join the waitlist" signups from the marketing site (web/src/components/WaitlistButton.jsx).
+    // Write-only from any visitor, no auth — nobody can read this back, including other
+    // visitors, so it can't be scraped for emails. Only
+    // ml_pipeline/notify_waitlist_signups.py (Admin SDK, bypasses these rules, same pattern as
+    // model_versions above) ever reads it, on a schedule, to email new signups and mark them
+    // notified.
+    match /waitlist/{signupID} {
+      allow read: if false;
+      allow create: if request.resource.data.keys().hasAll(['email', 'createdAt'])
+        && request.resource.data.email is string
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && request.resource.data.email.size() < 200
+        && (!('name' in request.resource.data) || (request.resource.data.name is string && request.resource.data.name.size() < 200));
+      allow update, delete: if false;
+    }
   }
 }

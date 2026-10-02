@@ -31,10 +31,17 @@ jobs:
       - run: npm run build
         working-directory: web
         env:
-          # Set this repo variable once web/scripts/waitlist-apps-script.gs is deployed (see its
-          # header) — Settings -> Secrets and variables -> Actions -> Variables. Left unset, the
-          # build still succeeds; the waitlist button just tells visitors it isn't connected yet.
-          VITE_WAITLIST_SCRIPT_URL: "${{ vars.VITE_WAITLIST_SCRIPT_URL }}"
+          # Firebase's web config is not a secret (it's shipped in the built JS either way — see
+          # https://firebase.google.com/docs/projects/api-keys), but it still has to come from
+          # somewhere at build time. Set these as repo Variables (Settings -> Secrets and
+          # variables -> Actions -> Variables) with the same values as web/.env.local; without
+          # them the build succeeds but the deployed site's Firestore calls (map, waitlist) fail.
+          VITE_FIREBASE_API_KEY: "${{ vars.VITE_FIREBASE_API_KEY }}"
+          VITE_FIREBASE_AUTH_DOMAIN: "${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}"
+          VITE_FIREBASE_PROJECT_ID: "${{ vars.VITE_FIREBASE_PROJECT_ID }}"
+          VITE_FIREBASE_STORAGE_BUCKET: "${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}"
+          VITE_FIREBASE_APP_ID: "${{ vars.VITE_FIREBASE_APP_ID }}"
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

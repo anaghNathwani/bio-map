@@ -1,0 +1,47 @@
+name: Notify waitlist signups
+
+# Runs ml_pipeline/notify_waitlist_signups.py on a schedule: checks the `waitlist` Firestore
+# collection (written by the "Join the waitlist" button on the site) for anything not yet
+# emailed, and if there's something new, sends one email to anaghnathwani@gmail.com listing it.
+# See that script's docstring for the one-time Resend setup.
+#
+# Every 10 minutes is 144 runs/day, but this job has no heavy dependencies (just firebase-admin —
+# none of live_poll.py's torch/tensorflow/birdnetlib), so each run is well under a minute
+# including setup. This repo is private (metered Actions minutes, 2000 free/month — see
+# live-poll.yml's comment); at roughly that cadence this alone stays a small fraction of that
+# budget. Tighten the cron below if actual usage says otherwise.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   FIREBASE_SERVICE_ACCOUNT_JSON  — already used by live-poll.yml, reused here as-is.
+#   RESEND_API_KEY                 — see notify_waitlist_signups.py's docstring.
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install firebase-admin==6.5.0
+        working-directory: ml_pipeline
+
+      - name: Write Firebase service account key
+        run: echo "$FIREBASE_SERVICE_ACCOUNT_JSON" > /tmp/firebase-key.json
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+
+      - name: Check for new waitlist signups
+        run: python notify_waitlist_signups.py --service-account /tmp/firebase-key.json
+        working-directory: ml_pipeline
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}

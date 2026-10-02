@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { X, Check } from 'lucide-react'
-
-// Set by `web/scripts/waitlist-apps-script.gs`, deployed as a Web App bound to the waitlist
-// Google Sheet (see that file's header for the one-time setup steps). Left unset in dev until
-// that's deployed — the form still opens, it just reports that signups aren't connected yet.
-const ENDPOINT = import.meta.env.VITE_WAITLIST_SCRIPT_URL
+import { submitWaitlistSignup } from '../firebase.js'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 /**
- * "Join the Waitlist" — a button that opens a small modal collecting name + email, and posts it
- * to the Apps Script endpoint above, which appends a row to the linked Google Sheet. No backend:
- * same zero-server approach as the rest of the site (see docs/DEPLOYMENT.md).
+ * "Join the Waitlist" — a button that opens a small modal collecting name + email, and writes it
+ * straight to Firestore (see firebase.js's submitWaitlistSignup) — no backend, same as the rest
+ * of this site. ml_pipeline/notify_waitlist_signups.py polls that collection on a schedule and
+ * emails new signups; nothing here ever reads it back.
  */
 export default function WaitlistButton({ size = 'md', className = '' }) {
   const [open, setOpen] = useState(false)
@@ -65,22 +62,10 @@ function WaitlistModal({ onClose }) {
       setError('That email address doesn’t look right.')
       return
     }
-    if (!ENDPOINT) {
-      setError('Waitlist signups aren’t connected yet — check back soon.')
-      return
-    }
     setStatus('submitting')
     setError('')
     try {
-      const url = new URL(ENDPOINT)
-      url.searchParams.set('email', trimmedEmail)
-      url.searchParams.set('name', name.trim())
-      url.searchParams.set('source', 'website')
-      // A GET avoids a CORS preflight the Apps Script endpoint can't answer; it only ever reads
-      // these as query params and appends a row, so there's no meaningful difference from a POST.
-      const res = await fetch(url.toString())
-      const data = await res.json().catch(() => ({ ok: res.ok }))
-      if (!res.ok || data.ok === false) throw new Error(data.error || 'Something went wrong.')
+      await submitWaitlistSignup({ email: trimmedEmail, name: name.trim() })
       setStatus('done')
     } catch {
       setStatus('error')

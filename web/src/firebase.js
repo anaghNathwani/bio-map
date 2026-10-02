@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs, orderBy, limit, query } from 'firebase/firestore'
+import { getFirestore, collection, getDocs, orderBy, limit, query, addDoc, serverTimestamp } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -21,4 +21,20 @@ export async function fetchSightings(maxResults = 500) {
   )
   const snap = await getDocs(q)
   return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+}
+
+/**
+ * Writes a "Join the waitlist" signup. Write-only from the client (see
+ * firestore.rules — no one can read this collection back, including other
+ * visitors); ml_pipeline/notify_waitlist_signups.py is the only thing that
+ * ever reads it, via the Admin SDK on a schedule, to email new signups.
+ */
+export async function submitWaitlistSignup({ email, name = '', source = 'website' }) {
+  await addDoc(collection(db, 'waitlist'), {
+    email,
+    name,
+    source,
+    notified: false,
+    createdAt: serverTimestamp(),
+  })
 }
