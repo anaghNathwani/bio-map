@@ -65,7 +65,7 @@
 
 /* Begin PBXFileReference section */
 		01BB46B5FD9872F1B713801E /* BirdNETClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdNETClassifier.swift; sourceTree = "<group>"; };
-		01DFBCD64A45A60CCBA65C18 /* BundledBirdModel.tflite */ = {isa = PBXFileReference; path = BundledBirdModel.tflite; sourceTree = "<group>"; };
+		01DFBCD64A45A60CCBA65C18 /* BundledBirdModel.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = BundledBirdModel.tflite; sourceTree = "<group>"; };
 		090451ECDCE9D22EEF845044 /* FrauncesBirdMapDisplay-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesBirdMapDisplay-Medium.ttf"; sourceTree = "<group>"; };
 		0BE2F5933761B5B5BE9E44DD /* Pods_BirdMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BirdMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		10F3F8CA4FE49B74E063B25E /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 		21912C8A76A78705F8D1D49E /* BirdInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdInfo.swift; sourceTree = "<group>"; };
 		2924446C0DE4D1C773946327 /* AudioImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioImporter.swift; sourceTree = "<group>"; };
 		2A5C4C8BC99DBD814228983B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		2C2E6CE6534F02A715579CEF /* BundledBirdNET.tflite */ = {isa = PBXFileReference; path = BundledBirdNET.tflite; sourceTree = "<group>"; };
+		2C2E6CE6534F02A715579CEF /* BundledBirdNET.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = BundledBirdNET.tflite; sourceTree = "<group>"; };
 		2EB06EDE7B326433395E11D6 /* BirdMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdMapApp.swift; sourceTree = "<group>"; };
 		343243962E3612773481F502 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3C0B729EC66751A584DB6FD1 /* BundledBirdNETLabels.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BundledBirdNETLabels.json; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 		90F913F67312692AD3BCC74D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		97B9CDBBC78969FEE89CFA6D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		99DB12F018E31261FE1BDCE0 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
-		9F83C691DDE866B89843C1CE /* BundledBirdNETLocation.tflite */ = {isa = PBXFileReference; path = BundledBirdNETLocation.tflite; sourceTree = "<group>"; };
+		9F83C691DDE866B89843C1CE /* BundledBirdNETLocation.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = BundledBirdNETLocation.tflite; sourceTree = "<group>"; };
 		A3917232B887930F8F3CC6E6 /* SightingMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingMapView.swift; sourceTree = "<group>"; };
 		AD31526D99593252A1958E58 /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
 		AE70FE5027549BBFA3523F07 /* AnnotationModerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationModerator.swift; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 		C1984A64CBE5025180837531 /* BirdClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdClassifier.swift; sourceTree = "<group>"; };
 		C70F68091FD6BA1A16E45D14 /* AIPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPredictionCard.swift; sourceTree = "<group>"; };
 		CCD17437B9CB93B20C48C2D5 /* AudioPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayback.swift; sourceTree = "<group>"; };
-		D390E46F4442A61026B54472 /* BirdMap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BirdMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D390E46F4442A61026B54472 /* BirdMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BirdMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF347E61214872E62EA1B868 /* GeistBirdMap-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistBirdMap-Regular.ttf"; sourceTree = "<group>"; };
 		E2BDF11DE1B245AC6A532FAE /* SupabaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseStorage.swift; sourceTree = "<group>"; };
 		E37D00D3EEEB7950967F8509 /* FrauncesBirdMap-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesBirdMap-Italic.ttf"; sourceTree = "<group>"; };
@@ -199,7 +199,6 @@
 				8121527A685D779F25C0BE11 /* Pods-BirdMap.debug.xcconfig */,
 				1AF3A2C8052508C3938685FB /* Pods-BirdMap.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -530,6 +529,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 85Q3P2575Z;
 				INFOPLIST_FILE = BirdMap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BirdMap;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -671,6 +672,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 85Q3P2575Z;
 				INFOPLIST_FILE = BirdMap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BirdMap;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
