@@ -7,11 +7,11 @@ Use the matching blog post text (copy from `web/src/content/posts.js`) and light
 
 ```
 ---
-title: How BirdMap identifies birds without the internet
+title: How BioMap identifies birds without the internet
 published: true
-description: The photo and sound models behind BirdMap run on your phone, so you get a species suggestion even with no signal.
+description: The photo and sound models behind BioMap run on your phone, so you get a species suggestion even with no signal.
 tags: ios, machinelearning, swift, opensource
-canonical_url: https://birdmap-citizenscience.web.app/blog/identify-birds-without-internet
+canonical_url: https://getbiomap.web.app/blog/identify-birds-without-internet
 cover_image: <upload docs/social/images/01-hero.png>
 ---
 ```

@@ -1,6 +1,6 @@
 // Murmuration: 3D boids with topological neighbours, projected to 2D, drawn as short strokes.
 // Deterministic (seeded) and stepped once per rendered frame, so a re-render is pixel-identical.
-// At the end of the film the birds drift together and settle into the BirdMap mark (CFG.form).
+// At the end of the film the birds drift together and settle into the BioMap mark (CFG.form).
 (function () {
   const CFG = window.CFG;
   const W = innerWidth, H = innerHeight, S = Math.min(W, H);
@@ -63,7 +63,7 @@
   const inOut = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2 };
   window.ease = ease;
 
-  // ---- the BirdMap mark, as N dots ---------------------------------------------------------------------------
+  // ---- the BioMap mark, as N dots ---------------------------------------------------------------------------
   const F = CFG.form || null;
   let targets = null, assign = null, order = null;
   function buildTargets() {

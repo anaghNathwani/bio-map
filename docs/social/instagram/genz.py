@@ -95,7 +95,7 @@ def marquee(text, top, color):
 
 def cta(a, b, line1='iOS app coming soon', bg=CLAY, fg=PAPER):
     return scene(a, b, bg, fg,
-                 marquee('BIRDMAP', 250, fg) + marquee('BIRDMAP', 1560, fg) +
+                 marquee('BIOMAP', 250, fg) + marquee('BIOMAP', 1560, fg) +
                  '<div class="c">' + pop(line1, 't m', 0) + pop('live map in the browser now', 'k', 0.6) +
                  '<div>' + pop('link in bio', 'pill', 1.0, 0, f'background:{LIME};color:{INK}', 'span') + '</div>' +
                  pop('follow for more bird stuff 🐦', 'k', 1.6) + '</div>')
@@ -108,7 +108,7 @@ def reel_pov():
         scene(3, 6, CLAY, PAPER, '<div class="c">' + words('and have zero idea what it is', 0, 0.36, 't m', hl=('zero', 'idea'), hlbg=INK, hlfg=LIME) + '</div>' + sticker('😭', 1.8, 690, 1230, -12, 200)),
         scene(6, 10, PAPER, INK, '<div class="c">' + pop('so you record it', 't m', 0) + '<div id="wave" style="position:relative;height:340px;margin-top:20px"></div>' + pop('(up to 30 sec)', 'k', 1.0) + '</div>' + sticker('🎤', 0.5, 700, 260, 10, 220)),
         scene(10, 14, LIME, INK, '<div class="c">' + pop('your phone:', 'k', 0) +
-              '<div data-p="0.4" data-r="-2" class="card"><div style="font-size:36px;font-weight:700;opacity:.55">🐦 BirdMap · now</div><div style="font-size:78px;font-weight:850;letter-spacing:-.04em;line-height:1;margin-top:14px">possible match:<br>Western Scrub-Jay</div>'
+              '<div data-p="0.4" data-r="-2" class="card"><div style="font-size:36px;font-weight:700;opacity:.55">🐦 BioMap · now</div><div style="font-size:78px;font-weight:850;letter-spacing:-.04em;line-height:1;margin-top:14px">possible match:<br>Western Scrub-Jay</div>'
               '<div style="height:26px;border-radius:14px;background:#e6e2d6;margin-top:30px;overflow:hidden"><div style="width:78%;height:100%;background:#C1602E"></div></div></div>' +
               pop('(dramatization, not real app UI)', 'k', 1.5, 0, 'font-size:32px;opacity:.6') + '</div>'),
         scene(14, 18, INK, PAPER, '<div class="c">' + words('works with no signal', 0, 0.45, 't', hl=('no', 'signal')) + pop('the ID runs on your phone', 'k', 1.9) + '</div>' + sticker('📵', 0.8, 690, 240, 10, 230)),
@@ -146,7 +146,7 @@ def reel_speedrun():
     prog = lambda k: ('<div style="position:absolute;left:84px;right:84px;top:200px;display:flex;gap:14px">' +
                       ''.join(f'<div style="flex:1;height:14px;border-radius:8px;background:currentColor;opacity:{1 if i < k else .22}"></div>' for i in range(4)) + '</div>')
     sc = [
-        scene(0, 2, INK, PAPER, '<div class="c">' + words('how BirdMap works', 0, 0.3, 't m') + pop('speedrun ⚡', 't', 1.0, -3, f'color:{LIME}') + '</div>'),
+        scene(0, 2, INK, PAPER, '<div class="c">' + words('how BioMap works', 0, 0.3, 't m') + pop('speedrun ⚡', 't', 1.0, -3, f'color:{LIME}') + '</div>'),
         scene(2, 5, CLAY, PAPER, prog(1) + step(1, 'take a photo', '📸', CLAY, PAPER, 'or record a bird call')),
         scene(5, 8, INK, PAPER, prog(2) + step(2, 'your phone IDs it', '🧠', INK, PAPER, '(no upload needed)')),
         scene(8, 11, PAPER, INK, prog(3) + step(3, 'birders confirm it', '✅', PAPER, INK, 'or correct it. or say unsure')),
@@ -161,7 +161,7 @@ def reel_unsure():
     dur = 30 * B
     sc = [
         scene(0, 4, PAPER, INK, '<div class="c">' + words('me pretending I know every bird', 0, 0.34, 't m', hl=('every',), hlbg=CLAY, hlfg=PAPER) + '</div>' + sticker('😌', 2.2, 690, 1230, -8, 200)),
-        scene(4, 8, INK, PAPER, '<div class="c">' + pop('BirdMap:', 'k', 0) +
+        scene(4, 8, INK, PAPER, '<div class="c">' + pop('BioMap:', 'k', 0) +
               '<div data-p="0.5" data-r="-2" class="bubble" style="background:%s;color:%s;align-self:flex-start">not sure ngl 🤷</div>' % (CLAY, PAPER) +
               pop('(dramatization)', 'k', 2.0, 0, 'font-size:32px;opacity:.55') + '</div>'),
         scene(8, 12, LIME, INK, '<div class="c">' + words('the bravest thing an app can do', 0, 0.4, 't m', hl=('bravest',), hlbg=INK, hlfg=LIME) + '</div>'),

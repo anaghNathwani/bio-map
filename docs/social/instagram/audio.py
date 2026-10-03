@@ -1,4 +1,4 @@
-"""Original, synthesized sound design for the BirdMap Reels (no samples, no licensing).
+"""Original, synthesized sound design for the BioMap Reels (no samples, no licensing).
 
 Each reel gets a soft pad, a pluck on every scene change, and a few stylized bird-like chirps.
 The chirps are synthesized whistles, not recordings of real birds.
@@ -227,8 +227,25 @@ def reel_showcase(dur):
     return b
 
 
-BUILDERS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
-            '09-the-map': reel_map, '10-works-offline': reel_offline, '11-see-it-in-action': reel_trailer, '12-birds-in-the-wild': reel_showcase}
+def reel_rebrand(dur):
+    b = np.zeros((int(dur * SR), 2))
+    b[:, 0] += (p := pad(dur, [A3, E4, B4], 0.03)); b[:, 1] += p
+    place(b, pluck(E5), 0.3); place(b, pluck(G5), 3.6)
+    place(b, glide(900, 240, 0.7, 0.07), 4.1)                       # the strike-through
+    place(b, pluck(A5, 2.0, 0.17), 5.05); place(b, pluck(E6, 2.0, 0.11), 5.1)   # the new name lands
+    place(b, pluck(C6, 1.4, 0.13), 7.4)
+    place(b, pluck(A5), 10.8)
+    place(b, pluck(A5, 2.6, 0.18), 13.8); place(b, pluck(E6, 2.6, 0.12), 13.85)
+    phrase(1.0, [CH(3000, 4200), CH(3600, 4600)], b, 0.08, -0.4)
+    phrase(5.6, [CH(3300, 4500), CH(3900, 3100, .18)], b, 0.09, 0.3)
+    phrase(11.4, [CH(3100, 4300), CH(3700, 4700)], b, 0.08, -0.2)
+    phrase(14.8, [CH(3400, 4600), CH(4200, 3200, .2), CH(3600, 4800, .16)], b, 0.10, 0.0)
+    return b
+
+
+BUILDERS = {'01-how-biomap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
+            '09-the-map': reel_map, '10-works-offline': reel_offline, '11-see-it-in-action': reel_trailer, '12-birds-in-the-wild': reel_showcase,
+            'our-new-name': reel_rebrand}
 
 
 def render_wav(name, dur, out):

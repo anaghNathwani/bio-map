@@ -1,4 +1,4 @@
-"""Builds the Instagram assets (Reels, carousels, stories, profile art) for BirdMap.
+"""Builds the Instagram assets (Reels, carousels, stories, profile art) for BioMap.
 
 Every asset is an HTML page whose look at time t is a pure function (window.render(t)), so frames are
 deterministic. Playwright (system Chrome) screenshots each frame; ffmpeg encodes the Reels.
@@ -6,6 +6,7 @@ deterministic. Playwright (system Chrome) screenshots each frame; ffmpeg encodes
   python3 build.py            # everything
   python3 build.py reels      # or: carousels | stories | profile
   python3 build.py genz       # the Gen Z-style beat-synced reels (05-08)
+  python3 build.py rebrand    # the name-change announcement reel -> rebrand/
   python3 build.py audio      # re-mux the synthesized soundtrack into the existing reels (no re-render)
 Needs: pip install playwright, ffmpeg, Google Chrome.
 """
@@ -75,7 +76,7 @@ def page(body, js='', css=''):
 
 def brandbar(top, a=None):
     da = f' data-a="{a}" data-d="0.5" data-y="0"' if a is not None else ''
-    return f'<div class="brandbar" style="top:{top}px"{da}><div class="brand">{bird(52)}BirdMap</div><div>birdmap-citizenscience.web.app</div></div>'
+    return f'<div class="brandbar" style="top:{top}px"{da}><div class="brand">{bird(52)}BioMap</div><div>getbiomap.web.app</div></div>'
 
 def safe(inner, top=300, bottom=420, a=None, b=None, extra=''):
     at = f' data-a="{a}"' + (f' data-b="{b}"' if b is not None else '') if a is not None else ''
@@ -112,7 +113,7 @@ def reel_tips():
     for num, txt, a, b in [('1', 'Get close and <em>hold still.</em>', 3.2, 6.4), ('2', 'Keep wind and <em>voices out.</em>', 6.6, 9.8), ('3', 'Short and clean <em>beats long and noisy.</em>', 10.0, 13.0)]:
         body += safe(f'<div class="num">{num}</div><h1 style="margin-top:6px;font-size:104px">{txt}</h1>', top=300, bottom=650, a=a, b=b)
     body += '<div id="wave" class="abs" style="left:100px;top:1130px;width:880px;height:260px;opacity:0"></div>'
-    body += safe('<div class="eb">BirdMap</div><h1>Identify birds by <em>sound.</em></h1><div class="sub">On your phone. iOS app coming soon.</div><div><span class="pill">Link in bio</span></div>', a=13.2)
+    body += safe('<div class="eb">BioMap</div><h1>Identify birds by <em>sound.</em></h1><div class="sub">On your phone. iOS app coming soon.</div><div><span class="pill">Link in bio</span></div>', a=13.2)
     body += brandbar(1450, a=0.4)
     return page(body, js=waveform_js(40, 1130, 260, 3.0, 13.0)), dur
 
@@ -125,7 +126,7 @@ def reel_ondevice():
     body += safe('<h2 style="text-align:center;font-size:74px" data-a="4.0" data-b="7.0">Identified right here, <em>on your phone.</em></h2>', top=1050, bottom=420, a=None)
     body += f'<div class="abs" data-a="7.2" data-b="10.3" data-y="0" style="left:0;right:0;top:360px;display:flex;justify-content:center">{cloud}</div>'
     body += safe('<h2 style="text-align:center" data-a="7.4" data-b="10.3">Nothing is uploaded <em>just to get a suggestion.</em></h2>', top=900, bottom=420)
-    body += safe('<div class="eb">BirdMap</div><h1>You decide what <em>to share.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div>', a=10.5)
+    body += safe('<div class="eb">BioMap</div><h1>You decide what <em>to share.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div>', a=10.5)
     body += brandbar(1450, a=0.4)
     js = "window.custom=function(t){const r=document.getElementById('ring');const p=((t-4)%1.6)/1.6;const on=t>4&&t<7;r.style.opacity=on?(1-p)*.9:0;const s=10+p*520;r.style.width=s+'px';r.style.height=s+'px';r.style.margin=(-s/2)+'px'}"
     return page(body, js=js), dur
@@ -136,7 +137,7 @@ def reel_unsure():
            '<div style="position:absolute;left:60%;top:-30px;bottom:-30px;width:4px;background:#211D16"></div></div>'
            '<div style="position:relative;width:880px;height:46px;font-size:30px;color:#6B6255;margin-top:34px"><span style="position:absolute;left:0">confidence</span><span style="position:absolute;left:60%;transform:translateX(-50%)">enough to suggest</span></div>')
     body = safe('<h1 data-a=".2" data-b="2.9" data-d=".9">A wrong answer is worse than <em>no answer.</em></h1>', top=300, bottom=420)
-    body += safe('<h1 data-a="3.1" data-b="5.3" data-d=".9">BirdMap <em>doesn\'t guess.</em></h1>', top=300, bottom=420)
+    body += safe('<h1 data-a="3.1" data-b="5.3" data-d=".9">BioMap <em>doesn\'t guess.</em></h1>', top=300, bottom=420)
     body += safe(f'<div class="eb">Illustration: a low-confidence photo</div>{bar}<h2 style="margin-top:70px;font-size:84px">Below the bar? <em>It says so.</em></h2><div style="margin-top:44px"><span class="pill" style="margin-top:0">Marked unsure</span></div>', a=5.5, b=9.3, top=300, bottom=420)
     body += safe('<h1>Then other birders <em>can help.</em></h1><div class="sub">Confirm it, correct it, or mark it unsure. iOS app coming soon.</div><div><span class="pill">Link in bio</span></div>', a=9.5)
     body += brandbar(1450, a=0.4)
@@ -155,7 +156,7 @@ def reel_map():
     body += safe('<h2 style="text-align:center;font-size:78px" data-a="4.6" data-b="6.8">A number means <em>more than one.</em></h2>', top=1000, bottom=420, a=None)
     bar = '<div style="width:880px;height:96px;border:3px solid #211D16;border-radius:48px;display:flex;align-items:center;padding:0 40px;gap:20px"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#211D16" stroke-width="3"><circle cx="10" cy="10" r="7"/><line x1="15" y1="15" x2="21" y2="21"/></svg><span id="q" style="font-size:40px;color:#211D16"></span></div>'
     body += safe(f'<div class="eb">Search</div>{bar}<div class="sub" style="margin-top:44px">Species, notes, or usernames.</div>', a=7.0, b=10.2, top=300, bottom=420)
-    body += safe('<div class="eb">BirdMap</div><h1>See every sighting, <em>mapped.</em></h1><div class="sub">Bookmark the ones you want to find again. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=10.4)
+    body += safe('<div class="eb">BioMap</div><h1>See every sighting, <em>mapped.</em></h1><div class="sub">Bookmark the ones you want to find again. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=10.4)
     body += brandbar(1450, a=0.4)
     js = """window.custom=function(t){
   const badge=document.getElementById('badge'); if(badge){badge.style.opacity=ease(seg(t,4.0,0.5)); badge.textContent=t<5.3?'2':t<6.4?'5':'9'}
@@ -174,21 +175,21 @@ def reel_offline():
     body += safe('<h2 style="text-align:center;font-size:76px" data-a="3.6" data-b="6.4">It saves right where <em>you are.</em></h2>', top=980, bottom=420, a=None)
     body += f'<div class="abs" data-a="6.6" data-b="9.8" data-y="0" style="left:0;right:0;top:520px;display:flex;justify-content:center;align-items:center;gap:60px"><div style="position:relative;width:260px;height:130px">{queue}</div><div style="position:relative">{cloud}<div style="position:absolute;left:30px;top:15px">{check}</div></div></div>'
     body += safe('<h2 style="text-align:center;font-size:72px" data-a="7.2" data-b="9.8">And sends the moment <em>you\'re back.</em></h2>', top=980, bottom=420, a=None)
-    body += safe('<div class="eb">BirdMap</div><h1>Nothing gets lost in a <em>dead zone.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=10.0)
+    body += safe('<div class="eb">BioMap</div><h1>Nothing gets lost in a <em>dead zone.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=10.0)
     body += brandbar(1450, a=0.4)
     return page(body), dur
 
-REELS = {'01-how-birdmap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
+REELS = {'01-how-biomap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
          '09-the-map': reel_map, '10-works-offline': reel_offline}
 
-# ------------------------------------------------------------------ TRAILER (mock cursor opens "BirdMap.mp4", then a recap montage)
+# ------------------------------------------------------------------ TRAILER (mock cursor opens "BioMap.mp4", then a recap montage)
 CURSOR_SVG = '<svg viewBox="0 0 24 24" width="34" height="34" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))"><path d="M4 2 L4 20 L9 15.4 L12.2 22 L15.3 20.6 L12.1 14 L19 14 Z" fill="#111" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>'
 
 def file_icon():
     return ('<div style="display:flex;flex-direction:column;align-items:center;gap:16px">'
             '<svg viewBox="0 0 64 48" width="96" height="72" fill="none" stroke="#211D16" stroke-width="3" stroke-linejoin="round">'
             '<rect x="2" y="2" width="60" height="44" rx="8"/><path d="M26 15 L26 33 L43 24 Z" fill="#C1602E" stroke="none"/></svg>'
-            '<div style="font-size:28px;color:#211D16;font-family:G,sans-serif">BirdMap.mp4</div></div>')
+            '<div style="font-size:28px;color:#211D16;font-family:G,sans-serif">BioMap.mp4</div></div>')
 
 def reel_trailer():
     dur = 19.6
@@ -199,14 +200,14 @@ def reel_trailer():
                f'<div id="cur" class="abs" style="left:0;top:0">{CURSOR_SVG}</div></div>')
     openrect = '<div id="openrect" class="abs" style="inset:0;background:#211D16;transform-origin:540px 747px;transform:scale(0.001);opacity:0"></div>'
     # recap montage: one beat lifted from each existing reel, compressed
-    video = safe('<div class="eb" data-a="3.5" data-b="5.9">BirdMap, <em>in brief</em></div>', top=300, bottom=420, a=None)
+    video = safe('<div class="eb" data-a="3.5" data-b="5.9">BioMap, <em>in brief</em></div>', top=300, bottom=420, a=None)
     video += f'<div class="abs" data-a="3.7" data-b="5.9" data-y="0" style="left:0;right:0;top:900px;display:flex;justify-content:center">{bird(340, draw=True).replace("class=\"draw\"", "class=\"draw\" data-a=\"3.8\" data-d=\"1.3\"")}</div>'
     video += safe('<h1 data-a="6.0" data-b="8.2" data-d=".7">Every bird you see becomes <em>data that matters.</em></h1>', top=300, bottom=420)
     video += safe('<h1 data-a="8.4" data-b="10.6" data-d=".7">Identify birds <em>by sound.</em></h1>', top=300, bottom=420)
     video += safe('<h1 data-a="10.8" data-b="13.0" data-d=".7">Identified right here, <em>on your phone.</em></h1>', top=300, bottom=420)
-    video += safe('<h1 data-a="13.2" data-b="15.4" data-d=".7">BirdMap <em>doesn\'t guess.</em></h1>', top=300, bottom=420)
+    video += safe('<h1 data-a="13.2" data-b="15.4" data-d=".7">BioMap <em>doesn\'t guess.</em></h1>', top=300, bottom=420)
     video += safe('<h1 data-a="15.6" data-b="17.6" data-d=".7">One pin per place. <em>Works with no signal.</em></h1>', top=300, bottom=420)
-    video += safe('<div class="eb">BirdMap</div><h1>See it for <em>yourself.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=17.8)
+    video += safe('<div class="eb">BioMap</div><h1>See it for <em>yourself.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=17.8)
     video += brandbar(1450, a=18.2)
     body = desktop + openrect + f'<div id="video" class="abs" style="inset:0;opacity:0">{video}</div>'
     js = """
@@ -427,14 +428,14 @@ window.custom=function(t){
 def reel_showcase():
     """Reel 12, "A sighting's journey": a different story from reel 11's recap. Same file-open intro and swash wipe,
     then one sighting travels from a forest at dawn (a bird sings) to a phone (recorded, identified on-device)
-    to a map (other birders confirm it) and finally the whole flock gathers into the BirdMap mark."""
+    to a map (other birders confirm it) and finally the whole flock gathers into the BioMap mark."""
     import json
     dur = 32.8
     desktop = (f'<div id="desktop" class="abs" style="inset:0">'
                f'<div id="win" class="abs" style="left:190px;top:560px;width:700px;height:460px;background:#fff;border:3px solid #211D16;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.2)"></div>'
                f'<div class="abs" style="left:190px;top:560px;width:700px;height:64px;border-bottom:2px solid rgba(33,29,22,.14);display:flex;align-items:center;padding:0 26px;font-size:26px;color:#6B6255;font-family:G,sans-serif">Downloads</div>'
                f'<div id="icon" class="abs" style="left:440px;top:672px;width:200px;transform-origin:center;border-radius:14px;padding-bottom:6px">{file_icon()}</div>'
-               f'<div id="proglabel" class="abs" style="left:190px;width:700px;top:930px;text-align:center;font-size:24px;color:#6B6255;font-family:G,sans-serif;opacity:0">Opening BirdMap.mp4</div>'
+               f'<div id="proglabel" class="abs" style="left:190px;width:700px;top:930px;text-align:center;font-size:24px;color:#6B6255;font-family:G,sans-serif;opacity:0">Opening BioMap.mp4</div>'
                f'<div class="abs" style="left:290px;top:972px;width:500px;height:8px;border-radius:4px;background:rgba(33,29,22,.12);overflow:hidden"><div id="prog" style="height:100%;width:0;background:#C1602E"></div></div>'
                f'<div id="rp0" class="abs" style="border-radius:50%;border:4px solid #C1602E;opacity:0"></div><div id="rp1" class="abs" style="border-radius:50%;border:4px solid #C1602E;opacity:0"></div>'
                f'<div id="cur" class="abs" style="left:0;top:0">{CURSOR_SVG}</div></div>')
@@ -451,8 +452,8 @@ def reel_showcase():
     caps += cap(f'<h1 style="{h}">One sighting. <em>Thousands together.</em></h1>', 23.3, 26.0)
     gather = '<canvas id="logo-cv" class="abs" style="inset:0" width="1080" height="1920"></canvas>'
     word_a = FORM_A + 0.6 + FORM_D - 0.2
-    letters = ''.join(f'<span data-a="{word_a + i * .09:.2f}" data-y="70" data-d=".7" style="display:inline-block">{c}</span>' for i, c in enumerate('Bird'))
-    letters += '<em>' + ''.join(f'<span data-a="{word_a + (4 + i) * .09:.2f}" data-y="70" data-d=".7" style="display:inline-block">{c}</span>' for i, c in enumerate('Map')) + '</em>'
+    letters = ''.join(f'<span data-a="{word_a + i * .09:.2f}" data-y="70" data-d=".7" style="display:inline-block">{c}</span>' for i, c in enumerate('Bio'))
+    letters += '<em>' + ''.join(f'<span data-a="{word_a + (3 + i) * .09:.2f}" data-y="70" data-d=".7" style="display:inline-block">{c}</span>' for i, c in enumerate('Map')) + '</em>'
     end = safe(f'<h1 style="text-align:center;font-size:150px">{letters}</h1>', top=1090, bottom=400)
     end += safe('<div class="sub" style="text-align:center">iOS app coming soon. Link in bio.</div><div style="display:flex;justify-content:center"><span class="pill">Link in bio</span></div>', a=word_a + 1.2, top=1340, bottom=170)
     end += brandbar(1780, a=word_a + 1.6)
@@ -462,6 +463,27 @@ def reel_showcase():
     return page(body, js=js), dur
 
 TRAILER = {'11-see-it-in-action': reel_trailer, '12-birds-in-the-wild': reel_showcase}
+
+# ------------------------------------------------------------------ REBRAND (BirdMap -> BioMap announcement; outputs go to rebrand/)
+def reel_rebrand():
+    """A quiet name-change announcement in the calm house style. Claims nothing about the app beyond the
+    name: same app, same community, same sightings. The old name is struck through, the new one writes in."""
+    dur = 17.4
+    body = safe('<div class="eb" data-a=".2" data-b="3.4">A small announcement</div><h1 data-a=".6" data-b="3.4" data-d=".9">We\u2019re changing <em>our name.</em></h1>', top=300, bottom=420)
+    # the old name, struck through, then the new one
+    strike = ('<svg height="40" viewBox="0 0 920 40" preserveAspectRatio="none" fill="none" stroke="#C1602E" stroke-width="7" stroke-linecap="round" style="position:absolute;left:-24px;width:calc(100% + 48px);top:92px;overflow:visible">'
+              '<path pathLength="1" class="draw" data-a="4.1" data-d=".7" vector-effect="non-scaling-stroke" d="M10 22 C230 8 520 34 910 16"/></svg>')
+    body += (f'<div class="abs" data-a="3.6" data-b="7.2" data-y="0" style="left:0;right:0;top:700px;display:flex;flex-direction:column;align-items:center">'
+             f'<div style="position:relative;font-family:F,serif;font-style:italic;font-size:200px;line-height:1;color:#6B6255;letter-spacing:-.02em">BirdMap{strike}</div></div>')
+    body += ('<div class="abs" data-a="5.0" data-b="7.2" data-y="40" data-d=".9" style="left:0;right:0;top:960px;text-align:center;'
+             'font-family:F,serif;font-style:italic;font-size:260px;line-height:1;color:#211D16;letter-spacing:-.03em">Bio<span style="color:#C1602E">Map</span></div>')
+    body += safe('<h1 data-a="7.4" data-b="10.6" data-d=".8"><em>Bio:</em> life.<br><em>Map:</em> where it\u2019s found.</h1>', top=300, bottom=420)
+    body += safe('<h1 data-a="10.8" data-b="13.6" data-d=".8">Same community.<br>Same sightings.<br><em>New name.</em></h1>', top=300, bottom=420)
+    body += safe('<div class="eb">BioMap</div><h1>Say hello to <em>BioMap.</em></h1><div class="sub">iOS app coming soon. Link in bio.</div><div><span class="pill">Link in bio</span></div>', a=13.8)
+    body += brandbar(1450, a=0.4)
+    return page(body), dur
+
+REBRAND = {'our-new-name': reel_rebrand}
 
 # ------------------------------------------------------------------ CAROUSELS (1080x1350)
 def slide_cover(title, eyebrow, hint=True, n=1, total=1):
@@ -474,7 +496,7 @@ def slide_point(num, title, sub, n, total):
     return page(body + brandbar(1230)), (1080, 1350)
 
 def slide_cta(n, total):
-    body = safe('<div class="eb">BirdMap</div><h1>See it on the <em>live map.</em></h1><div class="sub">In your browser now. iOS app coming soon.</div><div><span class="pill">Link in bio</span></div>', top=120, bottom=200)
+    body = safe('<div class="eb">BioMap</div><h1>See it on the <em>live map.</em></h1><div class="sub">In your browser now. iOS app coming soon.</div><div><span class="pill">Link in bio</span></div>', top=120, bottom=200)
     body += f'<div class="abs" style="right:100px;top:100px;font-size:30px;color:#6B6255">{n}/{total}</div>'
     return page(body + brandbar(1230)), (1080, 1350)
 
@@ -489,7 +511,7 @@ def carousel(slides):
     return out
 
 CAROUSELS = {
- '01-how-birdmap-works': [('cover', 'How BirdMap <em>works</em>', 'Citizen science for bird lovers'),
+ '01-how-biomap-works': [('cover', 'How BioMap <em>works</em>', 'Citizen science for bird lovers'),
     ('point', '1', 'Capture', 'A photo, or up to 30 seconds of a call.'),
     ('point', '2', 'Identified on your phone', 'A model on your phone suggests the species. Nothing is uploaded just to get a suggestion.'),
     ('point', '3', 'Community confirms', 'Other birders confirm the ID, correct it, or mark it unsure.'),
@@ -578,6 +600,14 @@ def main(which, filt=None):
                 if filt and filt not in name: continue
                 html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')
                 audio.add_audio(HERE / 'reels' / f'{name}.mp4')
+        if which in ('all', 'rebrand'):
+            (HERE / 'rebrand').mkdir(exist_ok=True)
+            for name, fn in REBRAND.items():
+                if filt and filt not in name: continue
+                html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'rebrand' / f'{name}.mp4')
+                audio.add_audio(HERE / 'rebrand' / f'{name}.mp4')
+                pg.set_viewport_size({'width': 1080, 'height': 1920}); pg.goto((SRC / f'reel-{name}.html').as_uri()); pg.evaluate('document.fonts.ready'); pg.wait_for_timeout(200)
+                pg.evaluate('render(6.4)'); pg.screenshot(path=str(HERE / 'rebrand' / f'{name}-cover.png'), type='png')   # cover = the name reveal
         if which in ('all', 'genz'):
             for name, fn in genz.REELS.items():
                 html, dur = fn(); render_reel(pg, name, html, dur, HERE / 'reels' / f'{name}.mp4')

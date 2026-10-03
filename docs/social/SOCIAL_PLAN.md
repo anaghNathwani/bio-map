@@ -1,4 +1,4 @@
-# BirdMap social media plan
+# BioMap social media plan
 
 Everything in `posts/` is ready to copy and paste. Images are in `images/` (1200x675, brand colours and fonts).
 I can write and design the content, but I can't log in and post it for you, so posting is the one manual bit.
@@ -16,7 +16,7 @@ Also worth doing: confirm BirdNET's license and credit Cornell Lab of Ornitholog
 
 ## Positioning (say this, consistently)
 
-**BirdMap is a citizen science app where bird photos and calls are identified on your phone, then other birders confirm the ID.**
+**BioMap is a citizen science app where bird photos and calls are identified on your phone, then other birders confirm the ID.**
 
 What makes it different, and what's true today:
 - Identification runs on the phone; nothing is uploaded just to get a suggestion.
@@ -100,8 +100,8 @@ Keep a simple list of feedback and turn repeated points into fixes and blog post
 | `07-on-your-phone.png` | privacy/on-device post |
 
 Alt text (paste it into the alt field on Bluesky/Mastodon; it helps accessibility and reach):
-- 01: "BirdMap: Every bird you see becomes data that matters. Identify birds from photos and calls on your phone."
-- 02: "How BirdMap works in three steps: capture a photo or call, it is identified on your phone, the community confirms."
+- 01: "BioMap: Every bird you see becomes data that matters. Identify birds from photos and calls on your phone."
+- 02: "How BioMap works in three steps: capture a photo or call, it is identified on your phone, the community confirms."
 - 03: "Two ways to identify: by photo with Google's AIY Birds model, or by sound with Cornell Lab's BirdNET."
 - 04: "When the AI isn't sure, it says so. Every suggestion can be confirmed, corrected or marked unsure."
 - 05: "Tips for recording bird sound: get close and hold still, keep wind and voices out, short and clean beats long and noisy."

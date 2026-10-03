@@ -3,14 +3,14 @@
 Record after the map has sightings and, ideally, when the iOS build is installable. Screen-record the simulator or phone, plus the
 browser map. Voiceover, calm pace, no music needed.
 
-**Title:** BirdMap: identify birds by photo and sound, on your phone
+**Title:** BioMap: identify birds by photo and sound, on your phone
 **Thumbnail:** `images/01-hero.png`
 
 ## Script (about 75 seconds)
 
 | Time | Show | Say |
 |---|---|---|
-| 0:00 | Hero image, then the app opening | "This is BirdMap, a citizen science app for bird sightings." |
+| 0:00 | Hero image, then the app opening | "This is BioMap, a citizen science app for bird sightings." |
 | 0:07 | Taking a photo of a bird | "Take a photo, and the identification runs right on your phone." |
 | 0:17 | Suggestion card, then a low-confidence example | "If the model isn't confident, it says so instead of guessing." |
 | 0:27 | Recording a call, waveform | "Or record up to thirty seconds of a call. Sound ID uses your location to rule out birds that don't live nearby." |
@@ -21,12 +21,12 @@ browser map. Voiceover, calm pace, no music needed.
 
 ## Description
 
-The BirdMap live map: https://birdmap-citizenscience.web.app/map
+The BioMap live map: https://getbiomap.web.app/map
 
-BirdMap is a citizen science app for bird sightings. Photos and calls are identified on your phone (Google's AIY Birds for photos, Cornell Lab of Ornithology's BirdNET for sound), then other birders confirm or correct the ID.
+BioMap is a citizen science app for bird sightings. Photos and calls are identified on your phone (Google's AIY Birds for photos, Cornell Lab of Ornithology's BirdNET for sound), then other birders confirm or correct the ID.
 
-How it works: https://birdmap-citizenscience.web.app/how-it-works
-FAQ: https://birdmap-citizenscience.web.app/faq
+How it works: https://getbiomap.web.app/how-it-works
+FAQ: https://getbiomap.web.app/faq
 
 Chapters:
 0:00 What it is

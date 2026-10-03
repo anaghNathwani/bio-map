@@ -1,4 +1,4 @@
-"""BirdMap brand campaign: "Look up."  Films (9:16, 16:9, cut-downs) and posters.
+"""BioMap brand campaign: "Look up."  Films (9:16, 16:9, cut-downs) and posters.
 
 The campaign is about the thought, not the product: it never mentions the app.
 Everything is generated: the flock is a seeded boids simulation, the type is the brand serif, the narration is local neural
@@ -108,10 +108,10 @@ def film_html(w, h, pl):
     ln = [dict(a=a, b=b, html=pick(t), fi=1.4, fo=1.3) for a, b, t in pl['items']]
     text_top = int(cy * h + logo_px * .47 + size * .35)
     css = f'.line{{top:{(.70 if portrait else .74)*100:.0f}%;font-size:{size:.0f}px}}'
-    big = size * (1.9 * 0.078 / 0.054 if portrait else 1.9 * 0.072 / 0.050)     # BIRDMAP takes Look up's original size
+    big = size * (1.9 * 0.078 / 0.054 if portrait else 1.9 * 0.072 / 0.050)     # the wordmark takes "Look up."'s original size
     css += f'.mark .wm{{font-family:G,sans-serif;font-weight:500;letter-spacing:.12em;font-size:{big:.0f}px;color:#fff;text-indent:.12em;line-height:1}}'
     css += f'.mark .lu{{font-family:F,serif;font-style:italic;font-size:{size*1.5:.0f}px;color:#fff;letter-spacing:-.02em;margin-top:{size*.6:.0f}px}}'
-    body = f'<div class="mark" id="end" style="top:{text_top}px"><div class="wm">BIRDMAP</div></div>'
+    body = f'<div class="mark" id="end" style="top:{text_top}px"><div class="wm">BIOMAP</div></div>'
     fin = pl['fin_at']
     cfg = dict(seed=11, n=3000 if portrait else 3400, warm=500, cy=cy, frame=.30 if portrait else .27, lines=ln, **DARK, **LOOK,
                form=dict(a=pl['form_a'], dur=pl['form_dur'], cx=.5, cy=cy, size=logo_px),
@@ -121,7 +121,7 @@ def film_html(w, h, pl):
     return page(cfg, body, css, dark=True)
 
 # ------------------------------------------------------------------ posters (still frames)
-def poster_html(w, h, headline, sub='', dark=True, steps=60, seed=5, cy=.31, form=False, foot='BIRDMAP'):
+def poster_html(w, h, headline, sub='', dark=True, steps=60, seed=5, cy=.31, form=False, foot='BIOMAP'):
     style = DARK if dark else LIGHT
     ink = '#fff' if dark else '#14110d'; soft = '#9b968a' if dark else '#6b6255'
     fs = w * .108

@@ -5,11 +5,11 @@ First comment (optional): post the extra hashtags there instead of in the captio
 
 ## Reels
 
-### 01: How BirdMap works (`reels/01-how-birdmap-works.mp4`)
+### 01: How BioMap works (`reels/01-how-biomap-works.mp4`)
 ```
 Every bird you see can become data that matters.
 
-BirdMap is a citizen science project: photograph a bird or record a call, get a suggestion on your phone, and let other birders confirm or correct it.
+BioMap is a citizen science project: photograph a bird or record a call, get a suggestion on your phone, and let other birders confirm or correct it.
 
 The iOS app is coming soon. The live map works in your browser now (link in bio).
 
@@ -33,7 +33,7 @@ Save this for your next walk. What's the trickiest call you've tried to record?
 
 ### 03: Stays on your phone (`reels/03-stays-on-your-phone.mp4`)
 ```
-Where does your bird photo go? In BirdMap, nowhere until you say so.
+Where does your bird photo go? In BioMap, nowhere until you say so.
 
 Identification runs on your phone, so getting a suggestion never requires uploading anything. You decide what to share.
 
@@ -46,7 +46,7 @@ iOS app coming soon. Link in bio for the live map.
 ```
 A wrong answer is worse than no answer.
 
-When BirdMap isn't confident, it says so instead of guessing, and other birders can confirm or correct the ID.
+When BioMap isn't confident, it says so instead of guessing, and other birders can confirm or correct the ID.
 
 Would you trust an app more if it admitted when it wasn't sure?
 
@@ -57,7 +57,7 @@ Would you trust an app more if it admitted when it wasn't sure?
 ```
 pov: you hear a bird and have zero idea what it is 😭
 
-BirdMap IDs it on your phone, even with no signal (you still need signal to post it). live map in bio, iOS app coming soon.
+BioMap IDs it on your phone, even with no signal (you still need signal to post it). live map in bio, iOS app coming soon.
 
 what's the bird you can never ID? 👇
 
@@ -70,14 +70,14 @@ what's the bird you can never ID? 👇
 
 which one are you? 1, 2 or 3? 👇
 
-log them all with BirdMap. iOS app coming soon, live map in bio.
+log them all with BioMap. iOS app coming soon, live map in bio.
 
 #birder #birdnerd #birdwatching #birdsofinstagram #birding
 ```
 
 ### 07: How it works, speedrun (`reels/07-how-it-works-speedrun.mp4`)
 ```
-how BirdMap works, speedrun ⚡
+how BioMap works, speedrun ⚡
 
 1. take a photo or record a call
 2. your phone IDs it (no upload needed)
@@ -93,7 +93,7 @@ iOS app coming soon. live map in bio.
 ```
 the bravest thing an app can do is say "not sure" 🫶
 
-when BirdMap isn't confident it tells you instead of guessing, and other birders can confirm or correct it. (the chat bubble is a dramatization)
+when BioMap isn't confident it tells you instead of guessing, and other birders can confirm or correct it. (the chat bubble is a dramatization)
 
 would you trust an app more if it admitted when it wasn't sure?
 
@@ -104,9 +104,9 @@ Pinned comment for any of them: `what bird would you most want an app to get rig
 
 ## Carousels
 
-### 01: How BirdMap works (`carousels/01-how-birdmap-works/`, 6 slides)
+### 01: How BioMap works (`carousels/01-how-biomap-works/`, 6 slides)
 ```
-How BirdMap works, in four steps.
+How BioMap works, in four steps.
 
 Capture a photo or a call, get a suggestion on your phone, let the community confirm it, and see it on a shared map.
 
@@ -114,7 +114,7 @@ iOS app coming soon. Live map in the bio link.
 
 #birding #citizenscience #birdwatching #birdsofinstagram
 ```
-Alt text (slide 1): "How BirdMap works, in four steps: capture, identified on your phone, community confirms, shared map."
+Alt text (slide 1): "How BioMap works, in four steps: capture, identified on your phone, community confirms, shared map."
 
 ### 02: 6 tips for better bird IDs (`carousels/02-tips-for-better-bird-ids/`, 8 slides)
 ```
@@ -130,7 +130,7 @@ Alt text (slide 1): "6 tips for better bird IDs, photos and sound."
 ```
 A single bird sighting is a small fact: a species, a place, a time. Thousands of them, checked by other people, can show migration timing and range changes.
 
-That's the idea behind BirdMap. Have you ever logged a sighting for a citizen science project?
+That's the idea behind BioMap. Have you ever logged a sighting for a citizen science project?
 
 #citizenscience #birding #birdwatching #ornithology
 ```
@@ -142,4 +142,4 @@ Alt text (slide 1): "What is citizen science, and why your sightings count."
 - **stories/02-photo-or-sound.png**: add a **Poll** sticker with the options Photo / Sound. Share the result the next day.
 - **stories/03-trust-an-id.png**: add a **Question** sticker. Use the answers to shape what you build.
 
-Launch-day Story: share the Reel to Stories, add a **Link** sticker to https://birdmap-citizenscience.web.app/map (once it has sightings).
+Launch-day Story: share the Reel to Stories, add a **Link** sticker to https://getbiomap.web.app/map (once it has sightings).

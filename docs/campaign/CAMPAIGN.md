@@ -1,12 +1,12 @@
 # "Look up."
 
-A brand campaign for BirdMap in the spirit of a quiet, black-and-white tribute film. It isn't about the product. It's about a way
+A brand campaign for BioMap in the spirit of a quiet, black-and-white tribute film. It isn't about the product. It's about a way
 of being in the world: the ones who stop mid-sentence because something chirped, who look up when everyone else looks down, and how
 a thin layer of living things (the biosphere) is telling us something all the time.
 
 **The idea:** the living world is speaking, and noticing is how we answer.
 **The line:** *Look up.*
-**The sign-off:** the bird mark, made of dots, and the name BIRDMAP. Nothing else. No app, no features, no availability.
+**The sign-off:** the bird mark, made of dots, and the name BIOMAP. Nothing else. No app, no features, no availability.
 
 Original writing and imagery. It borrows the *spirit* of that famous 1990s campaign (a hushed tribute, a montage of ideas, a
 one-line ending) but none of its words, footage or tagline.
@@ -26,7 +26,7 @@ one-line ending) but none of its words, footage or tagline.
 ## How it's made
 
 - **Picture:** a simulated flock of ~3,000 birds in pure black and white. Slow and wide, stretched across the frame like a real
-  murmuration, with no sudden bursts. At the end the birds drift together and settle into the BirdMap mark, dot by dot. No stock
+  murmuration, with no sudden bursts. At the end the birds drift together and settle into the BioMap mark, dot by dot. No stock
   footage, no photos: nothing to license.
 - **Type:** the brand serif, white on black, one thought at a time, timed to the voice.
 - **Voice:** synthesized locally (Kokoro, an open Apache-2.0 model), slow and close. It's a stand-in: see below.
