@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0BB07964E7E8E216BEFC1404 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A89B0D5B6A3AEC324F76D8A /* PreviewSupport.swift */; };
+		10E1F4C5DB77DFF59E995D01 /* Pods_BirdRadar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B426E9D50E59EF10A32A6E48 /* Pods_BirdRadar.framework */; };
 		14CD4EC27EBEE3507141F5D7 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 9EC1BD437D5929B8A2EF86B5 /* ZIPFoundation */; };
 		1625003032041F28F296B6AE /* MultiBirdDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80AAB265C39ADBB0E45070B /* MultiBirdDetector.swift */; };
 		16865F3D4D8C492C8911DD9A /* SupabaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C4F2E43BC8FF7EEBD74DE8 /* SupabaseStorage.swift */; };
@@ -27,6 +28,7 @@
 		5151EC023E8592AC0744E366 /* FrauncesBirdRadar-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6E127392900367C37735D1D1 /* FrauncesBirdRadar-Italic.ttf */; };
 		567FDFCE30507233526CCF9A /* AudioImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC721FFACA6F90878614D902 /* AudioImporter.swift */; };
 		584300941EDE981BAC9EC7D4 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F5CE67DD23F109A253876D /* FirebaseService.swift */; };
+		5B199C660B6739C0A3D0FCF9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 313682A3677C146937AB1C5D /* PrivacyInfo.xcprivacy */; };
 		5B7FEFAFDD9BF7A3779F636A /* BirdInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF55D1879876FA9FC6D05C5C /* BirdInfoView.swift */; };
 		61CF135D5C7D8525CA90E7CC /* BirdInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F27DD8FDA9141B60EE381EE /* BirdInfo.swift */; };
 		65FB0CE8BB41FCBA2B7BC392 /* FrauncesBirdRadar-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61FAAD06F4D76A8408CFC426 /* FrauncesBirdRadar-Regular.ttf */; };
@@ -42,7 +44,6 @@
 		9F32B00864312313090F1B05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56E695D0891E94BC2E56A1D7 /* GoogleService-Info.plist */; };
 		A4330EFFB6EC725BD8DC29D5 /* DataURI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33A453898EEF51647D0FF01 /* DataURI.swift */; };
 		A7C09FEDAC4B7F96B16D64DB /* AdditionalBirdsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5CB20196780ADCE55C9E52 /* AdditionalBirdsSection.swift */; };
-		BB07921383A520656A2836D8 /* Pods_BirdRadar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340EC3500CACFF12A08495AC /* Pods_BirdRadar.framework */; };
 		BFBD77BFA8E3BB249723F6A6 /* SightingMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1AD3EB5399B216002D2B41 /* SightingMapView.swift */; };
 		C218A1445F5F848353BBA772 /* GeistBirdRadar-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D727C85DB551F2752A4D1986 /* GeistBirdRadar-Medium.ttf */; };
 		C5DF04023E1B689F54A030AD /* BirdRadarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB61CED8E092F56FD2B3AB41 /* BirdRadarApp.swift */; };
@@ -69,14 +70,14 @@
 		06DFECB0C95D71F49FD0734A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		07408AE7EEA736E430396B5A /* Sighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sighting.swift; sourceTree = "<group>"; };
 		0DCA98DDAF539AA9B9BC56D8 /* GeistBirdRadar-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistBirdRadar-SemiBold.ttf"; sourceTree = "<group>"; };
-		0F8D27AE70F2F96800E3670E /* Pods-BirdRadar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BirdRadar.release.xcconfig"; path = "Target Support Files/Pods-BirdRadar/Pods-BirdRadar.release.xcconfig"; sourceTree = "<group>"; };
 		15FD41CB349B42FBCFAB8D1E /* BirdRadar.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BirdRadar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A34CDCC0D881F85146C9B4C /* Pods-BirdRadar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BirdRadar.debug.xcconfig"; path = "Target Support Files/Pods-BirdRadar/Pods-BirdRadar.debug.xcconfig"; sourceTree = "<group>"; };
 		1B6274BE7FAEB2655E1A53C1 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		1BF43AC84202B0CEE46B1A95 /* BirdRadar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BirdRadar.entitlements; sourceTree = "<group>"; };
 		2010D8C6F5E635CD6E86ADFA /* FrauncesBirdRadarDisplay-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesBirdRadarDisplay-Medium.ttf"; sourceTree = "<group>"; };
 		205530799317DA00AC4BA10A /* BirdNETClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdNETClassifier.swift; sourceTree = "<group>"; };
 		2975A3AD81C3D021DEF605DF /* BundledBirdNETLocation.tflite */ = {isa = PBXFileReference; path = BundledBirdNETLocation.tflite; sourceTree = "<group>"; };
-		340EC3500CACFF12A08495AC /* Pods_BirdRadar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BirdRadar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		313682A3677C146937AB1C5D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		342F561C966A9203FBD8CB88 /* AnnotationModerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationModerator.swift; sourceTree = "<group>"; };
 		3A89B0D5B6A3AEC324F76D8A /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
 		3BED64732AB416E769FA17FB /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -85,6 +86,7 @@
 		56E695D0891E94BC2E56A1D7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F7046B924D62170B4D1C721 /* BirdDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdDetector.swift; sourceTree = "<group>"; };
 		61FAAD06F4D76A8408CFC426 /* FrauncesBirdRadar-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesBirdRadar-Regular.ttf"; sourceTree = "<group>"; };
+		63EAC62CA686FEB00398D8FC /* Pods-BirdRadar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BirdRadar.release.xcconfig"; path = "Target Support Files/Pods-BirdRadar/Pods-BirdRadar.release.xcconfig"; sourceTree = "<group>"; };
 		66F5CE67DD23F109A253876D /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		6C5CB20196780ADCE55C9E52 /* AdditionalBirdsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalBirdsSection.swift; sourceTree = "<group>"; };
 		6E127392900367C37735D1D1 /* FrauncesBirdRadar-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesBirdRadar-Italic.ttf"; sourceTree = "<group>"; };
@@ -96,8 +98,8 @@
 		8ADD86930999E486E5DF0179 /* BundledBirdNET.tflite */ = {isa = PBXFileReference; path = BundledBirdNET.tflite; sourceTree = "<group>"; };
 		965C380E3E55A2404349280A /* AIPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPredictionCard.swift; sourceTree = "<group>"; };
 		9E886965777EF403F7A8F5D3 /* SightingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingListView.swift; sourceTree = "<group>"; };
-		A8652AF9932B74F39C44E0EA /* Pods-BirdRadar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BirdRadar.debug.xcconfig"; path = "Target Support Files/Pods-BirdRadar/Pods-BirdRadar.debug.xcconfig"; sourceTree = "<group>"; };
 		B251428A2729DE05C378A846 /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
+		B426E9D50E59EF10A32A6E48 /* Pods_BirdRadar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BirdRadar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5B182C35A50505CF23BBC28 /* BundledBirdNETLabels.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BundledBirdNETLabels.json; sourceTree = "<group>"; };
 		B7C9F6B123C9C94B31F38FE2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B8A961AFF4B00F66E3EE70B3 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
@@ -130,7 +132,7 @@
 				E7A0FC29F66462B58F3628C5 /* FirebaseFirestore in Frameworks */,
 				EDE57E73CFEEB1E130B1C829 /* GoogleSignIn in Frameworks */,
 				307628D874E3A66C598CDAC8 /* GoogleSignInSwift in Frameworks */,
-				BB07921383A520656A2836D8 /* Pods_BirdRadar.framework in Frameworks */,
+				10E1F4C5DB77DFF59E995D01 /* Pods_BirdRadar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,8 +159,8 @@
 			children = (
 				B94F41D12A0349AEF78BBC62 /* BirdRadar */,
 				383872B64778D75E2316E721 /* Products */,
-				4EE8FA5D0825CEA2E7D48548 /* Pods */,
-				25B667BFA11B1CBAAC9B5ADC /* Frameworks */,
+				B6BCF37092EF2EEBFCF24F9B /* Pods */,
+				A8D965ADDFB8A3059CCC756D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -175,14 +177,6 @@
 				805DA2EE443DF7E587336541 /* CameraViewModel.swift */,
 			);
 			path = Camera;
-			sourceTree = "<group>";
-		};
-		25B667BFA11B1CBAAC9B5ADC /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				340EC3500CACFF12A08495AC /* Pods_BirdRadar.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		271A50976282D767A2065EC8 /* Common */ = {
@@ -234,16 +228,6 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		4EE8FA5D0825CEA2E7D48548 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				A8652AF9932B74F39C44E0EA /* Pods-BirdRadar.debug.xcconfig */,
-				0F8D27AE70F2F96800E3670E /* Pods-BirdRadar.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		6F122F1FA17085EF2DBE9F82 /* Sighting */ = {
 			isa = PBXGroup;
 			children = (
@@ -269,6 +253,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		A8D965ADDFB8A3059CCC756D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B426E9D50E59EF10A32A6E48 /* Pods_BirdRadar.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B1EB6E4D670BA01E89B5B0C1 /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,6 +270,16 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		B6BCF37092EF2EEBFCF24F9B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1A34CDCC0D881F85146C9B4C /* Pods-BirdRadar.debug.xcconfig */,
+				63EAC62CA686FEB00398D8FC /* Pods-BirdRadar.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		B94F41D12A0349AEF78BBC62 /* BirdRadar */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +287,7 @@
 				1BF43AC84202B0CEE46B1A95 /* BirdRadar.entitlements */,
 				56E695D0891E94BC2E56A1D7 /* GoogleService-Info.plist */,
 				06DFECB0C95D71F49FD0734A /* Info.plist */,
+				313682A3677C146937AB1C5D /* PrivacyInfo.xcprivacy */,
 				2C347F37151EF4BCA741A172 /* App */,
 				DDAE9143B76D13E695E3C790 /* ML */,
 				FE9A81265FACD51CDC868939 /* Models */,
@@ -365,7 +368,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 70C02312A24DDE31C895FCB2 /* Build configuration list for PBXNativeTarget "BirdRadar" */;
 			buildPhases = (
-				8CAEB1ED571BD19E20CB7447 /* [CP] Check Pods Manifest.lock */,
+				30ECE48D7EEE1BE6BC548D2F /* [CP] Check Pods Manifest.lock */,
 				345FAAA8096E21B0531606A8 /* Sources */,
 				7E830E95C66DF4F7C4FBF2C1 /* Resources */,
 				2A7F2EED47A4E889CA379919 /* Frameworks */,
@@ -443,13 +446,14 @@
 				F985FDEA50FFD1C5C329F0AF /* GeistBirdRadar-Regular.ttf in Resources */,
 				CD5717D3A1074C755025F81C /* GeistBirdRadar-SemiBold.ttf in Resources */,
 				9F32B00864312313090F1B05 /* GoogleService-Info.plist in Resources */,
+				5B199C660B6739C0A3D0FCF9 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8CAEB1ED571BD19E20CB7447 /* [CP] Check Pods Manifest.lock */ = {
+		30ECE48D7EEE1BE6BC548D2F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -577,7 +581,7 @@
 		};
 		3D144681D04350278BBAEFB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A8652AF9932B74F39C44E0EA /* Pods-BirdRadar.debug.xcconfig */;
+			baseConfigurationReference = 1A34CDCC0D881F85146C9B4C /* Pods-BirdRadar.debug.xcconfig */;
 			buildSettings = {
 				API_BASE_URL = "http://localhost:8000";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -599,7 +603,7 @@
 		};
 		7794C9D6754210A10192AF20 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0F8D27AE70F2F96800E3670E /* Pods-BirdRadar.release.xcconfig */;
+			baseConfigurationReference = 63EAC62CA686FEB00398D8FC /* Pods-BirdRadar.release.xcconfig */;
 			buildSettings = {
 				API_BASE_URL = "https://birdmap-api.onrender.com";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
