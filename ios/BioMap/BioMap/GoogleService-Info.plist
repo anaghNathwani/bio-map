@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>857243141648-jalh90kgupsbqk9b55egoqcq8p1l9nfg.apps.googleusercontent.com</string>
+	<string>857243141648-0tm0cmmeqin463qsth6c09uq4974l980.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.857243141648-jalh90kgupsbqk9b55egoqcq8p1l9nfg</string>
+	<string>com.googleusercontent.apps.857243141648-0tm0cmmeqin463qsth6c09uq4974l980</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDBwP227XCD5AHGNK5wvAds_oDXgFuNsho</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.birdradar.BirdRadar</string>
+	<string>com.biomap.BioMap</string>
 	<key>PROJECT_ID</key>
 	<string>birdmap-citizenscience</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:857243141648:ios:408f505fb5ad32f0c32c95</string>
+	<string>1:857243141648:ios:eeb06c20363d0fe8c32c95</string>
 </dict>
 </plist>

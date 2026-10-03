@@ -1,9 +1,6 @@
 name: BioMap
 options:
-  # Bundle ID is intentionally NOT renamed with the product: it is registered with Apple and
-  # Firebase (see GoogleService-Info.plist), so change it deliberately in one go: here, the URL
-  # scheme below, and a new Firebase iOS app + plist. Then regenerate.
-  bundleIdPrefix: com.birdradar
+  bundleIdPrefix: com.biomap
   deploymentTarget:
     iOS: "17.0"
   xcodeVersion: "16"
@@ -53,14 +50,17 @@ targets:
           - GeistBioMap-SemiBold.ttf
         CFBundleURLTypes:
           - CFBundleURLSchemes:
-              - com.birdradar.app
+              - com.biomap.app
           - CFBundleURLSchemes:
-              - com.googleusercontent.apps.857243141648-jalh90kgupsbqk9b55egoqcq8p1l9nfg
+              - com.googleusercontent.apps.857243141648-0tm0cmmeqin463qsth6c09uq4974l980
     entitlements:
       path: BioMap/BioMap.entitlements
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.birdradar.BirdRadar
+        # Registered with Apple + Firebase (GoogleService-Info.plist). If this ever changes, the URL scheme
+        # below, bundleIdPrefix and a new Firebase iOS app/plist have to change with it.
+        PRODUCT_BUNDLE_IDENTIFIER: com.biomap.BioMap
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
         SWIFT_VERSION: 5.9
         DEVELOPMENT_TEAM: 2JN5C47MQT
         CODE_SIGN_STYLE: Automatic

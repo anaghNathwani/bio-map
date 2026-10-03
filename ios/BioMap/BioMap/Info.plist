@@ -23,13 +23,13 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.birdradar.app</string>
+				<string>com.biomap.app</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.857243141648-jalh90kgupsbqk9b55egoqcq8p1l9nfg</string>
+				<string>com.googleusercontent.apps.857243141648-0tm0cmmeqin463qsth6c09uq4974l980</string>
 			</array>
 		</dict>
 	</array>

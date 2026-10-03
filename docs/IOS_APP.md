@@ -202,7 +202,7 @@ Tapping a pin opens `SightingDetailView` as a sheet.
 Since this repo ships source files, create the Xcode project manually:
 
 1. Open Xcode → **File → New → Project → iOS → App**
-2. Set: Product Name `BioMap`, Bundle ID `com.birdradar.app`, Interface `SwiftUI`, Language `Swift`
+2. Set: Product Name `BioMap`, Bundle ID `com.biomap.BioMap`, Interface `SwiftUI`, Language `Swift`
 3. Delete the default `ContentView.swift` that Xcode generates
 4. Drag the `ios/BioMap/BioMap/` folder into the Project Navigator → **Add files to "BioMap"**, check **Create groups**, check **Add to target: BioMap**
 5. In the project editor → **Info** tab, add:
