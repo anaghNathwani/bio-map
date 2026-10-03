@@ -35,7 +35,7 @@ const FEATURES = [
 ]
 
 const FAQ_TEASER = [
-  'Is BirdRadar free?',
+  'Is BioMap free?',
   'Where can I get the app?',
   'Do I need an internet connection to identify a bird?',
   'Who can see my photos and location?',
@@ -59,9 +59,9 @@ export default function LandingPage() {
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-[var(--ink)] focus:px-3 focus:py-2 focus:text-[var(--paper)]">Skip to content</a>
       <header className="sticky top-0 z-50 bg-[var(--paper)]/90 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl items-center gap-8 px-6 py-5">
-          <Link to="/" aria-label="BirdRadar home" className="flex items-center gap-2.5">
+          <Link to="/" aria-label="BioMap home" className="flex items-center gap-2.5">
             <img src={birdMark} alt="" width="20" height="20" className="h-5 w-5" />
-            <span className="font-serif text-[17px] italic tracking-tight">BirdRadar</span>
+            <span className="font-serif text-[17px] italic tracking-tight">BioMap</span>
           </Link>
           <nav aria-label="Primary" className="ml-auto hidden items-center gap-7 text-[13px] uppercase tracking-[0.08em] text-[var(--ink-soft)] sm:flex">
             {NAV.map(item => (
@@ -112,7 +112,7 @@ export default function LandingPage() {
       {/* Mission */}
       <section className="mx-auto grid max-w-5xl grid-cols-1 gap-10 px-6 py-20 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
         <p className="font-serif text-[26px] font-normal italic leading-[1.35] text-[var(--ink)] sm:text-[30px]">
-          BirdRadar turns everyday bird sightings into a living, self-improving dataset — identified
+          BioMap turns everyday bird sightings into a living, self-improving dataset — identified
           on-device, verified by a community, and mapped for everyone.
         </p>
         <p className="max-w-[60ch] self-end text-[15px] leading-relaxed text-[var(--ink-soft)]">

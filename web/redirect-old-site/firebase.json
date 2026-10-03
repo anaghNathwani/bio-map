@@ -1,18 +1,36 @@
 {
-  "hosting": {
-    "site": "birdmap-citizenscience",
-    "public": "public",
-    "redirects": [
-      {
-        "source": "/",
-        "destination": "https://birdradar.web.app/",
-        "type": 301
-      },
-      {
-        "source": "/:path*",
-        "destination": "https://birdradar.web.app/:path*",
-        "type": 301
-      }
-    ]
-  }
+  "hosting": [
+    {
+      "site": "birdmap-citizenscience",
+      "public": "public",
+      "redirects": [
+        {
+          "source": "/",
+          "destination": "https://getbiomap.web.app/",
+          "type": 301
+        },
+        {
+          "source": "/:path*",
+          "destination": "https://getbiomap.web.app/:path*",
+          "type": 301
+        }
+      ]
+    },
+    {
+      "site": "birdradar",
+      "public": "public",
+      "redirects": [
+        {
+          "source": "/",
+          "destination": "https://getbiomap.web.app/",
+          "type": 301
+        },
+        {
+          "source": "/:path*",
+          "destination": "https://getbiomap.web.app/:path*",
+          "type": 301
+        }
+      ]
+    }
+  ]
 }

@@ -6,7 +6,7 @@
 
 ## Steps
 
-1. After deploying, confirm the key file loads: `curl -s https://birdradar.web.app/62259ef729e05ae65a5f78ca64f5e490.txt` prints the key.
+1. After deploying, confirm the key file loads: `curl -s https://getbiomap.web.app/62259ef729e05ae65a5f78ca64f5e490.txt` prints the key.
 2. Dry run: `cd web && npm run indexnow` shows what will be sent.
 3. Send it: `npm run indexnow -- --submit` (expect HTTP 200 or 202).
 

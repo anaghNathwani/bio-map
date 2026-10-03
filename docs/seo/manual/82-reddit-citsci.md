@@ -1,6 +1,6 @@
 # Post on r/citizenscience
 
-**Why it helps:** The audience cares about data quality and methods, which is BirdRadar's angle (on-device ID plus community verification).
+**Why it helps:** The audience cares about data quality and methods, which is BioMap's angle (on-device ID plus community verification).
 
 **Who does it:** you (needs your account or your judgement; it can't be done from the repo).
 

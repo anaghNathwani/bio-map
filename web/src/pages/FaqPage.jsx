@@ -9,7 +9,7 @@ export default function FaqPage() {
       meta="/faq"
       icon={CircleHelp}
       title="Frequently asked questions"
-      intro="How BirdRadar identifies birds, what happens to your sightings, and what it costs."
+      intro="How BioMap identifies birds, what happens to your sightings, and what it costs."
     >
       {FAQ.map(item => (
         <section key={item.q} className="static-page-card">

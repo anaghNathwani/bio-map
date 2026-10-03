@@ -7,6 +7,6 @@
 ## Steps
 
 1. Once the app is installable, add it at https://alternativeto.net as an alternative to bird-ID apps you're comparing against.
-2. Describe only what BirdRadar really does; don't overclaim.
+2. Describe only what BioMap really does; don't overclaim.
 
 **Done when:** the listing is submitted.

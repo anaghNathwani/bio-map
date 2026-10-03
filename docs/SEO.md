@@ -3,7 +3,7 @@
 How the marketing site (`web/`) is set up to be found on Google, and what you still have to do yourself.
 The 100-step checklist is in [SEO_PLAN.md](SEO_PLAN.md); manual steps have playbooks in [seo/manual/](seo/manual/).
 
-Live site: https://birdradar.web.app (free Firebase Hosting subdomain).
+Live site: https://getbiomap.web.app (free Firebase Hosting subdomain).
 No one can promise a ranking. This makes the site crawlable, fast, well described and linked to.
 
 ## How it works

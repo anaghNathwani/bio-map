@@ -17,7 +17,7 @@ export default function CommunityPage() {
         <div className="static-page-icon"><Users className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">Community Annotations</h1>
         <p className="static-page-sub">
-          Every sighting on BirdRadar can be reviewed and verified by the community,
+          Every sighting on BioMap can be reviewed and verified by the community,
           making the data more accurate over time.
         </p>
       </div>
@@ -37,7 +37,7 @@ export default function CommunityPage() {
             <div className="community-page-step-num">1</div>
             <div className="community-page-step-text">
               <div className="community-page-step-title">Browse the map</div>
-              <div className="community-page-step-body">Tap any marker on the BirdRadar community map to open a sighting — photo or audio.</div>
+              <div className="community-page-step-body">Tap any marker on the BioMap community map to open a sighting — photo or audio.</div>
             </div>
           </li>
           <li className="community-page-step">

@@ -14,19 +14,19 @@
 
 ### URLs
 
-- https://birdradar.web.app/
-- https://birdradar.web.app/map
-- https://birdradar.web.app/ai
-- https://birdradar.web.app/community
-- https://birdradar.web.app/citizen-science
-- https://birdradar.web.app/terms
-- https://birdradar.web.app/how-it-works
-- https://birdradar.web.app/faq
-- https://birdradar.web.app/about
-- https://birdradar.web.app/privacy
-- https://birdradar.web.app/bird-sound-identification
-- https://birdradar.web.app/bird-photo-identification
-- https://birdradar.web.app/blog
-- https://birdradar.web.app/blog/identify-birds-without-internet
-- https://birdradar.web.app/blog/what-is-citizen-science-bird-data-for
-- https://birdradar.web.app/blog/keeping-bird-id-on-your-phone
+- https://getbiomap.web.app/
+- https://getbiomap.web.app/map
+- https://getbiomap.web.app/ai
+- https://getbiomap.web.app/community
+- https://getbiomap.web.app/citizen-science
+- https://getbiomap.web.app/terms
+- https://getbiomap.web.app/how-it-works
+- https://getbiomap.web.app/faq
+- https://getbiomap.web.app/about
+- https://getbiomap.web.app/privacy
+- https://getbiomap.web.app/bird-sound-identification
+- https://getbiomap.web.app/bird-photo-identification
+- https://getbiomap.web.app/blog
+- https://getbiomap.web.app/blog/identify-birds-without-internet
+- https://getbiomap.web.app/blog/what-is-citizen-science-bird-data-for
+- https://getbiomap.web.app/blog/keeping-bird-id-on-your-phone

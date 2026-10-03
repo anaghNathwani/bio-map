@@ -30,7 +30,7 @@ export default function SiteFooter() {
             ))}
           </nav>
         )}
-        <p className="mt-5">© 2026 BirdRadar · Citizen Science</p>
+        <p className="mt-5">© 2026 BioMap · Citizen Science</p>
       </div>
     </footer>
   )

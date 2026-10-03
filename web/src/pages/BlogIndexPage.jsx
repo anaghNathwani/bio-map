@@ -9,7 +9,7 @@ export default function BlogIndexPage() {
     <ContentPage
       meta="/blog"
       icon={BookOpen}
-      title="BirdRadar blog"
+      title="BioMap blog"
       intro="Notes on bird identification, on-device AI and citizen science."
     >
       {POSTS.map(post => (

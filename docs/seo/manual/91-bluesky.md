@@ -7,7 +7,7 @@
 ## Steps
 
 1. Create an account for the project (or use your own).
-2. Post with a screenshot of the map and alt text. Draft: `Made a citizen science bird app: photos and calls get identified on your phone, then other birders confirm the ID. Live map works in your browser: https://birdradar.web.app/map #birding #birdsofbluesky`.
+2. Post with a screenshot of the map and alt text. Draft: `Made a citizen science bird app: photos and calls get identified on your phone, then other birders confirm the ID. Live map works in your browser: https://getbiomap.web.app/map #birding #birdsofbluesky`.
 3. Follow and interact with birders first; posting only links gets little reach.
 
 **Done when:** the post is up.

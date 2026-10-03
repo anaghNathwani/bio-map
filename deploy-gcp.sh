@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# BirdRadar deployment script — Google Cloud Run compute target.
+# BioMap deployment script — Google Cloud Run compute target.
 # Same backend code, same Supabase data layer (Postgres + S3-compatible
 # Storage) as deploy.sh (Render) — only the compute host differs. Safe to
 # keep both configured; run whichever is convenient, or both.

@@ -1,6 +1,6 @@
-# BirdRadar Documentation
+# BioMap Documentation
 
-Welcome to the BirdRadar documentation. Use the table below to find what you need.
+Welcome to the BioMap documentation. Use the table below to find what you need.
 
 | Document | Description |
 |---|---|

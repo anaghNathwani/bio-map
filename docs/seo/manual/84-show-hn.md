@@ -6,8 +6,8 @@
 
 ## Steps
 
-1. Only post when a visitor can try something: the live map at https://birdradar.web.app/map works today.
-2. Title format: `Show HN: BirdRadar, on-device bird ID (photo + BirdNET audio) with a community map`.
+1. Only post when a visitor can try something: the live map at https://getbiomap.web.app/map works today.
+2. Title format: `Show HN: BioMap, on-device bird ID (photo + BirdNET audio) with a community map`.
 3. Post the site URL, add a first comment explaining what it is and what's unfinished, and stay online for a few hours to answer.
 4. Don't ask friends to upvote; HN detects it.
 

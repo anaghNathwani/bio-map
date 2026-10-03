@@ -7,7 +7,7 @@
 ## Steps
 
 1. Create a Dev.to account and start a post from `/blog/identify-birds-without-internet` (copy the text).
-2. In the front matter set: `canonical_url: https://birdradar.web.app/blog/identify-birds-without-internet`.
+2. In the front matter set: `canonical_url: https://getbiomap.web.app/blog/identify-birds-without-internet`.
 3. Add tags: `ios`, `machinelearning`, `swift`, `opensource`. Publish after your site's post is already live and indexed.
 
 **Done when:** the article is live with the canonical URL set.

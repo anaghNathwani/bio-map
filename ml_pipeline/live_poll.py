@@ -1,5 +1,5 @@
 """
-BirdRadar live poll — run periodically (e.g. via the scheduled GitHub Actions
+BioMap live poll — run periodically (e.g. via the scheduled GitHub Actions
 workflow at .github/workflows/live-poll.yml) rather than as a persistent
 process. A persistent listener needs an always-on machine to actually be
 "live"; polling on a schedule runs entirely on free, ephemeral CI minutes

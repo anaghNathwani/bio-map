@@ -8,12 +8,12 @@ export default function AboutPage() {
     <ContentPage
       meta="/about"
       icon={Info}
-      title="About BirdRadar"
+      title="About BioMap"
       intro="A citizen science project for people who notice birds."
     >
       <h2 className="static-page-h2">What we are building</h2>
       <p className="static-page-p">
-        BirdRadar turns everyday bird sightings into a living dataset: identified on your phone, verified by a
+        BioMap turns everyday bird sightings into a living dataset: identified on your phone, verified by a
         community, and mapped for everyone. See <Link to="/how-it-works" className="underline">how it works</Link>.
       </p>
 

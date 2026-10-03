@@ -7,7 +7,7 @@
 ## Steps
 
 1. Go to https://search.google.com/search-console and sign in with the Google account that should own the site.
-2. Click **Add property** and choose **URL prefix** (a *Domain* property needs DNS access, which a `web.app` subdomain doesn't give you). Enter `https://birdradar.web.app/`.
+2. Click **Add property** and choose **URL prefix** (a *Domain* property needs DNS access, which a `web.app` subdomain doesn't give you). Enter `https://getbiomap.web.app/`.
 3. Pick the **HTML tag** verification method. Copy only the `content="..."` value of the `<meta name="google-site-verification">` tag.
 4. Paste it into `GOOGLE_SITE_VERIFICATION` in `web/src/site.js`, then redeploy (playbook 71). The build injects the tag into every page.
 5. Back in Search Console, click **Verify**.

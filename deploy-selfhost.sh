@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# BirdRadar deployment script — self-hosted compute target (your own machine
+# BioMap deployment script — self-hosted compute target (your own machine
 # as a temporary server). Runs ON that machine, not on your Mac — clone this
 # repo there first, then run this script from the clone.
 #
@@ -84,7 +84,7 @@ curl -sf http://localhost:8000/health > /dev/null 2>&1 || warn "Backend isn't re
 info "Installing systemd service for the Cloudflare Tunnel..."
 sudo tee /etc/systemd/system/birdmap-tunnel.service > /dev/null <<EOF
 [Unit]
-Description=BirdRadar Cloudflare Tunnel (quick tunnel — URL changes on restart)
+Description=BioMap Cloudflare Tunnel (quick tunnel — URL changes on restart)
 After=network-online.target docker.service
 Wants=network-online.target
 

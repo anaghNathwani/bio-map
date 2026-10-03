@@ -3,8 +3,8 @@ import { POSTS } from './content/posts.js'
 
 // Single source of truth for the marketing site's SEO metadata. Read by the
 // client (usePageMeta), the prerender script, the sitemap and the seo-check.
-export const SITE_URL = 'https://birdradar.web.app'
-export const SITE_NAME = 'BirdRadar'
+export const SITE_URL = 'https://getbiomap.web.app'
+export const SITE_NAME = 'BioMap'
 // Set this to a real inbox and the privacy page shows a contact line. Left empty on purpose.
 export const CONTACT_EMAIL = 'anaghnathwani@gmail.com'
 // Public profiles for the project (Bluesky, Mastodon, YouTube...). Empty until they exist:
@@ -14,7 +14,7 @@ export const SOCIAL_PROFILES = []
 // offers under "HTML tag" verification. Empty = no tag is emitted. See docs/seo/manual/72-gsc-verify.md.
 export const GOOGLE_SITE_VERIFICATION = ''
 export const DEFAULT_DESCRIPTION =
-  'BirdRadar is a citizen science app and live map for bird sightings. Identify birds from photos and calls on your phone, then let the community verify them.'
+  'BioMap is a citizen science app and live map for bird sightings. Identify birds from photos and calls on your phone, then let the community verify them.'
 
 /**
  * One entry per public page.
@@ -24,7 +24,7 @@ export const DEFAULT_DESCRIPTION =
 export const ROUTES = [
   {
     path: '/',
-    title: 'BirdRadar: Bird Sighting Map & On-Device Bird ID',
+    title: 'BioMap: Bird Sighting Map & On-Device Bird ID',
     description: DEFAULT_DESCRIPTION,
     changefreq: 'weekly',
     priority: 1.0,
@@ -32,9 +32,9 @@ export const ROUTES = [
   },
   {
     path: '/map',
-    title: 'Live Bird Sighting Map | BirdRadar',
+    title: 'Live Bird Sighting Map | BioMap',
     description:
-      'Explore bird sightings reported by the BirdRadar community on a live map. Filter by species and see photo and audio sightings as they come in.',
+      'Explore bird sightings reported by the BioMap community on a live map. Filter by species and see photo and audio sightings as they come in.',
     changefreq: 'hourly',
     priority: 0.9,
     prerender: false,
@@ -44,12 +44,12 @@ export const ROUTES = [
       {
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
-        name: 'BirdRadar live sighting map',
+        name: 'BioMap live sighting map',
         url: SITE_URL + '/map',
         applicationCategory: 'EducationalApplication',
         operatingSystem: 'Any (web browser)',
         description:
-          'A live map of bird sightings (photos and audio) reported by the BirdRadar community.',
+          'A live map of bird sightings (photos and audio) reported by the BioMap community.',
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
         isPartOf: { '@id': SITE_URL + '/#website' },
       },
@@ -57,9 +57,9 @@ export const ROUTES = [
   },
   {
     path: '/ai',
-    title: 'On-Device Bird Identification AI | BirdRadar',
+    title: 'On-Device Bird Identification AI | BioMap',
     description:
-      'How BirdRadar identifies birds from your photos entirely on your phone, which models it uses, and where the limits are.',
+      'How BioMap identifies birds from your photos entirely on your phone, which models it uses, and where the limits are.',
     changefreq: 'monthly',
     priority: 0.7,
     prerender: true,
@@ -68,9 +68,9 @@ export const ROUTES = [
   },
   {
     path: '/community',
-    title: 'Community Bird Annotations | BirdRadar',
+    title: 'Community Bird Annotations | BioMap',
     description:
-      'Every BirdRadar sighting can be reviewed and confirmed by other birders. See how community annotations build a trustworthy bird dataset.',
+      'Every BioMap sighting can be reviewed and confirmed by other birders. See how community annotations build a trustworthy bird dataset.',
     changefreq: 'monthly',
     priority: 0.7,
     prerender: true,
@@ -79,9 +79,9 @@ export const ROUTES = [
   },
   {
     path: '/citizen-science',
-    title: 'Citizen Science Bird Tracking | BirdRadar',
+    title: 'Citizen Science Bird Tracking | BioMap',
     description:
-      'Contribute geotagged bird photos and recordings to a shared, growing dataset. Learn how citizen science bird tracking works in BirdRadar.',
+      'Contribute geotagged bird photos and recordings to a shared, growing dataset. Learn how citizen science bird tracking works in BioMap.',
     changefreq: 'monthly',
     priority: 0.7,
     prerender: true,
@@ -90,8 +90,8 @@ export const ROUTES = [
   },
   {
     path: '/terms',
-    title: 'Terms of Service | BirdRadar',
-    description: 'The terms that apply when you use BirdRadar: data use, conduct, privacy, content and changes.',
+    title: 'Terms of Service | BioMap',
+    description: 'The terms that apply when you use BioMap: data use, conduct, privacy, content and changes.',
     changefreq: 'yearly',
     priority: 0.3,
     prerender: true,
@@ -100,9 +100,9 @@ export const ROUTES = [
   },
   {
     path: '/how-it-works',
-    title: 'How BirdRadar Works: Photo, Sound & Community ID',
+    title: 'How BioMap Works: Photo, Sound & Community ID',
     description:
-      'From capturing a bird photo or call to on-device identification and community review: a step-by-step look at how BirdRadar works.',
+      'From capturing a bird photo or call to on-device identification and community review: a step-by-step look at how BioMap works.',
     changefreq: 'monthly',
     priority: 0.8,
     prerender: true,
@@ -111,9 +111,9 @@ export const ROUTES = [
   },
   {
     path: '/faq',
-    title: 'BirdRadar FAQ: Bird ID, Privacy & How It Works',
+    title: 'BioMap FAQ: Bird ID, Privacy & How It Works',
     description:
-      'Answers to common questions about BirdRadar: how bird identification works on your phone, accuracy, privacy, cost and availability.',
+      'Answers to common questions about BioMap: how bird identification works on your phone, accuracy, privacy, cost and availability.',
     changefreq: 'monthly',
     priority: 0.7,
     prerender: true,
@@ -133,9 +133,9 @@ export const ROUTES = [
   },
   {
     path: '/about',
-    title: 'About BirdRadar: Citizen Science for Bird Lovers',
+    title: 'About BioMap: Citizen Science for Bird Lovers',
     description:
-      'BirdRadar turns everyday bird sightings into a shared, community-verified dataset. Learn what we are building and the principles behind it.',
+      'BioMap turns everyday bird sightings into a shared, community-verified dataset. Learn what we are building and the principles behind it.',
     changefreq: 'yearly',
     priority: 0.5,
     prerender: true,
@@ -144,9 +144,9 @@ export const ROUTES = [
   },
   {
     path: '/privacy',
-    title: 'Privacy Notice | BirdRadar',
+    title: 'Privacy Notice | BioMap',
     description:
-      'What BirdRadar stores when you use it, who can see it, and how identification on your device keeps photos and recordings private until you share them.',
+      'What BioMap stores when you use it, who can see it, and how identification on your device keeps photos and recordings private until you share them.',
     changefreq: 'yearly',
     priority: 0.3,
     prerender: true,
@@ -155,9 +155,9 @@ export const ROUTES = [
   },
   {
     path: '/bird-sound-identification',
-    title: 'Identify Birds by Sound: On-Device BirdNET | BirdRadar',
+    title: 'Identify Birds by Sound: On-Device BirdNET | BioMap',
     description:
-      'Record a bird call and BirdRadar identifies it on your phone with Cornell Lab of Ornithology\u2019s BirdNET, using your location to rule out unlikely species.',
+      'Record a bird call and BioMap identifies it on your phone with Cornell Lab of Ornithology\u2019s BirdNET, using your location to rule out unlikely species.',
     changefreq: 'monthly',
     priority: 0.8,
     prerender: true,
@@ -166,9 +166,9 @@ export const ROUTES = [
   },
   {
     path: '/bird-photo-identification',
-    title: 'Identify Birds from a Photo: On-Device AI | BirdRadar',
+    title: 'Identify Birds from a Photo: On-Device AI | BioMap',
     description:
-      'Take or choose a bird photo and BirdRadar suggests the species on your phone using Google\u2019s AIY Birds model, with honest confidence and community review.',
+      'Take or choose a bird photo and BioMap suggests the species on your phone using Google\u2019s AIY Birds model, with honest confidence and community review.',
     changefreq: 'monthly',
     priority: 0.8,
     prerender: true,
@@ -177,9 +177,9 @@ export const ROUTES = [
   },
   {
     path: '/blog',
-    title: 'BirdRadar Blog: Bird ID, AI and Citizen Science',
+    title: 'BioMap Blog: Bird ID, AI and Citizen Science',
     description:
-      'Articles on how BirdRadar identifies birds on your phone, what citizen science bird data is for, and how to get better sightings.',
+      'Articles on how BioMap identifies birds on your phone, what citizen science bird data is for, and how to get better sightings.',
     changefreq: 'weekly',
     priority: 0.6,
     prerender: true,
@@ -188,7 +188,7 @@ export const ROUTES = [
   },
   ...POSTS.map(post => ({
     path: `/blog/${post.slug}`,
-    title: `${post.title} | BirdRadar`,
+    title: `${post.title} | BioMap`,
     description: post.description,
     changefreq: 'yearly',
     priority: 0.6,

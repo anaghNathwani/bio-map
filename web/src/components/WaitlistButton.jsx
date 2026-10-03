@@ -164,7 +164,7 @@ function WaitlistModal({ onClose }) {
             </form>
 
             <p className="mt-4 text-[12px] leading-relaxed text-[var(--ink-soft)]/80">
-              We&rsquo;ll only use this to tell you about BirdRadar access. No spam.
+              We&rsquo;ll only use this to tell you about BioMap access. No spam.
             </p>
           </>
         )}

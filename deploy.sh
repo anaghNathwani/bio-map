@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# BirdRadar deployment script — Render compute target.
+# BioMap deployment script — Render compute target.
 # Deploys:
 #   1. Firestore rules + indexes -> Firebase (free, Spark plan — unaffected by
 #      the Storage/Blaze requirement, which only gates Firebase *Storage*)

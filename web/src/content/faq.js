@@ -2,12 +2,12 @@
 // emitted as FAQPage JSON-LD (site.js) from one source of truth.
 export const FAQ = [
   {
-    q: 'What is BirdRadar?',
-    a: 'BirdRadar is a citizen science app and live map for bird sightings. You photograph or record a bird, on-device AI suggests the species, and the community can confirm or correct it.',
+    q: 'What is BioMap?',
+    a: 'BioMap is a citizen science app and live map for bird sightings. You photograph or record a bird, on-device AI suggests the species, and the community can confirm or correct it.',
   },
   {
-    q: 'Is BirdRadar free?',
-    a: 'Yes. BirdRadar does not currently charge for anything: no purchases and no subscriptions.',
+    q: 'Is BioMap free?',
+    a: 'Yes. BioMap does not currently charge for anything: no purchases and no subscriptions.',
   },
   {
     q: 'Where can I get the app?',
@@ -18,11 +18,11 @@ export const FAQ = [
     a: 'No. Photo and sound identification both run on your phone. You need a connection to submit the sighting; if you are offline, submissions are queued and retried the next time the app opens.',
   },
   {
-    q: 'How does BirdRadar identify birds from photos?',
+    q: 'How does BioMap identify birds from photos?',
     a: 'A model on your phone based on Google\u2019s AIY Birds (about 960 species) suggests a species. If it is not confident it says so instead of guessing, and when a photo contains several birds it reviews each one separately.',
   },
   {
-    q: 'How does BirdRadar identify birds from sound?',
+    q: 'How does BioMap identify birds from sound?',
     a: 'Recordings are analysed on your phone with Cornell Lab of Ornithology\u2019s BirdNET. Your location is used to rule out species that do not live nearby, and every species it hears above the confidence threshold is reported, not just the loudest.',
   },
   {
@@ -31,7 +31,7 @@ export const FAQ = [
   },
   {
     q: 'Who can see my photos and location?',
-    a: 'Identification happens on your phone, but when you submit a sighting it is shared with the BirdRadar community along with its location, your username and any notes. Your email address is never shown publicly.',
+    a: 'Identification happens on your phone, but when you submit a sighting it is shared with the BioMap community along with its location, your username and any notes. Your email address is never shown publicly.',
   },
   {
     q: 'What are annotations?',
@@ -39,14 +39,14 @@ export const FAQ = [
   },
   {
     q: 'What happens to joke or spam annotations?',
-    a: 'BirdRadar checks on each device whether an annotation looks like a real bird name. Anything that does not is flagged with a label and left out of the consensus species. It is never deleted automatically.',
+    a: 'BioMap checks on each device whether an annotation looks like a real bird name. Anything that does not is flagged with a label and left out of the consensus species. It is never deleted automatically.',
   },
   {
-    q: 'Does BirdRadar work outside the United States?',
+    q: 'Does BioMap work outside the United States?',
     a: 'Yes. The identification models cover a global species list rather than one country, and audio results are narrowed using wherever you actually are.',
   },
   {
     q: 'Is there an Android version?',
-    a: 'Not at the moment. BirdRadar is iOS-first.',
+    a: 'Not at the moment. BioMap is iOS-first.',
   },
 ]

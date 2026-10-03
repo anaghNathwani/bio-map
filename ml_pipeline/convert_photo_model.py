@@ -1,5 +1,5 @@
 """
-Converts the BirdRadar photo model. Does NOT touch Firebase — see publish_model.py
+Converts the BioMap photo model. Does NOT touch Firebase — see publish_model.py
 for that step. Runs in the same venv as publish_model.py (requirements.txt) —
 this used to require coremltools in a separate venv (protobuf<=4.0.0, which
 conflicts with firebase-admin's protobuf>=4.25.8), but that's no longer

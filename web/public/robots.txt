@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://birdradar.web.app/sitemap.xml
+Sitemap: https://getbiomap.web.app/sitemap.xml

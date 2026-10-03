@@ -68,7 +68,7 @@
 
 | Component | Responsibility |
 |---|---|
-| `BirdRadarApp` | App lifecycle, routes to login or main tabs based on stored token |
+| `BioMapApp` | App lifecycle, routes to login or main tabs based on stored token |
 | `AppEnvironment` | Shared auth state (token, username) persisted in UserDefaults |
 | `APIClient` | All HTTP via `batteryEfficientSession` (`waitsForConnectivity=true`, 60s timeout); multipart upload builder; JWT bearer header; typed `APIError` throws |
 | `UploadQueue` | Actor; persists failed uploads as JPEG file paths in caches directory; flushes on app launch; deletes files after successful upload |

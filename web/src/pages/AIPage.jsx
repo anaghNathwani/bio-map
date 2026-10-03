@@ -17,7 +17,7 @@ export default function AIPage() {
         <div className="static-page-icon"><Cpu className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">On-Device AI Identification</h1>
         <p className="static-page-sub">
-          BirdRadar identifies birds instantly from your photos — entirely on your
+          BioMap identifies birds instantly from your photos — entirely on your
           device, with no photo sent to a server before you choose to share it.
         </p>
       </div>
@@ -25,7 +25,7 @@ export default function AIPage() {
       <div className="static-page-section">
         <h2 className="static-page-h2">How it works</h2>
         <p className="static-page-p">
-          When you take a photo in the BirdRadar app, a CoreML model runs directly
+          When you take a photo in the BioMap app, a CoreML model runs directly
           on your iPhone's Neural Engine. Within seconds it returns a ranked list
           of likely species. You see the top suggestion immediately — no internet
           connection required for the identification itself.

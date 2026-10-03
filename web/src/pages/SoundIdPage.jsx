@@ -13,21 +13,21 @@ export default function SoundIdPage() {
     >
       <h2 className="static-page-h2">How it works</h2>
       <p className="static-page-p">
-        BirdRadar uses BirdNET, the open bird-sound model from the Cornell Lab of Ornithology&rsquo;s K. Lisa Yang Center for
+        BioMap uses BirdNET, the open bird-sound model from the Cornell Lab of Ornithology&rsquo;s K. Lisa Yang Center for
         Conservation Bioacoustics. It runs on your phone the moment a recording stops. You can record up to 30 seconds, or upload
-        an existing audio file and BirdRadar will use its first 30 seconds.
+        an existing audio file and BioMap will use its first 30 seconds.
       </p>
 
       <h2 className="static-page-h2">Your location makes it more accurate</h2>
       <p className="static-page-p">
-        Sound models can name an implausible species for background noise. BirdRadar passes your real location and the time of year
+        Sound models can name an implausible species for background noise. BioMap passes your real location and the time of year
         to BirdNET&rsquo;s location filter so species that do not occur near you are ruled out. If location is off, a stricter
         confidence threshold is used instead.
       </p>
 
       <h2 className="static-page-h2">More than one bird</h2>
       <p className="static-page-p">
-        BirdNET scores every species independently for each short segment of audio, so when several birds are calling BirdRadar
+        BirdNET scores every species independently for each short segment of audio, so when several birds are calling BioMap
         reports each species that clears the confidence bar, not just the loudest.
       </p>
 

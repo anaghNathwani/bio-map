@@ -1,5 +1,5 @@
 """
-Fetches the BirdRadar photo *detector* model (Tier 2 of multi-bird photo
+Fetches the BioMap photo *detector* model (Tier 2 of multi-bird photo
 detection — see MultiBirdDetector.swift for Tier 1, the saliency fallback
 this supersedes when available). Does NOT touch Firebase — see
 publish_model.py for that step, same two-script split as

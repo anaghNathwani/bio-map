@@ -43,7 +43,7 @@ The current CORS configuration allows all origins (`allow_origins=["*"]`). This 
 ```python
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://app.birdradar.app"],
+    allow_origins=["https://app.biomap.app"],
     allow_methods=["GET", "POST"],
     allow_headers=["Authorization", "Content-Type"],
 )
@@ -84,4 +84,4 @@ mc admin policy attach local readwrite --user birdmap-api
 
 ## Responsible Disclosure
 
-To report a security vulnerability, email security@birdradar.app. Do not open a public GitHub issue for security bugs. We aim to respond within 48 hours and patch critical vulnerabilities within 7 days.
+To report a security vulnerability, email security@biomap.app. Do not open a public GitHub issue for security bugs. We aim to respond within 48 hours and patch critical vulnerabilities within 7 days.

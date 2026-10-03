@@ -62,7 +62,7 @@ docker-compose exec api python -m pytest backend/tests/ -v
 
 ### Adding a new screen
 
-1. Create a new `.swift` file under `ios/BirdRadar/BirdRadar/Views/`
+1. Create a new `.swift` file under `ios/BioMap/BioMap/Views/`
 2. Add it to the appropriate tab in `ContentView.swift` or as a navigation destination
 3. Add any new API calls to `APIClient.swift`
 4. Add any new model types to `Models/Sighting.swift`

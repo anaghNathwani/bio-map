@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "birdradar",
+    "site": "getbiomap",
     "public": "dist",
     "ignore": [
       "firebase.json",

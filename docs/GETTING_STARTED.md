@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide gets you from zero to a running BirdRadar stack in under 15 minutes.
+This guide gets you from zero to a running BioMap stack in under 15 minutes.
 
 > **This guide covers the original REST/Postgres-backed stack** (`backend/`'s separate, self-contained legacy system — see `CLAUDE.md`'s Architecture section for the live Firebase-based app and its actual setup commands). Any "Train the ML model" / `train.py` step below is stale — no such script currently exists; see `docs/ML_PIPELINE.md`'s "Our in-house training policy" for how training actually works today.
 
@@ -73,20 +73,20 @@ psql postgresql://birdmap:birdmap_secret@localhost:5432/birdmap -f backend/migra
 ## Step 4 — Open the iOS app in Xcode
 
 ```bash
-open ios/BirdRadar/BirdRadar.xcodeproj
+open ios/BioMap/BioMap.xcodeproj
 ```
 
 If the project file does not exist yet (this repo ships source files only), create a new Xcode project:
 
 1. **File → New → Project → iOS → App**
-2. Product name: `BirdRadar`, Interface: `SwiftUI`, Language: `Swift`
-3. Drag all `.swift` files from `ios/BirdRadar/BirdRadar/` into the project navigator
-4. Copy `Info.plist` and `BirdRadar.entitlements` into the project root
+2. Product name: `BioMap`, Interface: `SwiftUI`, Language: `Swift`
+3. Drag all `.swift` files from `ios/BioMap/BioMap/` into the project navigator
+4. Copy `Info.plist` and `BioMap.entitlements` into the project root
 5. In project settings → Signing & Capabilities, add **Location When In Use**, **Camera**, and **Photo Library** capabilities
 
 ### Point the app at your backend
 
-Open `ios/BirdRadar/BirdRadar/Networking/APIClient.swift` and set:
+Open `ios/BioMap/BioMap/Networking/APIClient.swift` and set:
 
 ```swift
 var baseURL = "http://YOUR_LAN_IP:8000"

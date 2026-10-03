@@ -1,27 +1,27 @@
 // Blog posts as plain data (no markdown pipeline needed). Block types:
 //   { h2: 'Heading' } | { p: 'Paragraph' } | { ul: ['item', ...] }
-// Titles must stay short enough that "<title> | BirdRadar" fits in ~65 characters.
+// Titles must stay short enough that "<title> | BioMap" fits in ~65 characters.
 export const POSTS = [
 {
   "slug": "identify-birds-without-internet",
-  "title": "How BirdRadar identifies birds without the internet",
-  "description": "The photo and sound models behind BirdRadar run on your phone, so you get a species suggestion in the field even with no signal.",
+  "title": "How BioMap identifies birds without the internet",
+  "description": "The photo and sound models behind BioMap run on your phone, so you get a species suggestion in the field even with no signal.",
   "date": "2026-09-25",
   "body": [
     {
-      "p": "Most bird ID apps send your photo or recording to a server and wait for an answer. BirdRadar does the identification on the phone itself, which is why it still works on a trail with no signal."
+      "p": "Most bird ID apps send your photo or recording to a server and wait for an answer. BioMap does the identification on the phone itself, which is why it still works on a trail with no signal."
     },
     {
       "h2": "Photos"
     },
     {
-      "p": "Photo suggestions come from Google’s AIY Birds model, a compact MobileNetV2 network that covers about 960 species. The model ships inside the app, so classifying a photo is just a calculation on your phone. If the model is not confident enough, BirdRadar tells you so instead of showing a low-quality guess."
+      "p": "Photo suggestions come from Google’s AIY Birds model, a compact MobileNetV2 network that covers about 960 species. The model ships inside the app, so classifying a photo is just a calculation on your phone. If the model is not confident enough, BioMap tells you so instead of showing a low-quality guess."
     },
     {
       "h2": "Sound"
     },
     {
-      "p": "Recordings are analysed with BirdNET, the bird-sound model from the Cornell Lab of Ornithology. It also runs on the device, right after you stop recording. BirdRadar feeds it your location and the time of year so that species which do not occur near you are ruled out, a step that matters because sound models can otherwise name an unlikely bird for background noise."
+      "p": "Recordings are analysed with BirdNET, the bird-sound model from the Cornell Lab of Ornithology. It also runs on the device, right after you stop recording. BioMap feeds it your location and the time of year so that species which do not occur near you are ruled out, a step that matters because sound models can otherwise name an unlikely bird for background noise."
     },
     {
       "h2": "What still needs a connection"
@@ -34,7 +34,7 @@ export const POSTS = [
       ]
     },
     {
-      "p": "If you are offline when you submit, BirdRadar keeps the sighting and retries the next time the app opens."
+      "p": "If you are offline when you submit, BioMap keeps the sighting and retries the next time the app opens."
     },
     {
       "h2": "The trade-off"
@@ -47,7 +47,7 @@ export const POSTS = [
 {
   "slug": "what-is-citizen-science-bird-data-for",
   "title": "What is citizen science bird data actually for?",
-  "description": "How everyday bird sightings become useful data, why verification matters, and how BirdRadar approaches it.",
+  "description": "How everyday bird sightings become useful data, why verification matters, and how BioMap approaches it.",
   "date": "2026-09-25",
   "body": [
     {
@@ -67,26 +67,26 @@ export const POSTS = [
       "h2": "Why verification matters"
     },
     {
-      "p": "Data is only as useful as it is trustworthy. A misidentified bird is worse than no record. In BirdRadar every sighting can be reviewed by other birders who confirm or correct the species, and several annotations on one sighting form a consensus. Annotations that do not look like a real bird name are flagged instead of counted."
+      "p": "Data is only as useful as it is trustworthy. A misidentified bird is worse than no record. In BioMap every sighting can be reviewed by other birders who confirm or correct the species, and several annotations on one sighting form a consensus. Annotations that do not look like a real bird name are flagged instead of counted."
     },
     {
       "h2": "Geotagged by design"
     },
     {
-      "p": "Each BirdRadar sighting carries GPS coordinates and a timestamp, which is what makes it possible to map species over space and time."
+      "p": "Each BioMap sighting carries GPS coordinates and a timestamp, which is what makes it possible to map species over space and time."
     },
     {
       "h2": "Be part of the bigger picture"
     },
     {
-      "p": "BirdRadar is a young project. Established programs such as eBird from the Cornell Lab of Ornithology have far larger datasets, and contributing there as well is a great idea. BirdRadar’s aim is to make it easy to identify and share what you see, right from your phone."
+      "p": "BioMap is a young project. Established programs such as eBird from the Cornell Lab of Ornithology have far larger datasets, and contributing there as well is a great idea. BioMap’s aim is to make it easy to identify and share what you see, right from your phone."
     }
   ]
 },
 {
   "slug": "keeping-bird-id-on-your-phone",
   "title": "Why we keep bird identification on your phone",
-  "description": "Privacy, speed and reliability: the reasons BirdRadar runs its identification models on the device instead of a server.",
+  "description": "Privacy, speed and reliability: the reasons BioMap runs its identification models on the device instead of a server.",
   "date": "2026-09-25",
   "body": [
     {
@@ -114,7 +114,7 @@ export const POSTS = [
       "h2": "What it costs us"
     },
     {
-      "p": "On-device models have to be compact, so they cannot match the largest server models. We are open about that: BirdRadar reports low confidence honestly and relies on the community to correct mistakes. Read more about the limits on the on-device AI page."
+      "p": "On-device models have to be compact, so they cannot match the largest server models. We are open about that: BioMap reports low confidence honestly and relies on the community to correct mistakes. Read more about the limits on the on-device AI page."
     }
   ]
 },

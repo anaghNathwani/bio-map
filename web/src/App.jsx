@@ -97,10 +97,10 @@ export default function App() {
   }, [filtered])
   return (
     <div className="app">
-      <h1 className="sr-only">BirdRadar live bird sighting map</h1>
+      <h1 className="sr-only">BioMap live bird sighting map</h1>
       <header className="app-header">
         <div>
-          <div className="app-logo">🐦 BirdRadar</div>
+          <div className="app-logo">🐦 BioMap</div>
           <div className="app-subtitle">Live community bird sightings</div>
         </div>
         <FilterBar sightings={sightings} onFiltered={setFiltered} />
