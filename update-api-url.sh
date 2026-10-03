@@ -19,10 +19,10 @@ sed -i '' -E \
    s|https://birdmap-api\.onrender\.com|$NEW_URL|g; \
    s|https://birdmap-api-[a-z0-9]+\.[a-z0-9]+\.run\.app|$NEW_URL|g; \
    s|https://[a-z-]+\.trycloudflare\.com|$NEW_URL|g" \
-  "$REPO_ROOT/ios/BirdMap/project.yml"
+  "$REPO_ROOT/ios/BirdRadar/project.yml"
 
-cd "$REPO_ROOT/ios/BirdMap"
+cd "$REPO_ROOT/ios/BirdRadar"
 xcodegen generate > /dev/null
-cp Package.resolved.backup BirdMap.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved 2>/dev/null || true
+cp Package.resolved.backup BirdRadar.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved 2>/dev/null || true
 cd "$REPO_ROOT"
 echo "    Xcode project regenerated."

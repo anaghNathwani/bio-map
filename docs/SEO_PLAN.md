@@ -1,8 +1,8 @@
-# SEO plan: getting BirdMap into Google, for free
+# SEO plan: getting BirdRadar into Google, for free
 
 100 steps, one commit each (`SEO step N/100`). **R** = implemented in this repo. **M** = needs *your* accounts/actions; each has a playbook in `docs/seo/manual/`.
 
-Site: https://birdmap-citizenscience.web.app (free Firebase Hosting subdomain).
+Site: https://birdradar.web.app (free Firebase Hosting subdomain).
 
 > Nothing here can *guarantee* ranking or indexing. Google decides. This makes the site crawlable, fast, well-described, and linked-to, which is everything you control.
 
@@ -55,7 +55,7 @@ Legend: `[x]` done in code · `[ ]` R step pending · `[~]` playbook written, ne
 45. [x] **New page: /bird-sound-identification** (R)
 46. [x] **New page: /bird-photo-identification** (R)
 47. [x] **Blog index page + post data model** (R)
-48. [x] **Blog post: how BirdMap identifies birds without the internet** (R)
+48. [x] **Blog post: how BirdRadar identifies birds without the internet** (R)
 49. [x] **Blog post: what citizen science bird data is used for** (R)
 50. [x] **Blog post: keeping bird ID on your phone** (R)
 51. [x] **JSON-LD: Article on blog posts** (R)

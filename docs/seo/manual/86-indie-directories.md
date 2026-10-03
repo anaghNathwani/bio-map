@@ -8,6 +8,6 @@
 
 1. Create a product page on Indie Hackers and post a short build story.
 2. Submit to BetaList (free tier has a queue) and Uneed.
-3. Use the same one-line description everywhere: "BirdMap is a citizen science app + live map for bird sightings."
+3. Use the same one-line description everywhere: "BirdRadar is a citizen science app + live map for bird sightings."
 
 **Done when:** each directory shows your listing or a pending submission.

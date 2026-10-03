@@ -31,7 +31,7 @@ def _fetch_wikipedia(species: str) -> dict:
     try:
         r = requests.get(
             f"https://en.wikipedia.org/api/rest_v1/page/summary/{encoded}",
-            headers={"User-Agent": "BirdMapApp/1.0"},
+            headers={"User-Agent": "BirdRadarApp/1.0"},
             timeout=8,
         )
         if r.status_code == 200:

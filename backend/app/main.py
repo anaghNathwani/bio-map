@@ -28,14 +28,14 @@ limiter = Limiter(key_func=get_remote_address)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Starting BirdMap API")
+    logger.info("Starting BirdRadar API")
     ensure_buckets()
     logger.info("S3 buckets ready")
     yield
-    logger.info("Shutting down BirdMap API")
+    logger.info("Shutting down BirdRadar API")
 
 
-app = FastAPI(title="BirdMap API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="BirdRadar API", version="1.0.0", lifespan=lifespan)
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)

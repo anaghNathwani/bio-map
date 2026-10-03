@@ -14,19 +14,19 @@
 
 ### URLs
 
-- https://birdmap-citizenscience.web.app/
-- https://birdmap-citizenscience.web.app/map
-- https://birdmap-citizenscience.web.app/ai
-- https://birdmap-citizenscience.web.app/community
-- https://birdmap-citizenscience.web.app/citizen-science
-- https://birdmap-citizenscience.web.app/terms
-- https://birdmap-citizenscience.web.app/how-it-works
-- https://birdmap-citizenscience.web.app/faq
-- https://birdmap-citizenscience.web.app/about
-- https://birdmap-citizenscience.web.app/privacy
-- https://birdmap-citizenscience.web.app/bird-sound-identification
-- https://birdmap-citizenscience.web.app/bird-photo-identification
-- https://birdmap-citizenscience.web.app/blog
-- https://birdmap-citizenscience.web.app/blog/identify-birds-without-internet
-- https://birdmap-citizenscience.web.app/blog/what-is-citizen-science-bird-data-for
-- https://birdmap-citizenscience.web.app/blog/keeping-bird-id-on-your-phone
+- https://birdradar.web.app/
+- https://birdradar.web.app/map
+- https://birdradar.web.app/ai
+- https://birdradar.web.app/community
+- https://birdradar.web.app/citizen-science
+- https://birdradar.web.app/terms
+- https://birdradar.web.app/how-it-works
+- https://birdradar.web.app/faq
+- https://birdradar.web.app/about
+- https://birdradar.web.app/privacy
+- https://birdradar.web.app/bird-sound-identification
+- https://birdradar.web.app/bird-photo-identification
+- https://birdradar.web.app/blog
+- https://birdradar.web.app/blog/identify-birds-without-internet
+- https://birdradar.web.app/blog/what-is-citizen-science-bird-data-for
+- https://birdradar.web.app/blog/keeping-bird-id-on-your-phone

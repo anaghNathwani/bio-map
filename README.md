@@ -1,6 +1,6 @@
-# BirdMap
+# BirdRadar
 
-BirdMap is a citizen-science iOS app and web map for bird sightings, community
+BirdRadar is a citizen-science iOS app and web map for bird sightings, community
 annotations, and on-device bird identification.
 
 ## Production architecture (the live app)
@@ -30,7 +30,7 @@ model runs on and why.
 ## Website
 
 The marketing site and live map (`web/`) is prerendered at build time for search engines and deploys to Firebase
-Hosting: https://birdmap-citizenscience.web.app. See `docs/SEO.md` for how discoverability is set up and
+Hosting: https://birdradar.web.app. See `docs/SEO.md` for how discoverability is set up and
 `docs/SEO_PLAN.md` for the full checklist.
 
 ```bash
@@ -93,9 +93,9 @@ Uses CocoaPods (`TensorFlowLiteSwift`) alongside Swift Package Manager —
 integration won't be there:
 
 ```bash
-cd ios/BirdMap
-xcodebuild -workspace BirdMap.xcworkspace \
-  -scheme BirdMap \
+cd ios/BirdRadar
+xcodebuild -workspace BirdRadar.xcworkspace \
+  -scheme BirdRadar \
   -destination 'platform=iOS Simulator,name=iPhone 17' \
   -configuration Debug build
 ```
@@ -108,8 +108,8 @@ directly — see the gotchas in `CLAUDE.md`.
 ```bash
 cd web && npm ci && npm run build
 python3 -m compileall backend/app ml_pipeline
-cd ios/BirdMap && xcodebuild -workspace BirdMap.xcworkspace \
-  -scheme BirdMap \
+cd ios/BirdRadar && xcodebuild -workspace BirdRadar.xcworkspace \
+  -scheme BirdRadar \
   -destination 'platform=iOS Simulator,name=iPhone 17' \
   -configuration Debug build
 ```

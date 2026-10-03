@@ -2,7 +2,7 @@
 
 ## Overview
 
-The BirdMap iOS app is built with **SwiftUI** targeting **iOS 17+**. It is the primary interface for citizen scientists to submit sightings, annotate the community dataset, and receive on-device bird identification powered by a continuously updated CoreML model.
+The BirdRadar iOS app is built with **SwiftUI** targeting **iOS 17+**. It is the primary interface for citizen scientists to submit sightings, annotate the community dataset, and receive on-device bird identification powered by a continuously updated CoreML model.
 
 ---
 
@@ -20,9 +20,9 @@ The BirdMap iOS app is built with **SwiftUI** targeting **iOS 17+**. It is the p
 ## Project Structure
 
 ```
-ios/BirdMap/BirdMap/
+ios/BirdRadar/BirdRadar/
 ├── App/
-│   ├── BirdMapApp.swift          Entry point, @main
+│   ├── BirdRadarApp.swift          Entry point, @main
 │   ├── AppEnvironment.swift      Auth state, shared via @EnvironmentObject
 │   └── ContentView.swift         4-tab shell + ProfileView
 │
@@ -53,7 +53,7 @@ ios/BirdMap/BirdMap/
 │       └── LeaderboardView.swift     Top annotators ranked list
 │
 ├── Info.plist                    Privacy strings, background modes
-└── BirdMap.entitlements          Sandbox + network + camera + location caps
+└── BirdRadar.entitlements          Sandbox + network + camera + location caps
 ```
 
 ---
@@ -90,7 +90,7 @@ Key design decisions:
 To point the app at a different server, change `baseURL`:
 
 ```swift
-APIClient.shared.baseURL = "https://api.birdmap.app"
+APIClient.shared.baseURL = "https://api.birdradar.app"
 ```
 
 ---
@@ -110,7 +110,7 @@ await UploadQueue.shared.enqueue(PendingUpload(
     notes: notes
 ))
 
-// Flushed on app launch (BirdMapApp.swift)
+// Flushed on app launch (BirdRadarApp.swift)
 await UploadQueue.shared.flushIfNeeded()
 ```
 
@@ -138,7 +138,7 @@ If no model has been downloaded yet, `classify()` returns `nil` and the UI simpl
 
 ### ModelManager
 
-On every app launch (triggered from `BirdMapApp.body`):
+On every app launch (triggered from `BirdRadarApp.body`):
 
 1. `GET /model/version` → compare remote version string with `UserDefaults["model_version"]`
 2. If different: `GET /model/download` → get presigned URL
@@ -202,15 +202,15 @@ Tapping a pin opens `SightingDetailView` as a sheet.
 Since this repo ships source files, create the Xcode project manually:
 
 1. Open Xcode → **File → New → Project → iOS → App**
-2. Set: Product Name `BirdMap`, Bundle ID `com.birdmap.app`, Interface `SwiftUI`, Language `Swift`
+2. Set: Product Name `BirdRadar`, Bundle ID `com.birdradar.app`, Interface `SwiftUI`, Language `Swift`
 3. Delete the default `ContentView.swift` that Xcode generates
-4. Drag the `ios/BirdMap/BirdMap/` folder into the Project Navigator → **Add files to "BirdMap"**, check **Create groups**, check **Add to target: BirdMap**
+4. Drag the `ios/BirdRadar/BirdRadar/` folder into the Project Navigator → **Add files to "BirdRadar"**, check **Create groups**, check **Add to target: BirdRadar**
 5. In the project editor → **Info** tab, add:
    - `NSCameraUsageDescription`
    - `NSLocationWhenInUseUsageDescription`
    - `NSPhotoLibraryUsageDescription`
-6. In **Signing & Capabilities**, add the entitlements from `BirdMap.entitlements`
-7. **File → Add Package Dependencies** and resolve `ios/BirdMap/Package.swift` to pull in ZIPFoundation
+6. In **Signing & Capabilities**, add the entitlements from `BirdRadar.entitlements`
+7. **File → Add Package Dependencies** and resolve `ios/BirdRadar/Package.swift` to pull in ZIPFoundation
 
 ---
 

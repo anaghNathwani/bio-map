@@ -7,7 +7,7 @@
 ## Steps
 
 1. Open https://search.google.com/test/rich-results.
-2. Test `https://birdmap-citizenscience.web.app/blog/identify-birds-without-internet`, `https://birdmap-citizenscience.web.app/map` and `https://birdmap-citizenscience.web.app/faq`.
+2. Test `https://birdradar.web.app/blog/identify-birds-without-internet`, `https://birdradar.web.app/map` and `https://birdradar.web.app/faq`.
 3. Fix anything flagged as an error in `web/src/site.js`. Warnings about optional fields are fine.
 
 **Done when:** no errors for those three URLs.

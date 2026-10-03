@@ -1,5 +1,5 @@
 """
-Builds ios/BirdMap/BirdMap/ML/Bundled/BundledBirdNETLabels.json from the label
+Builds ios/BirdRadar/BirdRadar/ML/Bundled/BundledBirdNETLabels.json from the label
 file that ships with birdnetlib: one entry per BirdNET output class, in class
 order, with a *blank* string for everything that isn't a bird.
 
@@ -34,7 +34,7 @@ NON_BIRD_GENERA = {
     "Alouatta", "Canis", "Odocoileus", "Sciurus", "Tamias", "Tamiasciurus",
 }
 
-OUTPUT = Path(__file__).parent.parent / "ios/BirdMap/BirdMap/ML/Bundled/BundledBirdNETLabels.json"
+OUTPUT = Path(__file__).parent.parent / "ios/BirdRadar/BirdRadar/ML/Bundled/BundledBirdNETLabels.json"
 
 
 def main() -> None:

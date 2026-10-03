@@ -11,7 +11,7 @@
 3. Reply to every comment for the first day.
 4. Draft:
 
-> BirdMap is a citizen science app + live map for bird sightings. Photos and calls are identified on your phone (Google's AIY Birds for photos, Cornell's BirdNET for sound), then other birders confirm or correct the ID. The iOS app is coming soon; the live map works in any browser.
+> BirdRadar is a citizen science app + live map for bird sightings. Photos and calls are identified on your phone (Google's AIY Birds for photos, Cornell's BirdNET for sound), then other birders confirm or correct the ID. The iOS app is coming soon; the live map works in any browser.
 >
 > I'd love honest feedback on the identification, especially for birds where it gets things wrong.
 

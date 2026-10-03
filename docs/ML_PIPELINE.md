@@ -2,7 +2,7 @@
 
 ## Overview
 
-BirdMap ships four models, all originally sourced from vetted American organizations (no Chinese-origin models or weights). **As of this writing, all four still run exactly as released by their publisher** — but this is a transition state, not the policy. Company policy has changed from "nothing is trained in-house" to **fine-tuning (and where useful, quantizing) these pretrained weights on our own community-annotation data**, funded by and triggered on annotation volume, once there's enough of it to be worth doing. See "Our in-house training policy" below for what's actually live today versus what's designed but not yet built.
+BirdRadar ships four models, all originally sourced from vetted American organizations (no Chinese-origin models or weights). **As of this writing, all four still run exactly as released by their publisher** — but this is a transition state, not the policy. Company policy has changed from "nothing is trained in-house" to **fine-tuning (and where useful, quantizing) these pretrained weights on our own community-annotation data**, funded by and triggered on annotation volume, once there's enough of it to be worth doing. See "Our in-house training policy" below for what's actually live today versus what's designed but not yet built.
 
 | Model | Publisher | Modality | Runs | Fine-tuned by us? |
 |---|---|---|---|---|
@@ -93,7 +93,7 @@ The conversion step (TF Hub download → CoreML conversion → a real inference 
 
 ## Multiple birds in one photo/recording
 
-BirdMap can flag more than one distinct bird in a single sighting:
+BirdRadar can flag more than one distinct bird in a single sighting:
 
 - **Audio:** BirdNET already scores every species independently per 3-second segment rather than a single top-1 — `live_poll.py` was simply discarding everything but the best match. It now keeps every species that clears `SECONDARY_CONFIDENCE_THRESHOLD` (0.5) beyond the always-kept top result (capped at `MAX_SPECIES_REPORTED`, 3), written to the sighting doc's `aiSpeciesSuggestions` array.
 - **Photo, Tier 1 (always available, no extra model):** `MultiBirdDetector.swift` runs `VNGenerateObjectnessBasedSaliencyImageRequest` (on-device Vision, no model download) to find visually salient regions beyond the main subject, crops each, and classifies the crop with the existing photo classifier. This has no concept of "bird" versus anything else salient in frame, so results are filtered hard by classifier confidence (`secondaryConfidenceThreshold`, 0.6) and deduplicated against the primary whole-image result.
@@ -154,7 +154,7 @@ Flow: each `live_poll.py` run queries `sightings` where `mediaType == "audio"` o
 
 ## Annotation moderation
 
-**Runs entirely on-device now.** `ML/AnnotationModerator.swift` decides whether an annotation's species looks like a real bird name on each viewer's own device, at the moment an annotation card is shown — nothing is written back to Firestore, so there's no stored verdict a client could tamper with, and the annotation form warns the author before they submit a non-bird. It matches the submitted species text against the ~7,400 bird names already bundled for identification: exact match, typo (edit distance), a known name embedded in a longer phrase, or a generic bird word ("sparrow", "hawk sp."), with explicit joke words/phrases as vetoes. Everything else is flagged — a label shown in the UI, never a deletion. Empty species and `reviewOfAI == "unsure"` are always treated as legitimate, per the same product rule the old server-side version used. Measure any change with `ios/BirdMap/Tools/ModerationEval/run.sh` (every bundled bird name must pass; genuine/silly test cases live in `cases.json`).
+**Runs entirely on-device now.** `ML/AnnotationModerator.swift` decides whether an annotation's species looks like a real bird name on each viewer's own device, at the moment an annotation card is shown — nothing is written back to Firestore, so there's no stored verdict a client could tamper with, and the annotation form warns the author before they submit a non-bird. It matches the submitted species text against the ~7,400 bird names already bundled for identification: exact match, typo (edit distance), a known name embedded in a longer phrase, or a generic bird word ("sparrow", "hawk sp."), with explicit joke words/phrases as vetoes. Everything else is flagged — a label shown in the UI, never a deletion. Empty species and `reviewOfAI == "unsure"` are always treated as legitimate, per the same product rule the old server-side version used. Measure any change with `ios/BirdRadar/Tools/ModerationEval/run.sh` (every bundled bird name must pass; genuine/silly test cases live in `cases.json`).
 
 Flagged annotations stay visible in the app (small badge in `SightingDetailView`) but are excluded from the plurality-voted "top species" shown on a sighting — computed identically on every device that renders it, so consensus can't skew based on who's viewing.
 

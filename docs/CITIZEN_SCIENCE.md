@@ -4,7 +4,7 @@
 
 ## The Model
 
-BirdMap follows the **VGI (Volunteered Geographic Information)** model pioneered by projects like OpenStreetMap, iNaturalist, and eBird. Users contribute observations; the community validates them; the aggregated dataset becomes a scientific resource.
+BirdRadar follows the **VGI (Volunteered Geographic Information)** model pioneered by projects like OpenStreetMap, iNaturalist, and eBird. Users contribute observations; the community validates them; the aggregated dataset becomes a scientific resource.
 
 ---
 
@@ -22,7 +22,7 @@ Each cycle of this loop makes the AI more accurate, which encourages more submis
 
 ## Data Quality
 
-Raw crowdsourced data contains noise. BirdMap uses several mechanisms to manage this:
+Raw crowdsourced data contains noise. BirdRadar uses several mechanisms to manage this:
 
 ### Plurality voting
 
@@ -117,19 +117,19 @@ Usernames are public on annotations and the leaderboard. Email addresses are nev
 
 | Project | Focus | AI | Community annotation | Open data |
 |---|---|---|---|---|
-| **BirdMap** | Birds, geospatial + AI | Self-trained CoreML | Yes | Yes (planned) |
+| **BirdRadar** | Birds, geospatial + AI | Self-trained CoreML | Yes | Yes (planned) |
 | **iNaturalist** | All taxa | Multiple community AI | Yes | Yes |
 | **eBird** | Birds, checklist-based | Limited | Partial | Yes |
 | **Merlin (Cornell)** | Bird ID | Pre-trained, static | No | No |
 | **Stanford Mosquito** | Mosquitos, sound | Pre-trained | Yes | Research only |
 
-BirdMap's distinguishing feature is the **closed-loop retraining** — unlike iNaturalist (which uses community-trained models updated infrequently) or Merlin (static model), BirdMap's model updates automatically as community annotations accumulate.
+BirdRadar's distinguishing feature is the **closed-loop retraining** — unlike iNaturalist (which uses community-trained models updated infrequently) or Merlin (static model), BirdRadar's model updates automatically as community annotations accumulate.
 
 ---
 
 ## Ethical Use
 
-BirdMap data should only be used for:
+BirdRadar data should only be used for:
 
 - Scientific research into bird populations and ecology
 - Conservation planning
@@ -142,4 +142,4 @@ It must not be used for:
 - Selling location data to third parties
 - Any use that could harm individual birds or their habitats
 
-Contributors retain moral rights over their photographs. Photo copyright remains with the submitter. By submitting, users grant BirdMap a non-exclusive licence to store, display, and use the photo for annotation and model training purposes.
+Contributors retain moral rights over their photographs. Photo copyright remains with the submitter. By submitting, users grant BirdRadar a non-exclusive licence to store, display, and use the photo for annotation and model training purposes.

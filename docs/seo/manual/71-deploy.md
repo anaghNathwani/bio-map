@@ -9,8 +9,8 @@
 1. From the repo root: `cd web && npm run build && npm run seo:check` (must print `SEO check passed`).
 2. Deploy: `firebase deploy --only hosting` (the CLI on this Mac is already logged in as your Google account; project alias is in `web/.firebaserc`).
 3. Or use GitHub: add the `FIREBASE_SERVICE_ACCOUNT_JSON` secret with the Hosting Admin role, then run the *Deploy web to Firebase Hosting* workflow from the Actions tab.
-4. Check it: `curl -sI https://birdmap-citizenscience.web.app/faq` should be `200`, `curl -sI https://birdmap-citizenscience.web.app/definitely-not-a-page` should be `404`, and `curl -s https://birdmap-citizenscience.web.app/ | grep '<h1'` should show real text.
-5. Open https://birdmap-citizenscience.web.app/sitemap.xml and https://birdmap-citizenscience.web.app/robots.txt in a browser.
+4. Check it: `curl -sI https://birdradar.web.app/faq` should be `200`, `curl -sI https://birdradar.web.app/definitely-not-a-page` should be `404`, and `curl -s https://birdradar.web.app/ | grep '<h1'` should show real text.
+5. Open https://birdradar.web.app/sitemap.xml and https://birdradar.web.app/robots.txt in a browser.
 
 **Done when:** the three curl checks behave as described.
 

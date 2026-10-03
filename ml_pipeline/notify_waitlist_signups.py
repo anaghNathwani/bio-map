@@ -30,7 +30,7 @@ import urllib.request
 
 RESEND_URL = "https://api.resend.com/emails"
 DEFAULT_TO = "anaghnathwani@gmail.com"
-DEFAULT_FROM = "BirdMap Waitlist <onboarding@resend.dev>"
+DEFAULT_FROM = "BirdRadar Waitlist <onboarding@resend.dev>"
 
 
 def fetch_unnotified(db):
@@ -61,11 +61,11 @@ def render_email(signups):
         )
 
     count = len(signups)
-    subject = f"{count} new BirdMap waitlist signup" + ("" if count == 1 else "s")
-    text = f"{count} new signup(s) on the BirdMap waitlist:\n\n" + "\n".join(lines_text)
+    subject = f"{count} new BirdRadar waitlist signup" + ("" if count == 1 else "s")
+    text = f"{count} new signup(s) on the BirdRadar waitlist:\n\n" + "\n".join(lines_text)
     html = (
         "<div style='font-family:sans-serif'>"
-        f"<p>{count} new signup(s) on the BirdMap waitlist:</p>"
+        f"<p>{count} new signup(s) on the BirdRadar waitlist:</p>"
         "<table style='border-collapse:collapse'>"
         "<tr style='font-weight:600;text-align:left'><td style='padding:4px 12px 4px 0'>Email</td>"
         "<td style='padding:4px 12px 4px 0'>Name</td><td>Joined</td></tr>"
