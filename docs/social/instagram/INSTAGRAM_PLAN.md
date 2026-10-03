@@ -1,4 +1,4 @@
-# BirdMap on Instagram
+# BioMap on Instagram
 
 Yes, I can make videos. These are **motion-graphics Reels** (animated type, shapes and a waveform, rendered from code) with an **original soundtrack I synthesized** (soft pad, a pluck on each scene change, and stylized bird-like chirps; these are synthesized whistles, not recordings of real birds, and there's nothing to license).
 I can't film real footage or screen-record your phone. Once the iOS app is installable, record 10-15 seconds of the real app
@@ -10,6 +10,7 @@ Files (all in `docs/social/instagram/`):
 |---|---|---|
 | `reels/01`-`04` | 4 calm, on-brand Reels (serif type, soft pad) | MP4 1080x1920, 30 fps, H.264 + AAC stereo (~-16 LUFS) |
 | `reels/05`-`08` | 4 **Gen Z-style** Reels (bold captions, hard cuts on the beat, emoji stickers, original beat), 12-15 s | same |
+| `rebrand/` | the name-change announcement Reel ("Our new name"), its cover and caption: `rebrand/caption.md` | MP4 1080x1920 + PNG |
 | `reels/covers/` | a cover image for each of the 8 Reels | PNG 1080x1920 |
 | `carousels/` | 3 swipe posts (6, 8 and 6 slides) | PNG 1080x1350 (4:5) |
 | `stories/` | 3 question/poll backgrounds | PNG 1080x1920 |
@@ -28,15 +29,15 @@ Files (all in `docs/social/instagram/`):
 ## Set up the account (15 minutes)
 
 - **Account type:** Instagram -> Settings -> *Account type and tools* -> *Switch to professional account* (free; gives Insights).
-- **Name:** `BirdMap | Bird ID & Sightings` (29 characters).
-- **Handle** (check availability in the app): `birdmap.app`, `getbirdmap`, or `birdmapcitizenscience`.
+- **Name:** `BioMap | Bird ID & Sightings` (29 characters).
+- **Handle** (check availability in the app): `biomap.app`, `getbiomap`, or `biomapcitizenscience`.
 - **Bio** (limit 150 characters):
   ```
   Citizen science for bird lovers.
   Bird IDs on your phone, checked by birders.
   iOS app coming soon. Live map below.
   ```
-- **Link:** https://birdmap-citizenscience.web.app
+- **Link:** https://getbiomap.web.app
 - **Profile picture:** `profile/profile-picture.png` (paper-coloured bird on the brand clay; 1080x1080, Instagram crops it to a circle).
   It's the one that stays readable on both light and dark Instagram, even at 40px. Alternatives if you prefer:
   `profile-picture-paper.png` (dark bird on cream; fades into a white feed) and `profile-picture-ink.png` (cream bird on dark;
