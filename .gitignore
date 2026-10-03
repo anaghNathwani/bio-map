@@ -32,7 +32,7 @@ env/
 *.mlmodel
 # Exception: the classifier bundled into the app install itself (see
 # ModelManager.swift's bundledModelURL) — this one must be tracked.
-!ios/BirdMap/BirdMap/ML/Bundled/**
+!ios/BirdRadar/BirdRadar/ML/Bundled/**
 ml_pipeline/data/
 ml_pipeline/output*/
 ml_pipeline/checkpoints/
@@ -41,11 +41,11 @@ ml_pipeline/checkpoints/
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
 *.xcworkspace/contents.xcworkspacedata
-# Exception: BirdMap.xcworkspace is the real CocoaPods-generated workspace
-# (references both BirdMap.xcodeproj and Pods.xcodeproj) — must be tracked,
+# Exception: BirdRadar.xcworkspace is the real CocoaPods-generated workspace
+# (references both BirdRadar.xcodeproj and Pods.xcodeproj) — must be tracked,
 # unlike the auto-generated .xcodeproj/project.xcworkspace the rule above
 # is actually meant for.
-!ios/BirdMap/BirdMap.xcworkspace/contents.xcworkspacedata
+!ios/BirdRadar/BirdRadar.xcworkspace/contents.xcworkspacedata
 DerivedData/
 *.ipa
 *.dSYM.zip
@@ -59,7 +59,7 @@ DerivedData/
 # xcodegen/project.yml). Podfile.lock IS tracked (pins exact versions);
 # Pods/ itself isn't — `pod install` fetches it, same as SPM resolves its
 # own packages from Package.resolved.
-ios/BirdMap/Pods/
+ios/BirdRadar/Pods/
 .build/
 
 # macOS

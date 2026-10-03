@@ -1,0 +1,100 @@
+name: BirdRadar
+options:
+  bundleIdPrefix: com.birdradar
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "16"
+  # xcodegen regenerates project.pbxproj from scratch every run, which wipes
+  # CocoaPods' integration (added by `pod install`, needed for
+  # TensorFlowLiteSwift — see Podfile). Re-running pod install here keeps
+  # the two in sync automatically instead of relying on remembering to do it
+  # by hand. Open BirdRadar.xcworkspace after this, not BirdRadar.xcodeproj.
+  postGenCommand: LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 pod install
+
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation.git
+    from: 0.9.19
+  FirebaseSDK:
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    from: 11.0.0
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS.git
+    from: 8.0.0
+
+targets:
+  BirdRadar:
+    type: application
+    platform: iOS
+    sources:
+      - path: BirdRadar
+    info:
+      path: BirdRadar/Info.plist
+      properties:
+        API_BASE_URL: $(API_BASE_URL)
+        GCSupportsGameMode: false
+        UILaunchScreen: {}
+        NSCameraUsageDescription: BirdRadar needs camera access to photograph bird sightings.
+        NSMicrophoneUsageDescription: BirdRadar records bird calls to identify species by sound.
+        NSLocationWhenInUseUsageDescription: BirdRadar attaches your GPS location to each sighting so it can be placed on the map.
+        NSPhotoLibraryUsageDescription: BirdRadar can use photos from your library to report sightings.
+        # Brand type (matches the marketing site and social assets — see Theme.swift): Fraunces
+        # for display serif, Geist for UI sans. Bundled as static instances of the same variable
+        # webfonts used in docs/social and web/, converted with fontTools (see Resources/Fonts).
+        UIAppFonts:
+          - FrauncesBirdRadar-Regular.ttf
+          - FrauncesBirdRadarDisplay-Medium.ttf
+          - FrauncesBirdRadar-Italic.ttf
+          - GeistBirdRadar-Regular.ttf
+          - GeistBirdRadar-Medium.ttf
+          - GeistBirdRadar-SemiBold.ttf
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - com.birdradar.app
+          - CFBundleURLSchemes:
+              - com.googleusercontent.apps.857243141648-jalh90kgupsbqk9b55egoqcq8p1l9nfg
+    entitlements:
+      path: BirdRadar/BirdRadar.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.birdradar.BirdRadar
+        SWIFT_VERSION: 5.9
+        DEVELOPMENT_TEAM: 2JN5C47MQT
+        CODE_SIGN_STYLE: Automatic
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      configs:
+        Debug:
+          API_BASE_URL: http://localhost:8000
+        Release:
+          API_BASE_URL: https://birdmap-api.onrender.com
+    dependencies:
+      - package: ZIPFoundation
+      - package: FirebaseSDK
+        product: FirebaseAuth
+      - package: FirebaseSDK
+        product: FirebaseFirestore
+      - package: GoogleSignIn
+        product: GoogleSignIn
+      - package: GoogleSignIn
+        product: GoogleSignInSwift
+
+schemes:
+  BirdRadar:
+    build:
+      targets:
+        BirdRadar: all
+    run:
+      config: Debug
+      preActions:
+        - name: Start local backend
+          settingsTarget: BirdRadar
+          script: |
+            REPO="$SRCROOT/../.."
+            docker compose -f "$REPO/docker-compose.yml" up -d --remove-orphans 2>/dev/null || true
+            for i in $(seq 1 60); do
+              curl -sf http://localhost:8000/health > /dev/null 2>&1 && exit 0
+              sleep 1
+            done
+            echo "Warning: backend did not become healthy in 60s" >&2
+    archive:
+      config: Release

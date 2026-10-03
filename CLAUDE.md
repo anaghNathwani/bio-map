@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BirdMap is a citizen science iOS app for bird sighting collection, community annotation, and ML bird identification (on-device for photos and — as of the on-device BirdNET work — audio too; the scheduled server job is only a fallback for recordings the device couldn't analyze). **Everything runs on free tiers with no credit card attached anywhere** — genuinely true again as of the Firestore-only media architecture below, not just an aspiration; see docs/DEPLOYMENT.md for the full reasoning and history.
+BirdRadar is a citizen science iOS app for bird sighting collection, community annotation, and ML bird identification (on-device for photos and — as of the on-device BirdNET work — audio too; the scheduled server job is only a fallback for recordings the device couldn't analyze). **Everything runs on free tiers with no credit card attached anywhere** — genuinely true again as of the Firestore-only media architecture below, not just an aspiration; see docs/DEPLOYMENT.md for the full reasoning and history.
 
 Backend:
 - **Firebase (Auth + Firestore) is the entire live app's backend — data *and* media.** No Firebase Storage (needs Blaze billing for any usage), no Supabase, no deployed server of any kind. Sighting photo/audio bytes are compressed client-side and embedded as a base64 data URI directly in the sighting's Firestore document (`FirebaseService.uploadImage`/`uploadAudio`); the on-device ML model is the same idea scaled up — too large for one document, so it's split into base64 chunk documents under `model_versions/{id}/chunks` and reassembled by `ModelManager`. This pattern (compress + base64-in-Firestore, skip Storage entirely) follows github.com/ishanvi-dekate/team-efficient-epp, a prior project that used it successfully at zero cost — see that repo's `Profile.jsx` (avatar upload) and `ChatBot.jsx` (`imageToBase64`).
@@ -20,7 +20,7 @@ The self-hosted ML pipeline (`ml_pipeline/`) reads/writes Firestore via the Admi
 
 **Map:** one pin per place (sightings within ~11 m group; number badge = several; tap opens a list), bookmark-saving (UserDefaults, this device only), and a search bar over species/notes/usernames (the latest 300 sightings, client-side) plus place search via `MKLocalSearch`.
 
-**Annotation moderation ("shitpost" filter) runs on-device.** `ML/AnnotationModerator.swift` decides whether an annotation's species looks like a real bird name, on each viewer's device when an annotation card is shown (nothing is stored, so a client can't self-clear a verdict), and the annotation form warns the author before they submit a non-bird. Species is the only free-text field (behavior/age are fixed chips). It matches against the ~7,400 bird names already bundled for identification: exact, typo (edit distance), a known name inside a longer phrase, or a generic bird word ("sparrow", "hawk sp."), with explicit joke words/phrases as vetoes; everything else is flagged (a label, never a deletion). New annotations no longer set `moderation: "pending"`, so the server pass in `live_poll.py` (a sentence-embedding similarity check that flagged "Iceland Gull" and passed "banana") is now dormant and `sentence-transformers`/torch could be dropped from CI. A text-embedding "sounds like a joke" step was tried and removed — it flagged real single words. Measure any change with `ios/BirdMap/Tools/ModerationEval/run.sh` (all bundled names must pass; genuine/silly cases in `cases.json`). BirdNET's label list contains non-birds (frogs, toads, crickets, katydids, squirrels, a coyote, a wolf, a deer, a honey bee) — `ml_pipeline/build_birdnet_labels.py` blanks them by genus so they're neither identified as sightings nor accepted as bird names.
+**Annotation moderation ("shitpost" filter) runs on-device.** `ML/AnnotationModerator.swift` decides whether an annotation's species looks like a real bird name, on each viewer's device when an annotation card is shown (nothing is stored, so a client can't self-clear a verdict), and the annotation form warns the author before they submit a non-bird. Species is the only free-text field (behavior/age are fixed chips). It matches against the ~7,400 bird names already bundled for identification: exact, typo (edit distance), a known name inside a longer phrase, or a generic bird word ("sparrow", "hawk sp."), with explicit joke words/phrases as vetoes; everything else is flagged (a label, never a deletion). New annotations no longer set `moderation: "pending"`, so the server pass in `live_poll.py` (a sentence-embedding similarity check that flagged "Iceland Gull" and passed "banana") is now dormant and `sentence-transformers`/torch could be dropped from CI. A text-embedding "sounds like a joke" step was tried and removed — it flagged real single words. Measure any change with `ios/BirdRadar/Tools/ModerationEval/run.sh` (all bundled names must pass; genuine/silly cases in `cases.json`). BirdNET's label list contains non-birds (frogs, toads, crickets, katydids, squirrels, a coyote, a wolf, a deer, a honey bee) — `ml_pipeline/build_birdnet_labels.py` blanks them by genus so they're neither identified as sightings nor accepted as bird names.
 
 **Multiple birds in one sighting:** BirdNET (audio) already scores every species independently per segment, so `live_poll.py` surfaces every species clearing a confidence bar, not just the top one. Photos get the same treatment via two layered tiers: `MultiBirdDetector.swift`'s on-device Vision saliency (Tier 1, always available, no model download) crops and classifies extra salient regions; `BirdDetector.swift` (Tier 2, optional) uses a real object-detection CoreML model for far more reliable region-finding when its model has been published. Both feed the same `AdditionalBirdsSection` review UI as audio. See `docs/ML_PIPELINE.md`'s "Multiple birds in one photo/recording" section for the full detail, including why converting a TF-Hub COCO detector ourselves didn't work and what we used instead.
 
@@ -29,10 +29,10 @@ The self-hosted ML pipeline (`ml_pipeline/`) reads/writes Firestore via the Admi
 ### iOS
 ```bash
 # Build and run from Terminal (NOT by opening the .xcodeproj — see gotchas below)
-cd birdmap/ios/BirdMap
+cd birdmap/ios/BirdRadar
 # Uses CocoaPods (TensorFlowLiteSwift) alongside SPM — build the .xcworkspace,
 # NOT the .xcodeproj directly, or the Pods integration won't be there.
-xcodebuild -workspace BirdMap.xcworkspace -scheme BirdMap -destination 'id=<simulator-udid>' -configuration Debug build
+xcodebuild -workspace BirdRadar.xcworkspace -scheme BirdRadar -destination 'id=<simulator-udid>' -configuration Debug build
 
 # After any `xcodegen generate`, project.yml's postGenCommand re-runs
 # `pod install` automatically (xcodegen wipes CocoaPods' project integration
@@ -93,9 +93,9 @@ Reads `sightings` directly from Firestore client-side (`src/firebase.js`) — no
 
 ## Architecture
 
-### iOS App (`ios/BirdMap/BirdMap/`)
+### iOS App (`ios/BirdRadar/BirdRadar/`)
 
-**Entry point:** `App/BirdMapApp.swift` → routes to `LoginView` or `ContentView` (TabView) based on Firebase Auth state (`AppEnvironment`).
+**Entry point:** `App/BirdRadarApp.swift` → routes to `LoginView` or `ContentView` (TabView) based on Firebase Auth state (`AppEnvironment`).
 
 **State:** `AppEnvironment` is a single `@EnvironmentObject` holding the Firebase `user`/`username`, injected at the root.
 
