@@ -1,6 +1,6 @@
 {
-  "name": "BirdMap",
-  "short_name": "BirdMap",
+  "name": "BirdRadar",
+  "short_name": "BirdRadar",
   "description": "Citizen science bird sightings, identified on your phone.",
   "start_url": "/",
   "scope": "/",

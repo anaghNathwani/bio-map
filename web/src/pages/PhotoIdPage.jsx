@@ -13,7 +13,7 @@ export default function PhotoIdPage() {
     >
       <h2 className="static-page-h2">How it works</h2>
       <p className="static-page-p">
-        BirdMap classifies photos with Google&rsquo;s AIY Birds model (a MobileNetV2 network covering about 960 species) running
+        BirdRadar classifies photos with Google&rsquo;s AIY Birds model (a MobileNetV2 network covering about 960 species) running
         on your phone. No photo is uploaded just to get a suggestion. You choose whether to submit it afterwards.
       </p>
 
@@ -25,7 +25,7 @@ export default function PhotoIdPage() {
 
       <h2 className="static-page-h2">Photos with several birds</h2>
       <p className="static-page-p">
-        BirdMap looks for other salient birds in the frame, crops each one and classifies it separately, so a flock or a pair
+        BirdRadar looks for other salient birds in the frame, crops each one and classifies it separately, so a flock or a pair
         gets a suggestion per bird for you to review.
       </p>
 

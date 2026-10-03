@@ -25,7 +25,7 @@ export default function CitizenSciencePage() {
         <h2 className="static-page-h2">What is citizen science?</h2>
         <p className="static-page-p">
           Citizen science is the practice of public participation in scientific research.
-          With BirdMap, anyone with a smartphone can contribute real observations that
+          With BirdRadar, anyone with a smartphone can contribute real observations that
           complement data collected by professional ornithologists. Your sightings — with
           their species, location, date, and photo or audio — feed directly into the
           community database.
@@ -43,7 +43,7 @@ export default function CitizenSciencePage() {
 
         <div className="static-page-card">
           <div className="static-page-card-title"><Camera size={16} strokeWidth={1.75} /> Photo sightings</div>
-          <div className="static-page-card-body">Capture a bird in the wild — BirdMap's on-device AI suggests the species and your photo is uploaded to the community map.</div>
+          <div className="static-page-card-body">Capture a bird in the wild — BirdRadar's on-device AI suggests the species and your photo is uploaded to the community map.</div>
         </div>
         <div className="static-page-card">
           <div className="static-page-card-title"><Mic size={16} strokeWidth={1.75} /> Audio recordings</div>

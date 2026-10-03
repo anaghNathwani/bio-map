@@ -16,7 +16,7 @@ export default function TermsPage() {
       <div className="static-page-hero">
         <div className="static-page-icon"><FileText className="h-6 w-6" strokeWidth={1.75} /></div>
         <h1 className="static-page-h1">Terms of Service</h1>
-        <p className="static-page-sub">Please read these terms carefully before using BirdMap.</p>
+        <p className="static-page-sub">Please read these terms carefully before using BirdRadar.</p>
       </div>
 
       <div className="static-page-section">
@@ -24,7 +24,7 @@ export default function TermsPage() {
 
         <div className="static-page-card">
           <div className="static-page-card-title">1. Data Use</div>
-          <div className="static-page-card-body">Sightings and photos you submit are shared with the BirdMap community to support citizen science research. Location data is stored with each sighting.</div>
+          <div className="static-page-card-body">Sightings and photos you submit are shared with the BirdRadar community to support citizen science research. Location data is stored with each sighting.</div>
         </div>
 
         <div className="static-page-card">
@@ -39,7 +39,7 @@ export default function TermsPage() {
 
         <div className="static-page-card">
           <div className="static-page-card-title">4. Content</div>
-          <div className="static-page-card-body">You retain ownership of photos you upload. By uploading, you grant BirdMap a license to display them within the app.</div>
+          <div className="static-page-card-body">You retain ownership of photos you upload. By uploading, you grant BirdRadar a license to display them within the app.</div>
         </div>
 
         <div className="static-page-card">

@@ -28,24 +28,23 @@ jobs:
       - run: npm ci
         working-directory: web
 
-      - run: npm run build
+      - run: npm run build && npm run seo:check
         working-directory: web
         env:
-          # Firebase's web config is not a secret (it's shipped in the built JS either way — see
-          # https://firebase.google.com/docs/projects/api-keys), but it still has to come from
-          # somewhere at build time. Set these as repo Variables (Settings -> Secrets and
-          # variables -> Actions -> Variables) with the same values as web/.env.local; without
-          # them the build succeeds but the deployed site's Firestore calls (map, waitlist) fail.
-          VITE_FIREBASE_API_KEY: "${{ vars.VITE_FIREBASE_API_KEY }}"
-          VITE_FIREBASE_AUTH_DOMAIN: "${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}"
-          VITE_FIREBASE_PROJECT_ID: "${{ vars.VITE_FIREBASE_PROJECT_ID }}"
-          VITE_FIREBASE_STORAGE_BUCKET: "${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}"
-          VITE_FIREBASE_MESSAGING_SENDER_ID: "${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}"
-          VITE_FIREBASE_APP_ID: "${{ vars.VITE_FIREBASE_APP_ID }}"
+          # Firebase's web config is not a secret (it ships in the built JS either way, see
+          # https://firebase.google.com/docs/projects/api-keys), but the build needs it, and
+          # without it every Firestore call on the deployed site (map, waitlist) fails.
+          VITE_FIREBASE_API_KEY: "AIzaSyB3VisSHGhcgr70jAkCWWMttS9kjeXHLck"
+          VITE_FIREBASE_AUTH_DOMAIN: "birdmap-citizenscience.firebaseapp.com"
+          VITE_FIREBASE_PROJECT_ID: "birdmap-citizenscience"
+          VITE_FIREBASE_STORAGE_BUCKET: "birdmap-citizenscience.firebasestorage.app"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "857243141648"
+          VITE_FIREBASE_APP_ID: "1:857243141648:web:53bbd34201b43f26c32c95"
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_BIRDMAP_CITIZENSCIENCE }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}"
           projectId: birdmap-citizenscience
           channelId: live
+          entryPoint: web   # deploys with web/firebase.json (headers, clean per-page rewrites, site: birdradar)

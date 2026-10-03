@@ -8,7 +8,7 @@ const ROWS = [
   ['Your account',
     'Email address and username, plus a password or an Apple/Google sign-in. Your email is never shown publicly. Your username is visible next to your sightings and annotations.'],
   ['Sightings you submit',
-    'The photo or recording, the notes you add, the time, and the location of the sighting. Submitted sightings are visible to other BirdMap users and on the public map.'],
+    'The photo or recording, the notes you add, the time, and the location of the sighting. Submitted sightings are visible to other BirdRadar users and on the public map.'],
   ['Annotations',
     'Species IDs and details you add to sightings, and the resulting leaderboard totals, are visible to other users.'],
   ['Identification on your device',
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
       meta="/privacy"
       icon={ShieldCheck}
       title="Privacy notice"
-      intro="A plain-language summary of what BirdMap handles. Last updated September 2026."
+      intro="A plain-language summary of what BirdRadar handles. Last updated September 2026."
     >
       {ROWS.map(([title, body]) => (
         <section key={title} className="static-page-card">

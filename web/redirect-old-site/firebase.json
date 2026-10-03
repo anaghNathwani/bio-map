@@ -1,0 +1,18 @@
+{
+  "hosting": {
+    "site": "birdmap-citizenscience",
+    "public": "public",
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "https://birdradar.web.app/",
+        "type": 301
+      },
+      {
+        "source": "/:path*",
+        "destination": "https://birdradar.web.app/:path*",
+        "type": 301
+      }
+    ]
+  }
+}

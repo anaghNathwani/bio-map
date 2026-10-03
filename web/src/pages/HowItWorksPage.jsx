@@ -21,7 +21,7 @@ export default function HowItWorksPage() {
     <ContentPage
       meta="/how-it-works"
       icon={Compass}
-      title="How BirdMap works"
+      title="How BirdRadar works"
       intro="From a photo or a call to a verified sighting on a shared map, in five steps."
     >
       <ul className="community-page-steps">
@@ -38,7 +38,7 @@ export default function HowItWorksPage() {
 
       <h2 className="static-page-h2">Where it is available</h2>
       <p className="static-page-p">
-        The BirdMap iOS app is coming soon to the App Store. The live sighting map already works in any web
+        The BirdRadar iOS app is coming soon to the App Store. The live sighting map already works in any web
         browser, and you can read more about the <a href="/bird-photo-identification" className="underline">photo</a> and{' '}
         <a href="/bird-sound-identification" className="underline">sound</a> identification behind it.
       </p>
