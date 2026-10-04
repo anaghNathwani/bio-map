@@ -64,6 +64,9 @@ targets:
         SWIFT_VERSION: 5.9
         DEVELOPMENT_TEAM: 2JN5C47MQT
         CODE_SIGN_STYLE: Automatic
+        # iPhone only: the UI is phone-shaped. Leaving iPad enabled makes App Store Connect demand all four
+        # iPad orientations ("Invalid bundle. No orientations were specified").
+        TARGETED_DEVICE_FAMILY: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
       configs:
         Debug:
