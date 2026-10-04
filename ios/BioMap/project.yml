@@ -33,6 +33,8 @@ targets:
       properties:
         API_BASE_URL: $(API_BASE_URL)
         GCSupportsGameMode: false
+        # Only standard HTTPS/TLS is used, so App Store Connect skips the export-compliance prompt on every build.
+        ITSAppUsesNonExemptEncryption: false
         UILaunchScreen: {}
         NSCameraUsageDescription: BioMap needs camera access to photograph bird sightings.
         NSMicrophoneUsageDescription: BioMap records bird calls to identify species by sound.
