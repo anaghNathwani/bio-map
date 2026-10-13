@@ -56,14 +56,14 @@ struct AnnotationView: View {
                             Text(error)
                         }
                         .font(Theme.sans(13))
-                        .foregroundStyle(ThemeColors(scheme: scheme).clay)
+                        .foregroundStyle(ThemeColors(scheme: scheme).accent)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                     }
                 }
                 .padding(.vertical, 16)
             }
-            .background(ThemeColors(scheme: scheme).paper)
+            .background(ThemeColors(scheme: scheme).bg)
             .navigationTitle("Annotate Sighting")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -80,7 +80,7 @@ struct AnnotationView: View {
                             Text("Save").fontWeight(.semibold)
                         }
                     }
-                    .tint(ThemeColors(scheme: scheme).clay)
+                    .tint(ThemeColors(scheme: scheme).accent)
                     .disabled(!canSubmit)
                 }
             }
@@ -94,19 +94,19 @@ struct AnnotationView: View {
 
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(c.inkSoft)
+                    .foregroundStyle(c.fgSoft)
                 TextField(reviewOfAI == "unsure" ? "Leave blank if you're not sure" : "e.g. American Robin", text: $species)
                     .font(Theme.sans(15))
                     .autocorrectionDisabled()
             }
             .padding(12)
-            .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
 
             if AnnotationModerator.shared.verdict(species: species, reviewOfAI: reviewOfAI).isFlagged {
                 Label("That doesn't look like a bird name we know, so it will show as flagged. Check the spelling, or leave it blank and mark it unsure.",
                       systemImage: "exclamationmark.triangle.fill")
                     .font(Theme.sans(12))
-                    .foregroundStyle(c.clay)
+                    .foregroundStyle(c.accent)
             }
         }
         .padding(.horizontal)
@@ -153,7 +153,7 @@ struct AnnotationView: View {
                 HStack {
                     Text("How sure are you?")
                         .font(Theme.sans(14))
-                        .foregroundStyle(c.inkSoft)
+                        .foregroundStyle(c.fgSoft)
                     Spacer()
                     Text("\(Int(confidence * 100))%")
                         .font(Theme.display(22, medium: true))
@@ -167,13 +167,13 @@ struct AnnotationView: View {
                     .animation(.easeInOut(duration: 0.15), value: confidence)
 
                 HStack {
-                    Text("Unsure").font(Theme.sans(11)).foregroundStyle(c.inkSoft)
+                    Text("Unsure").font(Theme.sans(11)).foregroundStyle(c.fgSoft)
                     Spacer()
-                    Text("Certain").font(Theme.sans(11)).foregroundStyle(c.inkSoft)
+                    Text("Certain").font(Theme.sans(11)).foregroundStyle(c.fgSoft)
                 }
             }
             .padding(14)
-            .background(c.paper, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(c.bg, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
             .padding(.horizontal)
         }
@@ -186,10 +186,10 @@ struct AnnotationView: View {
             if required {
                 Text("required")
                     .font(Theme.sansSemibold(10))
-                    .foregroundStyle(c.paper)
+                    .foregroundStyle(c.bg)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(c.clay, in: Capsule())
+                    .background(c.accent, in: Capsule())
             }
         }
         .padding(.horizontal)
@@ -202,8 +202,8 @@ struct AnnotationView: View {
                 .font(Theme.sansMedium(14))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
-                .background(selected ? c.ink : c.paperDim, in: Capsule())
-                .foregroundStyle(selected ? c.paper : c.ink)
+                .background(selected ? c.fg : c.bgRaised, in: Capsule())
+                .foregroundStyle(selected ? c.bg : c.fg)
                 .animation(.easeInOut(duration: 0.15), value: selected)
         }
     }

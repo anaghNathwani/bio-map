@@ -72,16 +72,16 @@ struct SightingListView: View {
                 if sightings.isEmpty {
                     VStack(spacing: 10) {
                         BirdMark()
-                            .stroke(c.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                            .stroke(c.fgSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                             .frame(width: 48, height: 48)
                         Text(emptyMessage)
                             .font(Theme.sans(14))
-                            .foregroundStyle(c.inkSoft)
+                            .foregroundStyle(c.fgSoft)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(c.paper)
+                    .background(c.bg)
                 } else {
                     List(sightings) { sighting in
                         NavigationLink {
@@ -89,10 +89,10 @@ struct SightingListView: View {
                         } label: {
                             SightingRow(sighting: sighting)
                         }
-                        .listRowBackground(c.paper)
+                        .listRowBackground(c.bg)
                     }
                     .scrollContentBackground(.hidden)
-                    .background(c.paper)
+                    .background(c.bg)
                 }
             }
             .navigationTitle(title)
@@ -117,7 +117,7 @@ struct SightingRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(sighting.displaySpecies ?? "Unidentified")
                     .font(Theme.sansSemibold(15))
-                    .foregroundStyle(c.ink)
+                    .foregroundStyle(c.fg)
                     .lineLimit(1)
                 HStack(spacing: 6) {
                     Label(sighting.isAudio ? "Recording" : "Photo",
@@ -128,11 +128,11 @@ struct SightingRow: View {
                     }
                 }
                 .font(Theme.sans(12))
-                .foregroundStyle(c.inkSoft)
+                .foregroundStyle(c.fgSoft)
                 if let username = sighting.username {
                     Text("by \(username)")
                         .font(Theme.sans(11))
-                        .foregroundStyle(c.inkSoft.opacity(0.75))
+                        .foregroundStyle(c.fgSoft.opacity(0.75))
                 }
             }
 
@@ -141,13 +141,13 @@ struct SightingRow: View {
             if sighting.annotationCount > 0 {
                 Text("\(sighting.annotationCount)")
                     .font(Theme.sansSemibold(11))
-                    .foregroundStyle(c.paper)
+                    .foregroundStyle(c.bg)
                     .padding(.horizontal, 7)
                     .padding(.vertical, 2)
-                    .background(c.clay, in: Capsule())
+                    .background(c.accent, in: Capsule())
             }
             if saved.isSaved(sighting.id) {
-                Image(systemName: "bookmark.fill").foregroundStyle(c.clay)
+                Image(systemName: "bookmark.fill").foregroundStyle(c.accent)
             }
         }
         .padding(.vertical, 2)
@@ -168,15 +168,15 @@ struct SightingRow: View {
         let c = ThemeColors(scheme: scheme)
         if sighting.isAudio {
             ZStack {
-                c.ink
-                Image(systemName: "waveform").foregroundStyle(c.paper)
+                c.fg
+                Image(systemName: "waveform").foregroundStyle(c.bg)
             }
         } else if let thumbnail {
             Image(uiImage: thumbnail).resizable().scaledToFill()
         } else {
             ZStack {
-                c.paperDim
-                Image(systemName: "photo").foregroundStyle(c.inkSoft)
+                c.bgRaised
+                Image(systemName: "photo").foregroundStyle(c.fgSoft)
             }
         }
     }
@@ -193,8 +193,7 @@ struct SavedSightingsView: View {
     var body: some View {
         Group {
             if isLoading {
-                ProgressView("Loading saved sightings…")
-                    .tint(ThemeColors(scheme: scheme).clay)
+                BioLoader(size: 110)
             } else {
                 SightingListView(
                     title: "Saved",

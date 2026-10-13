@@ -1,41 +1,35 @@
 import SwiftUI
 
-/// BioMap's editorial "paper/ink/clay" design system — the same palette, type and hairline-rule
-/// language as the marketing site (web/src/tailwind.css) and the brand social assets
-/// (docs/social/instagram, docs/campaign). Warm paper background, a serif display face
-/// (Fraunces, italic for emphasis) over a plain sans (Geist), hairline rules instead of card
-/// shadows, and clay as the one accent color. Light/dark values mirror the site's exactly so the
-/// app, the web map and the brand videos all read as one thing.
+/// BioMap's design system: the iOS system look. San Francisco type, system backgrounds and label
+/// colors (so light/dark and accessibility settings just work), one blue accent, and quiet grouped
+/// surfaces instead of borders or shadows. The website follows the same language (web/src/tailwind.css).
 enum Theme {
     // MARK: - Color
 
-    /// Resolves against the current color scheme, exactly like the site's `:root` / `[data-theme]` split.
-    static func paper(_ scheme: ColorScheme) -> Color { scheme == .dark ? Color(hex: 0x17140F) : Color(hex: 0xF4F1E9) }
-    static func paperDim(_ scheme: ColorScheme) -> Color { scheme == .dark ? Color(hex: 0x201C15) : Color(hex: 0xECE7DA) }
-    static func ink(_ scheme: ColorScheme) -> Color { scheme == .dark ? Color(hex: 0xECE7DA) : Color(hex: 0x211D16) }
-    static func inkSoft(_ scheme: ColorScheme) -> Color { scheme == .dark ? Color(hex: 0xA69C8B) : Color(hex: 0x6B6255) }
-    static func clay(_ scheme: ColorScheme) -> Color { scheme == .dark ? Color(hex: 0xE2895A) : Color(hex: 0xC1602E) }
-    static func claySoft(_ scheme: ColorScheme) -> Color { scheme == .dark ? Color(hex: 0x7A3F1E) : Color(hex: 0xE4A272) }
-    static func rule(_ scheme: ColorScheme) -> Color { ink(scheme).opacity(0.14) }
+    static func bg(_ scheme: ColorScheme) -> Color { Color(.systemBackground) }
+    static func bgRaised(_ scheme: ColorScheme) -> Color { Color(.secondarySystemBackground) }
+    static func fg(_ scheme: ColorScheme) -> Color { Color(.label) }
+    static func fgSoft(_ scheme: ColorScheme) -> Color { Color(.secondaryLabel) }
+    /// Apple blue: #0071E3 on light, #0A84FF on dark.
+    static func accent(_ scheme: ColorScheme) -> Color { scheme == .dark ? Color(hex: 0x0A84FF) : Color(hex: 0x0071E3) }
+    static func accentSoft(_ scheme: ColorScheme) -> Color { accent(scheme).opacity(0.14) }
+    static func rule(_ scheme: ColorScheme) -> Color { Color(.separator) }
 
-    // MARK: - Type
-    // Bundled as static instances of the same variable webfonts used on the site and in the
-    // social videos (see project.yml's UIAppFonts and Resources/Fonts); PostScript names from
-    // that conversion.
+    // MARK: - Type (system font; names kept so call sites read the same)
 
     static func display(_ size: CGFloat, medium: Bool = false) -> Font {
-        .custom(medium ? "FrauncesBioMapDisplay-Medium" : "FrauncesBioMap-Regular", size: size)
+        .system(size: size, weight: medium ? .semibold : .regular)
     }
-    static func displayItalic(_ size: CGFloat) -> Font { .custom("FrauncesBioMap-Italic", size: size) }
-    static func sans(_ size: CGFloat) -> Font { .custom("GeistBioMap-Regular", size: size) }
-    static func sansMedium(_ size: CGFloat) -> Font { .custom("GeistBioMap-Medium", size: size) }
-    static func sansSemibold(_ size: CGFloat) -> Font { .custom("GeistBioMap-SemiBold", size: size) }
+    static func displayItalic(_ size: CGFloat) -> Font { .system(size: size, weight: .semibold) }
+    static func sans(_ size: CGFloat) -> Font { .system(size: size, weight: .regular) }
+    static func sansMedium(_ size: CGFloat) -> Font { .system(size: size, weight: .medium) }
+    static func sansSemibold(_ size: CGFloat) -> Font { .system(size: size, weight: .semibold) }
 
-    /// The small caps-style label used throughout the reels/site ("CITIZEN SCIENCE", "SUGGESTION"...).
+    /// Small secondary label above a heading ("Citizen science", "Suggestion").
     static func eyebrow(_ size: CGFloat = 13) -> Font { sansSemibold(size) }
 }
 
-private extension Color {
+extension Color {
     init(hex: UInt32) {
         self.init(
             red: Double((hex >> 16) & 0xFF) / 255,
@@ -45,26 +39,24 @@ private extension Color {
     }
 }
 
-// MARK: - Environment-resolved convenience (the common case: `Theme.Colors.ink` inside a View)
+// MARK: - Environment-resolved convenience
 
-/// Reads `\.colorScheme` so call sites don't have to thread it through. Use the static `Theme.ink(_:)`
-/// etc. functions instead in non-View contexts (e.g. UIKit bridging) where no Environment is available.
+/// Reads `\.colorScheme` so call sites don't have to thread it through.
 struct ThemeColors {
     let scheme: ColorScheme
-    var paper: Color { Theme.paper(scheme) }
-    var paperDim: Color { Theme.paperDim(scheme) }
-    var ink: Color { Theme.ink(scheme) }
-    var inkSoft: Color { Theme.inkSoft(scheme) }
-    var clay: Color { Theme.clay(scheme) }
-    var claySoft: Color { Theme.claySoft(scheme) }
+    var bg: Color { Theme.bg(scheme) }
+    var bgRaised: Color { Theme.bgRaised(scheme) }
+    var fg: Color { Theme.fg(scheme) }
+    var fgSoft: Color { Theme.fgSoft(scheme) }
+    var accent: Color { Theme.accent(scheme) }
+    var accentSoft: Color { Theme.accentSoft(scheme) }
     var rule: Color { Theme.rule(scheme) }
 }
 
 // MARK: - Shared building blocks
 
-/// A hairline border in place of a card shadow — the house style everywhere in the reels and on
-/// the site (`.frame`/`.rule` in build.py / tailwind.css) instead of Material or drop shadows.
-struct HairlineCard<Content: View>: View {
+/// A rounded, softly tinted surface (no border, no shadow), like the tiles on apple.com.
+struct Tile<Content: View>: View {
     @Environment(\.colorScheme) private var scheme
     var padding: CGFloat = 18
     var corner: CGFloat = 18
@@ -74,14 +66,13 @@ struct HairlineCard<Content: View>: View {
         let c = ThemeColors(scheme: scheme)
         content
             .padding(padding)
-            .background(c.paper, in: RoundedRectangle(cornerRadius: corner, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: corner, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
+            .background(c.bgRaised, in: RoundedRectangle(cornerRadius: corner, style: .continuous))
     }
 }
 
-/// The pill button used for every primary action in the reels/site: solid ink fill, paper label,
-/// no gradients. `prominent: false` gives the hairline-outline secondary style instead.
-struct ClayButtonStyle: ButtonStyle {
+/// The pill button used for every primary action: solid blue capsule, white label.
+/// `prominent: false` gives the quiet secondary style (blue text on a pale blue capsule).
+struct PillButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.isEnabled) private var isEnabled
     var prominent: Bool = true
@@ -91,36 +82,29 @@ struct ClayButtonStyle: ButtonStyle {
         configuration.label
             .font(Theme.sansSemibold(17))
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 15)
-            .foregroundStyle(prominent ? c.paper : c.ink)
-            .background {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(prominent ? c.ink : Color.clear)
-                    .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(c.ink, lineWidth: prominent ? 0 : 1.6))
-            }
-            .opacity(isEnabled ? (configuration.isPressed ? 0.85 : 1) : 0.45)
-            .scaleEffect(configuration.isPressed ? 0.985 : 1)
+            .padding(.vertical, 14)
+            .foregroundStyle(prominent ? Color.white : c.accent)
+            .background(prominent ? c.accent : c.accentSoft, in: Capsule())
+            .opacity(isEnabled ? (configuration.isPressed ? 0.8 : 1) : 0.4)
             .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 
-/// The small clay-colored tracking-heavy label used everywhere in the brand ("CITIZEN SCIENCE",
-/// "SUGGESTION", "TRY IT") — build.py's `.eb` class.
+/// Small secondary-colored label above a heading.
 struct Eyebrow: View {
     @Environment(\.colorScheme) private var scheme
     let text: String
     var body: some View {
-        Text(text.uppercased())
+        Text(text)
             .font(Theme.eyebrow())
-            .tracking(1.6)
-            .foregroundStyle(Theme.clay(scheme))
+            .foregroundStyle(Theme.fgSoft(scheme))
     }
 }
 
-/// A thin full-width rule, in place of a Divider/card border — `.rule`/`border-bottom` on the site.
+/// A thin full-width separator.
 struct HairlineRule: View {
     @Environment(\.colorScheme) private var scheme
-    var body: some View { Theme.rule(scheme).frame(height: 1) }
+    var body: some View { Theme.rule(scheme).frame(height: 1 / UIScreen.main.scale) }
 }
 
 /// The brand mark: the line-art bird from build.py's `bird()` / the campaign's logo path, drawn as

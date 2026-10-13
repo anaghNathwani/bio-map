@@ -15,7 +15,7 @@ struct LoginView: View {
     var body: some View {
         let c = ThemeColors(scheme: scheme)
         ZStack {
-            c.paper.ignoresSafeArea()
+            c.bg.ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 0) {
@@ -38,17 +38,17 @@ struct LoginView: View {
         return VStack(spacing: 16) {
             let markSize = screen.scale(84, compact: 66, large: 96)
             BirdMark()
-                .stroke(c.ink, style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
+                .stroke(c.fg, style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
                 .frame(width: markSize, height: markSize)
                 .padding(.top, screen.scale(64, compact: 40, large: 76))
 
             Text("BioMap")
                 .font(Theme.displayItalic(screen.scale(42, compact: 34, large: 46)))
-                .foregroundStyle(c.ink)
+                .foregroundStyle(c.fg)
 
             Text("Citizen science, one sighting at a time")
                 .font(Theme.sans(15))
-                .foregroundStyle(c.inkSoft)
+                .foregroundStyle(c.fgSoft)
                 .multilineTextAlignment(.center)
         }
     }
@@ -66,12 +66,12 @@ struct LoginView: View {
                     Text(error)
                 }
                 .font(Theme.sans(13))
-                .foregroundStyle(c.ink)
+                .foregroundStyle(c.fg)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(c.claySoft.opacity(0.28), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(c.clay.opacity(0.5), lineWidth: 1))
+                .background(c.accentSoft.opacity(0.28), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(c.accent.opacity(0.5), lineWidth: 1))
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
 
@@ -80,7 +80,7 @@ struct LoginView: View {
 
             HStack(spacing: 10) {
                 HairlineRule()
-                Text("or").font(Theme.sans(12)).foregroundStyle(c.inkSoft)
+                Text("or").font(Theme.sans(12)).foregroundStyle(c.fgSoft)
                 HairlineRule()
             }
             .padding(.vertical, 2)
@@ -88,7 +88,7 @@ struct LoginView: View {
             googleSignInButton
         }
         .padding(22)
-        .background(c.paper, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(c.bg, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
     }
 
@@ -127,11 +127,11 @@ struct LoginView: View {
         let c = ThemeColors(scheme: scheme)
         HStack(spacing: 10) { content() }
             .font(Theme.sans(16))
-            .foregroundStyle(c.ink)
-            .tint(c.clay)
+            .foregroundStyle(c.fg)
+            .tint(c.accent)
             .padding(.horizontal, 14)
             .padding(.vertical, 13)
-            .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     // MARK: - Buttons
@@ -150,7 +150,7 @@ struct LoginView: View {
                 Text(isLoading ? "Please wait…" : (isRegistering ? "Create account" : "Sign in"))
             }
         }
-        .buttonStyle(ClayButtonStyle())
+        .buttonStyle(PillButtonStyle())
         .disabled(isLoading)
         .animation(.easeInOut(duration: 0.2), value: isLoading)
     }
@@ -164,9 +164,9 @@ struct LoginView: View {
             }
         } label: {
             (Text(isRegistering ? "Already have an account? " : "New here? ")
-                + Text(isRegistering ? "Sign in" : "Create account").italic().foregroundStyle(c.clay))
+                + Text(isRegistering ? "Sign in" : "Create account").foregroundStyle(c.accent))
                 .font(Theme.sans(14))
-                .foregroundStyle(c.inkSoft)
+                .foregroundStyle(c.fgSoft)
         }
         .padding(.top, 2)
     }
@@ -180,7 +180,7 @@ struct LoginView: View {
                 Text("Sign in with Google").font(Theme.sansMedium(16))
             }
         }
-        .buttonStyle(ClayButtonStyle(prominent: false))
+        .buttonStyle(PillButtonStyle(prominent: false))
         .disabled(isLoading)
     }
 

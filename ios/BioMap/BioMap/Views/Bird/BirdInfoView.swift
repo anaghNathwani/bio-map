@@ -18,10 +18,9 @@ struct BirdInfoView: View {
         NavigationStack {
             Group {
                 if isLoading {
-                    ProgressView("Loading bird info…")
-                        .tint(c.clay)
+                    BioLoader(size: 110)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(c.paper)
+                        .background(c.bg)
                 } else if let info {
                     infoContent(info)
                 } else {
@@ -55,7 +54,7 @@ struct BirdInfoView: View {
                             img.resizable().scaledToFill()
                                 .frame(maxWidth: .infinity).frame(height: 220).clipped()
                         default:
-                            Rectangle().fill(c.paperDim).frame(height: 220)
+                            Rectangle().fill(c.bgRaised).frame(height: 220)
                         }
                     }
                 }
@@ -65,11 +64,11 @@ struct BirdInfoView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(info.species)
                             .font(Theme.display(24, medium: true))
-                            .foregroundStyle(c.ink)
+                            .foregroundStyle(c.fg)
                         if !info.scientificName.isEmpty {
                             Text(info.scientificName)
                                 .font(Theme.displayItalic(15))
-                                .foregroundStyle(c.inkSoft)
+                                .foregroundStyle(c.fgSoft)
                         }
                         if !info.family.isEmpty || !info.order.isEmpty {
                             HStack(spacing: 8) {
@@ -83,7 +82,7 @@ struct BirdInfoView: View {
                     if !info.description.isEmpty {
                         Text(info.description)
                             .font(Theme.sans(15))
-                            .foregroundStyle(c.ink)
+                            .foregroundStyle(c.fg)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
@@ -96,38 +95,38 @@ struct BirdInfoView: View {
                         linkRow(title: "All About Birds", icon: "bird.fill", urlString: info.allaboutbirdsURL)
                     }
                     .padding(16)
-                    .background(c.paper, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .background(c.bg, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                     .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
                 }
                 .padding(16)
             }
         }
-        .background(c.paper)
+        .background(c.bg)
     }
 
     private var unavailableView: some View {
         let c = ThemeColors(scheme: scheme)
         return VStack(spacing: 16) {
             BirdMark()
-                .stroke(c.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                .stroke(c.fgSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                 .frame(width: 56, height: 56)
             Text("No info available for \"\(species)\"")
                 .font(Theme.sans(14))
-                .foregroundStyle(c.inkSoft)
+                .foregroundStyle(c.fgSoft)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(c.paper)
+        .background(c.bg)
     }
 
     private func chip(_ text: String) -> some View {
         let c = ThemeColors(scheme: scheme)
         return Text(text)
             .font(Theme.sansMedium(12))
-            .foregroundStyle(c.clay)
+            .foregroundStyle(c.accent)
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
-            .overlay(Capsule().strokeBorder(c.clay.opacity(0.45), lineWidth: 1.2))
+            .overlay(Capsule().strokeBorder(c.accent.opacity(0.45), lineWidth: 1.2))
     }
 
     @ViewBuilder
@@ -140,14 +139,14 @@ struct BirdInfoView: View {
                 HStack(spacing: 12) {
                     Image(systemName: icon)
                         .frame(width: 22)
-                        .foregroundStyle(c.clay)
+                        .foregroundStyle(c.accent)
                     Text(title)
                         .font(Theme.sans(15))
-                        .foregroundStyle(c.ink)
+                        .foregroundStyle(c.fg)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .font(.caption)
-                        .foregroundStyle(c.inkSoft)
+                        .foregroundStyle(c.fgSoft)
                 }
             }
         }

@@ -47,15 +47,6 @@
 	<string>BioMap records bird calls to identify species by sound.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>BioMap can use photos from your library to report sightings.</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>FrauncesBioMap-Regular.ttf</string>
-		<string>FrauncesBioMapDisplay-Medium.ttf</string>
-		<string>FrauncesBioMap-Italic.ttf</string>
-		<string>GeistBioMap-Regular.ttf</string>
-		<string>GeistBioMap-Medium.ttf</string>
-		<string>GeistBioMap-SemiBold.ttf</string>
-	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 </dict>

@@ -29,10 +29,9 @@ struct SightingDetailView: View {
     private var content: some View {
         Group {
             if isLoading {
-                ProgressView("Loading…")
-                    .tint(ThemeColors(scheme: scheme).clay)
+                BioLoader(size: 110)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(ThemeColors(scheme: scheme).paper)
+                    .background(ThemeColors(scheme: scheme).bg)
             } else if let detail {
                 detailContent(detail)
             }
@@ -90,7 +89,7 @@ struct SightingDetailView: View {
             }
             .padding(.bottom)
         }
-        .background(ThemeColors(scheme: scheme).paper)
+        .background(ThemeColors(scheme: scheme).bg)
     }
 
     @ViewBuilder
@@ -100,13 +99,13 @@ struct SightingDetailView: View {
             if detail.isAudio {
                 // Audio sighting — show waveform placeholder + player
                 Rectangle()
-                    .fill(c.ink)
+                    .fill(c.fg)
                     .frame(maxWidth: .infinity, minHeight: 200)
                     .overlay(
                         VStack(spacing: 12) {
                             Image(systemName: "waveform")
                                 .font(.system(size: 48))
-                                .foregroundStyle(c.clay)
+                                .foregroundStyle(c.accent)
                             if detail.audioURL != nil || detail.audioFallbackURL != nil {
                                 Button {
                                     Task { await togglePlayback(detail) }
@@ -116,13 +115,13 @@ struct SightingDetailView: View {
                                         .font(Theme.sansSemibold(15))
                                         .padding(.horizontal, 20)
                                         .padding(.vertical, 10)
-                                        .overlay(Capsule().strokeBorder(c.paper.opacity(0.5), lineWidth: 1.4))
-                                        .foregroundStyle(c.paper)
+                                        .overlay(Capsule().strokeBorder(c.bg.opacity(0.5), lineWidth: 1.4))
+                                        .foregroundStyle(c.bg)
                                 }
                                 if playback.failed {
                                     Text("Couldn't play this recording.")
                                         .font(Theme.sans(12))
-                                        .foregroundStyle(c.paper.opacity(0.85))
+                                        .foregroundStyle(c.bg.opacity(0.85))
                                 }
                             }
                         }
@@ -139,10 +138,10 @@ struct SightingDetailView: View {
                     case .success(let img):
                         img.resizable().scaledToFill()
                     case .failure:
-                        Rectangle().fill(c.paperDim)
-                            .overlay(Image(systemName: "photo.badge.exclamationmark").font(.largeTitle).foregroundStyle(c.inkSoft))
+                        Rectangle().fill(c.bgRaised)
+                            .overlay(Image(systemName: "photo.badge.exclamationmark").font(.largeTitle).foregroundStyle(c.fgSoft))
                     default:
-                        Rectangle().fill(c.paperDim).overlay(ProgressView().tint(c.clay))
+                        Rectangle().fill(c.bgRaised).overlay(ProgressView().tint(c.accent))
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -156,8 +155,8 @@ struct SightingDetailView: View {
                 HStack(spacing: 10) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(detail.isAudio ? "BirdNET ID" : "Suggestion")
-                            .font(Theme.sansSemibold(10)).tracking(1.2).foregroundStyle(c.clay)
-                        Text(species).font(Theme.display(18, medium: true)).foregroundStyle(c.paper)
+                            .font(Theme.sansSemibold(10)).tracking(1.2).foregroundStyle(c.accent)
+                        Text(species).font(Theme.display(18, medium: true)).foregroundStyle(c.bg)
                     }
                     Spacer()
                     if let conf = detail.aiConfidence {
@@ -167,11 +166,11 @@ struct SightingDetailView: View {
                         .font(Theme.sansSemibold(12))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .overlay(Capsule().strokeBorder(c.paper.opacity(0.5), lineWidth: 1.4))
-                        .foregroundStyle(c.paper)
+                        .overlay(Capsule().strokeBorder(c.bg.opacity(0.5), lineWidth: 1.4))
+                        .foregroundStyle(c.bg)
                 }
                 .padding(14)
-                .background(c.ink.opacity(0.7), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .background(c.fg.opacity(0.7), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .padding(12)
             } else if detail.isAudio {
                 // New recordings are identified on-device at submission, so
@@ -181,16 +180,16 @@ struct SightingDetailView: View {
                 // which GitHub runs every few hours, not on a tight interval).
                 HStack(spacing: 10) {
                     Image(systemName: detail.aiAnalyzed ? "questionmark.circle" : "clock.arrow.circlepath")
-                        .foregroundStyle(c.paper.opacity(0.85))
+                        .foregroundStyle(c.bg.opacity(0.85))
                     Text(detail.aiAnalyzed
                          ? "No bird was identified with confidence in this recording."
                          : "Identification pending — our server processes recordings every few hours.")
                         .font(Theme.sansMedium(12))
-                        .foregroundStyle(c.paper)
+                        .foregroundStyle(c.bg)
                     Spacer()
                 }
                 .padding(14)
-                .background(c.ink.opacity(0.7), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .background(c.fg.opacity(0.7), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .padding(12)
             }
         }
@@ -203,22 +202,22 @@ struct SightingDetailView: View {
             if let notes = detail.notes, !notes.isEmpty {
                 Text(notes)
                     .font(Theme.sans(15))
-                    .foregroundStyle(c.ink)
+                    .foregroundStyle(c.fg)
             }
 
             HStack(spacing: 6) {
-                Image(systemName: "mappin.circle.fill").foregroundStyle(c.clay)
+                Image(systemName: "mappin.circle.fill").foregroundStyle(c.accent)
                 if let name = locationName {
-                    Text(name).font(Theme.sans(12)).foregroundStyle(c.inkSoft)
+                    Text(name).font(Theme.sans(12)).foregroundStyle(c.fgSoft)
                 } else {
                     Text(String(format: "%.4f, %.4f", detail.latitude, detail.longitude))
-                        .font(Theme.sans(12)).foregroundStyle(c.inkSoft).monospaced()
+                        .font(Theme.sans(12)).foregroundStyle(c.fgSoft).monospaced()
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(c.paper, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .background(c.bg, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
     }
 
@@ -227,27 +226,27 @@ struct SightingDetailView: View {
         let c = ThemeColors(scheme: scheme)
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Community annotations").font(Theme.display(17, medium: true)).foregroundStyle(c.ink)
+                Text("Community annotations").font(Theme.display(17, medium: true)).foregroundStyle(c.fg)
                 Spacer()
                 Text("\(detail.annotations.count)")
                     .font(Theme.sansSemibold(12))
-                    .foregroundStyle(c.paper)
+                    .foregroundStyle(c.bg)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background(c.ink, in: Capsule())
+                    .background(c.fg, in: Capsule())
             }
 
             if detail.annotations.isEmpty {
                 VStack(spacing: 10) {
                     BirdMark()
-                        .stroke(c.inkSoft, style: StrokeStyle(lineWidth: 1.8, lineCap: .round, lineJoin: .round))
+                        .stroke(c.fgSoft, style: StrokeStyle(lineWidth: 1.8, lineCap: .round, lineJoin: .round))
                         .frame(width: 40, height: 40)
                     Text("No annotations yet")
                         .font(Theme.sansMedium(14))
-                        .foregroundStyle(c.inkSoft)
+                        .foregroundStyle(c.fgSoft)
                     Text("Be the first to identify this bird.")
                         .font(Theme.sans(12))
-                        .foregroundStyle(c.inkSoft.opacity(0.8))
+                        .foregroundStyle(c.fgSoft.opacity(0.8))
                 }
                 .frame(maxWidth: .infinity)
                 .padding(24)
@@ -264,10 +263,10 @@ struct SightingDetailView: View {
             } label: {
                 Label("Add your annotation", systemImage: "plus")
             }
-            .buttonStyle(ClayButtonStyle(prominent: false))
+            .buttonStyle(PillButtonStyle(prominent: false))
         }
         .padding(16)
-        .background(c.paper, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .background(c.bg, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
     }
 
@@ -278,14 +277,14 @@ struct SightingDetailView: View {
                 Circle().strokeBorder(c.rule, lineWidth: 1.5).frame(width: 36, height: 36)
                 Text(String(ann.username.prefix(1)).uppercased())
                     .font(Theme.sansSemibold(14))
-                    .foregroundStyle(c.clay)
+                    .foregroundStyle(c.accent)
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(ann.species.isEmpty ? "Marked unsure" : ann.species)
                         .font(Theme.sansSemibold(14))
-                        .foregroundStyle(ann.species.isEmpty ? c.inkSoft : c.ink)
+                        .foregroundStyle(ann.species.isEmpty ? c.fgSoft : c.fg)
                         .italic(ann.species.isEmpty)
                     // Judged on this device (see AnnotationModerator), not by the server.
                     if AnnotationModerator.shared.verdict(species: ann.species, reviewOfAI: ann.reviewOfAI).isFlagged {
@@ -302,15 +301,15 @@ struct SightingDetailView: View {
                 if let behavior = ann.behavior {
                     Label(behavior, systemImage: "binoculars")
                         .font(Theme.sans(12))
-                        .foregroundStyle(c.inkSoft)
+                        .foregroundStyle(c.fgSoft)
                 }
                 Text("by \(ann.username)")
                     .font(Theme.sans(11))
-                    .foregroundStyle(c.inkSoft.opacity(0.75))
+                    .foregroundStyle(c.fgSoft.opacity(0.75))
             }
         }
         .padding(12)
-        .background(c.paperDim, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
     private func confidenceBadge(_ confidence: Double) -> some View {

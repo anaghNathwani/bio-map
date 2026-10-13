@@ -25,15 +25,15 @@ struct FeedbackView: View {
                     VStack(spacing: 14) {
                         Image(systemName: "checkmark.circle")
                             .font(.system(size: 44, weight: .light))
-                            .foregroundStyle(c.clay)
+                            .foregroundStyle(c.accent)
                         Text("Thank you")
                             .font(Theme.display(26, medium: true))
-                            .foregroundStyle(c.ink)
+                            .foregroundStyle(c.fg)
                         Text("Your note reached the team.")
                             .font(Theme.sans(14))
-                            .foregroundStyle(c.inkSoft)
+                            .foregroundStyle(c.fgSoft)
                         Button("Done") { dismiss() }
-                            .buttonStyle(ClayButtonStyle())
+                            .buttonStyle(PillButtonStyle())
                             .padding(.top, 8)
                     }
                     .padding(32)
@@ -42,10 +42,10 @@ struct FeedbackView: View {
                     form(c)
                 }
             }
-            .background(c.paper)
+            .background(c.bg)
             .navigationTitle("Feedback")
             .navigationBarTitleDisplayMode(.inline)
-            .tint(c.clay)
+            .tint(c.accent)
             .toolbar {
                 if !sent {
                     ToolbarItem(placement: .cancellationAction) {
@@ -68,7 +68,7 @@ struct FeedbackView: View {
                     ForEach(FirebaseService.FeedbackKind.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
-                .listRowBackground(c.paper)
+                .listRowBackground(c.bg)
             }
 
             Section {
@@ -79,7 +79,7 @@ struct FeedbackView: View {
                     .onChange(of: message) { _, new in
                         if new.count > maxLength { message = String(new.prefix(maxLength)) }
                     }
-                    .listRowBackground(c.paper)
+                    .listRowBackground(c.bg)
             } header: {
                 Text(kind == .bug ? "What went wrong?" : kind == .feature ? "What would you like to see?" : "Your message")
             } footer: {
@@ -92,8 +92,8 @@ struct FeedbackView: View {
                 Section {
                     Text(errorText)
                         .font(Theme.sans(12))
-                        .foregroundStyle(c.clay)
-                        .listRowBackground(c.paper)
+                        .foregroundStyle(c.accent)
+                        .listRowBackground(c.bg)
                 }
             }
         }

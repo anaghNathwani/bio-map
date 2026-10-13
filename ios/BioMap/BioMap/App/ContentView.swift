@@ -10,19 +10,19 @@ struct ContentView: View {
         let c = ThemeColors(scheme: UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .light)
         let tab = UITabBarAppearance()
         tab.configureWithOpaqueBackground()
-        tab.backgroundColor = UIColor(c.paper)
+        tab.backgroundColor = UIColor(c.bg)
         tab.shadowColor = UIColor(c.rule)
         UITabBar.appearance().standardAppearance = tab
         UITabBar.appearance().scrollEdgeAppearance = tab
 
         let nav = UINavigationBarAppearance()
         nav.configureWithOpaqueBackground()
-        nav.backgroundColor = UIColor(c.paper)
+        nav.backgroundColor = UIColor(c.bg)
         nav.shadowColor = UIColor(c.rule)
         let titleFont = UIFont(name: "FrauncesBioMap-Regular", size: 19) ?? .systemFont(ofSize: 19)
         let largeFont = UIFont(name: "FrauncesBioMapDisplay-Medium", size: 32) ?? .systemFont(ofSize: 32)
-        nav.titleTextAttributes = [.foregroundColor: UIColor(c.ink), .font: titleFont]
-        nav.largeTitleTextAttributes = [.foregroundColor: UIColor(c.ink), .font: largeFont]
+        nav.titleTextAttributes = [.foregroundColor: UIColor(c.fg), .font: titleFont]
+        nav.largeTitleTextAttributes = [.foregroundColor: UIColor(c.fg), .font: largeFont]
         UINavigationBar.appearance().standardAppearance = nav
         UINavigationBar.appearance().scrollEdgeAppearance = nav
         UINavigationBar.appearance().compactAppearance = nav
@@ -43,7 +43,7 @@ struct ContentView: View {
             ProfileView()
                 .tabItem { Label("Profile", systemImage: "person.fill") }
         }
-        .tint(c.clay)
+        .tint(c.accent)
     }
 }
 
@@ -62,7 +62,7 @@ struct ReportTabView: View {
                     segment("Sound", systemImage: "waveform", isOn: mode == .audio) { mode = .audio }
                 }
                 .padding(4)
-                .background(c.paperDim, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                 .padding(.horizontal)
                 .padding(.top, 12)
                 .padding(.bottom, 4)
@@ -75,7 +75,7 @@ struct ReportTabView: View {
                         .navigationTitle("Record Bird Sound")
                 }
             }
-            .background(c.paper)
+            .background(c.bg)
         }
     }
 
@@ -87,8 +87,8 @@ struct ReportTabView: View {
                 .font(Theme.sansSemibold(15))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 9)
-                .foregroundStyle(isOn ? c.paper : c.ink)
-                .background(isOn ? c.ink : Color.clear, in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+                .foregroundStyle(isOn ? c.bg : c.fg)
+                .background(isOn ? c.fg : Color.clear, in: RoundedRectangle(cornerRadius: 11, style: .continuous))
         }
     }
 }

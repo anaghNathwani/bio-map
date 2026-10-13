@@ -34,7 +34,7 @@ struct AIPredictionCard: View {
                 Spacer()
                 Text("\(Int(confidence * 100))% confident")
                     .font(Theme.sansMedium(12))
-                    .foregroundStyle(c.inkSoft)
+                    .foregroundStyle(c.fgSoft)
             }
 
             HStack(spacing: 12) {
@@ -42,10 +42,10 @@ struct AIPredictionCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(species)
                         .font(Theme.display(19, medium: true))
-                        .foregroundStyle(c.ink)
+                        .foregroundStyle(c.fg)
                     Text("Is this right?")
                         .font(Theme.sans(13))
-                        .foregroundStyle(c.inkSoft)
+                        .foregroundStyle(c.fgSoft)
                 }
                 Spacer()
             }
@@ -57,13 +57,13 @@ struct AIPredictionCard: View {
                 verdictButton("Wrong", icon: "xmark", color: .red) {
                     onVerdict(.rejected)
                 }
-                verdictButton("Unsure", icon: "questionmark", color: c.inkSoft) {
+                verdictButton("Unsure", icon: "questionmark", color: c.fgSoft) {
                     onVerdict(.unsure)
                 }
             }
         }
         .padding(16)
-        .background(c.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(c.bg, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
         .padding(.horizontal)
         .task { await loadReferenceImage() }
@@ -73,7 +73,7 @@ struct AIPredictionCard: View {
     private var referenceImage: some View {
         let c = ThemeColors(scheme: scheme)
         ZStack {
-            RoundedRectangle(cornerRadius: 12, style: .continuous).fill(c.paperDim)
+            RoundedRectangle(cornerRadius: 12, style: .continuous).fill(c.bgRaised)
             if let url = referenceImageURL {
                 AsyncImage(url: url) { phase in
                     switch phase {
@@ -84,7 +84,7 @@ struct AIPredictionCard: View {
                     }
                 }
             } else if isLoadingReference {
-                ProgressView().tint(c.clay)
+                ProgressView().tint(c.accent)
             } else {
                 placeholderIcon
             }
@@ -95,7 +95,7 @@ struct AIPredictionCard: View {
 
     private var placeholderIcon: some View {
         BirdMark()
-            .stroke(ThemeColors(scheme: scheme).inkSoft, style: StrokeStyle(lineWidth: 1.8, lineCap: .round, lineJoin: .round))
+            .stroke(ThemeColors(scheme: scheme).fgSoft, style: StrokeStyle(lineWidth: 1.8, lineCap: .round, lineJoin: .round))
             .padding(16)
     }
 
@@ -108,7 +108,7 @@ struct AIPredictionCard: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 10)
-            .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(color.opacity(0.4), lineWidth: 1.4))
             .foregroundStyle(color)
         }

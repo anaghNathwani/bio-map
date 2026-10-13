@@ -40,16 +40,6 @@ targets:
         NSMicrophoneUsageDescription: BioMap records bird calls to identify species by sound.
         NSLocationWhenInUseUsageDescription: BioMap attaches your GPS location to each sighting so it can be placed on the map.
         NSPhotoLibraryUsageDescription: BioMap can use photos from your library to report sightings.
-        # Brand type (matches the marketing site and social assets — see Theme.swift): Fraunces
-        # for display serif, Geist for UI sans. Bundled as static instances of the same variable
-        # webfonts used in docs/social and web/, converted with fontTools (see Resources/Fonts).
-        UIAppFonts:
-          - FrauncesBioMap-Regular.ttf
-          - FrauncesBioMapDisplay-Medium.ttf
-          - FrauncesBioMap-Italic.ttf
-          - GeistBioMap-Regular.ttf
-          - GeistBioMap-Medium.ttf
-          - GeistBioMap-SemiBold.ttf
         CFBundleURLTypes:
           - CFBundleURLSchemes:
               - com.biomap.app

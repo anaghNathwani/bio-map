@@ -18,27 +18,27 @@ struct AudioRecorderView: View {
                 controlSection
                 if vm.isImporting {
                     HStack(spacing: 10) {
-                        ProgressView().tint(ThemeColors(scheme: scheme).clay)
+                        ProgressView().tint(ThemeColors(scheme: scheme).accent)
                         Text("Preparing your audio file…")
                             .font(Theme.sans(14))
-                            .foregroundStyle(ThemeColors(scheme: scheme).inkSoft)
+                            .foregroundStyle(ThemeColors(scheme: scheme).fgSoft)
                         Spacer()
                     }
                     .padding(14)
-                    .background(ThemeColors(scheme: scheme).paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .background(ThemeColors(scheme: scheme).bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                     .padding(.horizontal)
                 }
                 if vm.recordingURL == nil, let err = vm.error {
                     Label(err, systemImage: "exclamationmark.triangle.fill")
                         .font(Theme.sans(13))
-                        .foregroundStyle(ThemeColors(scheme: scheme).clay)
+                        .foregroundStyle(ThemeColors(scheme: scheme).accent)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                 }
                 if let notice = vm.importNotice, vm.recordingURL != nil {
                     Label(notice, systemImage: "scissors")
                         .font(Theme.sans(13))
-                        .foregroundStyle(ThemeColors(scheme: scheme).inkSoft)
+                        .foregroundStyle(ThemeColors(scheme: scheme).fgSoft)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                 }
@@ -58,7 +58,7 @@ struct AudioRecorderView: View {
             .padding(.top, 24)
             .padding(.bottom, 40)
         }
-        .background(ThemeColors(scheme: scheme).paper)
+        .background(ThemeColors(scheme: scheme).bg)
         .onAppear { vm.startLocationUpdates() }
         .onDisappear {
             vm.stopLocationUpdates()
@@ -130,14 +130,14 @@ struct AudioRecorderView: View {
         let c = ThemeColors(scheme: scheme)
         if vm.isIdentifying {
             HStack(spacing: 10) {
-                ProgressView().tint(c.clay)
+                ProgressView().tint(c.accent)
                 Text("Identifying bird calls…")
                     .font(Theme.sans(14))
-                    .foregroundStyle(c.inkSoft)
+                    .foregroundStyle(c.fgSoft)
                 Spacer()
             }
             .padding(14)
-            .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             .padding(.horizontal)
         } else if let results = vm.identification {
             VStack(alignment: .leading, spacing: 10) {
@@ -145,20 +145,20 @@ struct AudioRecorderView: View {
 
                 if results.isEmpty {
                     Text("Couldn't confidently identify a bird")
-                        .font(Theme.sansSemibold(14)).foregroundStyle(c.ink)
+                        .font(Theme.sansSemibold(14)).foregroundStyle(c.fg)
                     Text("No bird call in this recording was clear enough to name. Recording closer to the bird, away from wind and voices, helps. You can still submit it and add your own ID.")
                         .font(Theme.sans(12))
-                        .foregroundStyle(c.inkSoft)
+                        .foregroundStyle(c.fgSoft)
                 } else {
                     ForEach(Array(results.enumerated()), id: \.offset) { index, result in
                         HStack {
                             Text(result.species)
                                 .font(index == 0 ? Theme.sansSemibold(14) : Theme.sans(14))
-                                .foregroundStyle(c.ink)
+                                .foregroundStyle(c.fg)
                             Spacer()
                             Text("\(Int(result.confidence * 100))%")
                                 .font(Theme.sansMedium(13))
-                                .foregroundStyle(c.inkSoft)
+                                .foregroundStyle(c.fgSoft)
                         }
                     }
                 }
@@ -166,31 +166,31 @@ struct AudioRecorderView: View {
                 if !vm.identificationUsedLocation {
                     Text("No GPS fix yet, so this was matched against every species worldwide and held to a stricter standard.")
                         .font(Theme.sans(11))
-                        .foregroundStyle(c.inkSoft.opacity(0.8))
+                        .foregroundStyle(c.fgSoft.opacity(0.8))
                 }
             }
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(c.paper, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(c.bg, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
             .padding(.horizontal)
         } else if let failure = vm.identificationError {
             HStack(spacing: 10) {
-                Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(c.clay)
+                Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(c.accent)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Couldn't identify this recording")
-                        .font(Theme.sansSemibold(14)).foregroundStyle(c.ink)
+                        .font(Theme.sansSemibold(14)).foregroundStyle(c.fg)
                     Text("\(failure). You can still submit it — our server will try again later.")
                         .font(Theme.sans(12))
-                        .foregroundStyle(c.inkSoft)
+                        .foregroundStyle(c.fgSoft)
                 }
                 Spacer()
                 Button("Retry") { vm.identifyRecording() }
                     .font(Theme.sansSemibold(13))
-                    .foregroundStyle(c.clay)
+                    .foregroundStyle(c.accent)
             }
             .padding(14)
-            .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             .padding(.horizontal)
         }
     }
@@ -198,13 +198,13 @@ struct AudioRecorderView: View {
     private var analyzingSection: some View {
         let c = ThemeColors(scheme: scheme)
         return HStack(spacing: 10) {
-            ProgressView().tint(c.clay)
+            ProgressView().tint(c.accent)
             Text("Analyzing your recording…")
                 .font(Theme.sans(14))
-                .foregroundStyle(c.inkSoft)
+                .foregroundStyle(c.fgSoft)
         }
         .padding(14)
-        .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .padding(.horizontal)
     }
 
@@ -212,7 +212,7 @@ struct AudioRecorderView: View {
         let c = ThemeColors(scheme: scheme)
         return ZStack {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(c.paperDim)
+                .fill(c.bgRaised)
                 .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
                 .frame(height: 180)
 
@@ -224,12 +224,12 @@ struct AudioRecorderView: View {
                 VStack(spacing: 10) {
                     Image(systemName: "waveform")
                         .font(.system(size: 40))
-                        .foregroundStyle(c.clay)
+                        .foregroundStyle(c.accent)
                     Text(vm.hasRecording
                          ? "Recording ready · \(formatTime(vm.recordingSeconds))"
                          : "Tap record to capture bird sounds, or upload a file")
                         .font(Theme.sans(14))
-                        .foregroundStyle(c.inkSoft)
+                        .foregroundStyle(c.fgSoft)
                         .multilineTextAlignment(.center)
                 }
             }
@@ -243,9 +243,9 @@ struct AudioRecorderView: View {
                         } label: {
                             Image(systemName: "arrow.counterclockwise")
                                 .font(.headline)
-                                .foregroundStyle(c.paper)
+                                .foregroundStyle(c.bg)
                                 .frame(width: 40, height: 40)
-                                .background(c.ink.opacity(0.72), in: Circle())
+                                .background(c.fg.opacity(0.72), in: Circle())
                         }
                         .disabled(vm.isUploading)
                         .accessibilityLabel("Discard recording and record again")
@@ -261,14 +261,14 @@ struct AudioRecorderView: View {
                     HStack {
                         Spacer()
                         HStack(spacing: 6) {
-                            Circle().fill(c.clay).frame(width: 8, height: 8)
+                            Circle().fill(c.accent).frame(width: 8, height: 8)
                             Text("\(formatTime(vm.recordingSeconds)) / \(formatTime(AudioRecorderViewModel.maxRecordingSeconds))")
                                 .font(Theme.sansMedium(12))
-                                .foregroundStyle(c.paper)
+                                .foregroundStyle(c.bg)
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .background(c.ink.opacity(0.8), in: Capsule())
+                        .background(c.fg.opacity(0.8), in: Capsule())
                         .padding(12)
                     }
                     Spacer()
@@ -288,11 +288,11 @@ struct AudioRecorderView: View {
             } label: {
                 ZStack {
                     Circle()
-                        .fill(vm.isRecording ? c.clay : c.ink)
+                        .fill(vm.isRecording ? c.accent : c.fg)
                         .frame(width: 72, height: 72)
                     Image(systemName: vm.isRecording ? "stop.fill" : "mic.fill")
                         .font(.title2)
-                        .foregroundStyle(c.paper)
+                        .foregroundStyle(c.bg)
                 }
             }
             .scaleEffect(vm.isRecording ? 1.08 : 1.0)
@@ -300,7 +300,7 @@ struct AudioRecorderView: View {
 
             Text(vm.isRecording ? "Recording… tap to stop" : "Tap to record")
                 .font(Theme.sans(13))
-                .foregroundStyle(c.inkSoft)
+                .foregroundStyle(c.fgSoft)
 
             if !vm.isRecording {
                 Button {
@@ -310,8 +310,8 @@ struct AudioRecorderView: View {
                         .font(Theme.sansMedium(14))
                         .padding(.horizontal, 16)
                         .padding(.vertical, 9)
-                        .overlay(Capsule().strokeBorder(c.ink, lineWidth: 1.4))
-                        .foregroundStyle(c.ink)
+                        .overlay(Capsule().strokeBorder(c.fg, lineWidth: 1.4))
+                        .foregroundStyle(c.fg)
                 }
                 .disabled(vm.isImporting || vm.isUploading)
             }
@@ -331,8 +331,8 @@ struct AudioRecorderView: View {
                     .font(Theme.sansSemibold(15))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .foregroundStyle(c.ink)
+                    .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .foregroundStyle(c.fg)
             }
             .disabled(vm.isRecording || vm.isUploading)
             .padding(.horizontal)
@@ -340,7 +340,7 @@ struct AudioRecorderView: View {
             if playback.failed {
                 Text("Couldn't play this recording back.")
                     .font(Theme.sans(13))
-                    .foregroundStyle(c.clay)
+                    .foregroundStyle(c.accent)
             }
 
             // Notes
@@ -348,7 +348,7 @@ struct AudioRecorderView: View {
                 .font(Theme.sans(15))
                 .lineLimit(2...4)
                 .padding(12)
-                .background(c.paperDim, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .padding(.horizontal)
 
             if let err = vm.error {
@@ -357,7 +357,7 @@ struct AudioRecorderView: View {
                     Text(err)
                 }
                 .font(Theme.sans(13))
-                .foregroundStyle(c.clay)
+                .foregroundStyle(c.accent)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
             }
@@ -371,7 +371,7 @@ struct AudioRecorderView: View {
                     Text(vm.isUploading ? "Uploading…" : "Submit sound sighting")
                 }
             }
-            .buttonStyle(ClayButtonStyle())
+            .buttonStyle(PillButtonStyle())
             .disabled(vm.isUploading || vm.isRecording)
             .padding(.horizontal)
         }
@@ -388,7 +388,7 @@ struct WaveformView: View {
     private let barCount = 28
 
     var body: some View {
-        let clay = ThemeColors(scheme: scheme).clay
+        let clay = ThemeColors(scheme: scheme).accent
         HStack(spacing: 3) {
             ForEach(0..<barCount, id: \.self) { i in
                 let phase = Double(i) / Double(barCount)

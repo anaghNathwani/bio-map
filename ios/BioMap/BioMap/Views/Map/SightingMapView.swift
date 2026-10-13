@@ -29,9 +29,9 @@ struct SightingMapView: View {
                         // any other way on the built-in marker.
                         let c = ThemeColors(scheme: scheme)
                         Circle()
-                            .fill(c.clay)
+                            .fill(c.accent)
                             .frame(width: 16, height: 16)
-                            .overlay(Circle().stroke(c.paper, lineWidth: 2.5))
+                            .overlay(Circle().stroke(c.bg, lineWidth: 2.5))
                     }
                     ForEach(SightingGroup.grouping(vm.sightings)) { group in
                         Annotation(
@@ -146,7 +146,7 @@ struct SightingMapView: View {
                                     }
                                 }
                             } icon: {
-                                Image(systemName: "mappin.and.ellipse").foregroundStyle(ThemeColors(scheme: scheme).clay)
+                                Image(systemName: "mappin.and.ellipse").foregroundStyle(ThemeColors(scheme: scheme).accent)
                             }
                         }
                         .buttonStyle(.plain)
@@ -218,20 +218,20 @@ struct SightingMapView: View {
         } label: {
             ZStack {
                 MapPinShape()
-                    .fill(c.clay)
-                    .overlay(MapPinShape().stroke(c.ink, lineWidth: 1.6))
+                    .fill(c.accent)
+                    .overlay(MapPinShape().stroke(c.fg, lineWidth: 1.6))
                     .frame(width: 30, height: 40)
                 Circle()
-                    .fill(c.paper)
+                    .fill(c.bg)
                     .frame(width: 11, height: 11)
                     .offset(y: -9)
 
                 if count > 1 {
                     Text("\(count)")
                         .font(Theme.sansSemibold(13))
-                        .foregroundStyle(c.paper)
+                        .foregroundStyle(c.bg)
                         .frame(minWidth: 22, minHeight: 22)
-                        .background(c.ink, in: Circle())
+                        .background(c.fg, in: Circle())
                         .offset(x: 15, y: -20)
                 }
             }
@@ -242,14 +242,14 @@ struct SightingMapView: View {
     private var countBadge: some View {
         let c = ThemeColors(scheme: scheme)
         return HStack(spacing: 6) {
-            Circle().fill(c.clay).frame(width: 7, height: 7)
+            Circle().fill(c.accent).frame(width: 7, height: 7)
             Text("\(vm.sightings.count) sighting\(vm.sightings.count == 1 ? "" : "s") in view")
                 .font(Theme.sansMedium(13))
         }
-        .foregroundStyle(c.ink)
+        .foregroundStyle(c.fg)
         .padding(.horizontal, 16)
         .padding(.vertical, 9)
-        .background(c.paper, in: Capsule())
+        .background(c.bg, in: Capsule())
         .overlay(Capsule().strokeBorder(c.rule, lineWidth: 1.5))
         .padding(.bottom, 14)
     }
@@ -257,14 +257,14 @@ struct SightingMapView: View {
     private var loadingBadge: some View {
         let c = ThemeColors(scheme: scheme)
         return HStack(spacing: 8) {
-            ProgressView().scaleEffect(0.8).tint(c.clay)
+            ProgressView().scaleEffect(0.8).tint(c.accent)
             Text("Loading sightings…")
                 .font(Theme.sansMedium(13))
         }
-        .foregroundStyle(c.ink)
+        .foregroundStyle(c.fg)
         .padding(.horizontal, 16)
         .padding(.vertical, 9)
-        .background(c.paper, in: Capsule())
+        .background(c.bg, in: Capsule())
         .overlay(Capsule().strokeBorder(c.rule, lineWidth: 1.5))
         .padding(.bottom, 14)
     }

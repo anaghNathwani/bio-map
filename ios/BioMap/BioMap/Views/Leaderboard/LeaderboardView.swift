@@ -10,17 +10,16 @@ struct LeaderboardView: View {
         NavigationStack {
             Group {
                 if isLoading {
-                    ProgressView("Loading leaderboard…")
-                        .tint(c.clay)
+                    BioLoader(size: 110)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if entries.isEmpty {
                     VStack(spacing: 10) {
                         BirdMark()
-                            .stroke(c.inkSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                            .stroke(c.fgSoft, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                             .frame(width: 56, height: 56)
-                        Text("No entries yet").font(Theme.display(20, medium: true)).foregroundStyle(c.ink)
+                        Text("No entries yet").font(Theme.display(20, medium: true)).foregroundStyle(c.fg)
                         Text("Start annotating sightings to appear here.")
-                            .font(Theme.sans(14)).foregroundStyle(c.inkSoft)
+                            .font(Theme.sans(14)).foregroundStyle(c.fgSoft)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
@@ -38,7 +37,7 @@ struct LeaderboardView: View {
                                         rankRow(entry: entry, rank: index + 4)
                                     }
                                 }
-                                .background(c.paper)
+                                .background(c.bg)
                                 .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
                                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 .padding(.horizontal)
@@ -46,10 +45,10 @@ struct LeaderboardView: View {
                         }
                         .padding(.bottom, 32)
                     }
-                    .background(c.paper)
+                    .background(c.bg)
                 }
             }
-            .background(c.paper)
+            .background(c.bg)
             .navigationTitle("Top Observers")
             .task { await loadLeaderboard() }
             .refreshable { await loadLeaderboard() }
@@ -79,28 +78,28 @@ struct LeaderboardView: View {
         return VStack(spacing: 8) {
             Text(rank == 1 ? "1st" : rank == 2 ? "2nd" : "3rd")
                 .font(Theme.displayItalic(rank == 1 ? 28 : 22))
-                .foregroundStyle(c.clay)
+                .foregroundStyle(c.accent)
 
             Text(entry.username)
                 .font(Theme.sansSemibold(rank == 1 ? 15 : 14))
-                .foregroundStyle(c.ink)
+                .foregroundStyle(c.fg)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
 
             Text("\(entry.annotationCount)")
                 .font(Theme.display(20, medium: true))
-                .foregroundStyle(c.ink)
+                .foregroundStyle(c.fg)
 
             Text("annotations")
                 .font(Theme.sans(11))
-                .foregroundStyle(c.inkSoft)
+                .foregroundStyle(c.fgSoft)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
         .padding(.horizontal, 8)
         .frame(height: height)
-        .background(c.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(rank == 1 ? c.clay.opacity(0.7) : c.rule, lineWidth: rank == 1 ? 1.8 : 1.5))
+        .background(c.bg, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(rank == 1 ? c.accent.opacity(0.7) : c.rule, lineWidth: rank == 1 ? 1.8 : 1.5))
     }
 
     private func rankRow(entry: LeaderboardEntry, rank: Int) -> some View {
@@ -108,25 +107,25 @@ struct LeaderboardView: View {
         return HStack(spacing: 14) {
             Text("\(rank)")
                 .font(Theme.displayItalic(16))
-                .foregroundStyle(c.inkSoft)
+                .foregroundStyle(c.fgSoft)
                 .frame(width: 28, alignment: .trailing)
 
             ZStack {
                 Circle().strokeBorder(c.rule, lineWidth: 1.5).frame(width: 36, height: 36)
                 Text(String(entry.username.prefix(1)).uppercased())
                     .font(Theme.sansSemibold(15))
-                    .foregroundStyle(c.clay)
+                    .foregroundStyle(c.accent)
             }
 
             Text(entry.username)
                 .font(Theme.sans(15))
-                .foregroundStyle(c.ink)
+                .foregroundStyle(c.fg)
 
             Spacer()
 
             Text("\(entry.annotationCount)")
                 .font(Theme.sansSemibold(14))
-                .foregroundStyle(c.ink)
+                .foregroundStyle(c.fg)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

@@ -43,11 +43,11 @@ struct AdditionalBirdsSection: View {
                 if let submitError {
                     Text(submitError)
                         .font(Theme.sans(11))
-                        .foregroundStyle(c.clay)
+                        .foregroundStyle(c.accent)
                 }
             }
             .padding(14)
-            .background(c.paper, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .background(c.bg, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(c.rule, lineWidth: 1.5))
             .padding(.horizontal)
         }
@@ -65,9 +65,9 @@ struct AdditionalBirdsSection: View {
                         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 }
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(candidate.species).font(Theme.sansMedium(14)).foregroundStyle(c.ink)
+                    Text(candidate.species).font(Theme.sansMedium(14)).foregroundStyle(c.fg)
                     Text("\(Int(candidate.confidence * 100))% confident")
-                        .font(Theme.sans(11)).foregroundStyle(c.inkSoft)
+                        .font(Theme.sans(11)).foregroundStyle(c.fgSoft)
                 }
                 Spacer()
 
@@ -83,7 +83,7 @@ struct AdditionalBirdsSection: View {
                             correctingID = candidate.id
                             correctionText = ""
                         }
-                        smallButton("questionmark", c.inkSoft) {
+                        smallButton("questionmark", c.fgSoft) {
                             Task { await submit(candidate, species: "", verdict: .unsure) }
                         }
                     }
@@ -96,12 +96,12 @@ struct AdditionalBirdsSection: View {
                         .font(Theme.sans(14))
                         .autocorrectionDisabled()
                         .padding(8)
-                        .background(c.paperDim, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        .background(c.bgRaised, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     Button("Save") {
                         Task { await submit(candidate, species: correctionText.trimmingCharacters(in: .whitespaces), verdict: .rejected) }
                     }
                     .font(Theme.sansSemibold(13))
-                    .foregroundStyle(c.clay)
+                    .foregroundStyle(c.accent)
                     .disabled(correctionText.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }

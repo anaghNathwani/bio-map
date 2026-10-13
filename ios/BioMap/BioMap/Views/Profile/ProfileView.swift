@@ -26,22 +26,22 @@ struct ProfileView: View {
                         ZStack {
                             Circle().strokeBorder(c.rule, lineWidth: 1.5).frame(width: 56, height: 56)
                             BirdMark()
-                                .stroke(c.clay, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                                .stroke(c.accent, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
                                 .frame(width: 26, height: 26)
                         }
                         VStack(alignment: .leading, spacing: 2) {
                             Text(env.username ?? "No username set")
                                 .font(Theme.sansSemibold(16))
-                                .foregroundStyle(c.ink)
+                                .foregroundStyle(c.fg)
                             if let email = env.user?.email {
                                 Text(email)
                                     .font(Theme.sans(12))
-                                    .foregroundStyle(c.inkSoft)
+                                    .foregroundStyle(c.fgSoft)
                             }
                         }
                     }
                     .padding(.vertical, 6)
-                    .listRowBackground(c.paper)
+                    .listRowBackground(c.bg)
                 } header: {
                     Text("Account")
                 }
@@ -64,7 +64,7 @@ struct ProfileView: View {
                         }
                     }
                     .foregroundStyle(.primary)
-                    .listRowBackground(c.paper)
+                    .listRowBackground(c.bg)
                 } header: {
                     Text("Profile")
                 }
@@ -79,8 +79,8 @@ struct ProfileView: View {
                         Label("Appearance", systemImage: "circle.lefthalf.filled")
                     }
                     .pickerStyle(.menu)
-                    .tint(c.clay)
-                    .listRowBackground(c.paper)
+                    .tint(c.accent)
+                    .listRowBackground(c.bg)
                 } header: {
                     Text("Display")
                 }
@@ -92,7 +92,7 @@ struct ProfileView: View {
                         Spacer()
                         Toggle("", isOn: $notificationsEnabled)
                             .labelsHidden()
-                            .tint(c.clay)
+                            .tint(c.accent)
                             .onChange(of: notificationsEnabled) { _, enabled in
                                 if enabled {
                                     requestNotificationPermission()
@@ -101,7 +101,7 @@ struct ProfileView: View {
                                 }
                             }
                     }
-                    .listRowBackground(c.paper)
+                    .listRowBackground(c.bg)
                 } header: {
                     Text("Notifications")
                 } footer: {
@@ -122,7 +122,7 @@ struct ProfileView: View {
                         }
                     }
                     .foregroundStyle(.primary)
-                    .listRowBackground(c.paper)
+                    .listRowBackground(c.bg)
                 } header: {
                     Text("Feedback")
                 } footer: {
@@ -146,11 +146,11 @@ struct ProfileView: View {
                     } label: {
                         Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
                     }
-                    .listRowBackground(c.paper)
+                    .listRowBackground(c.bg)
                 }
             }
             .scrollContentBackground(.hidden)
-            .background(c.paper)
+            .background(c.bg)
             .navigationTitle("Profile")
             .sheet(isPresented: $isEditingUsername) {
                 editUsernameSheet
@@ -186,7 +186,7 @@ struct ProfileView: View {
                     TextField("Username", text: $draftUsername)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
-                        .listRowBackground(c.paper)
+                        .listRowBackground(c.bg)
                 } header: {
                     Text("Choose a username")
                 } footer: {
@@ -196,17 +196,17 @@ struct ProfileView: View {
                 if let saveError {
                     Section {
                         Text(saveError)
-                            .foregroundStyle(c.clay)
+                            .foregroundStyle(c.accent)
                             .font(Theme.sans(12))
-                            .listRowBackground(c.paper)
+                            .listRowBackground(c.bg)
                     }
                 }
             }
             .scrollContentBackground(.hidden)
-            .background(c.paper)
+            .background(c.bg)
             .navigationTitle("Edit Username")
             .navigationBarTitleDisplayMode(.inline)
-            .tint(c.clay)
+            .tint(c.accent)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { isEditingUsername = false }
@@ -276,7 +276,7 @@ struct ProfileView: View {
             }
         }
         .foregroundStyle(.primary)
-        .listRowBackground(ThemeColors(scheme: scheme).paper)
+        .listRowBackground(ThemeColors(scheme: scheme).bg)
     }
 }
 

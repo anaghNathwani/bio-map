@@ -11,15 +11,13 @@
 		05FB974B2B17DBD2CBA2A0BE /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05F7AB222FFD417B234CFAF5 /* FirebaseAuth */; };
 		062F39A14C124AAB5CBCA84E /* BirdDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9F21BCDA81E8C34CD0C028 /* BirdDetector.swift */; };
 		0B4295CB154CA74577CE65DB /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC09F1B51D344DB1A2E7012 /* GoogleSignIn */; };
-		0BBC05D9BD627AB41285AE4D /* FrauncesBioMapDisplay-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A0E73752ACD28CC8224EAC62 /* FrauncesBioMapDisplay-Medium.ttf */; };
 		178CF1FCFC34CC23312D1ED9 /* BundledBirdLabels.json in Resources */ = {isa = PBXBuildFile; fileRef = 2E8FBBEF20130794C4590B46 /* BundledBirdLabels.json */; };
 		18B33EDF84386398323FB4F8 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 366F98A5444E320F3D9C6D48 /* PreviewSupport.swift */; };
 		1D3E1ACA3A201F7CE73E55FC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA990DBCBAA064609615557 /* Theme.swift */; };
 		24DC116B1D4908A3D600A3D6 /* MultiBirdDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE232117924D0A4F7E1B8282 /* MultiBirdDetector.swift */; };
-		2CC5B680DB6B4F6A532D8B18 /* FrauncesBioMap-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2E1B9E64952D37420C21A08 /* FrauncesBioMap-Regular.ttf */; };
 		364510CC4EB0DB2A161D3866 /* BirdInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71907B3F002980AB0F2204E9 /* BirdInfo.swift */; };
-		3E3B4205367726C1360AB415 /* GeistBioMap-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2EF7A26AF713C75CE4A3581A /* GeistBioMap-Medium.ttf */; };
 		3F76A92641D8F93CA1DFD316 /* UploadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6C68C9CBB05037BAFE5B92 /* UploadQueue.swift */; };
+		42314B0A04EA1DD59F8C2CAF /* OrganismData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B03BF08268E2E6A5410517C /* OrganismData.swift */; };
 		443CD92C17D74496DFC018CE /* BirdNETClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98C6A910E7C2D4BC2808CDA /* BirdNETClassifier.swift */; };
 		466A1092B19D1A9391B2503A /* AudioImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E739AC64350DEF4F9905EA /* AudioImporter.swift */; };
 		4A260B76E72795D6C77E2A98 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB08041A5AEF347B04BBB7 /* FeedbackView.swift */; };
@@ -32,9 +30,8 @@
 		67DEEAD79D70FAB452905055 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E2E167736D07B37A5EE506 /* AppEnvironment.swift */; };
 		6873AEEF66D1EA443B5DC335 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 08D186D60CA63EF022259DA7 /* ZIPFoundation */; };
 		697CAF42DBE8E69A85B768D8 /* AudioRecorderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCCE40013FB860D5B5BBF9D8 /* AudioRecorderViewModel.swift */; };
-		6AC0DC5562DD6611D1D818B3 /* GeistBioMap-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAEE3D96A438BCCAF7D015D1 /* GeistBioMap-SemiBold.ttf */; };
+		6BAB6AEA042D1B1848B7EA09 /* Pods_BioMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD55214B98F990E849E0D820 /* Pods_BioMap.framework */; };
 		6CDA5D2F76EFE16A2D78DDF8 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D56F3393A64304CF291C6B01 /* GoogleSignInSwift */; };
-		73299DAC56250EB94C16FDF9 /* Pods_BioMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD437131ED1C07E86174173 /* Pods_BioMap.framework */; };
 		73B4D99D468FD780F2146758 /* AIPredictionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9F066666BFF809B649E486 /* AIPredictionCard.swift */; };
 		7FE15719E093078724D6206C /* SightingMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588B7BD265FF4D622D002238 /* SightingMapView.swift */; };
 		82F9371329B1DB6DFC0DB1F7 /* BundledBirdNETLocation.tflite in Resources */ = {isa = PBXBuildFile; fileRef = C14ECB898ACF3C1A41306D3D /* BundledBirdNETLocation.tflite */; };
@@ -48,7 +45,6 @@
 		B35CCA642132F17A86265534 /* BundledBirdNET.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 112C45936E50DB79321AFD66 /* BundledBirdNET.tflite */; };
 		BFD6F4954F5B059428460C80 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D3F64D31173139DEEB3877 /* FirebaseService.swift */; };
 		C2B10A9FC0C531E454D649C4 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE28A03F143AF6F33D8D2248 /* APIClient.swift */; };
-		C51A3F95590798784DDF06E6 /* GeistBioMap-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBCB66839AC59582E379CB63 /* GeistBioMap-Regular.ttf */; };
 		C58D8963C233424AB313BAB1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6911A72A9692483291E2B0 /* LoginView.swift */; };
 		C602448D644EBA4A02CCA538 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792125B26A8AAD7900CB1E48 /* LeaderboardView.swift */; };
 		C908664D3C4B52D3B95A3E2A /* AdditionalBirdsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4551858A3E6A9938A4F8BFE /* AdditionalBirdsSection.swift */; };
@@ -57,7 +53,7 @@
 		D393339E2BE0BECE0B410CE7 /* AudioPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5CDFC845B0E18A1D417779A /* AudioPlayback.swift */; };
 		D8856E67F18B6EABD90CB04F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B5E1A31FCCD5274E0D5A238F /* FirebaseFirestore */; };
 		DB77E740D0D129842DB37A3A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B49FFEE2CB9CACD645AE9EC /* ProfileView.swift */; };
-		DFAAD164A2DA60BCFF5A7550 /* FrauncesBioMap-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D09F3092543BE157C9C152DA /* FrauncesBioMap-Italic.ttf */; };
+		E1817019D77BD47F66225541 /* BioLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C37575471E52718891D9FAF /* BioLoader.swift */; };
 		E49E2C38F54424D04FAAF061 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7837F6E6FB0B1F13EBC159 /* ModelManager.swift */; };
 		F33C59385944CC3DDE07A27C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11528B44D0B78122DC81010C /* AudioRecorderView.swift */; };
 		F532D975A32F0B0661D1F8C4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61762F7028AB7A7C39A37AA6 /* GoogleService-Info.plist */; };
@@ -67,6 +63,7 @@
 
 /* Begin PBXFileReference section */
 		053A296A2A5819343BC2E8F2 /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
+		0C37575471E52718891D9FAF /* BioLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioLoader.swift; sourceTree = "<group>"; };
 		0C46399C2914A7F950B13819 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		112C45936E50DB79321AFD66 /* BundledBirdNET.tflite */ = {isa = PBXFileReference; path = BundledBirdNET.tflite; sourceTree = "<group>"; };
 		11528B44D0B78122DC81010C /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
@@ -74,7 +71,6 @@
 		2C9F21BCDA81E8C34CD0C028 /* BirdDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdDetector.swift; sourceTree = "<group>"; };
 		2D6C68C9CBB05037BAFE5B92 /* UploadQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadQueue.swift; sourceTree = "<group>"; };
 		2E8FBBEF20130794C4590B46 /* BundledBirdLabels.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BundledBirdLabels.json; sourceTree = "<group>"; };
-		2EF7A26AF713C75CE4A3581A /* GeistBioMap-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistBioMap-Medium.ttf"; sourceTree = "<group>"; };
 		319223F3CA7E2D81A21182DC /* BirdClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdClassifier.swift; sourceTree = "<group>"; };
 		35357E5587CF9EBE8A2ADCF9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		366F98A5444E320F3D9C6D48 /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
@@ -82,8 +78,8 @@
 		374990A569A9CC961A566D48 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3BA990DBCBAA064609615557 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		3BB2940A51585C276AED26F7 /* Sighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sighting.swift; sourceTree = "<group>"; };
-		3DD437131ED1C07E86174173 /* Pods_BioMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BioMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C2EB058A1A7955E7ADD2B9 /* AnnotationModerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationModerator.swift; sourceTree = "<group>"; };
+		4B03BF08268E2E6A5410517C /* OrganismData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganismData.swift; sourceTree = "<group>"; };
 		4DCB08041A5AEF347B04BBB7 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		588B7BD265FF4D622D002238 /* SightingMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingMapView.swift; sourceTree = "<group>"; };
 		59D53B666ECA560C5089F17B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -95,33 +91,29 @@
 		6F1AA91D85EEACB88F890555 /* BundledBirdNETLabels.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BundledBirdNETLabels.json; sourceTree = "<group>"; };
 		71907B3F002980AB0F2204E9 /* BirdInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdInfo.swift; sourceTree = "<group>"; };
 		792125B26A8AAD7900CB1E48 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
-		7B1218702CE7696594C97B18 /* Pods-BioMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BioMap.release.xcconfig"; path = "Target Support Files/Pods-BioMap/Pods-BioMap.release.xcconfig"; sourceTree = "<group>"; };
 		7E7837F6E6FB0B1F13EBC159 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		849F9C00C8FCFB6C3AB02683 /* BioMapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioMapApp.swift; sourceTree = "<group>"; };
 		84D3F64D31173139DEEB3877 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
-		9CFB4A3A3FC189698AB55B2C /* Pods-BioMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BioMap.debug.xcconfig"; path = "Target Support Files/Pods-BioMap/Pods-BioMap.debug.xcconfig"; sourceTree = "<group>"; };
-		A0E73752ACD28CC8224EAC62 /* FrauncesBioMapDisplay-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesBioMapDisplay-Medium.ttf"; sourceTree = "<group>"; };
 		ABFE81353A3ED7B57AB5681D /* BioMap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BioMap.entitlements; sourceTree = "<group>"; };
+		AC78B3DF103EC186A1B87ADC /* Pods-BioMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BioMap.debug.xcconfig"; path = "Target Support Files/Pods-BioMap/Pods-BioMap.debug.xcconfig"; sourceTree = "<group>"; };
 		AE232117924D0A4F7E1B8282 /* MultiBirdDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBirdDetector.swift; sourceTree = "<group>"; };
 		AE96E59F18239DB863A064E8 /* DataURI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataURI.swift; sourceTree = "<group>"; };
+		B4657D0E9D8981F4BF1C350D /* Pods-BioMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BioMap.release.xcconfig"; path = "Target Support Files/Pods-BioMap/Pods-BioMap.release.xcconfig"; sourceTree = "<group>"; };
 		B8E739AC64350DEF4F9905EA /* AudioImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioImporter.swift; sourceTree = "<group>"; };
-		BBCB66839AC59582E379CB63 /* GeistBioMap-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistBioMap-Regular.ttf"; sourceTree = "<group>"; };
 		BC76EFFC6863139FD386DB64 /* BundledBirdModel.tflite */ = {isa = PBXFileReference; path = BundledBirdModel.tflite; sourceTree = "<group>"; };
 		BCCE40013FB860D5B5BBF9D8 /* AudioRecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderViewModel.swift; sourceTree = "<group>"; };
 		BD6911A72A9692483291E2B0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		BE28A03F143AF6F33D8D2248 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		C14ECB898ACF3C1A41306D3D /* BundledBirdNETLocation.tflite */ = {isa = PBXFileReference; path = BundledBirdNETLocation.tflite; sourceTree = "<group>"; };
-		D09F3092543BE157C9C152DA /* FrauncesBioMap-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesBioMap-Italic.ttf"; sourceTree = "<group>"; };
 		DAA84F8A055F47E9B24F1544 /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
+		DD55214B98F990E849E0D820 /* Pods_BioMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BioMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECB22A086594D117D69A338 /* SightingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingListView.swift; sourceTree = "<group>"; };
 		E0E2E167736D07B37A5EE506 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
-		E2E1B9E64952D37420C21A08 /* FrauncesBioMap-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FrauncesBioMap-Regular.ttf"; sourceTree = "<group>"; };
 		E4551858A3E6A9938A4F8BFE /* AdditionalBirdsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalBirdsSection.swift; sourceTree = "<group>"; };
 		E8E9052896B72D8C987E03A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F248ACEB9DACC3465C828980 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		F5CDFC845B0E18A1D417779A /* AudioPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayback.swift; sourceTree = "<group>"; };
 		F98C6A910E7C2D4BC2808CDA /* BirdNETClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdNETClassifier.swift; sourceTree = "<group>"; };
-		FAEE3D96A438BCCAF7D015D1 /* GeistBioMap-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GeistBioMap-SemiBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,7 +126,7 @@
 				D8856E67F18B6EABD90CB04F /* FirebaseFirestore in Frameworks */,
 				0B4295CB154CA74577CE65DB /* GoogleSignIn in Frameworks */,
 				6CDA5D2F76EFE16A2D78DDF8 /* GoogleSignInSwift in Frameworks */,
-				73299DAC56250EB94C16FDF9 /* Pods_BioMap.framework in Frameworks */,
+				6BAB6AEA042D1B1848B7EA09 /* Pods_BioMap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,24 +155,6 @@
 				C14ECB898ACF3C1A41306D3D /* BundledBirdNETLocation.tflite */,
 			);
 			path = Bundled;
-			sourceTree = "<group>";
-		};
-		2569A5A52235E659613266E8 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				9CFB4A3A3FC189698AB55B2C /* Pods-BioMap.debug.xcconfig */,
-				7B1218702CE7696594C97B18 /* Pods-BioMap.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		26BB19F4D52B15E26FD2DFCB /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				3DD437131ED1C07E86174173 /* Pods_BioMap.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		2EB92BBFC12230FDFC2C135A /* Leaderboard */ = {
@@ -234,19 +208,6 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		545495D359AC0EB56C3DAF79 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				D09F3092543BE157C9C152DA /* FrauncesBioMap-Italic.ttf */,
-				E2E1B9E64952D37420C21A08 /* FrauncesBioMap-Regular.ttf */,
-				A0E73752ACD28CC8224EAC62 /* FrauncesBioMapDisplay-Medium.ttf */,
-				2EF7A26AF713C75CE4A3581A /* GeistBioMap-Medium.ttf */,
-				BBCB66839AC59582E379CB63 /* GeistBioMap-Regular.ttf */,
-				FAEE3D96A438BCCAF7D015D1 /* GeistBioMap-SemiBold.ttf */,
-			);
-			path = Fonts;
-			sourceTree = "<group>";
-		};
 		57E71D859ADB8E3025F2BF7E /* BioMap */ = {
 			isa = PBXGroup;
 			children = (
@@ -259,7 +220,6 @@
 				58933273A3706718132FE6BF /* ML */,
 				31A6139DB14CC13DC31E92A2 /* Models */,
 				020DB1AD75F70BAA75E7E39F /* Networking */,
-				B9A885507B40C42FFDBE0C03 /* Resources */,
 				A02068C4620CF409319D3E44 /* Views */,
 			);
 			path = BioMap;
@@ -297,6 +257,8 @@
 		5ADDA83EFD2D33326187815C /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				0C37575471E52718891D9FAF /* BioLoader.swift */,
+				4B03BF08268E2E6A5410517C /* OrganismData.swift */,
 				3BA990DBCBAA064609615557 /* Theme.swift */,
 			);
 			path = Common;
@@ -329,12 +291,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		B9A885507B40C42FFDBE0C03 /* Resources */ = {
+		BACAED2A68CB3464B6210CB0 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				545495D359AC0EB56C3DAF79 /* Fonts */,
+				AC78B3DF103EC186A1B87ADC /* Pods-BioMap.debug.xcconfig */,
+				B4657D0E9D8981F4BF1C350D /* Pods-BioMap.release.xcconfig */,
 			);
-			path = Resources;
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		BD5A84A6D8727A0B5090B6BE /* Profile */ = {
@@ -354,13 +318,21 @@
 			path = Bird;
 			sourceTree = "<group>";
 		};
+		E2E52F318FFC99EFEABA6167 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DD55214B98F990E849E0D820 /* Pods_BioMap.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F73D7E13228418DBC7D80F8B = {
 			isa = PBXGroup;
 			children = (
 				57E71D859ADB8E3025F2BF7E /* BioMap */,
 				452F232E1F34F99B1BECCE4D /* Products */,
-				2569A5A52235E659613266E8 /* Pods */,
-				26BB19F4D52B15E26FD2DFCB /* Frameworks */,
+				BACAED2A68CB3464B6210CB0 /* Pods */,
+				E2E52F318FFC99EFEABA6167 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -371,7 +343,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 090B8403561E08DED2E39D73 /* Build configuration list for PBXNativeTarget "BioMap" */;
 			buildPhases = (
-				3AB1D76CEE3A186E9ED09613 /* [CP] Check Pods Manifest.lock */,
+				2F764CC5F62C0FC0418B474F /* [CP] Check Pods Manifest.lock */,
 				BA539C66B41EDE6FF23CCB30 /* Sources */,
 				D833CCD5A16E4294CE8D943C /* Resources */,
 				5809CA2CA58505EAE86A1514 /* Frameworks */,
@@ -442,12 +414,6 @@
 				B35CCA642132F17A86265534 /* BundledBirdNET.tflite in Resources */,
 				00E2B86BB791B72AFC348750 /* BundledBirdNETLabels.json in Resources */,
 				82F9371329B1DB6DFC0DB1F7 /* BundledBirdNETLocation.tflite in Resources */,
-				DFAAD164A2DA60BCFF5A7550 /* FrauncesBioMap-Italic.ttf in Resources */,
-				2CC5B680DB6B4F6A532D8B18 /* FrauncesBioMap-Regular.ttf in Resources */,
-				0BBC05D9BD627AB41285AE4D /* FrauncesBioMapDisplay-Medium.ttf in Resources */,
-				3E3B4205367726C1360AB415 /* GeistBioMap-Medium.ttf in Resources */,
-				C51A3F95590798784DDF06E6 /* GeistBioMap-Regular.ttf in Resources */,
-				6AC0DC5562DD6611D1D818B3 /* GeistBioMap-SemiBold.ttf in Resources */,
 				F532D975A32F0B0661D1F8C4 /* GoogleService-Info.plist in Resources */,
 				6383B44C8BEB9F0C352BF40C /* PrivacyInfo.xcprivacy in Resources */,
 			);
@@ -456,7 +422,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3AB1D76CEE3A186E9ED09613 /* [CP] Check Pods Manifest.lock */ = {
+		2F764CC5F62C0FC0418B474F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -496,6 +462,7 @@
 				D393339E2BE0BECE0B410CE7 /* AudioPlayback.swift in Sources */,
 				F33C59385944CC3DDE07A27C /* AudioRecorderView.swift in Sources */,
 				697CAF42DBE8E69A85B768D8 /* AudioRecorderViewModel.swift in Sources */,
+				E1817019D77BD47F66225541 /* BioLoader.swift in Sources */,
 				F7D3CAF328CAA62C34597E25 /* BioMapApp.swift in Sources */,
 				86DAE4F200E4646C5F98BC6D /* BirdClassifier.swift in Sources */,
 				062F39A14C124AAB5CBCA84E /* BirdDetector.swift in Sources */,
@@ -512,6 +479,7 @@
 				C58D8963C233424AB313BAB1 /* LoginView.swift in Sources */,
 				E49E2C38F54424D04FAAF061 /* ModelManager.swift in Sources */,
 				24DC116B1D4908A3D600A3D6 /* MultiBirdDetector.swift in Sources */,
+				42314B0A04EA1DD59F8C2CAF /* OrganismData.swift in Sources */,
 				18B33EDF84386398323FB4F8 /* PreviewSupport.swift in Sources */,
 				DB77E740D0D129842DB37A3A /* ProfileView.swift in Sources */,
 				5731A86D0A00A539F449C281 /* Sighting.swift in Sources */,
@@ -529,7 +497,7 @@
 /* Begin XCBuildConfiguration section */
 		87FBB15AECCF8E8E18854849 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B1218702CE7696594C97B18 /* Pods-BioMap.release.xcconfig */;
+			baseConfigurationReference = B4657D0E9D8981F4BF1C350D /* Pods-BioMap.release.xcconfig */;
 			buildSettings = {
 				API_BASE_URL = "https://birdmap-api.onrender.com";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -671,7 +639,7 @@
 		};
 		FF63533138AB18BBC202D002 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CFB4A3A3FC189698AB55B2C /* Pods-BioMap.debug.xcconfig */;
+			baseConfigurationReference = AC78B3DF103EC186A1B87ADC /* Pods-BioMap.debug.xcconfig */;
 			buildSettings = {
 				API_BASE_URL = "http://localhost:8000";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
