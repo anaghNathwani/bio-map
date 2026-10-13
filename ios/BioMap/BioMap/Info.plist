@@ -37,6 +37,8 @@
 	<string>1</string>
 	<key>GCSupportsGameMode</key>
 	<false/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>BioMap needs camera access to photograph bird sightings.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
