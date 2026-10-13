@@ -70,9 +70,30 @@ service cloud.firestore {
       allow read: if false;
       allow create: if request.resource.data.keys().hasAll(['email', 'createdAt'])
         && request.resource.data.email is string
-        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        // iCloud addresses only (TestFlight invites go to the Apple ID) — keep in sync with
+        // web/src/lib/waitlist.js.
+        && request.resource.data.email.lower().matches('^[^@\\s]+@(icloud|me|mac)\\.com$')
         && request.resource.data.email.size() < 200
         && (!('name' in request.resource.data) || (request.resource.data.name is string && request.resource.data.name.size() < 200));
+      allow update, delete: if false;
+    }
+
+    // In-app bug reports / feature requests (ios FeedbackView -> FirebaseService.submitFeedback).
+    // Signed-in users can only add their own; nobody can read, edit or delete them from a client.
+    // ml_pipeline/notify_waitlist_signups.py (Admin SDK) emails new ones; they're also readable in
+    // the Firebase console under `feedback`.
+    match /feedback/{feedbackID} {
+      allow read: if false;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasAll(['type', 'message', 'userId', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['type', 'message', 'userId', 'createdAt', 'username',
+             'email', 'appVersion', 'build', 'device', 'osVersion', 'notified'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.type in ['bug', 'feature', 'other']
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 1
+        && request.resource.data.message.size() <= 4000;
       allow update, delete: if false;
     }
   }

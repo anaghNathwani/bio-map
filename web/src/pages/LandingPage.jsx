@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import WaitlistButton from '../components/WaitlistButton.jsx'
+import WaitlistForm from '../components/WaitlistForm.jsx'
 import { FAQ } from '../content/faq.js'
 import SiteFooter from '../components/SiteFooter.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
@@ -103,7 +104,16 @@ export default function LandingPage() {
             Open the live map
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
           </Link>
-          <WaitlistButton />
+        </div>
+
+        <div id="waitlist" className="mt-12 max-w-md scroll-mt-28 border border-[var(--rule)] bg-[var(--paper-dim)] p-6 sm:p-7">
+          <p className="text-[13px] uppercase tracking-[0.14em] text-[var(--clay)]">Beta access</p>
+          <h2 className="mt-2 font-serif text-[24px] italic leading-tight">Join the waitlist</h2>
+          <p className="mb-5 mt-2 text-[14px] leading-relaxed text-[var(--ink-soft)]">
+            The app is rolling out gradually. Leave your iCloud email and we&rsquo;ll send a
+            TestFlight invite as soon as a spot opens up.
+          </p>
+          <WaitlistForm idPrefix="waitlist-hero" />
         </div>
       </section>
 

@@ -31,7 +31,7 @@ export async function fetchSightings(maxResults = 500) {
  */
 export async function submitWaitlistSignup({ email, name = '', source = 'website' }) {
   await addDoc(collection(db, 'waitlist'), {
-    email,
+    email: email.trim().toLowerCase(),
     name,
     source,
     notified: false,

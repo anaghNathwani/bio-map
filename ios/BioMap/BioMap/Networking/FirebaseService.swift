@@ -93,6 +93,41 @@ final class FirebaseService {
         try await db.collection("users").document(uid).setData(["username": newUsername], merge: true)
     }
 
+    // MARK: - Feedback
+
+    enum FeedbackKind: String, CaseIterable, Identifiable {
+        case bug, feature, other
+        var id: String { rawValue }
+        var title: String {
+            switch self {
+            case .bug: return "Bug"
+            case .feature: return "Feature idea"
+            case .other: return "Other"
+            }
+        }
+    }
+
+    /// Adds a bug report / feature request to the write-only `feedback` collection (see
+    /// firestore.rules). App + device details are attached so a bug can be reproduced.
+    func submitFeedback(kind: FeedbackKind, message: String, username: String?, email: String?) async throws {
+        guard let uid = currentUID else { throw AppError.notLoggedIn }
+        let info = Bundle.main.infoDictionary
+        var data: [String: Any] = [
+            "type": kind.rawValue,
+            "message": message,
+            "userId": uid,
+            "appVersion": info?["CFBundleShortVersionString"] as? String ?? "",
+            "build": info?["CFBundleVersion"] as? String ?? "",
+            "device": UIDevice.current.model,
+            "osVersion": UIDevice.current.systemVersion,
+            "notified": false,
+            "createdAt": FieldValue.serverTimestamp(),
+        ]
+        if let username, !username.isEmpty { data["username"] = username }
+        if let email, !email.isEmpty { data["email"] = email }
+        try await db.collection("feedback").addDocument(data: data)
+    }
+
     // MARK: - Media "upload" (compressed base64 embedded in the Firestore doc)
 
     /// Firestore rejects a single string field once its encoded size exceeds

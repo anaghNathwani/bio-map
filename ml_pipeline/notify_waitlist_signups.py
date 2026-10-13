@@ -1,5 +1,6 @@
 """
-Emails anaghnathwani@gmail.com whenever someone joins the website's waitlist
+Emails anaghnathwani@gmail.com whenever someone joins the website's waitlist, or sends a bug report /
+feature request from the iOS app (Profile -> Feedback, stored in the `feedback` collection)
 (web/src/components/WaitlistButton.jsx writes to the `waitlist` Firestore collection; see
 firestore.rules — it's write-only from the client, so this script, running with the Admin SDK, is
 the only thing that ever reads it).
@@ -30,7 +31,7 @@ import urllib.request
 
 RESEND_URL = "https://api.resend.com/emails"
 DEFAULT_TO = "anaghnathwani@gmail.com"
-DEFAULT_FROM = "BioMap Waitlist <onboarding@resend.dev>"
+DEFAULT_FROM = "BioMap Alerts <onboarding@resend.dev>"
 
 
 def fetch_unnotified(db):
@@ -75,6 +76,35 @@ def render_email(signups):
     return subject, text, html
 
 
+def fetch_unnotified_feedback(db):
+    docs = list(db.collection("feedback").stream())
+    pending = [d for d in docs if not d.to_dict().get("notified")]
+    pending.sort(key=lambda d: d.to_dict().get("createdAt") or 0)
+    return pending
+
+
+def render_feedback_email(items):
+    lines_text = []
+    blocks_html = []
+    for doc in items:
+        d = doc.to_dict()
+        kind = d.get("type", "other")
+        who = d.get("username") or d.get("email") or d.get("userId", "unknown")
+        meta = f"{d.get('device', '')} iOS {d.get('osVersion', '')}, v{d.get('appVersion', '?')} ({d.get('build', '?')})"
+        msg = d.get("message", "")
+        lines_text.append(f"[{kind}] from {who} ({meta})\n{msg}\n")
+        blocks_html.append(
+            f"<p style='margin:0 0 4px'><b>{escape(kind)}</b> from {escape(who)} "
+            f"<span style='color:#6b6255'>({escape(meta)})</span></p>"
+            f"<p style='margin:0 0 18px;white-space:pre-wrap'>{escape(msg)}</p>"
+        )
+    count = len(items)
+    subject = f"{count} new BioMap feedback message" + ("" if count == 1 else "s")
+    text = f"{count} new feedback message(s):\n\n" + "\n".join(lines_text)
+    html = "<div style='font-family:sans-serif'>" + "".join(blocks_html) + "</div>"
+    return subject, text, html
+
+
 def escape(s):
     return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
@@ -104,34 +134,39 @@ def main():
 
     db = get_db(args.service_account)
     pending = fetch_unnotified(db)
+    feedback = fetch_unnotified_feedback(db)
 
-    if not pending:
-        print("No new waitlist signups.")
+    if not pending and not feedback:
+        print("No new waitlist signups or feedback.")
         return
 
-    subject, text, html = render_email(pending)
-    print(f"{len(pending)} new signup(s):\n{text}")
-
-    if args.dry_run:
-        print("--dry-run: not sending, not marking notified.")
-        return
-
-    if not args.resend_api_key:
+    if not args.dry_run and not args.resend_api_key:
         raise SystemExit(
             "RESEND_API_KEY not set (env var or --resend-api-key). "
             "See this script's docstring for how to get one — nothing was sent, nothing was marked notified."
         )
 
-    status, resp_body = send_email(args.resend_api_key, args.to, subject, text, html)
-    if status >= 300:
-        raise SystemExit(f"Resend API error ({status}): {resp_body}")
-    print(f"Email sent to {args.to} (status {status}).")
+    # Each batch is one email (a burst is one message, not one per item), then marked notified.
+    batches = []
+    if pending:
+        batches.append((render_email(pending), pending))
+    if feedback:
+        batches.append((render_feedback_email(feedback), feedback))
 
-    batch = db.batch()
-    for doc in pending:
-        batch.update(doc.reference, {"notified": True})
-    batch.commit()
-    print(f"Marked {len(pending)} signup(s) as notified.")
+    for (subject, text, html), docs in batches:
+        print(f"{subject}:\n{text}")
+        if args.dry_run:
+            print("--dry-run: not sending, not marking notified.")
+            continue
+        status, resp_body = send_email(args.resend_api_key, args.to, subject, text, html)
+        if status >= 300:
+            raise SystemExit(f"Resend API error ({status}): {resp_body}")
+        print(f"Email sent to {args.to} (status {status}).")
+        batch = db.batch()
+        for doc in docs:
+            batch.update(doc.reference, {"notified": True})
+        batch.commit()
+        print(f"Marked {len(docs)} item(s) as notified.")
 
 
 if __name__ == "__main__":

@@ -14,6 +14,7 @@ struct ProfileView: View {
     @State private var saveError: String?
     @State private var showLogoutConfirm = false
     @State private var safariURL: URL?
+    @State private var showFeedback = false
 
     var body: some View {
         let c = ThemeColors(scheme: scheme)
@@ -107,6 +108,27 @@ struct ProfileView: View {
                     Text("Receive alerts when your sightings are annotated by the community.")
                 }
 
+                // MARK: - Feedback
+                Section {
+                    Button {
+                        showFeedback = true
+                    } label: {
+                        HStack {
+                            Label("Report a bug or suggest a feature", systemImage: "ladybug.fill")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+                    .listRowBackground(c.paper)
+                } header: {
+                    Text("Feedback")
+                } footer: {
+                    Text("The beta is rolling out slowly. Tell us what broke or what you'd like to see.")
+                }
+
                 // MARK: - About
                 Section {
                     aboutRow("Citizen science bird tracking", icon: "globe", path: "/citizen-science")
@@ -132,6 +154,10 @@ struct ProfileView: View {
             .navigationTitle("Profile")
             .sheet(isPresented: $isEditingUsername) {
                 editUsernameSheet
+            }
+            .sheet(isPresented: $showFeedback) {
+                FeedbackView()
+                    .environmentObject(env)
             }
             .sheet(item: $safariURL) { url in
                 SafariView(url: url)
