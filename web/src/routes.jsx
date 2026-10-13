@@ -14,6 +14,7 @@ import PhotoIdPage from './pages/PhotoIdPage.jsx'
 import BlogIndexPage from './pages/BlogIndexPage.jsx'
 import BlogPostPage from './pages/BlogPostPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
+import BioLoader from './components/BioLoader.jsx'
 
 // The map pulls in Leaflet + Firebase; keep them out of every other page's bundle.
 const MapApp = lazy(() => import('./App.jsx'))
@@ -23,7 +24,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/map" element={<Suspense fallback={null}><MapApp /></Suspense>} />
+      <Route path="/map" element={<Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[var(--bg)]"><BioLoader /></div>}><MapApp /></Suspense>} />
       <Route path="/citizen-science" element={<CitizenSciencePage />} />
       <Route path="/community" element={<CommunityPage />} />
       <Route path="/ai" element={<AIPage />} />

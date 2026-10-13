@@ -74,7 +74,7 @@
 
 .sighting-popup-badge--photo {
   background: rgba(193, 96, 46, .2);
-  color: #e4a272;
+  color: #2997FF;
 }
 
 .sighting-popup-close-btn {
@@ -103,7 +103,7 @@
 
 .sighting-popup-link {
   font-size: 11px;
-  color: #e4a272;
+  color: #2997FF;
   text-decoration: none;
   padding: 3px 8px;
   background: rgba(228, 162, 114, .1);

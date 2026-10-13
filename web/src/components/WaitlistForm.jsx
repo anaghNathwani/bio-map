@@ -3,8 +3,7 @@ import { Check } from 'lucide-react'
 import { submitWaitlistSignup } from '../firebase.js'
 import { isIcloudEmail } from '../lib/waitlist.js'
 
-const inputClass =
-  'w-full border border-[var(--rule)] bg-transparent px-3.5 py-2.5 text-[14.5px] text-[var(--ink)] outline-none placeholder:text-[var(--ink-soft)]/70 focus:border-[var(--ink)]'
+const inputClass = 'field'
 
 /**
  * Name + iCloud email form that writes to the `waitlist` Firestore collection (see firebase.js's
@@ -42,11 +41,11 @@ export default function WaitlistForm({ autoFocusEmail = false, idPrefix = 'waitl
   if (status === 'done') {
     return (
       <div className="py-2">
-        <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--clay)] text-[var(--clay)]">
+        <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--accent)] text-[var(--accent)]">
           <Check size={20} strokeWidth={2} />
         </div>
-        <h3 className="mt-4 font-serif text-[22px] italic">You&rsquo;re on the list</h3>
-        <p className="mt-2 max-w-[34ch] text-[14px] leading-relaxed text-[var(--ink-soft)]">
+        <h3 className="mt-4 text-[24px] font-semibold tracking-[-0.02em]">You&rsquo;re on the list</h3>
+        <p className="mt-2 max-w-[34ch] text-[14px] leading-relaxed text-[var(--fg-soft)]">
           We&rsquo;re rolling the beta out slowly so we can keep up with everyone&rsquo;s feedback.
           We&rsquo;ll send a TestFlight invite to your iCloud email when it&rsquo;s your turn.
         </p>
@@ -94,17 +93,17 @@ export default function WaitlistForm({ autoFocusEmail = false, idPrefix = 'waitl
         className="absolute left-[-9999px] h-0 w-0 opacity-0"
       />
 
-      {error && <p role="alert" className="text-[13px] leading-snug text-[var(--clay)]">{error}</p>}
+      {error && <p role="alert" className="text-[13px] leading-snug text-[var(--accent)]">{error}</p>}
 
       <button
         type="submit"
         disabled={status === 'submitting'}
-        className="inline-flex w-full items-center justify-center gap-2 bg-[var(--ink)] px-5 py-3 text-[14px] font-medium text-[var(--paper)] transition-colors hover:bg-[var(--clay)] disabled:opacity-60"
+        className="btn-blue w-full px-5 py-3 text-[17px]"
       >
         {status === 'submitting' ? 'Joining…' : 'Join the waitlist'}
       </button>
 
-      <p className="text-[12px] leading-relaxed text-[var(--ink-soft)]/80">
+      <p className="text-[12px] leading-relaxed text-[var(--fg-soft)]">
         iCloud email only (@icloud.com, @me.com, @mac.com): the beta is sent through Apple&rsquo;s
         TestFlight. We&rsquo;ll only use it to tell you about BioMap access. No spam.
       </p>

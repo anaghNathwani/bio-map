@@ -2,18 +2,18 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  background: var(--paper-dim);
+  background: var(--bg-raised);
   border: 1px solid var(--rule);
-  border-left: 2px solid var(--clay);
+  border-left: 2px solid var(--accent);
   padding: 20px 24px;
   margin-bottom: 32px;
   font-size: 15px;
-  color: var(--ink);
+  color: var(--fg);
   line-height: 1.7;
 }
 
 .ai-page-highlight-icon {
   flex: none;
   margin-top: 3px;
-  color: var(--clay);
+  color: var(--accent);
 }

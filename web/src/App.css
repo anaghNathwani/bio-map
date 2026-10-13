@@ -4,12 +4,12 @@
   flex-direction: column;
 }
 
-/* This toolbar sits over the map itself, not the paper/ink site chrome, so it
+/* This toolbar sits over the map itself, not the site chrome, so it
    stays a fixed dark bar regardless of the site's light/dark theme — same
    reasoning as the legend and sighting popup below. */
 .app-header {
   padding: 12px 20px;
-  background: #211D16;
+  background: #1D1D1F;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -18,10 +18,10 @@
 }
 
 .app-logo {
-  font-family: 'Fraunces Variable', serif;
-  font-style: italic;
+  font-family: var(--font-system);
+  letter-spacing: -0.02em;
   font-size: 20px;
-  color: #F4F1E9;
+  color: #F5F5F7;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -29,14 +29,14 @@
 
 .app-subtitle {
   font-size: 12px;
-  color: rgba(244, 241, 233, .65);
+  color: rgba(245, 245, 247, .65);
   margin-top: 1px;
 }
 
 .app-badge {
   margin-left: auto;
-  background: rgba(244, 241, 233, .12);
-  color: #F4F1E9;
+  background: rgba(245, 245, 247, .12);
+  color: #F5F5F7;
   padding: 3px 10px;
   border-radius: 20px;
   font-size: 12px;
@@ -58,19 +58,19 @@
   bottom: 30px;
   right: 10px;
   z-index: 1000;
-  background: rgba(33, 29, 22, .88);
+  background: rgba(29, 29, 31, .88);
   -webkit-background-filter: blur(8px);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 12px;
-  color: #F4F1E9;
-  border: 1px solid rgba(244, 241, 233, .12);
+  color: #F5F5F7;
+  border: 1px solid rgba(245, 245, 247, .12);
 }
 
 .legend-title {
   font-weight: 600;
   margin-bottom: 6px;
-  color: rgba(244, 241, 233, .6);
+  color: rgba(245, 245, 247, .6);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -91,7 +91,7 @@
 }
 
 .legend-dot--photo {
-  background: #C1602E;
+  background: #0A84FF;
 }
 
 .legend-dot--audio {
@@ -107,9 +107,24 @@
 }
 
 .marker-dot--photo {
-  background: #C1602E;
+  background: #0A84FF;
 }
 
 .marker-dot--audio {
   background: #5B6B8C;
+}
+
+/* Shown over the map until the first batch of sightings arrives. */
+.map-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .78);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  --fg-soft: #A1A1A6;
+  --accent: #2997FF;
 }

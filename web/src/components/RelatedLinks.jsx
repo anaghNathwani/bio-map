@@ -12,7 +12,7 @@ export default function RelatedLinks({ paths }) {
       <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
         {items.map(r => (
           <li key={r.path} className="static-page-card">
-            <Link to={r.path} className="static-page-card-title underline decoration-[var(--rule)] underline-offset-4 hover:decoration-[var(--ink)]">
+            <Link to={r.path} className="static-page-card-title underline decoration-[var(--rule)] underline-offset-4 hover:decoration-[var(--fg)]">
               {r.breadcrumb || r.title}
             </Link>
             <p className="static-page-card-body">{r.description}</p>

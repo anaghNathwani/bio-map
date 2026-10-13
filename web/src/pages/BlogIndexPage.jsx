@@ -15,7 +15,7 @@ export default function BlogIndexPage() {
       {POSTS.map(post => (
         <article key={post.slug} className="static-page-card">
           <h2 className="static-page-card-title">
-            <Link to={`/blog/${post.slug}`} className="underline decoration-[var(--rule)] underline-offset-4 hover:decoration-[var(--ink)]">
+            <Link to={`/blog/${post.slug}`} className="underline decoration-[var(--rule)] underline-offset-4 hover:decoration-[var(--fg)]">
               {post.title}
             </Link>
           </h2>

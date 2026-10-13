@@ -19,12 +19,12 @@ export default function WaitlistButton({ size = 'md', className = '' }) {
         onClick={() => setOpen(true)}
         className={
           large
-            ? `group inline-flex items-center gap-2 border border-[var(--ink)] px-7 py-3.5 text-[15px] font-medium text-[var(--ink)] transition-colors hover:bg-[var(--ink)] hover:text-[var(--paper)] ${className}`
-            : `group inline-flex items-center gap-2 border border-[var(--ink)] px-6 py-3 text-[14px] font-medium text-[var(--ink)] transition-colors hover:bg-[var(--ink)] hover:text-[var(--paper)] ${className}`
+            ? `btn-blue px-7 py-3 text-[17px] ${className}`
+            : `btn-blue px-6 py-2.5 text-[15px] ${className}`
         }
       >
         Join the waitlist
-        <span className="transition-transform group-hover:translate-x-0.5">→</span>
+        
       </button>
       {open && <WaitlistModal onClose={() => setOpen(false)} />}
     </>
@@ -44,28 +44,28 @@ function WaitlistModal({ onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[var(--ink)]/40 px-6 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-6 backdrop-blur-sm"
       onMouseDown={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="waitlist-title"
-        className="relative w-full max-w-sm border border-[var(--rule)] bg-[var(--paper)] p-7 shadow-xl"
+        className="relative w-full max-w-sm rounded-[28px] bg-[var(--bg)] p-8 shadow-2xl"
       >
         <button
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-4 top-4 text-[var(--ink-soft)] transition-colors hover:text-[var(--ink)]"
+          className="absolute right-4 top-4 text-[var(--fg-soft)] transition-colors hover:text-[var(--fg)]"
         >
           <X size={18} strokeWidth={1.75} />
         </button>
-        <p className="text-[13px] uppercase tracking-[0.14em] text-[var(--clay)]">Beta access</p>
-        <h2 id="waitlist-title" className="mt-2 font-serif text-[24px] italic leading-tight">
+        <p className="text-[13px] font-semibold text-[var(--fg-soft)]">Beta access</p>
+        <h2 id="waitlist-title" className="mt-2 text-[28px] font-semibold leading-tight tracking-[-0.02em]">
           Join the waitlist
         </h2>
-        <p className="mb-6 mt-2 text-[14px] leading-relaxed text-[var(--ink-soft)]">
+        <p className="mb-6 mt-2 text-[14px] leading-relaxed text-[var(--fg-soft)]">
           The app is rolling out gradually. Leave your iCloud email and we&rsquo;ll send a TestFlight
           invite as soon as a spot opens up.
         </p>

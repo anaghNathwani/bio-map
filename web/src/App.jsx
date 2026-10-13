@@ -6,6 +6,8 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import FilterBar from './components/FilterBar.jsx'
 import SightingPopup from './components/SightingPopup.jsx'
+import BioLoader from './components/BioLoader.jsx'
+import birdMark from './assets/bird-mark.svg'
 import { fetchSightings } from './firebase.js'
 import usePageMeta from './lib/pageMeta.js'
 import './App.css'
@@ -34,6 +36,7 @@ export default function App() {
   const [filtered, setFiltered] = useState([])
   const [selected, setSelected] = useState(null)
   const [count, setCount] = useState(0)
+  const [loaded, setLoaded] = useState(false)
 
   // Init map
   useEffect(() => {
@@ -71,6 +74,8 @@ export default function App() {
       setCount(data.length)
     } catch (e) {
       console.warn('Firestore fetch failed:', e)
+    } finally {
+      setLoaded(true)
     }
   }, [])
 
@@ -100,7 +105,7 @@ export default function App() {
       <h1 className="sr-only">BioMap live bird sighting map</h1>
       <header className="app-header">
         <div>
-          <div className="app-logo">🐦 BioMap</div>
+          <div className="app-logo"><img src={birdMark} alt="" width="22" height="22" style={{ filter: "invert(1)" }} /> BioMap</div>
           <div className="app-subtitle">Live community bird sightings</div>
         </div>
         <FilterBar sightings={sightings} onFiltered={setFiltered} />
@@ -109,6 +114,12 @@ export default function App() {
 
       <div className="map-container">
         <div ref={mapRef} className="map" />
+
+        {!loaded && (
+          <div className="map-loading">
+            <BioLoader size={150} />
+          </div>
+        )}
 
         <div className="legend">
           <div className="legend-title">Sighting type</div>

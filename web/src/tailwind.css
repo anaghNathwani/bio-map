@@ -7,8 +7,8 @@
 
 @theme inline {
     --font-heading: var(--font-sans);
-    --font-sans: 'Geist Variable', sans-serif;
-    --font-serif: 'Fraunces Variable', 'Iowan Old Style', serif;
+    --font-sans: var(--font-system);
+    --font-display: var(--font-system);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -130,77 +130,112 @@
     }
 }
 
-/* Editorial site palette — paper/ink/clay — used on the marketing pages.
-   Light values are the default; dark values apply when the OS prefers dark
-   (and the visitor hasn't explicitly picked light), or when they've
-   explicitly picked dark via the theme toggle (html[data-theme]). */
+/* Palette: white / light grey / near-black, one blue. Light by default; dark when the OS prefers
+   dark (unless the visitor picked light) or when they pick dark via the toggle (html[data-theme]). */
 :root {
-  --paper: #F4F1E9;
-  --paper-dim: #ECE7DA;
-  --ink: #211D16;
-  --ink-soft: #6B6255;
-  --clay: #C1602E;
-  --clay-soft: #E4A272;
-  --rule: rgba(33, 29, 22, 0.14);
+  --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --bg: #FFFFFF;
+  --bg-raised: #F5F5F7;
+  --fg: #1D1D1F;
+  --fg-soft: #6E6E73;
+  --accent: #0071E3;
+  --link: #0066CC;
+  --accent-soft: rgba(0, 113, 227, 0.22);
+  --rule: #D2D2D7;
+  --nav-bg: rgba(255, 255, 255, 0.8);
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #17140F;
-    --paper-dim: #201C15;
-    --ink: #ECE7DA;
-    --ink-soft: #A69C8B;
-    --clay: #E2895A;
-    --clay-soft: #7A3F1E;
-    --rule: rgba(236, 231, 218, 0.14);
+    --bg: #000000;
+    --bg-raised: #161617;
+    --fg: #F5F5F7;
+    --fg-soft: #A1A1A6;
+    --accent: #0A84FF;
+    --link: #2997FF;
+    --accent-soft: rgba(10, 132, 255, 0.35);
+    --rule: #424245;
+    --nav-bg: rgba(0, 0, 0, 0.8);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --paper: #17140F;
-  --paper-dim: #201C15;
-  --ink: #ECE7DA;
-  --ink-soft: #A69C8B;
-  --clay: #E2895A;
-  --clay-soft: #7A3F1E;
-  --rule: rgba(236, 231, 218, 0.14);
+  --bg: #000000;
+  --bg-raised: #161617;
+  --fg: #F5F5F7;
+  --fg-soft: #A1A1A6;
+  --accent: #0A84FF;
+  --link: #2997FF;
+  --accent-soft: rgba(10, 132, 255, 0.35);
+  --rule: #424245;
+  --nav-bg: rgba(0, 0, 0, 0.8);
   color-scheme: dark;
 }
 
-/* Unlayered so it wins over the shadcn `body { bg-background }` rule above,
-   which is always white — keeps overscroll/short pages themed in dark mode. */
+/* Unlayered so it wins over the shadcn `body { bg-background }` rule above. */
 body {
-  background-color: var(--paper);
-  color: var(--ink);
+  background-color: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* A faint, fixed paper-grain texture; layered under content, never on top of type. */
-.bg-grain {
-  position: relative;
-  isolation: isolate; /* keeps ::before's z-index:-1 inside this section */
-}
-.bg-grain::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.5;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.13  0 0 0 0 0.11  0 0 0 0 0.09  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Translucent global nav, like apple.com. */
+.nav-bar {
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .bg-grain::before {
-    mix-blend-mode: overlay;
-    opacity: 0.35;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.93  0 0 0 0 0.91  0 0 0 0 0.86  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+/* Primary action: solid blue pill. */
+.btn-blue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 980px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
 }
-:root[data-theme="dark"] .bg-grain::before {
-  mix-blend-mode: overlay;
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.93  0 0 0 0 0.91  0 0 0 0 0.86  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+.btn-blue:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+.btn-blue:disabled { opacity: 0.5; }
+
+/* Secondary action: blue text link with a chevron, "Learn more >". */
+.link-chevron {
+  color: var(--link);
+  letter-spacing: -0.01em;
 }
+.link-chevron:hover { text-decoration: underline; text-underline-offset: 3px; }
+.link-chevron::after { content: " \203A"; }
+
+/* Rounded content tile, light grey on white (or the reverse). */
+.tile {
+  background: var(--bg-raised);
+  border-radius: 28px;
+}
+
+.field {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  padding: 0.85rem 1rem;
+  font-size: 17px;
+  color: var(--fg);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.field::placeholder { color: var(--fg-soft); }
+.field:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+
+/* BioLoader nucleus pulse */
+.bio-loader-pulse { animation: bio-pulse 1.8s ease-in-out infinite; }
+@keyframes bio-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+@media (prefers-reduced-motion: reduce) { .bio-loader-pulse { animation: none; } }
+
+/* The bird mark is a dark line drawing; flip it on dark backgrounds. */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .bird-logo { filter: invert(1); } }
+:root[data-theme="dark"] .bird-logo { filter: invert(1); }
