@@ -263,9 +263,29 @@ def reel_testflight(dur):
     return b
 
 
+def reel_evolve(dur):
+    """Calm pad; a pluck per beat of the story; one ping per organism as the bird morphs; a glide for the strike-through."""
+    b = np.zeros((int(dur * SR), 2))
+    b[:, 0] += (p := pad(dur, [A3, E4, B4], 0.03)); b[:, 1] += p
+    place(b, pluck(E5, 1.8, 0.16), 0.7)
+    for i, f in enumerate([E5, G5, A5, C6, A5, G5, E5, G5, A5, C6]):          # one soft note per organism
+        place(b, ping(f, 1.0, 0.055), 3.8 + i * 0.9, pan=-0.5 + 0.11 * i)
+    for at, f in [(3.7, E5), (7.9, G5), (12.6, A5), (16.6, C6), (20.2, A5)]:
+        place(b, pluck(f, 1.2, 0.15), at)
+    place(b, whoosh(0.9, 0.11), 3.0)
+    place(b, glide(900, 240, 0.7, 0.07), 13.6)                                 # the strike-through
+    place(b, pluck(A5, 2.2, 0.17), 14.5); place(b, pluck(E6, 2.2, 0.11), 14.55)  # the new name lands
+    phrase(1.6, [CH(3000, 4200), CH(3600, 4600)], b, 0.07, -0.4)
+    phrase(8.4, [CH(3100, 4400), CH(3800, 4800)], b, 0.07, 0.3)
+    phrase(17.4, [CH(3300, 4500), CH(3900, 3100, .18)], b, 0.07, -0.2)
+    place(b, pluck(A5, 2.8, 0.18), 24.2); place(b, pluck(E6, 2.8, 0.12), 24.25)
+    phrase(25.2, [CH(3400, 4600), CH(4200, 3200, .2), CH(3600, 4800, .16)], b, 0.10, 0.0)
+    return b
+
+
 BUILDERS = {'01-how-biomap-works': reel_how, '02-tips-bird-sound': reel_tips, '03-stays-on-your-phone': reel_ondevice, '04-says-when-unsure': reel_unsure,
             '09-the-map': reel_map, '10-works-offline': reel_offline, '11-see-it-in-action': reel_trailer, '12-birds-in-the-wild': reel_showcase,
-            'our-new-name': reel_rebrand, 'testflight-is-live': reel_testflight}
+            'our-new-name': reel_rebrand, 'testflight-is-live': reel_testflight, 'birdmap-is-now-biomap': reel_evolve}
 
 
 def render_wav(name, dur, out):
