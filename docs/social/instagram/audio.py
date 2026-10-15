@@ -247,14 +247,14 @@ def reel_testflight(dur):
     """Soft pad, a pluck on each step, dry UI ticks on every mock tap, a swell as the phone enters/leaves."""
     b = np.zeros((int(dur * SR), 2))
     b[:, 0] += (p := pad(dur, [A3, E4, B4], 0.03)); b[:, 1] += p
-    place(b, whoosh(0.9, 0.12), 2.6)
+    place(b, glide(330, 520, 0.9, 0.035), 2.6)
     place(b, pluck(E5, 1.6, 0.16), 0.5); place(b, pluck(A5, 2.0, 0.15), 0.55)
     for at, f in [(3.7, E5), (8.8, G5), (13.6, A5), (19.6, C6)]:
         place(b, pluck(f, 1.1, 0.15), at)
     for at in [5.7, 11.3, 15.3, 17.3, 20.9]:
         place(b, click(2300, .05, .17), at)
     place(b, ping(1760, 1.2, 0.07), 7.1); place(b, ping(1760, 1.2, 0.07), 19.0)       # "Open" appears
-    place(b, whoosh(0.8, 0.11), 21.0); place(b, whoosh(0.8, 0.10), 23.2)
+    place(b, glide(380, 600, 0.8, 0.032), 21.0); place(b, glide(520, 300, 0.8, 0.03), 23.2)
     phrase(4.2, [CH(3000, 4200), CH(3600, 4600)], b, 0.07, -0.4)
     phrase(9.2, [CH(3100, 4400), CH(3800, 4800)], b, 0.07, 0.3)
     phrase(14.4, [CH(3300, 4500), CH(3900, 3100, .18)], b, 0.07, -0.2)

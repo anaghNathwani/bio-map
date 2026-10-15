@@ -25,7 +25,7 @@ DUR = 30.0
 T_IN, T_OUT = 3.3, 23.7
 STEPS = [  # (caption start, caption end)
     (3.6, 8.5), (8.7, 13.3), (13.5, 19.3), (19.5, 23.5)]
-SCENES = {'s1': (3.6, 8.6), 's2': (8.4, 13.4), 's3': (13.2, 19.5), 's4': (19.3, 22.1), 's5': (21.9, 23.9)}
+SCENES = {'s1': (3.2, 8.6), 's2': (8.4, 13.4), 's3': (13.2, 19.5), 's4': (19.3, 22.1), 's5': (21.9, 23.9)}
 TAPS = [  # (time, x, y) in phone-screen points
     (5.7, 182, 202), (11.3, 201, 455), (15.3, 201, 560), (17.3, 201, 560), (20.9, 247.7, 257)]
 
@@ -213,17 +213,18 @@ window.custom=function(t){
 """
 
 
-def page():
+def page(final=False):
     # captions: [eyebrow, headline, sub]
     caps = [('Step 1 of 4', 'Install TestFlight.', 'It&rsquo;s Apple&rsquo;s free app for trying betas.'),
             ('Step 2 of 4', 'Open the invite link.', 'On your iPhone, tap the BioMap beta link.'),
             ('Step 3 of 4', 'Accept. Then install.', 'Tap Accept, then Install.'),
             ('Step 4 of 4', 'Open BioMap.', 'The orange dot means it&rsquo;s a beta.')]
     body = ''
-    # intro
-    body += ('<div class="abs" data-a=".1" data-b="3.1" data-y="0" style="left:0;right:0;top:420px;display:flex;justify-content:center">'
-             + build.bird(300, draw=True, color='#1D1D1F', sw=2.1).replace('class="draw"', 'class="draw" data-a=".2" data-d="1.4"') + '</div>')
-    body += ('<div class="abs" style="left:100px;right:100px;top:800px" data-a=".7" data-b="3.1" data-d=".9">'
+    # intro (in the joined ad the rename story just showed the bird, so this is text only)
+    if not final:
+        body += ('<div class="abs" data-a=".1" data-b="3.1" data-y="0" style="left:0;right:0;top:420px;display:flex;justify-content:center">'
+                 + build.bird(300, draw=True, color='#1D1D1F', sw=2.1).replace('class="draw"', 'class="draw" data-a=".2" data-d="1.4"') + '</div>')
+    body += (f'<div class="abs" style="left:100px;right:100px;top:{640 if final else 800}px" data-a=".7" data-b="3.1" data-d=".9">'
              '<div class="eyebrow">The public beta is open</div><h1 style="margin-top:20px">BioMap is on TestFlight.</h1>'
              '<div class="sub">Here&rsquo;s how to get in, in four taps.</div></div>')
     for (a, b), (eb, h, sub) in zip(STEPS, caps):
@@ -244,20 +245,26 @@ def page():
             f'<script>{build.TL_JS}{js}</script></body></html>')
 
 
-def main():
+def render(mp4, final=False, cover=None):
     from playwright.sync_api import sync_playwright
-    OUT.mkdir(exist_ok=True)
+    mp4 = pathlib.Path(mp4)
+    mp4.parent.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
         b = p.chromium.launch(channel='chrome')
         pg = b.new_page(viewport={'width': 1080, 'height': 1920})
-        mp4 = OUT / f'{NAME}.mp4'
-        build.render_reel(pg, NAME, page(), DUR, mp4)
-        audio.add_audio(mp4)
-        pg.set_viewport_size({'width': 1080, 'height': 1920})
-        pg.goto((build.SRC / f'reel-{NAME}.html').as_uri()); pg.evaluate('document.fonts.ready'); pg.wait_for_timeout(200)
-        pg.evaluate('render(26.2)')   # cover = the call to action
-        pg.screenshot(path=str(OUT / f'{NAME}-cover.png'), type='png')
+        build.render_reel(pg, NAME, page(final), DUR, mp4)
+        audio.add_audio(mp4)      # keyed by file stem, so the file must be called testflight-is-live.mp4
+        if cover:
+            pg.set_viewport_size({'width': 1080, 'height': 1920})
+            pg.goto((build.SRC / f'reel-{NAME}.html').as_uri()); pg.evaluate('document.fonts.ready'); pg.wait_for_timeout(200)
+            pg.evaluate('render(26.2)')   # cover = the call to action
+            pg.screenshot(path=str(cover), type='png')
         b.close()
+
+
+def main():
+    OUT.mkdir(exist_ok=True)
+    render(OUT / f'{NAME}.mp4', cover=OUT / f'{NAME}-cover.png')
 
 
 if __name__ == '__main__':

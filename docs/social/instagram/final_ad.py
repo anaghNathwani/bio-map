@@ -2,20 +2,25 @@
 
 The rename story (evolve.py) is cut just before its own end card, then crossfades into the TestFlight
 walkthrough (testflight.py), whose closing card carries the link. Both reels use the same background,
-so the join is a plain 0.6 s crossfade of picture and sound. Run evolve.py and testflight.py first.
+so the join is a plain 0.6 s crossfade of picture and sound. Run evolve.py first; this renders its own copy of the walkthrough.
 
   python3 final_ad.py
 """
-import pathlib, shutil, subprocess
+import pathlib, shutil, subprocess, tempfile
+import testflight
 
 HERE = pathlib.Path(__file__).parent
 D = HERE / 'testflight'
-A, B = D / 'birdmap-is-now-biomap.mp4', D / 'testflight-is-live.mp4'
+A = D / 'birdmap-is-now-biomap.mp4'
 OUT = D / 'biomap-final-ad.mp4'
 CUT, FADE = 20.9, 0.6      # keep the story up to 20.9 s (just after "New name." fades), crossfade 0.6 s
 
 
 def main():
+    # the walkthrough, minus its own bird-logo intro (the rename story just showed the bird)
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    B = tmp / 'testflight-is-live.mp4'
+    testflight.render(B, final=True)
     fc = (f'[0:v]trim=0:{CUT},setpts=PTS-STARTPTS[v0];[1:v]setpts=PTS-STARTPTS[v1];'
           f'[v0][v1]xfade=transition=fade:duration={FADE}:offset={CUT - FADE}[v];'
           f'[0:a]atrim=0:{CUT},asetpts=PTS-STARTPTS[a0];[1:a]asetpts=PTS-STARTPTS[a1];[a0][a1]acrossfade=d={FADE}[a]')
