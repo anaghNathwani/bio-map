@@ -2,8 +2,8 @@
 
 Same pipeline and Apple-style look as testflight.py. The bird mark morphs through other organisms (the
 same outlines as the website/app loader), then the old name is struck through and BioMap writes in.
-It tells the "why" of the rename (the idea outgrew birds) without claiming anything the app doesn't do
-yet: today BioMap is a bird app, and the reel says so.
+It tells the "why" of the rename (the idea outgrew birds) and makes no claim about what the app does
+or where it's headed.
 
   python3 evolve.py        # renders testflight/birdmap-is-now-biomap.mp4 + -cover.png
 """
@@ -75,8 +75,7 @@ def page():
     body += ('<div class="abs" style="left:100px;right:100px;top:560px" data-a="16.6" data-b="20.0" data-d=".8">'
              '<h1><span style="color:#0071E3">Bio:</span> life.<br><span style="color:#0071E3">Map:</span> where it&rsquo;s found.</h1></div>')
     body += ('<div class="abs" style="left:100px;right:100px;top:560px" data-a="20.2" data-b="24.0" data-d=".8">'
-             '<h1>Same community.<br>Same sightings.<br><span style="color:#0071E3">Birds first.</span></h1>'
-             '<div class="sub">Today BioMap is a bird app. The name is where it&rsquo;s headed.</div></div>')
+             '<h1>Same community.<br>Same sightings.<br><span style="color:#0071E3">New name.</span></h1></div>')
     # 5. end card
     body += ('<div class="abs" style="left:100px;right:100px;top:420px" data-a="24.2" data-d=".8">'
              '<div class="eyebrow">The public beta is open</div>'

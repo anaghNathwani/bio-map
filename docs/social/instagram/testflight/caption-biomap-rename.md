@@ -15,7 +15,7 @@ It started with a bird. Then the dream kept growing, past wings and toward all k
 Bio: life.
 Map: where it's found.
 
-Same community, same sightings, same citizen science. Today BioMap is still a bird app, and the name is where it's headed.
+Same community, same sightings, same citizen science. Just a new name.
 
 The public beta is open on TestFlight: https://testflight.apple.com/join/ZcyddckA
 
@@ -24,6 +24,6 @@ The public beta is open on TestFlight: https://testflight.apple.com/join/Zcyddck
 
 ## Notes
 
-- The reel deliberately says "today BioMap is a bird app": it explains the new name without promising features that don't exist yet. If you add other organisms to the app, update the line "Same community. Same sightings. Birds first."
+- The reel tells why the name changed and says nothing about what the app can do or where it's headed.
 - The bird that morphs into other life forms is the same animation as the app's loading screen and the website hero.
 - Links in Instagram captions aren't tappable, so put the TestFlight link in your bio.
