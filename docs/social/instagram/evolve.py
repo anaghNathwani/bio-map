@@ -15,7 +15,7 @@ import testflight as tf
 HERE = pathlib.Path(__file__).parent
 OUT = HERE / 'testflight'
 NAME = 'birdmap-is-now-biomap'
-DUR = 28.4
+DUR = 24.8
 HOLD, MORPH = 0.3, 0.6          # seconds per organism: pause, then morph
 
 CSS = tf.CSS + """
@@ -71,18 +71,16 @@ def page():
     body += ('<div class="abs" style="left:100px;right:100px;top:200px" data-a="12.6" data-b="16.4" data-d=".8"><h1>So we&rsquo;re changing our name.</h1></div>')
     body += (f'<div class="center" style="top:760px" data-a="12.9" data-b="16.4" data-y="0" data-d=".7"><div style="position:relative;display:inline-block" class="word"><span style="color:#8E8E93">BirdMap</span>{strike}</div></div>')
     body += ('<div class="center" style="top:1010px" data-a="14.5" data-b="16.4" data-y="40" data-d=".8"><div class="word" style="font-size:300px">Bio<span style="color:#0071E3">Map</span></div></div>')
-    # 4. what the name means
-    body += ('<div class="abs" style="left:100px;right:100px;top:560px" data-a="16.6" data-b="20.0" data-d=".8">'
-             '<h1><span style="color:#0071E3">Bio:</span> life.<br><span style="color:#0071E3">Map:</span> where it&rsquo;s found.</h1></div>')
-    body += ('<div class="abs" style="left:100px;right:100px;top:560px" data-a="20.2" data-b="24.0" data-d=".8">'
+    # 4. what stays the same
+    body += ('<div class="abs" style="left:100px;right:100px;top:560px" data-a="16.6" data-b="20.4" data-d=".8">'
              '<h1>Same community.<br>Same sightings.<br><span style="color:#0071E3">New name.</span></h1></div>')
     # 5. end card
-    body += ('<div class="abs" style="left:100px;right:100px;top:420px" data-a="24.2" data-d=".8">'
+    body += ('<div class="abs" style="left:100px;right:100px;top:420px" data-a="20.6" data-d=".8">'
              '<div class="eyebrow">The public beta is open</div>'
              '<h1 style="margin-top:18px">Say hello to BioMap.</h1>'
              '<div class="sub">Join on TestFlight.</div>'
              f'<span class="linkpill" style="font-size:41px;padding:34px 48px">{tf.LINK_SHORT}</span></div>')
-    body += ('<div class="abs" style="left:100px;right:100px;top:1480px;display:flex;align-items:center;gap:18px;font-size:40px;font-weight:700;letter-spacing:-.02em" data-a="25.4" data-d=".6" data-y="0">'
+    body += ('<div class="abs" style="left:100px;right:100px;top:1480px;display:flex;align-items:center;gap:18px;font-size:40px;font-weight:700;letter-spacing:-.02em" data-a="21.8" data-d=".6" data-y="0">'
              + build.bird(60, color='#1D1D1F', sw=2.4) + 'BioMap</div>')
     js = JS.replace('__ORG__', json.dumps(tf.ORGANISMS)).replace('__HOLD__', str(HOLD)).replace('__MORPH__', str(MORPH))
     return (f'<!doctype html><html><head><meta charset="utf-8"><style>{CSS}</style></head><body>{body}'

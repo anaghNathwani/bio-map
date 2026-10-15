@@ -12,9 +12,6 @@ BirdMap is now BioMap.
 
 It started with a bird. Then the dream kept growing, past wings and toward all kinds of life.
 
-Bio: life.
-Map: where it's found.
-
 Same community, same sightings, same citizen science. Just a new name.
 
 The public beta is open on TestFlight: https://testflight.apple.com/join/ZcyddckA
