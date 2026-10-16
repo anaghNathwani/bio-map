@@ -1,6 +1,8 @@
 """
 Emails anaghnathwani@gmail.com whenever someone joins the website's waitlist, or sends a bug report /
-feature request from the iOS app (Profile -> Feedback, stored in the `feedback` collection)
+feature request from the iOS app (Profile -> Feedback, stored in the `feedback` collection), and whenever
+someone creates a new account in the app (Firebase Auth) — with the running total against the TestFlight
+tester cap (TESTFLIGHT_CAP) so you know when to raise it in App Store Connect
 (web/src/components/WaitlistButton.jsx writes to the `waitlist` Firestore collection; see
 firestore.rules — it's write-only from the client, so this script, running with the Admin SDK, is
 the only thing that ever reads it).
@@ -105,6 +107,63 @@ def render_feedback_email(items):
     return subject, text, html
 
 
+STATE_DOC = ("admin_state", "new_users")   # {lastCreatedMs}: the newest account we've already told you about
+CAP_WARN_FRACTION = 0.8                    # start flagging "raise the cap" at this share of the cap
+
+
+def fetch_new_users(db):
+    """(new accounts since the last alert, total accounts, newest creation time in ms, first_run).
+    Counts Firebase Auth accounts, so it includes Google sign-ins and email sign-ups, and works on the
+    free plan (no Cloud Function / Blaze needed). First run only records a baseline: it doesn't email
+    you about everyone who already exists."""
+    from firebase_admin import auth
+
+    users = list(auth.list_users().iterate_all())
+    ms = lambda u: u.user_metadata.creation_timestamp or 0
+    users.sort(key=ms)
+    newest = ms(users[-1]) if users else 0
+    snap = db.collection(STATE_DOC[0]).document(STATE_DOC[1]).get()
+    if not snap.exists:
+        return [], len(users), newest, True
+    last = snap.to_dict().get("lastCreatedMs", 0)
+    return [u for u in users if ms(u) > last], len(users), newest, False
+
+
+def cap_status(total, cap):
+    """(headline suffix, plain sentence) describing how close the account count is to the tester cap."""
+    if not cap:
+        return "", f"{total} accounts so far (set TESTFLIGHT_CAP to track this against your TestFlight limit)."
+    pct = int(100 * total / cap)
+    if total >= cap:
+        return " — RAISE THE CAP", f"{total} of {cap} ({pct}%): you're at the TestFlight cap. Raise the public link's tester limit in App Store Connect."
+    if total >= cap * CAP_WARN_FRACTION:
+        return " — nearly full", f"{total} of {cap} ({pct}%): close to the cap. Raise the public link's tester limit soon (App Store Connect -> TestFlight -> your group -> Public Link)."
+    return "", f"{total} of {cap} ({pct}%)."
+
+
+def render_users_email(new, total, cap):
+    import datetime
+    lines_text, rows_html = [], []
+    for u in new:
+        email = u.email or "(no email)"
+        name = u.display_name or ""
+        provider = ", ".join(p.provider_id.replace(".com", "") for p in u.provider_data) or "password"
+        when = datetime.datetime.fromtimestamp((u.user_metadata.creation_timestamp or 0) / 1000, datetime.timezone.utc).isoformat(timespec="minutes")
+        lines_text.append(f"- {email}  ({name + ', ' if name else ''}{provider}, {when} UTC)")
+        rows_html.append(
+            f"<tr><td style='padding:4px 12px 4px 0'>{escape(email)}</td><td style='padding:4px 12px 4px 0'>{escape(name)}</td>"
+            f"<td style='padding:4px 12px 4px 0;color:#6e6e73'>{escape(provider)}</td><td style='padding:4px 0;color:#6e6e73'>{escape(when)} UTC</td></tr>"
+        )
+    suffix, sentence = cap_status(total, cap)
+    n = len(new)
+    subject = f"{n} new BioMap user" + ("" if n == 1 else "s") + f" ({total}{'/' + str(cap) if cap else ''}){suffix}"
+    text = f"{n} new account(s) in BioMap:\n\n" + "\n".join(lines_text) + f"\n\n{sentence}"
+    html = ("<div style='font-family:sans-serif'>"
+            f"<p>{n} new account(s) in BioMap:</p><table style='border-collapse:collapse'>" + "".join(rows_html) + "</table>"
+            f"<p style='margin-top:16px'><b>{escape(sentence)}</b></p></div>")
+    return subject, text, html
+
+
 def escape(s):
     return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
@@ -127,6 +186,8 @@ def main():
     ap.add_argument("--service-account")
     ap.add_argument("--to", default=DEFAULT_TO)
     ap.add_argument("--resend-api-key", default=os.environ.get("RESEND_API_KEY"))
+    ap.add_argument("--tester-cap", type=int, default=int(os.environ.get("TESTFLIGHT_CAP") or 0),
+                    help="Your TestFlight public-link tester limit; new-user emails show the total against it.")
     ap.add_argument("--dry-run", action="store_true", help="Print what would be sent; don't email or mark anything notified.")
     args = ap.parse_args()
 
@@ -135,9 +196,16 @@ def main():
     db = get_db(args.service_account)
     pending = fetch_unnotified(db)
     feedback = fetch_unnotified_feedback(db)
+    new_users, total_users, newest_ms, first_run = fetch_new_users(db)
+    state_ref = db.collection(STATE_DOC[0]).document(STATE_DOC[1])
 
-    if not pending and not feedback:
-        print("No new waitlist signups or feedback.")
+    if first_run:
+        print(f"First run: {total_users} existing account(s). Recording a baseline; you'll be emailed about accounts created from now on.")
+        if not args.dry_run:
+            state_ref.set({"lastCreatedMs": newest_ms})
+
+    if not pending and not feedback and not new_users:
+        print("No new waitlist signups, feedback or accounts.")
         return
 
     if not args.dry_run and not args.resend_api_key:
@@ -146,14 +214,24 @@ def main():
             "See this script's docstring for how to get one — nothing was sent, nothing was marked notified."
         )
 
-    # Each batch is one email (a burst is one message, not one per item), then marked notified.
+    # Each batch is one email (a burst is one message, not one per item), then marked as handled.
+    def mark(docs):
+        batch = db.batch()
+        for doc in docs:
+            batch.update(doc.reference, {"notified": True})
+        batch.commit()
+        print(f"Marked {len(docs)} item(s) as notified.")
+
     batches = []
     if pending:
-        batches.append((render_email(pending), pending))
+        batches.append((render_email(pending), lambda: mark(pending)))
     if feedback:
-        batches.append((render_feedback_email(feedback), feedback))
+        batches.append((render_feedback_email(feedback), lambda: mark(feedback)))
+    if new_users:
+        batches.append((render_users_email(new_users, total_users, args.tester_cap),
+                        lambda: state_ref.set({"lastCreatedMs": newest_ms})))
 
-    for (subject, text, html), docs in batches:
+    for (subject, text, html), done in batches:
         print(f"{subject}:\n{text}")
         if args.dry_run:
             print("--dry-run: not sending, not marking notified.")
@@ -162,11 +240,7 @@ def main():
         if status >= 300:
             raise SystemExit(f"Resend API error ({status}): {resp_body}")
         print(f"Email sent to {args.to} (status {status}).")
-        batch = db.batch()
-        for doc in docs:
-            batch.update(doc.reference, {"notified": True})
-        batch.commit()
-        print(f"Marked {len(docs)} item(s) as notified.")
+        done()
 
 
 if __name__ == "__main__":

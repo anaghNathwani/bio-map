@@ -2,7 +2,8 @@ name: Notify waitlist signups
 
 # Runs ml_pipeline/notify_waitlist_signups.py on a schedule: checks the `waitlist` Firestore
 # collection (written by the "Join the waitlist" button on the site) for anything not yet
-# emailed, and if there's something new, sends one email to anaghnathwani@gmail.com listing it.
+# emailed, and if there's something new, sends one email to anaghnathwani@gmail.com listing it. It also
+# emails when someone creates a new BioMap account, with the total against TESTFLIGHT_CAP (see below).
 # See that script's docstring for the one-time Resend setup.
 #
 # Every 10 minutes is 144 runs/day, but this job has no heavy dependencies (just firebase-admin —
@@ -45,3 +46,6 @@ jobs:
         working-directory: ml_pipeline
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          # Your TestFlight public-link tester limit (a repo *variable*, Settings -> Secrets and variables ->
+          # Actions -> Variables). New-account emails show the running total against it.
+          TESTFLIGHT_CAP: ${{ vars.TESTFLIGHT_CAP }}
