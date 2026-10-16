@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import WaitlistButton from '../components/WaitlistButton.jsx'
 import WaitlistForm from '../components/WaitlistForm.jsx'
 import BioLoader from '../components/BioLoader.jsx'
+import NameStoryLink from '../components/NameStory.jsx'
 import { FAQ } from '../content/faq.js'
 import SiteFooter from '../components/SiteFooter.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
@@ -87,6 +88,7 @@ export default function LandingPage() {
             <a href="#waitlist" className="btn-blue px-6 py-2.5 text-[17px]">Join the waitlist</a>
             <Link to="/map" className="link-chevron">Open the live map</Link>
           </div>
+          <p className="mt-6 text-[17px]"><NameStoryLink /></p>
         </section>
 
         <section className="mx-auto max-w-[1080px] px-5 pb-20 pt-6">
