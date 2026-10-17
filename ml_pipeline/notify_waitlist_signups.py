@@ -188,6 +188,8 @@ def main():
     ap.add_argument("--resend-api-key", default=os.environ.get("RESEND_API_KEY"))
     ap.add_argument("--tester-cap", type=int, default=int(os.environ.get("TESTFLIGHT_CAP") or 0),
                     help="Your TestFlight public-link tester limit; new-user emails show the total against it.")
+    ap.add_argument("--send-test", action="store_true",
+                    help="Email a one-line 'alerts are working' message (with the current account count) to confirm Resend is set up.")
     ap.add_argument("--dry-run", action="store_true", help="Print what would be sent; don't email or mark anything notified.")
     args = ap.parse_args()
 
@@ -198,6 +200,16 @@ def main():
     feedback = fetch_unnotified_feedback(db)
     new_users, total_users, newest_ms, first_run = fetch_new_users(db)
     state_ref = db.collection(STATE_DOC[0]).document(STATE_DOC[1])
+
+    if args.send_test:
+        if not args.resend_api_key:
+            raise SystemExit("RESEND_API_KEY not set — can't send the test email.")
+        _, sentence = cap_status(total_users, args.tester_cap)
+        text = f"BioMap alerts are working. You'll get an email for new waitlist signups, new in-app feedback and new accounts.\n\nAccounts right now: {sentence}"
+        status, resp_body = send_email(args.resend_api_key, args.to, "BioMap alerts are working", text, f"<div style='font-family:sans-serif'><p>{escape(text).replace(chr(10), '<br>')}</p></div>")
+        if status >= 300:
+            raise SystemExit(f"Resend API error ({status}): {resp_body}")
+        print(f"Test email sent to {args.to} (status {status}).")
 
     if first_run:
         print(f"First run: {total_users} existing account(s). Recording a baseline; you'll be emailed about accounts created from now on.")

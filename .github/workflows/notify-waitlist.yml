@@ -19,7 +19,12 @@ name: Notify waitlist signups
 on:
   schedule:
     - cron: "*/10 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      send_test:
+        description: "Email a test message to confirm Resend works"
+        type: boolean
+        default: false
 
 jobs:
   notify:
@@ -42,10 +47,10 @@ jobs:
           FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
 
       - name: Check for new waitlist signups
-        run: python notify_waitlist_signups.py --service-account /tmp/firebase-key.json
+        run: python notify_waitlist_signups.py --service-account /tmp/firebase-key.json ${{ inputs.send_test && '--send-test' || '' }}
         working-directory: ml_pipeline
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           # Your TestFlight public-link tester limit (a repo *variable*, Settings -> Secrets and variables ->
-          # Actions -> Variables). New-account emails show the running total against it.
-          TESTFLIGHT_CAP: ${{ vars.TESTFLIGHT_CAP }}
+          # Actions -> Variables; a secret of the same name also works). New-account emails show the running total against it.
+          TESTFLIGHT_CAP: ${{ vars.TESTFLIGHT_CAP || secrets.TESTFLIGHT_CAP }}
