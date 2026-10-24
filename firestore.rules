@@ -96,5 +96,13 @@ service cloud.firestore {
         && request.resource.data.message.size() <= 4000;
       allow update, delete: if false;
     }
+
+    // Public bug tracker shown on the website (/blog/bug-tracker). Written only by
+    // ml_pipeline/sync_bug_tracker.py (Admin SDK, bypasses these rules), which mirrors bug-type
+    // `feedback` docs with NO user details (no message, email or userId). Safe to read publicly.
+    match /bugTracker/{bugID} {
+      allow read: if true;
+      allow write: if false;
+    }
   }
 }

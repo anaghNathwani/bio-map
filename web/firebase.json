@@ -114,6 +114,14 @@
         "destination": "/blog.html"
       },
       {
+        "source": "/blog/bug-tracker",
+        "destination": "/blog/bug-tracker.html"
+      },
+      {
+        "source": "/blog/install-biomap-testflight",
+        "destination": "/blog/install-biomap-testflight.html"
+      },
+      {
         "source": "/blog/identify-birds-without-internet",
         "destination": "/blog/identify-birds-without-internet.html"
       },

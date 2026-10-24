@@ -54,3 +54,7 @@ jobs:
           # Your TestFlight public-link tester limit (a repo *variable*, Settings -> Secrets and variables ->
           # Actions -> Variables; a secret of the same name also works). New-account emails show the running total against it.
           TESTFLIGHT_CAP: ${{ vars.TESTFLIGHT_CAP || secrets.TESTFLIGHT_CAP }}
+
+      - name: Sync public bug tracker
+        run: python sync_bug_tracker.py --service-account /tmp/firebase-key.json
+        working-directory: ml_pipeline

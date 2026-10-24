@@ -38,3 +38,13 @@ export async function submitWaitlistSignup({ email, name = '', source = 'website
     createdAt: serverTimestamp(),
   })
 }
+
+/** Public bug tracker rows (see firestore.rules `bugTracker` and ml_pipeline/sync_bug_tracker.py). */
+export async function fetchBugTracker() {
+  const snap = await getDocs(query(collection(db, 'bugTracker'), orderBy('reportedAt', 'desc'), limit(200)))
+  return snap.docs.map(d => {
+    const x = d.data()
+    const ms = t => (t && t.toMillis ? t.toMillis() : null)
+    return { id: d.id, title: x.title, appVersion: x.appVersion, reportedAt: ms(x.reportedAt), notedAt: ms(x.notedAt), fixedAt: ms(x.fixedAt) }
+  })
+}

@@ -1,0 +1,92 @@
+.blog-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
+  gap: 48px;
+}
+
+.blog-sidebar {
+  position: sticky;
+  top: 66px;
+  align-self: start;
+  max-height: calc(100vh - 66px);
+  overflow-y: auto;
+  padding: 40px 0;
+  border-right: 1px solid var(--rule);
+  padding-right: 24px;
+}
+
+.blog-sidebar-home {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  text-decoration: none;
+  margin-bottom: 28px;
+}
+
+.blog-sidebar-heading {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-soft);
+  margin: 0 0 10px;
+}
+
+.blog-sidebar-group { margin-bottom: 28px; }
+.blog-sidebar-group ul { list-style: none; margin: 0; padding: 0; }
+
+.blog-sidebar-link {
+  display: block;
+  padding: 7px 10px;
+  margin-left: -10px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--fg-soft);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: color .15s ease, background .15s ease;
+}
+
+.blog-sidebar-link:hover { color: var(--fg); }
+.blog-sidebar-link.active {
+  color: var(--fg);
+  font-weight: 600;
+  background: var(--accent-soft);
+}
+
+.blog-sidebar-empty { font-size: 13px; color: var(--fg-soft); margin: 0; }
+
+.blog-main { padding: 48px 0 64px; min-width: 0; }
+.blog-main .static-page-h1 { font-size: 34px; margin-bottom: 10px; }
+.blog-main .static-page-sub { margin: 0 0 32px; max-width: 560px; }
+
+@media (max-width: 760px) {
+  .blog-shell { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
+  .blog-sidebar {
+    position: static;
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 24px 0 8px;
+  }
+  .blog-main { padding-top: 32px; }
+}
+
+.bug-table-wrap { overflow-x: auto; }
+.bug-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.bug-table th {
+  text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--fg-soft); padding: 0 12px 10px 0; border-bottom: 1px solid var(--rule);
+}
+.bug-table td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--rule); color: var(--fg-soft); white-space: nowrap; }
+.bug-table td:first-child { color: var(--fg); white-space: normal; min-width: 180px; }
+.bug-ver { color: var(--fg-soft); }
+.bug-status { font-size: 12px; font-weight: 600; color: var(--fg-soft); }
+.bug-status-fixed { color: var(--accent); }
+.bug-status-noted { color: var(--fg); }

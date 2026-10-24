@@ -45,6 +45,7 @@ const NAV = [
   { to: '/community', label: 'Community' },
   { to: '/citizen-science', label: 'Citizen Science' },
   { to: '/faq', label: 'FAQ' },
+  { to: '/blog', label: 'Blog' },
 ]
 
 export default function LandingPage() {

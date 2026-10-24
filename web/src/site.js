@@ -186,6 +186,16 @@ export const ROUTES = [
     breadcrumb: 'Blog',
     footerLabel: 'Blog',
   },
+  {
+    path: '/blog/bug-tracker',
+    title: 'BioMap Bug Tracker: Reports and Fixes',
+    description: 'Bugs reported from the BioMap beta, when they were noted and fixed, and how long each fix took.',
+    changefreq: 'daily',
+    priority: 0.5,
+    prerender: true,
+    breadcrumb: 'Bug tracker',
+    parents: [{ name: 'Blog', path: '/blog' }],
+  },
   ...POSTS.map(post => ({
     path: `/blog/${post.slug}`,
     title: `${post.title} | BioMap`,

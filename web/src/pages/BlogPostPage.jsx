@@ -1,10 +1,10 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { BookOpen } from 'lucide-react'
-import ContentPage from '../components/ContentPage.jsx'
+import BlogShell from '../components/BlogShell.jsx'
 import PostBody from '../components/PostBody.jsx'
+import RelatedLinks from '../components/RelatedLinks.jsx'
 import NotFoundPage from './NotFoundPage.jsx'
-import { ROUTES } from '../site.js'
+import { ROUTES, relatedFor } from '../site.js'
 
 export default function BlogPostPage() {
   const { slug } = useParams()
@@ -12,11 +12,14 @@ export default function BlogPostPage() {
   if (!meta) return <NotFoundPage />
   const { post } = meta
   return (
-    <ContentPage meta={meta} icon={BookOpen} title={post.title} intro={post.description}>
+    <BlogShell meta={meta}>
+      <h1 className="static-page-h1">{post.title}</h1>
+      <p className="static-page-sub">{post.description}</p>
       <p className="static-page-card-body" style={{ marginBottom: 24 }}>
         Published <time dateTime={post.date}>{post.date}</time>
       </p>
       <PostBody blocks={post.body} />
-    </ContentPage>
+      <RelatedLinks paths={relatedFor(meta)} />
+    </BlogShell>
   )
 }

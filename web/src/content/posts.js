@@ -1,7 +1,45 @@
 // Blog posts as plain data (no markdown pipeline needed). Block types:
 //   { h2: 'Heading' } | { p: 'Paragraph' } | { ul: ['item', ...] }
+// Set "pinned": true to list a post under "Important" in the blog sidebar (the Bug tracker is a fixed entry there); the rest appear under "General".
 // Titles must stay short enough that "<title> | BioMap" fits in ~65 characters.
 export const POSTS = [
+{
+  "slug": "install-biomap-testflight",
+  "pinned": true,
+  "title": "How to install BioMap with TestFlight",
+  "description": "A step-by-step guide to getting the BioMap beta on your iPhone using Apple's TestFlight app.",
+  "date": "2026-10-18",
+  "body": [
+    { "p": "BioMap is in beta, so it is installed through TestFlight, Apple's free app for trying apps before they are on the App Store. It takes about five minutes." },
+    { "h2": "Before you start" },
+    { "ul": [
+      "An iPhone or iPad running a recent version of iOS.",
+      "An Apple ID. TestFlight sends your invite to the email address on your Apple ID, which is why the waitlist asks for an iCloud address.",
+      "A little free storage space for two apps: TestFlight and BioMap."
+    ] },
+    { "h2": "Step 1: Join the waitlist" },
+    { "p": "Use the Join the waitlist button on the BioMap home page and enter your iCloud email address. We send invitations in batches, so it can take a little while." },
+    { "h2": "Step 2: Install TestFlight" },
+    { "p": "Open the App Store on your phone, search for TestFlight, and install it. It is made by Apple and is free." },
+    { "h2": "Step 3: Open your invitation" },
+    { "p": "When your invite is ready you will get an email from TestFlight. Open that email on the same iPhone, then tap View in TestFlight or Start Testing. If you have a public invite link instead, tapping it on your phone does the same thing." },
+    { "h2": "Step 4: Accept and install" },
+    { "p": "TestFlight opens and shows BioMap. Tap Accept if it asks, then tap Install. When it finishes, the button changes to Open." },
+    { "h2": "Step 5: Open BioMap" },
+    { "p": "Tap Open, or find the BioMap icon on your home screen. The first time, iOS asks for permission to use your camera, microphone and location. These are only used for identifying and mapping the birds you choose to report." },
+    { "h2": "Keeping it up to date" },
+    { "p": "TestFlight tells you when a new build is available. Open TestFlight and tap Update next to BioMap. Beta builds also expire after a while, so update regularly." },
+    { "h2": "Reporting a problem" },
+    { "p": "In the app, go to Profile and open Feedback to report a bug or suggest a feature. Reported bugs show up on the Bug tracker page here on the blog." },
+    { "h2": "If something goes wrong" },
+    { "ul": [
+      "No invite email: check your spam folder, and make sure you signed up with the email address on your Apple ID.",
+      "The invite link does nothing: open it on your iPhone, not a computer, and make sure TestFlight is installed first.",
+      "Install button missing: the beta may be full. Check back later or stay on the waitlist.",
+      "The app stopped opening: its beta build has probably expired, so update it in TestFlight."
+    ] }
+  ]
+},
 {
   "slug": "identify-birds-without-internet",
   "title": "How BioMap identifies birds without the internet",
