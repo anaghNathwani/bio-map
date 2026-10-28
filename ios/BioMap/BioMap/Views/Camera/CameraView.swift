@@ -421,20 +421,22 @@ struct LiveCameraView: UIViewControllerRepresentable {
     }
 }
 
-final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
+final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate, UIGestureRecognizerDelegate {
     private let session = AVCaptureSession()
     private let output = AVCapturePhotoOutput()
     private var preview: AVCaptureVideoPreviewLayer!
     private let coordinator: LiveCameraView.Coordinator
-    private lazy var shutterButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.setImage(UIImage(systemName: "camera.shutter.button.fill"), for: .normal)
-        b.tintColor = UIColor(red: 0.76, green: 0.54, blue: 0.35, alpha: 1)   // Theme.accent, dark scheme
-        b.contentVerticalAlignment = .fill
-        b.contentHorizontalAlignment = .fill
-        b.addTarget(self, action: #selector(snap), for: .touchUpInside)
-        return b
-    }()
+    private let shutterButton = ShutterButton()
+
+    // Zoom (native-camera style): lens buttons + pinch. `baseZoom` is the raw videoZoomFactor of "1×".
+    private var device: AVCaptureDevice?
+    private var baseZoom: CGFloat = 1
+    private var maxRawZoom: CGFloat = 1
+    private var pinchStartRaw: CGFloat = 1
+    private let zoomBar = ZoomBar()
+    private var zoomObservation: NSKeyValueObservation?
+    private let focusSquare = FocusSquare()
+    private var subjectAreaObserver: NSObjectProtocol?
 
     init(coordinator: LiveCameraView.Coordinator) {
         self.coordinator = coordinator
@@ -443,29 +445,41 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
 
     required init?(coder: NSCoder) { fatalError() }
 
+    /// The multi-lens virtual camera when the phone has one (so zoom hops between real lenses like the
+    /// native app does), else the plain wide camera.
+    private static func bestBackCamera() -> AVCaptureDevice? {
+        let types: [AVCaptureDevice.DeviceType] = [.builtInTripleCamera, .builtInDualWideCamera, .builtInDualCamera, .builtInWideAngleCamera]
+        return AVCaptureDevice.DiscoverySession(deviceTypes: types, mediaType: .video, position: .back).devices.first
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
 
         session.sessionPreset = .photo
-        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+        guard let device = Self.bestBackCamera(),
               let input = try? AVCaptureDeviceInput(device: device),
               session.canAddInput(input), session.canAddOutput(output) else { return }
         session.addInput(input)
         session.addOutput(output)
+        self.device = device
 
         preview = AVCaptureVideoPreviewLayer(session: session)
         preview.videoGravity = .resizeAspectFill
         view.layer.addSublayer(preview)
 
         view.addSubview(shutterButton)
+        shutterButton.addTarget(self, action: #selector(snap), for: .touchUpInside)
         shutterButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             shutterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             shutterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            shutterButton.widthAnchor.constraint(equalToConstant: 72),
-            shutterButton.heightAnchor.constraint(equalToConstant: 72),
+            shutterButton.widthAnchor.constraint(equalToConstant: 76),
+            shutterButton.heightAnchor.constraint(equalToConstant: 76),
         ])
+
+        setUpZoom(device)
+        setUpFocus(device)
 
         DispatchQueue.global(qos: .userInitiated).async { self.session.startRunning() }
     }
@@ -479,6 +493,133 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate {
         super.viewDidLayoutSubviews()
         preview?.frame = view.bounds
     }
+
+    deinit {
+        zoomObservation?.invalidate()
+        if let o = subjectAreaObserver { NotificationCenter.default.removeObserver(o) }
+    }
+
+    // MARK: - Zoom
+
+    private func setUpZoom(_ device: AVCaptureDevice) {
+        let hasUltraWide = device.constituentDevices.contains { $0.deviceType == .builtInUltraWideCamera }
+        let switchOver = device.virtualDeviceSwitchOverVideoZoomFactors.map { CGFloat(truncating: $0) }
+        baseZoom = CameraZoom.base(hasUltraWide: hasUltraWide, switchOver: switchOver)
+        maxRawZoom = min(device.maxAvailableVideoZoomFactor, baseZoom * CameraZoom.maxDisplayZoom)
+
+        // Start on the main lens ("1×"), not the ultra-wide.
+        try? device.lockForConfiguration()
+        device.videoZoomFactor = max(device.minAvailableVideoZoomFactor, baseZoom)
+        device.unlockForConfiguration()
+
+        zoomBar.configure(presets: CameraZoom.presets(hasUltraWide: hasUltraWide, switchOver: switchOver,
+                                                      maxDisplay: maxRawZoom / baseZoom))
+        zoomBar.onSelect = { [weak self] display in self?.ramp(toDisplay: display) }
+        zoomBar.update(current: device.videoZoomFactor / baseZoom)
+        view.addSubview(zoomBar)
+        zoomBar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            zoomBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            zoomBar.bottomAnchor.constraint(equalTo: shutterButton.topAnchor, constant: -22),
+            zoomBar.heightAnchor.constraint(equalToConstant: 50),
+        ])
+
+        // Keep the bar in step with the real zoom, including while a ramp is running.
+        zoomObservation = device.observe(\.videoZoomFactor, options: [.new]) { [weak self] dev, _ in
+            DispatchQueue.main.async { self?.zoomBar.update(current: dev.videoZoomFactor / (self?.baseZoom ?? 1)) }
+        }
+
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinched(_:)))
+        view.addGestureRecognizer(pinch)
+    }
+
+    /// Smoothly animate to a preset, the way tapping a lens button does in the native app.
+    private func ramp(toDisplay display: CGFloat) {
+        guard let device else { return }
+        let target = min(max(display * baseZoom, device.minAvailableVideoZoomFactor), maxRawZoom)
+        do {
+            try device.lockForConfiguration()
+            device.cancelVideoZoomRamp()
+            device.ramp(toVideoZoomFactor: target, withRate: 5)
+            device.unlockForConfiguration()
+        } catch {}
+    }
+
+    @objc private func pinched(_ g: UIPinchGestureRecognizer) {
+        guard let device else { return }
+        switch g.state {
+        case .began:
+            pinchStartRaw = device.videoZoomFactor
+            zoomBar.hapticsEnabled = true
+            try? device.lockForConfiguration()
+            device.cancelVideoZoomRamp()
+            device.unlockForConfiguration()
+        case .changed:
+            let target = min(max(pinchStartRaw * g.scale, device.minAvailableVideoZoomFactor), maxRawZoom)
+            if (try? device.lockForConfiguration()) != nil {
+                device.videoZoomFactor = target
+                device.unlockForConfiguration()
+            }
+        default:
+            zoomBar.hapticsEnabled = false
+        }
+    }
+
+    // MARK: - Tap to focus
+
+    private func setUpFocus(_ device: AVCaptureDevice) {
+        view.addSubview(focusSquare)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedToFocus(_:)))
+        tap.delegate = self
+        view.addGestureRecognizer(tap)
+        if (try? device.lockForConfiguration()) != nil {
+            device.isSubjectAreaChangeMonitoringEnabled = true
+            device.unlockForConfiguration()
+        }
+        // When the scene changes after a tap-to-focus, go back to continuous autofocus.
+        subjectAreaObserver = NotificationCenter.default.addObserver(
+            forName: AVCaptureDevice.subjectAreaDidChangeNotification, object: device, queue: .main) { [weak self] _ in
+            self?.resetFocus()
+        }
+    }
+
+    @objc private func tappedToFocus(_ g: UITapGestureRecognizer) {
+        guard let device, let preview else { return }
+        let point = g.location(in: view)
+        let devicePoint = preview.captureDevicePointConverted(fromLayerPoint: point)
+        guard (try? device.lockForConfiguration()) != nil else { return }
+        if device.isFocusPointOfInterestSupported, device.isFocusModeSupported(.autoFocus) {
+            device.focusPointOfInterest = devicePoint
+            device.focusMode = .autoFocus
+        }
+        if device.isExposurePointOfInterestSupported, device.isExposureModeSupported(.autoExpose) {
+            device.exposurePointOfInterest = devicePoint
+            device.exposureMode = .autoExpose
+        }
+        device.unlockForConfiguration()
+        focusSquare.show(at: point)
+    }
+
+    private func resetFocus() {
+        guard let device, (try? device.lockForConfiguration()) != nil else { return }
+        if device.isFocusModeSupported(.continuousAutoFocus) {
+            device.focusPointOfInterest = CGPoint(x: 0.5, y: 0.5)
+            device.focusMode = .continuousAutoFocus
+        }
+        if device.isExposureModeSupported(.continuousAutoExposure) {
+            device.exposurePointOfInterest = CGPoint(x: 0.5, y: 0.5)
+            device.exposureMode = .continuousAutoExposure
+        }
+        device.unlockForConfiguration()
+    }
+
+    /// Taps on the zoom bar or shutter are theirs, not a focus tap.
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let v = touch.view else { return true }
+        return !v.isDescendant(of: zoomBar) && !v.isDescendant(of: shutterButton)
+    }
+
+    // MARK: - Capture
 
     @objc private func snap() {
         output.capturePhoto(with: AVCapturePhotoSettings(), delegate: self)
