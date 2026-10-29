@@ -3,9 +3,13 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var env: AppEnvironment
     @Environment(\.colorScheme) private var scheme
+    @State private var tab: Tab = .map
+    @State private var reportMode: ReportTabView.ReportMode = .photo
+
+    enum Tab { case map, report, leaders, profile }
 
     init() {
-        // Brand type/color on the tab bar and nav bars app-wide (paper/ink/clay — see Theme.swift),
+        // Brand color on the tab bar and nav bars app-wide (see Theme.swift),
         // set once via UIKit appearance since SwiftUI's TabView styling can't reach every state.
         let c = ThemeColors(scheme: UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .light)
         let tab = UITabBarAppearance()
@@ -19,8 +23,8 @@ struct ContentView: View {
         nav.configureWithOpaqueBackground()
         nav.backgroundColor = UIColor(c.bg)
         nav.shadowColor = UIColor(c.rule)
-        let titleFont = UIFont(name: "FrauncesBioMap-Regular", size: 19) ?? .systemFont(ofSize: 19)
-        let largeFont = UIFont(name: "FrauncesBioMapDisplay-Medium", size: 32) ?? .systemFont(ofSize: 32)
+        let titleFont = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        let largeFont = UIFont.systemFont(ofSize: 34, weight: .bold)
         nav.titleTextAttributes = [.foregroundColor: UIColor(c.fg), .font: titleFont]
         nav.largeTitleTextAttributes = [.foregroundColor: UIColor(c.fg), .font: largeFont]
         UINavigationBar.appearance().standardAppearance = nav
@@ -30,25 +34,42 @@ struct ContentView: View {
 
     var body: some View {
         let c = ThemeColors(scheme: scheme)
-        TabView {
+        TabView(selection: $tab) {
             SightingMapView()
                 .tabItem { Label("Map", systemImage: "map.fill") }
+                .tag(Tab.map)
 
-            ReportTabView()
+            ReportTabView(mode: $reportMode)
                 .tabItem { Label("Report", systemImage: "camera.fill") }
+                .tag(Tab.report)
 
             LeaderboardView()
                 .tabItem { Label("Leaders", systemImage: "trophy.fill") }
+                .tag(Tab.leaders)
 
             ProfileView()
                 .tabItem { Label("Profile", systemImage: "person.fill") }
+                .tag(Tab.profile)
         }
         .tint(c.accent)
+        .onAppear { consume(env.pendingDeepLink) }
+        .onChange(of: env.pendingDeepLink) { _, link in consume(link) }
+    }
+
+    /// Jump to wherever a widget / lock-screen control asked for, then clear the request.
+    private func consume(_ link: DeepLink?) {
+        guard let link else { return }
+        switch link {
+        case .photo: reportMode = .photo; tab = .report
+        case .sound: reportMode = .audio; tab = .report
+        case .map: tab = .map
+        }
+        env.pendingDeepLink = nil
     }
 }
 
 struct ReportTabView: View {
-    @State private var mode: ReportMode = .photo
+    @Binding var mode: ReportMode
     @Environment(\.colorScheme) private var scheme
 
     enum ReportMode { case photo, audio }
@@ -98,5 +119,5 @@ struct ReportTabView: View {
 }
 
 #Preview("ReportTabView") {
-    FirebasePreview { ReportTabView() }
+    FirebasePreview { ReportTabView(mode: .constant(.photo)) }
 }

@@ -22,6 +22,13 @@ packages:
     url: https://github.com/google/GoogleSignIn-iOS.git
     from: 8.0.0
 
+settings:
+  base:
+    # The app and its widget extension must carry identical version/build numbers.
+    # Every upload to App Store Connect needs a higher build number than the last one (now 4).
+    MARKETING_VERSION: "1.1"
+    CURRENT_PROJECT_VERSION: 4
+
 targets:
   BioMap:
     type: application
@@ -56,9 +63,6 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.biomap.BioMap
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
         SWIFT_VERSION: 5.9
-        # Every upload to App Store Connect needs a higher build number than the last one (now 3).
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: 3
         DEVELOPMENT_TEAM: 2JN5C47MQT
         CODE_SIGN_STYLE: Automatic
         # iPhone only: the UI is phone-shaped. Leaving iPad enabled makes App Store Connect demand all four
@@ -80,6 +84,33 @@ targets:
         product: GoogleSignIn
       - package: GoogleSignIn
         product: GoogleSignInSwift
+      - target: BioMapWidgets
+
+  # Home screen + lock screen widgets and the two lock-screen corner controls (iOS 18+).
+  # No App Group: the widget reads public sightings from Firestore directly and opens the app by URL.
+  BioMapWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: BioMapWidgets
+      - path: BioMap/Views/Common/Theme.swift
+      - path: BioMap/GoogleService-Info.plist
+    info:
+      path: BioMapWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: BioMap
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.biomap.BioMap.Widgets
+        SWIFT_VERSION: 5.9
+        DEVELOPMENT_TEAM: 2JN5C47MQT
+        CODE_SIGN_STYLE: Automatic
+        TARGETED_DEVICE_FAMILY: "1"
+        SKIP_INSTALL: "YES"
 
 schemes:
   BioMap:
