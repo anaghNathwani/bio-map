@@ -27,10 +27,10 @@ private extension UIImage {
         }
     }
 
-    /// Normalized RGB Float32 buffer (no alpha), row-major HWC — matches
+    /// Normalized RGB Float32 pixels (no alpha), row-major HWC — matches
     /// convert_photo_model.py's conversion input exactly (scale=1/255,
     /// straight RGB, no channel reordering or mean subtraction).
-    func normalizedRGBData(side: Int) -> Data? {
+    func normalizedRGBFloats(side: Int) -> [Float32]? {
         guard let cgImage = squareCropped(to: CGFloat(side)).cgImage else { return nil }
         var pixelData = [UInt8](repeating: 0, count: side * side * 4)
         guard let context = CGContext(
@@ -47,7 +47,7 @@ private extension UIImage {
             floats[i * 3 + 1] = Float32(pixelData[i * 4 + 1]) / 255.0
             floats[i * 3 + 2] = Float32(pixelData[i * 4 + 2]) / 255.0
         }
-        return floats.withUnsafeBufferPointer { Data(buffer: $0) }
+        return floats
     }
 }
 
@@ -109,18 +109,35 @@ actor BirdClassifier {
         }
     }
 
+    /// One forward pass over a 224x224 RGB float buffer.
+    private func scores(_ pixels: [Float32], with interpreter: Interpreter) throws -> [Float32]? {
+        let data = pixels.withUnsafeBufferPointer { Data(buffer: $0) }
+        try interpreter.copy(data, toInputAt: 0)
+        try interpreter.invoke()
+        return [Float32](unsafeData: try interpreter.output(at: 0).data)
+    }
+
     /// Returns the top-`count` predictions, sorted by confidence descending.
+    ///
+    /// Photos taken into low sun (orange cast, a washed-out veil, a dark bird against a blown sky) are the model's
+    /// weak spot, so when GlareCorrector's measurements say a photo looks like that, it's classified twice (as
+    /// taken and corrected) and the probabilities are blended 30/70. Ordinary photos take one pass, as before.
     func classifyTopN(image: UIImage, count: Int = 3) async -> [ClassificationResult] {
         guard let (interpreter, labels) = currentInterpreter(),
-              let inputData = image.normalizedRGBData(side: Self.inputSide) else { return [] }
+              let pixels = image.normalizedRGBFloats(side: Self.inputSide) else { return [] }
 
         do {
-            try interpreter.copy(inputData, toInputAt: 0)
-            try interpreter.invoke()
-            let output = try interpreter.output(at: 0)
-            guard let scores = [Float32](unsafeData: output.data) else { return [] }
+            guard var probs = try scores(pixels, with: interpreter) else { return [] }
+            if let fixed = GlareCorrector.corrected(pixels),
+               let corrected = try scores(fixed.pixels, with: interpreter), corrected.count == probs.count {
+                let w = GlareCorrector.correctedWeight
+                probs = zip(probs, corrected).map { (1 - w) * $0 + w * $1 }
+                #if DEBUG
+                print("[BirdClassifier] glare correction applied (\(fixed.applied.rawValue))")
+                #endif
+            }
 
-            let ranked = scores.enumerated()
+            let ranked = probs.enumerated()
                 .filter { offset, score in
                     offset < labels.count && labels[offset] != Self.unknownLabel && score >= Self.minConfidence
                 }

@@ -437,6 +437,8 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate, UIGes
     private var zoomObservation: NSKeyValueObservation?
     private let focusSquare = FocusSquare()
     private var subjectAreaObserver: NSObjectProtocol?
+    private var exposureBias: Float = 0
+    private var panStartBias: Float = 0
 
     init(coordinator: LiveCameraView.Coordinator) {
         self.coordinator = coordinator
@@ -572,6 +574,12 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate, UIGes
         let tap = UITapGestureRecognizer(target: self, action: #selector(tappedToFocus(_:)))
         tap.delegate = self
         view.addGestureRecognizer(tap)
+        // After a tap, dragging up/down changes the exposure like the native Camera: pull a bright sunset sky down,
+        // or lift a bird that's a dark silhouette against it.
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(draggedExposure(_:)))
+        pan.maximumNumberOfTouches = 1
+        pan.delegate = self
+        view.addGestureRecognizer(pan)
         if (try? device.lockForConfiguration()) != nil {
             device.isSubjectAreaChangeMonitoringEnabled = true
             device.unlockForConfiguration()
@@ -596,8 +604,35 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate, UIGes
             device.exposurePointOfInterest = devicePoint
             device.exposureMode = .autoExpose
         }
+        device.setExposureTargetBias(0)                // a new tap starts from neutral exposure
+        exposureBias = 0
         device.unlockForConfiguration()
         focusSquare.show(at: point)
+    }
+
+    @objc private func draggedExposure(_ g: UIPanGestureRecognizer) {
+        guard let device else { return }
+        switch g.state {
+        case .began:
+            panStartBias = exposureBias
+        case .changed:
+            // ~100 pt of drag per EV; up brightens.
+            let bias = min(max(panStartBias - Float(g.translation(in: view).y) / 100, -2), 2)
+            let clamped = min(max(bias, device.minExposureTargetBias), device.maxExposureTargetBias)
+            if (try? device.lockForConfiguration()) != nil {
+                device.setExposureTargetBias(clamped)
+                device.unlockForConfiguration()
+            }
+            exposureBias = clamped
+            focusSquare.setBias(clamped)
+        default: break
+        }
+    }
+
+    /// Exposure drags only count shortly after a tap-to-focus (the native behaviour), so they never fight the map-like gestures.
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UIPanGestureRecognizer { return focusSquare.isActive }
+        return true
     }
 
     private func resetFocus() {
@@ -610,6 +645,8 @@ final class LiveCameraVC: UIViewController, AVCapturePhotoCaptureDelegate, UIGes
             device.exposurePointOfInterest = CGPoint(x: 0.5, y: 0.5)
             device.exposureMode = .continuousAutoExposure
         }
+        device.setExposureTargetBias(0)
+        exposureBias = 0
         device.unlockForConfiguration()
     }
 

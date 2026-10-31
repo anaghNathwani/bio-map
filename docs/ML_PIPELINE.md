@@ -191,6 +191,31 @@ Until the detector+classifier model lands, recognition quality still comes entir
 
 ---
 
+## Sunrise / sunset glare
+
+Photos taken into low sun are a weak spot for the photo classifier: an orange cast, a washed-out veil when the sun is in or near
+the frame, and a dark bird against a blown-out sky. The model itself is unchanged; `ML/GlareCorrector.swift` measures the
+224×224 image the classifier is about to see and, **only when it looks glare-affected**, builds a corrected copy (grey-world
+white balance for the cast, a percentile levels stretch for the veil, a shadow lift with highlight roll-off for the dark
+subject). `BirdClassifier` then classifies both and blends the probabilities 30% original / 70% corrected. Ordinary photos take
+one pass, as before; the camera also lets you drag up/down after tap-to-focus to change exposure.
+
+Measured with `ml_pipeline/glare_eval/` on 177 openly licensed photos of 59 species, with glare **simulated** (see its README for
+the limits):
+
+| Condition | Correct suggestion shown, before → after | Confidently wrong, before → after |
+|---|---|---|
+| Clean (control) | 65% → 65% | 3% → 4% |
+| Golden-hour cast | 52% → 57% | 6% → 4% |
+| Sun veil / flare | 37% → 47% | 9% → 6% |
+| Backlit | 43% → 45% | 10% → 7% |
+| Silhouette | 13% → 22% | 10% → 7% |
+
+The correction also fires on about 18% of ordinary photos (mostly warm backgrounds); the blend keeps their accuracy unchanged.
+Candidates that did **not** make it: dark-channel dehazing (made backlit photos worse) and applying any correction to every
+photo (cost about 4% on clean photos). This is a pre-processing change, not training, so the "pre-trained models run as released"
+policy above is unaffected.
+
 ## Operations scripts (not models)
 
 - **`notify_waitlist_signups.py`** runs every 10 minutes from `.github/workflows/notify-waitlist.yml` and emails you (via

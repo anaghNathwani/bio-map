@@ -158,14 +158,27 @@ final class ShutterButton: UIControl {
     }
 }
 
-/// The yellow square that appears where you tap to focus.
+/// The yellow square that appears where you tap to focus, with the native Camera's exposure "sun" beside it:
+/// drag up or down after a tap to brighten or darken the shot (handy against a bright sunrise/sunset sky).
 final class FocusSquare: UIView {
+    private let sun = UIImageView(image: UIImage(systemName: "sun.max.fill"))
+    private var fade: DispatchWorkItem?
+    private static let yellow = UIColor(red: 1, green: 0.84, blue: 0.04, alpha: 1)
+
+    /// True for a few seconds after a tap (and while dragging): the window in which exposure drags are accepted.
+    private(set) var activeUntil = Date.distantPast
+    var isActive: Bool { Date() < activeUntil }
+
     override init(frame: CGRect) {
         super.init(frame: CGRect(x: 0, y: 0, width: 76, height: 76))
-        layer.borderColor = UIColor(red: 1, green: 0.84, blue: 0.04, alpha: 1).cgColor
+        layer.borderColor = Self.yellow.cgColor
         layer.borderWidth = 1.5
         isUserInteractionEnabled = false
         alpha = 0
+        sun.tintColor = Self.yellow
+        sun.contentMode = .scaleAspectFit
+        sun.frame = CGRect(x: 76 + 10, y: 28, width: 20, height: 20)
+        addSubview(sun)
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -173,9 +186,28 @@ final class FocusSquare: UIView {
     func show(at point: CGPoint) {
         layer.removeAllAnimations()
         center = point
+        sun.center = CGPoint(x: 76 + 20, y: 38)
         transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
         alpha = 1
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) { self.transform = .identity }
-        UIView.animate(withDuration: 0.3, delay: 1.0, options: []) { self.alpha = 0 }
+        scheduleFade(after: 2.5)
+    }
+
+    /// Move the sun to reflect the exposure bias (-2...+2 EV) and keep everything visible while the user drags.
+    func setBias(_ bias: Float) {
+        sun.center = CGPoint(x: 76 + 20, y: 38 - CGFloat(bias) * 22)
+        layer.removeAllAnimations()
+        alpha = 1
+        scheduleFade(after: 2.0)
+    }
+
+    private func scheduleFade(after seconds: TimeInterval) {
+        fade?.cancel()
+        activeUntil = Date().addingTimeInterval(seconds)
+        let item = DispatchWorkItem { [weak self] in
+            UIView.animate(withDuration: 0.3) { self?.alpha = 0 }
+        }
+        fade = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: item)
     }
 }

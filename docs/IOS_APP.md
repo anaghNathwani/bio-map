@@ -110,6 +110,8 @@ The live camera (`LiveCameraVC`, a `UIViewController` bridged into SwiftUI) work
 - A zoom bar above the shutter shows the same stops the native app does (for example `.5  1  2  3`); the active stop turns yellow
   and shows the exact zoom (`3.4×`). Tapping a stop ramps smoothly to it. Pinch zooms continuously (0.5× up to 15×).
 - Haptic ticks as a pinch crosses a lens; tap-to-focus with the yellow square; a native-style shutter.
+- After a tap, drag up or down to change exposure (the yellow sun beside the square): pull a bright sunset sky down, or lift a
+  bird that is a dark silhouette against it.
 - The zoom maths (`CameraZoom`) is pure Swift, kept apart from AVFoundation so it can be tested without a camera.
 - `AVCaptureSession.stopRunning()` runs in `viewWillDisappear` so the camera hardware stops when you leave.
 
@@ -155,6 +157,10 @@ An `actor`. Failed photo uploads are written to `caches/pending_uploads/` as JPE
 and retried on the next launch; each file is deleted after a successful upload.
 
 ### Models (`ML/`)
+
+Photos taken into low sun are handled by `GlareCorrector.swift`: when a photo looks like it has a sunrise/sunset cast, veil or
+backlight, `BirdClassifier` also classifies a corrected copy and blends the two. See `docs/ML_PIPELINE.md` ("Sunrise / sunset
+glare") for the measurements.
 
 See `docs/ML_PIPELINE.md` for what each model is. In short: photo ID is Google's AIY Birds V1, call ID is Cornell's BirdNET
 V2.4 plus its location model, all run on the phone through TensorFlow Lite; annotation moderation is rules and string matching,

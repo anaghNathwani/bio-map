@@ -10,6 +10,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added (not yet released)
+- **Glare handling for sunrise/sunset photos:** `GlareCorrector` detects an orange cast, a washed-out veil or a backlit subject
+  and `BirdClassifier` blends in a corrected copy; plus exposure drag after tap-to-focus in the camera. Evaluated on simulated
+  glare in `ml_pipeline/glare_eval/` (see `docs/ML_PIPELINE.md`).
+
 ### Planned (not built yet)
 - Species autocomplete via a curated species list endpoint
 - Annotation offline queue (mirrors the sighting upload queue)
