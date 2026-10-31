@@ -191,6 +191,15 @@ Until the detector+classifier model lands, recognition quality still comes entir
 
 ---
 
+## Operations scripts (not models)
+
+- **`notify_waitlist_signups.py`** runs every 10 minutes from `.github/workflows/notify-waitlist.yml` and emails you (via
+  Resend) new `waitlist` signups, new in-app `feedback`, and new Firebase Auth accounts with the total against
+  `TESTFLIGHT_CAP`. It marks items `notified` (or advances `admin_state/new_users`) only after the email is accepted. Flags:
+  `--dry-run`, `--send-test`, `--tester-cap`. Setup: `docs/DEPLOYMENT.md`.
+- **`web/scripts/gen_organisms.py`** (in the web app) generates the shape data for the bird-to-microbe loading animation used
+  by the website and the iOS app. It has nothing to do with identification.
+
 ## Limitations and Future Work
 
 | Limitation | Notes |

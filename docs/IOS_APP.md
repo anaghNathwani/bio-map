@@ -2,7 +2,14 @@
 
 ## Overview
 
-The BioMap iOS app is built with **SwiftUI** targeting **iOS 17+**. It is the primary interface for citizen scientists to submit sightings, annotate the community dataset, and receive on-device bird identification powered by a continuously updated CoreML model.
+The BioMap iOS app is built with **SwiftUI** for **iOS 17+**, iPhone only. Citizen scientists use it to photograph or record
+birds, get an on-device species suggestion, submit sightings to a shared map, and confirm or correct other people's IDs.
+Auth, data and media all go through **Firebase** (Auth + Firestore) directly; there is no backend to deploy. See
+`CLAUDE.md` for the architecture and `docs/ML_PIPELINE.md` for the models.
+
+The project is generated from `ios/BioMap/project.yml` with **XcodeGen**, so edit `project.yml`, not the `.xcodeproj`
+(regenerating overwrites hand-edits made only in Xcode). It also uses **CocoaPods** (`TensorFlowLiteSwift`) and Swift Package
+Manager (Firebase, GoogleSignIn, ZIPFoundation), so always open **`BioMap.xcworkspace`**.
 
 ---
 
@@ -10,244 +17,177 @@ The BioMap iOS app is built with **SwiftUI** targeting **iOS 17+**. It is the pr
 
 | Requirement | Minimum |
 |---|---|
-| iOS | 17.0 |
-| Xcode | 15.0 |
+| iOS | 17.0 (the Lock Screen corner controls need iOS 18) |
+| Xcode | 16 |
 | Swift | 5.9 |
-| Device | iPhone with camera (camera features); simulator works for browsing |
+| Tools | `xcodegen`, `pod` (CocoaPods) |
+| Device | iPhone with a camera; the simulator works for browsing but has no camera |
+
+## Building and running
+
+```bash
+cd ios/BioMap
+xcodegen generate                 # regenerates the project and re-runs `pod install`
+open BioMap.xcworkspace           # or build from Terminal:
+xcodebuild -workspace BioMap.xcworkspace -scheme BioMap \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -configuration Debug build
+```
+
+To run on your own iPhone, plug it in, turn on Developer Mode (Settings → Privacy & Security), choose it as the destination
+and press ⌘R. Re-run after changes. To put a build in front of testers, see [TESTFLIGHT.md](TESTFLIGHT.md).
+
+**Versions** are set once in `project.yml` (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`) and shared by the app and the
+widget extension. Bump the build number for every upload.
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
-ios/BioMap/BioMap/
-├── App/
-│   ├── BioMapApp.swift          Entry point, @main
-│   ├── AppEnvironment.swift      Auth state, shared via @EnvironmentObject
-│   └── ContentView.swift         4-tab shell + ProfileView
-│
-├── Models/
-│   └── Sighting.swift            All Codable structs: Sighting, SightingDetail,
-│                                 AnnotationItem, LeaderboardEntry, ModelVersionInfo
-│
-├── Networking/
-│   ├── APIClient.swift           All REST calls; battery-efficient URLSession; multipart upload builder
-│   └── UploadQueue.swift         Offline persistence; stores image file paths, not base64
-│
-├── ML/
-│   ├── BirdClassifier.swift      CoreML + Vision inference; cached model + VNCoreMLModel
-│   └── ModelManager.swift        Model version check, download, cache management
-│
-├── Views/
-│   ├── Auth/
-│   │   └── LoginView.swift       Register + login form
-│   ├── Camera/
-│   │   ├── CameraView.swift      Main capture UI, photo library, live camera; GPS lifecycle
-│   │   └── CameraViewModel.swift GPS (conditional) + AI inference + upload + offline queueing
-│   ├── Map/
-│   │   └── SightingMapView.swift MapKit map with debounced bbox-filtered pins
-│   ├── Sighting/
-│   │   ├── SightingDetailView.swift  Photo, AI suggestion, annotations list
-│   │   └── AnnotationView.swift      Species annotation form
-│   └── Leaderboard/
-│       └── LeaderboardView.swift     Top annotators ranked list
-│
-├── Info.plist                    Privacy strings, background modes
-└── BioMap.entitlements          Sandbox + network + camera + location caps
-```
-
----
-
-## Key Components
-
-### AppEnvironment
-
-`AppEnvironment` is an `ObservableObject` injected at the root of the view hierarchy via `.environmentObject()`. It holds the JWT token and username, persisted in `UserDefaults`.
-
-```swift
-@Published var token: String? {
-    didSet { UserDefaults.standard.set(token, forKey: "token") }
-}
-```
-
-When `token` is `nil`, the app shows `LoginView`. When set, it transitions to the main `ContentView` tab shell.
-
----
-
-### APIClient
-
-A singleton that wraps all network calls. All calls are `async throws` using a custom battery-efficient `URLSession` configured with `waitsForConnectivity = true` and a 60-second resource timeout.
-
-`waitsForConnectivity` means failed requests are held by the OS until connectivity is available rather than immediately retrying, which avoids repeatedly waking the radio when offline.
-
-Key design decisions:
-- `batteryEfficientSession` (module-level constant) used for all `data()` calls instead of `URLSession.shared`
-- Multipart form data is built manually (no external dependency)
-- JWT token is read from `UserDefaults` on every call — no separate token storage
-- The client does not retry; retry logic lives in `UploadQueue`
-- All force-unwraps replaced with `guard let` + typed `APIError` throws; HTTP 4xx/5xx surfaced via `checkStatus()`
-
-To point the app at a different server, change `baseURL`:
-
-```swift
-APIClient.shared.baseURL = "https://api.biomap.app"
+ios/BioMap/
+├── project.yml                       XcodeGen spec: targets, versions, bundle IDs, signing team
+├── Podfile                           TensorFlowLiteSwift
+├── BioMap/                           the app target (com.biomap.BioMap)
+│   ├── App/
+│   │   ├── BioMapApp.swift           entry point; Firebase + Google Sign-In setup; URL routing
+│   │   ├── AppEnvironment.swift      auth state; DeepLink (widget / control / URL requests)
+│   │   └── ContentView.swift         tab shell (Map, Report, Leaders, Profile); consumes deep links
+│   ├── Models/                       Sighting, SightingDetail, AnnotationItem, BirdInfo ...
+│   ├── Networking/
+│   │   ├── FirebaseService.swift     the data layer: auth, sightings, annotations, leaderboard, feedback, media
+│   │   ├── APIClient.swift           Wikipedia bird info + the optional (dead) Vision proxy
+│   │   ├── UploadQueue.swift         offline retry queue (actor)
+│   │   └── DataURI.swift             base64 data-URI decoding for photo/audio
+│   ├── ML/
+│   │   ├── BirdClassifier.swift      photo species (AIY Birds V1 via TensorFlow Lite)
+│   │   ├── BirdNETClassifier.swift   call identification (BirdNET V2.4 + location model, TFLite)
+│   │   ├── MultiBirdDetector.swift   several birds in one photo (Vision saliency / optional detector)
+│   │   ├── BirdDetector.swift        the optional CoreML object detector
+│   │   ├── AnnotationModerator.swift on-device "is this a real bird name" check
+│   │   ├── ModelManager.swift        model updates from Firestore chunks
+│   │   └── Bundled/                  the shipped .tflite models and label files
+│   └── Views/
+│       ├── Auth/LoginView.swift
+│       ├── Camera/                   CameraView (+ live camera), AudioRecorderView, review cards,
+│       │                             CameraControls.swift (zoom bar, shutter, focus square)
+│       ├── Map/                      SightingMapView, SightingListView
+│       ├── Sighting/                 SightingDetailView, AnnotationView
+│       ├── Bird/BirdInfoView.swift
+│       ├── Leaderboard/LeaderboardView.swift
+│       ├── Profile/                  ProfileView, FeedbackView
+│       └── Common/                   Theme.swift, BioLoader.swift, OrganismData.swift (generated)
+└── BioMapWidgets/                    the widget extension (com.biomap.BioMap.Widgets)
+    ├── BioMapWidgets.swift           the widget bundle
+    ├── SightingsWidget.swift         home screen + Lock Screen widgets
+    ├── Controls.swift                the two Lock Screen corner controls (iOS 18)
+    └── ControlIntents.swift          their actions; ALSO compiled into the app (see below)
 ```
 
 ---
 
-### UploadQueue
+## Key components
 
-An `actor` (Swift concurrency-safe) that persists pending uploads across app restarts. When an upload fails, `CameraViewModel.saveImageToTemp()` writes the JPEG to the app's caches directory and stores the **file path** in `UserDefaults` as a `[PendingUpload]` array.
+### Design (`Theme.swift`)
 
-Storing file paths instead of base64-encoded strings avoids 33% data size inflation and the CPU cost of encoding/decoding large JPEG payloads.
+The app uses the system look: San Francisco type, system background/label colours (so light, dark and accessibility settings
+just work) and one blue accent (`#0071E3` light, `#0A84FF` dark). `ThemeColors` exposes `bg`, `bgRaised`, `fg`, `fgSoft`,
+`accent`, `accentSoft` and `rule`. Shared pieces: `Tile` (rounded soft surface), `PillButtonStyle` (blue capsule button),
+`Eyebrow`, `HairlineRule`, and `BirdMark` (the logo as a vector `Shape`). The website follows the same language
+(`web/src/tailwind.css`).
 
-```swift
-// Enqueue on failure — path written to caches/pending_uploads/
-await UploadQueue.shared.enqueue(PendingUpload(
-    imagePath: fileURL.path,
-    latitude: location.coordinate.latitude,
-    longitude: location.coordinate.longitude,
-    notes: notes
-))
+### Loading animation (`BioLoader.swift`)
 
-// Flushed on app launch (BioMapApp.swift)
-await UploadQueue.shared.flushIfNeeded()
-```
+The brand bird morphs through other organisms down to single cells (butterfly, fish, leaf, jellyfish, amoeba, bacterium,
+yeast, paramecium, diatom) and back, drawn as one blue line. Shapes are radius-versus-angle tables generated by
+`web/scripts/gen_organisms.py` into `OrganismData.swift` and `web/src/lib/organisms.js`; edit the script, not the outputs.
+It honours Reduce Motion (a still bird).
 
-Items that succeed are removed and their image files deleted from disk. Items that still fail remain in the queue for the next attempt.
+### Camera (`CameraView.swift`, `CameraControls.swift`)
 
----
+The live camera (`LiveCameraVC`, a `UIViewController` bridged into SwiftUI) works like the native Camera app:
 
-### BirdClassifier
+- It prefers the multi-lens virtual camera (triple, dual-wide, dual) so zoom hops between real lenses.
+- A zoom bar above the shutter shows the same stops the native app does (for example `.5  1  2  3`); the active stop turns yellow
+  and shows the exact zoom (`3.4×`). Tapping a stop ramps smoothly to it. Pinch zooms continuously (0.5× up to 15×).
+- Haptic ticks as a pinch crosses a lens; tap-to-focus with the yellow square; a native-style shutter.
+- The zoom maths (`CameraZoom`) is pure Swift, kept apart from AVFoundation so it can be tested without a camera.
+- `AVCaptureSession.stopRunning()` runs in `viewWillDisappear` so the camera hardware stops when you leave.
 
-Uses `VNCoreMLModel` + `VNCoreMLRequest` to run the downloaded CoreML model on a `CGImage`. Returns the top-1 classification:
+The photo library path uses `PhotoPickerView` (`UIImagePickerController`). Both paths call `vm.setImage(_:)`, which runs the
+on-device classifier.
 
-```swift
-let result = await BirdClassifier.shared.classify(image: capturedImage)
-// result?.species == "American Robin"
-// result?.confidence == 0.87
-```
+### Report tab and deep links
 
-**Caching** — `VNCoreMLModel` is expensive to construct. `BirdClassifier` caches it alongside the model version string and only rebuilds it when `ModelManager` signals a version change via `invalidateCache()`. The underlying `MLModel` is similarly cached in `ModelManager` and only reloaded from disk when the version changes.
+`ContentView` owns the selected tab and the Report tab's Photo/Sound mode. Something outside the app can ask to land on a
+screen by setting `AppEnvironment.pendingDeepLink` (`DeepLink`: `photo`, `sound`, `map`), which `ContentView` consumes once
+the user is signed in. Two things set it:
 
-**Background queue** — `VNImageRequestHandler.perform()` runs on a dedicated `DispatchQueue` at `.userInitiated` QoS, not on the main actor. This keeps inference off the UI thread and allows the OS to schedule it at a lower power level than main-thread work.
+- **URLs** `com.biomap.app://photo`, `://sound` and `://map` (`BioMapApp.onOpenURL`; anything else goes to Google Sign-In).
+- **Lock Screen controls** via `ControlRoute` (see Widgets).
 
-If no model has been downloaded yet, `classify()` returns `nil` and the UI simply hides the AI suggestion section.
+### Feedback (`FeedbackView.swift`)
 
----
+Profile → "Report a bug or suggest a feature" writes to the write-only `feedback` Firestore collection through
+`FirebaseService.submitFeedback`, attaching the app version, build, device model and iOS version. New reports are emailed by
+`ml_pipeline/notify_waitlist_signups.py`.
 
-### ModelManager
+### Widgets (`BioMapWidgets/`)
 
-On every app launch (triggered from `BioMapApp.body`):
+| Where | What |
+|---|---|
+| Home screen, small | Sighting count, how long ago the latest one was; tap opens the camera |
+| Home screen, medium | The same, plus Photo and Sound buttons |
+| Lock Screen, circular / rectangular / inline | Bird icon or "BioMap · 37 sightings"; tap opens the camera |
+| Lock Screen corner buttons (iOS 18+) | "Photograph a bird" and "Record a bird call" controls (also in Control Center) |
 
-1. `GET /model/version` → compare remote version string with `UserDefaults["model_version"]`
-2. If different: `GET /model/download` → get presigned URL
-3. `URLSession.download(from:)` → downloads to a temp file
-4. Unzip `.mlpackage.zip` → `Documents/BirdClassifier.mlpackage` (via ZIPFoundation)
-5. Delete the zip file after extraction to free disk space
-6. Invalidate `ModelManager.cachedModel` and call `BirdClassifier.shared.invalidateCache()` so the next inference picks up the new model
-7. Store new version string in `UserDefaults`
+- The count and latest time come from Firestore's REST API (`runAggregationQuery` / `runQuery` on `sightings`), which the
+  security rules allow publicly, so there is **no App Group** and no sign-in. The widget bundles `GoogleService-Info.plist`
+  for its API key, and refreshes about every 30 minutes.
+- Tapping opens the app with a `com.biomap.app://` link.
+- **The control intents must exist in the app too.** `ControlIntents.swift` is compiled into both targets: iOS runs an
+  app-opening control's intent inside the app process, and when it only existed in the extension, tapping the control did
+  nothing. The intent also leaves a `ControlRoute` hand-off that the app picks up, and returns an `OpenURLIntent` as a backup.
+- Add one: touch and hold the home screen and tap **+**, or touch and hold the Lock Screen and tap **Customize**.
 
-The download is silent — no UI feedback. The updated model is used on the next `BirdClassifier.classify()` call.
+### Offline queue (`UploadQueue.swift`)
 
----
+An `actor`. Failed photo uploads are written to `caches/pending_uploads/` as JPEG files, with the paths kept in `UserDefaults`,
+and retried on the next launch; each file is deleted after a successful upload.
 
-### CameraView + LiveCameraVC
+### Models (`ML/`)
 
-The camera flow has two paths:
-
-**Photo Library** — `UIImagePickerController` wrapped in `PhotoPickerView` (a `UIViewControllerRepresentable`).
-
-**Live Camera** — `AVCaptureSession` with `AVCapturePhotoOutput`, implemented in `LiveCameraVC` (a `UIViewController` subclass). Presented via `NavigationLink` with a custom `UIViewControllerRepresentable` bridge.
-
-`AVCaptureSession.stopRunning()` is called in `viewWillDisappear` to stop the camera hardware immediately when the user navigates back. Leaving the session running burns CPU and camera power for no benefit.
-
-Both paths call `vm.setImage(_:)` which sets `capturedImage` and immediately fires `BirdClassifier.classify()`.
-
----
-
-### CameraViewModel
-
-Orchestrates the capture → classify → upload flow. GPS is managed conditionally:
-
-- `startLocationUpdates()` / `stopLocationUpdates()` are called from `CameraView`'s `onAppear` / `onDisappear` — GPS hardware is completely off when the Report tab is not visible
-- `desiredAccuracy = kCLLocationAccuracyHundredMeters` — sufficient for a map pin; avoids the power cost of full GPS lock
-- `distanceFilter = 50` — suppresses updates for movements under 50 metres, reducing unnecessary wake-ups
-
-On upload failure, `saveImageToTemp()` writes the compressed JPEG to `caches/pending_uploads/` and the path is handed to `UploadQueue`.
+See `docs/ML_PIPELINE.md` for what each model is. In short: photo ID is Google's AIY Birds V1, call ID is Cornell's BirdNET
+V2.4 plus its location model, all run on the phone through TensorFlow Lite; annotation moderation is rules and string matching,
+not a model. Copies are bundled in `ML/Bundled/`. `ModelManager` can ship a replacement through Firestore without an app
+release.
 
 ---
 
-### SightingMapView
-
-Uses the SwiftUI `Map` view with `Annotation` markers. Region-based fetching is **debounced** — `scheduleRegionLoad(_:)` cancels any pending `Task` and waits 600ms before firing a network request. This means rapid panning or zooming produces only one network call after the user settles, not one per frame.
-
-```swift
-func scheduleRegionLoad(_ region: MKCoordinateRegion) {
-    debounceTask?.cancel()
-    debounceTask = Task {
-        try? await Task.sleep(for: .milliseconds(600))
-        guard !Task.isCancelled else { return }
-        await loadForRegion(region)
-    }
-}
-```
-
-Tapping a pin opens `SightingDetailView` as a sheet.
-
----
-
-## Adding the Xcode Project
-
-Since this repo ships source files, create the Xcode project manually:
-
-1. Open Xcode → **File → New → Project → iOS → App**
-2. Set: Product Name `BioMap`, Bundle ID `com.biomap.BioMap`, Interface `SwiftUI`, Language `Swift`
-3. Delete the default `ContentView.swift` that Xcode generates
-4. Drag the `ios/BioMap/BioMap/` folder into the Project Navigator → **Add files to "BioMap"**, check **Create groups**, check **Add to target: BioMap**
-5. In the project editor → **Info** tab, add:
-   - `NSCameraUsageDescription`
-   - `NSLocationWhenInUseUsageDescription`
-   - `NSPhotoLibraryUsageDescription`
-6. In **Signing & Capabilities**, add the entitlements from `BioMap.entitlements`
-7. **File → Add Package Dependencies** and resolve `ios/BioMap/Package.swift` to pull in ZIPFoundation
-
----
-
-## Permissions Required
+## Permissions
 
 | Permission | Usage |
 |---|---|
-| Camera (`NSCameraUsageDescription`) | Photographing birds via `AVCaptureSession`; session stopped immediately when camera view exits |
-| Location When In Use (`NSLocationWhenInUseUsageDescription`) | Geotagging sightings; active **only** while Report tab is visible; uses `kCLLocationAccuracyHundredMeters` and 50m distance filter |
-| Photo Library (`NSPhotoLibraryUsageDescription`) | Uploading existing photos via `UIImagePickerController` |
+| Camera | Photographing birds; the session stops when the camera view exits |
+| Microphone | Recording calls for BirdNET |
+| Location When In Use | Geotagging sightings and narrowing audio results; active only while the Report tab is visible (100 m accuracy, 50 m filter) |
+| Photo Library | Choosing existing photos |
 
----
+The privacy manifest (`PrivacyInfo.xcprivacy`) declares no tracking and the `UserDefaults` reason `CA92.1`. The app sets
+`ITSAppUsesNonExemptEncryption` to false (standard HTTPS only).
 
-## Offline Behaviour
+## Offline behaviour
 
 | Scenario | Behaviour |
 |---|---|
-| No network on launch | Cached sightings not shown (no local cache in v1.0); map is empty |
-| Photo captured offline | JPEG saved to `caches/pending_uploads/`; path queued in `UploadQueue`; retried on next launch; file deleted after successful upload |
-| Annotation submitted offline | Fails with error toast; no offline queue (v1.0 limitation) |
-| Model download fails | App continues with previous cached model (or no AI suggestion if first run) |
-
----
+| Identifying a bird | Works offline: both models run on the phone |
+| Submitting a photo offline | Queued and retried at next launch |
+| Submitting an annotation offline | Fails with an error; there is no offline queue for annotations |
+| Model update fails | The app keeps the bundled / previously cached model |
+| Widgets offline | Show the last data, or "–" with no data yet |
 
 ## Configuration
 
-Server URL is set in `APIClient.swift`:
-
-```swift
-var baseURL = "http://localhost:8000"
-```
-
-GPS accuracy and distance filter are set in `CameraViewModel.init()`:
-
-```swift
-locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-locationManager.distanceFilter = 50
-```
-
-For production, `baseURL` should be set from a build scheme environment variable or `xcconfig` file rather than hardcoded.
+- **Firebase:** `BioMap/GoogleService-Info.plist` (and `REVERSED_CLIENT_ID` must match the Google URL scheme in `project.yml`).
+- **`API_BASE_URL`:** `http://localhost:8000` in Debug and the legacy backend URL in Release; only the optional Vision proxy
+  uses it.
+- **Signing:** automatic, team `2JN5C47MQT`.

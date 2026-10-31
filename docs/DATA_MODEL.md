@@ -2,6 +2,22 @@
 
 > **This describes the original Postgres schema** (`backend/`'s separate, self-contained legacy system per `CLAUDE.md` — not called by the live app). The live app's actual schema is Firestore-based: see `CLAUDE.md`'s Architecture section, and `firestore.rules` for the authoritative `users`/`sightings`/`sightings/{id}/annotations`/`model_versions` shapes. Training-time majority-vote label computation described below matches the live app's `topSpecies` field conceptually, but there is no Postgres `model_versions.accuracy` field in the live system — see `docs/ML_PIPELINE.md`'s "Our in-house training policy" for the current (different) training design.
 
+## Live Firestore collections
+
+The live app's data is in Firestore (see `firestore.rules` for the exact allowed shapes):
+
+| Collection | Holds |
+|---|---|
+| `users/{uid}` | username, email, annotationCount, createdAt |
+| `sightings/{id}` | location, mediaType, photo/audio as base64 data URIs, AI suggestion fields, topSpecies, annotationCount, userId, createdAt |
+| `sightings/{id}/annotations/{id}` | species, confidence, behaviour/plumage, reviewOfAI, userId, username |
+| `model_versions/{id}` and `.../chunks/{n}` | model release metadata and its base64 chunks |
+| `waitlist/{id}` | email (iCloud only), name, source, notified, createdAt: signups from the website |
+| `feedback/{id}` | type (`bug`/`feature`/`other`), message, userId, app version/build, device, iOS version, notified, createdAt |
+| `admin_state/new_users` | `lastCreatedMs`: the newest account the notifier has already emailed about |
+
+The sections below describe the original Postgres schema.
+
 ## Entity Relationship Diagram
 
 ```

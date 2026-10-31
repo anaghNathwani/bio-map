@@ -1,5 +1,24 @@
 # Security
 
+## Live app (Firebase) at a glance
+
+The live app has no server of its own; access is controlled by `firestore.rules`:
+
+| Collection | Who can do what |
+|---|---|
+| `sightings`, `.../annotations` | Anyone can read (the public map). Signed-in users create their own; owners edit/delete theirs. |
+| `users` | Signed-in users read any profile and write only their own. |
+| `model_versions`, `.../chunks` | Anyone can read; only the trusted pipeline (Admin SDK) writes. |
+| `waitlist` | **Write-only** from the website, no sign-in. The email must be an iCloud address (`icloud.com`, `me.com`, `mac.com`). Nobody can read it back from a client, so it can't be scraped. |
+| `feedback` | **Write-only** for signed-in users, and only as themselves (`userId == auth.uid`), with a fixed set of fields and a 4,000 character limit. Not readable from a client. |
+| `admin_state` | No client access (the notifier's bookkeeping, written with the Admin SDK). |
+
+Waitlist signups, feedback and the notifier's progress are read with the service account (`FIREBASE_SERVICE_ACCOUNT_JSON`) or
+in the Firebase console. The widgets read the public `sightings` collection through Firestore's REST API with the app's API
+key, which is not a secret. Keep `firebase-service-account.json` and `backend/.env` out of git (both are ignored).
+
+The rest of this document covers the legacy REST backend.
+
 ## Authentication
 
 - Passwords are hashed with **bcrypt** (via `passlib`) — never stored in plaintext

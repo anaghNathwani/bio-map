@@ -66,6 +66,42 @@ A second job in the same workflow, `check-training-trigger`, runs on the same sc
 
 ---
 
+### GitHub Actions workflows
+
+| Workflow | Schedule / trigger | Purpose | Needs |
+|---|---|---|---|
+| `live-poll.yml` | every 20 min | Fallback BirdNET pass for recordings the phone couldn't classify; training-trigger check | `FIREBASE_SERVICE_ACCOUNT_JSON` |
+| `notify-waitlist.yml` | every 10 min, or run manually | Emails you new waitlist signups, in-app feedback and **new accounts** (with the total against your TestFlight cap) | `FIREBASE_SERVICE_ACCOUNT_JSON`, `RESEND_API_KEY`, `TESTFLIGHT_CAP` |
+| `deploy-web.yml` | push to `main` touching `web/` | Builds and deploys the website to Firebase Hosting | `FIREBASE_SERVICE_ACCOUNT_JSON` (Hosting Admin role) |
+| `web-ci.yml` | pushes / PRs | Builds the site and runs the SEO check | none |
+| `web-deploy.yml` | manual | Manual Hosting deploy | `FIREBASE_SERVICE_ACCOUNT_JSON` |
+
+**Notification setup (once):**
+
+1. Sign up at [resend.com](https://resend.com) with the email you want alerts at (the sandbox sender `onboarding@resend.dev` only
+   delivers to the address you signed up with, unless you verify a domain), and create an API key.
+2. In the repo: Settings → Secrets and variables → Actions. On the **Secrets** tab add `RESEND_API_KEY`. On the **Variables**
+   tab add `TESTFLIGHT_CAP` (your TestFlight public-link tester limit; a secret of the same name also works). These are
+   not "Deploy keys", which is a different page.
+3. Actions → "Notify waitlist signups" → **Run workflow** with **Email a test message** ticked. An email titled "BioMap alerts
+   are working" should arrive; a 403 from Resend means the recipient isn't the account's email.
+
+The account alert counts Firebase Auth accounts and records a baseline on its first run, so it only emails about accounts
+created after that. It stores its progress in the Firestore doc `admin_state/new_users`.
+
+**Actions can be blocked by billing.** If a run fails within seconds with "recent account payments have failed or your
+spending limit needs to be increased", GitHub isn't starting the job at all and **every** scheduled workflow is dead until
+Settings → Billing and plans is fixed (a public repo gets free Actions). Check the run's annotations first when emails or
+polling stop.
+
+---
+
+## Releasing the iOS app
+
+The iOS app is released through TestFlight from Xcode, not CI. See [TESTFLIGHT.md](TESTFLIGHT.md).
+
+---
+
 ## Production deployment (Google Cloud Run alternative)
 
 Same result as `deploy.sh`, different compute host — same Supabase project (Postgres + Storage), same Firestore/Hosting deploy, backend built straight from `backend/Dockerfile` via Cloud Build instead of Render.
@@ -104,7 +140,7 @@ This writes `backend/.env.supabase` — copy that one file to the PC (`scp`, a U
 
 **On the PC** (after installing Ubuntu Server and cloning this repo there):
 ```bash
-git clone https://github.com/anaghNathwani/bird-app.git && cd bird-app/birdmap
+git clone https://github.com/anaghNathwani/bio-map.git && cd bio-map
 # copy backend/.env.supabase here first
 ./deploy-selfhost.sh
 ```

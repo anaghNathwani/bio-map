@@ -10,11 +10,34 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-### Planned for v1.1
+### Planned (not built yet)
 - Species autocomplete via a curated species list endpoint
 - Annotation offline queue (mirrors the sighting upload queue)
 - Layer-freezing strategy in ML pipeline for small-dataset training runs
 - ~~Webhook-triggered retraining when annotation count crosses a threshold~~ — superseded: a polling-based trigger (not a webhook) now runs live every 20 minutes, see `docs/ML_PIPELINE.md`
+
+---
+
+## TestFlight releases (the shipping iOS versions)
+
+The `[1.1.0]` and `[1.0.0]` entries further down were written during the original REST-backend design, before any public
+release. These are the versions testers actually receive (set in `ios/BioMap/project.yml`; see `docs/TESTFLIGHT.md`).
+
+### 1.1 (build 5), 1.1 (build 4): beta
+- **Widgets:** home screen (small, medium) and Lock Screen (circular, rectangular, inline) widgets showing the community
+  sighting count, plus two Lock Screen corner controls (iOS 18+): "Photograph a bird" and "Record a bird call".
+- **Fix (build 5):** the Lock Screen controls did nothing when tapped. Their intents now live in the app target as well as the
+  widget extension, and the app reads a hand-off so it opens straight to the camera or recorder.
+- **Camera:** native-style zoom (lens buttons, pinch 0.5× to 15×, smooth ramps, haptics), tap-to-focus, native shutter.
+- **Feedback:** Profile → "Report a bug or suggest a feature", stored in the `feedback` collection.
+- **Deep links:** `com.biomap.app://photo | sound | map`.
+- **Design:** Apple-style system look in the app and on the website; new bird-to-microbe loading animation; new app icon.
+- **Website:** inline waitlist in the hero (iCloud emails only), and a "Why we changed our name" popup.
+- **Alerts:** the notifier now also emails new accounts with the total against the TestFlight cap.
+
+### 1.0 (builds 1 to 3): first TestFlight builds
+- Renamed BirdMap → BioMap (bundle ID `com.biomap.BioMap`), iPhone only, privacy manifest, 1024 px icon, App Store Connect
+  record and TestFlight distribution.
 
 ---
 
