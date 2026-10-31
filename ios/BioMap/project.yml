@@ -25,9 +25,9 @@ packages:
 settings:
   base:
     # The app and its widget extension must carry identical version/build numbers.
-    # Every upload to App Store Connect needs a higher build number than the last one (now 4).
+    # Every upload to App Store Connect needs a higher build number than the last one (now 5).
     MARKETING_VERSION: "1.1"
-    CURRENT_PROJECT_VERSION: 4
+    CURRENT_PROJECT_VERSION: 5
 
 targets:
   BioMap:
@@ -35,6 +35,7 @@ targets:
     platform: iOS
     sources:
       - path: BioMap
+      - path: BioMapWidgets/ControlIntents.swift   # control intents must exist in the app too
     info:
       path: BioMap/Info.plist
       properties:

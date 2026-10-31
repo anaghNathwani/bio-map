@@ -6,6 +6,7 @@ import GoogleSignIn
 struct BioMapApp: App {
     @StateObject private var env = AppEnvironment()
     @AppStorage("appearanceMode") private var appearanceMode: String = "system"
+    @Environment(\.scenePhase) private var scenePhase
 
     init() {
         FirebaseApp.configure()
@@ -56,6 +57,10 @@ struct BioMapApp: App {
             }
             .environmentObject(env)
             .preferredColorScheme(colorScheme(for: appearanceMode))
+            // Lock-screen control taps (ControlIntents.swift): route to the camera / recorder.
+            .onReceive(NotificationCenter.default.publisher(for: ControlRoute.requested)) { _ in takeControlRoute() }
+            .onChange(of: scenePhase) { _, phase in if phase == .active { takeControlRoute() } }
+            .onAppear { takeControlRoute() }
             .onOpenURL { url in
                 if let link = DeepLink(url: url) {
                     env.pendingDeepLink = link
@@ -63,6 +68,12 @@ struct BioMapApp: App {
                     _ = GIDSignIn.sharedInstance.handle(url)
                 }
             }
+        }
+    }
+
+    private func takeControlRoute() {
+        if let route = ControlRoute.takePending(), let link = DeepLink(rawValue: route) {
+            env.pendingDeepLink = link
         }
     }
 

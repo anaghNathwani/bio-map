@@ -1,13 +1,6 @@
 import WidgetKit
 import SwiftUI
 
-/// Deep links the widgets open (handled by DeepLink in the app).
-enum WidgetLink {
-    static let photo = URL(string: "com.biomap.app://photo")!
-    static let sound = URL(string: "com.biomap.app://sound")!
-    static let map = URL(string: "com.biomap.app://map")!
-}
-
 struct SightingsEntry: TimelineEntry {
     let date: Date
     let total: Int?
