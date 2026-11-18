@@ -9,6 +9,7 @@ Welcome to the BioMap documentation. Use the table below to find what you need.
 | [GETTING_STARTED.md](GETTING_STARTED.md) | Set up the full stack locally in ~15 minutes |
 | [API_REFERENCE.md](API_REFERENCE.md) | Complete REST API reference with request/response examples |
 | [IOS_APP.md](IOS_APP.md) | iOS app structure, camera, widgets and controls, design system, building and running |
+| [GLARE_WEIGHT_PROGRAMMING.md](GLARE_WEIGHT_PROGRAMMING.md) | Experiment: fixing sunrise/sunset glare by editing the photo model's weights directly (result: no reliable effect) |
 | [TESTFLIGHT.md](TESTFLIGHT.md) | Releasing the iOS app: version bumps, archive, upload, TestFlight groups and the public link |
 | [DATA_MODEL.md](DATA_MODEL.md) | Database schema, ER diagram, object storage layout, coordinate system |
 | [ML_PIPELINE.md](ML_PIPELINE.md) | Model architecture, training config, CoreML export, retraining instructions |

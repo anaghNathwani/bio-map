@@ -87,6 +87,7 @@
 .bug-table td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--rule); color: var(--fg-soft); white-space: nowrap; }
 .bug-table td:first-child { color: var(--fg); white-space: normal; min-width: 180px; }
 .bug-ver { color: var(--fg-soft); }
+.bug-time { font-size: 12px; opacity: 0.75; margin-top: 2px; }
 .bug-status { font-size: 12px; font-weight: 600; color: var(--fg-soft); }
 .bug-status-fixed { color: var(--accent); }
 .bug-status-noted { color: var(--fg); }

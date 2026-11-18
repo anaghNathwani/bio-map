@@ -11,12 +11,13 @@ struct SightingMapView: View {
     @State private var searchText = ""
     @State private var isSearching = false
     @State private var placeResults: [MKMapItem] = []
-    @State private var cameraPosition = MapCameraPosition.userLocation(fallback: .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-            span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5)
-        )
-    ))
+    // No hard-coded city: until a location fix arrives the map frames the sightings (.automatic), and then it centres on the
+    // user once (see onChange below). It used to fall back to San Francisco, and because the location permission is only
+    // asked for after this screen appears, a first launch stayed there.
+    @State private var cameraPosition = MapCameraPosition.userLocation(fallback: .automatic)
+    /// True once the camera has been placed by the user's location or by them (a search, a tapped sighting), so a late
+    /// location fix never yanks the map away from where they are looking.
+    @State private var cameraSettled = false
 
     var body: some View {
         NavigationStack {
@@ -50,6 +51,16 @@ struct SightingMapView: View {
                 }
                 .onMapCameraChange(frequency: .onEnd) { ctx in
                     vm.scheduleRegionLoad(ctx.region)
+                }
+                .onChange(of: vm.userLocation) { _, location in
+                    guard let location, !cameraSettled else { return }
+                    cameraSettled = true
+                    withAnimation {
+                        cameraPosition = .region(MKCoordinateRegion(
+                            center: location.coordinate,
+                            span: MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)   // roughly 30 km across
+                        ))
+                    }
                 }
 
                 if vm.isLoading {
@@ -168,6 +179,7 @@ struct SightingMapView: View {
     }
 
     private func open(_ sighting: Sighting) {
+        cameraSettled = true
         finishSearch()
         withAnimation {
             cameraPosition = .region(MKCoordinateRegion(
@@ -186,6 +198,7 @@ struct SightingMapView: View {
     }
 
     private func jump(to item: MKMapItem) {
+        cameraSettled = true
         finishSearch()
         withAnimation {
             cameraPosition = .region(MKCoordinateRegion(
@@ -295,8 +308,10 @@ private struct MapPinShape: Shape {
 }
 
 @MainActor
-final class SightingMapViewModel: ObservableObject {
+final class SightingMapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var sightings: [Sighting] = []
+    /// The user's current location (one coarse fix, for centring the map), once known.
+    @Published var userLocation: CLLocation?
     /// The most recent sightings regardless of viewport — what search runs over,
     /// since `sightings` is narrowed to whatever the map is currently showing.
     @Published var allSightings: [Sighting] = []
@@ -305,8 +320,37 @@ final class SightingMapViewModel: ObservableObject {
     private var debounceTask: Task<Void, Never>?
     private let locationManager = CLLocationManager()
 
+    override init() {
+        super.init()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer   // enough to centre a map; quick and battery-friendly
+    }
+
+    /// Asks for permission the first time; if it's already granted, takes a single location fix.
     func requestLocationPermission() {
-        locationManager.requestWhenInUseAuthorization()
+        switch locationManager.authorizationStatus {
+        case .notDetermined: locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways: locationManager.requestLocation()
+        default: break
+        }
+    }
+
+    // CLLocationManagerDelegate: the fix arrives after the permission prompt is answered, which is why the map can't just
+    // read it at launch.
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways: manager.requestLocation()
+        default: break
+        }
+    }
+
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        Task { @MainActor in self.userLocation = location }
+    }
+
+    nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        // No fix (denied, indoors, airplane mode): the map keeps showing the sightings instead of a made-up city.
     }
 
     func load() async {

@@ -14,6 +14,14 @@ import Foundation
 ///
 /// Input and output are Float32 RGB in 0...1, row-major HWC, `side` x `side` x 3.
 enum GlareCorrector {
+    /// OFF. The correction helped against *simulated* glare, but on 1,349 real iNaturalist photos (330 daylight, 238 golden hour,
+    /// 781 with the sun within 3 degrees of the horizon) it did nothing for the photos where the model is weaker, and it slightly
+    /// hurt ordinary daylight photos (-1.2 points of correct suggestions shown, interval -2.4 to -0.3; it fired on 24% of them).
+    /// Real near-horizon photos are not warmer or flatter than daylight ones (cameras correct the cast themselves), so the
+    /// simulation's assumptions did not hold. Kept in the code, with its parity tests, in case better evidence or a better
+    /// correction turns up. See docs/GLARE_WEIGHT_PROGRAMMING.md ("What real photos showed").
+    static var isEnabled = false
+
     static let side = 224
 
     // Gates: read off clean-vs-glare distributions of the measurements, not tuned on accuracy (see glare_lib.py).
@@ -43,7 +51,7 @@ enum GlareCorrector {
 
     /// The corrected pixels and what was done, or nil when the photo looks ordinary (the common case).
     static func corrected(_ px: [Float]) -> (pixels: [Float], applied: Applied)? {
-        guard px.count == side * side * 3 else { return nil }
+        guard isEnabled, px.count == side * side * 3 else { return nil }
         let m = measure(px)
         var y = px
         var applied: Applied = []

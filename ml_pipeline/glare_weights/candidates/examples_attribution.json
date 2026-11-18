@@ -1,0 +1,58 @@
+[
+ {
+  "file": "American_Avocet_0.jpg",
+  "label": "American Avocet",
+  "condition": "golden",
+  "source": "https://www.inaturalist.org/observations/155645373",
+  "license": "cc-by"
+ },
+ {
+  "file": "Barn_Swallow_0.jpg",
+  "label": "Barn Swallow",
+  "condition": "veil",
+  "source": "https://www.inaturalist.org/observations/239048645",
+  "license": "cc-by"
+ },
+ {
+  "file": "Canada_Goose_0.jpg",
+  "label": "Canada Goose",
+  "condition": "backlit",
+  "source": "https://www.inaturalist.org/observations/75718382",
+  "license": "cc0"
+ },
+ {
+  "file": "Eastern_Bluebird_0.jpg",
+  "label": "Eastern Bluebird",
+  "condition": "silhouette",
+  "source": "https://www.inaturalist.org/observations/107700686",
+  "license": "cc-by"
+ },
+ {
+  "file": "Mourning_Dove_0.jpg",
+  "label": "Mourning Dove",
+  "condition": "golden",
+  "source": "https://www.inaturalist.org/observations/330289532",
+  "license": "cc-by"
+ },
+ {
+  "file": "Red-tailed_Hawk_0.jpg",
+  "label": "Red-tailed Hawk",
+  "condition": "veil",
+  "source": "https://www.inaturalist.org/observations/365887523",
+  "license": "cc-by"
+ },
+ {
+  "file": "Steller's_Jay_0.jpg",
+  "label": "Steller's Jay",
+  "condition": "backlit",
+  "source": "https://www.inaturalist.org/observations/395912903",
+  "license": "cc0"
+ },
+ {
+  "file": "Wild_Turkey_0.jpg",
+  "label": "Wild Turkey",
+  "condition": "silhouette",
+  "source": "https://www.inaturalist.org/observations/13169483",
+  "license": "cc-by"
+ }
+]

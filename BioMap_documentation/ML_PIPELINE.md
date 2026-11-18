@@ -193,28 +193,22 @@ Until the detector+classifier model lands, recognition quality still comes entir
 
 ## Sunrise / sunset glare
 
-Photos taken into low sun are a weak spot for the photo classifier: an orange cast, a washed-out veil when the sun is in or near
-the frame, and a dark bird against a blown-out sky. The model itself is unchanged; `ML/GlareCorrector.swift` measures the
-224×224 image the classifier is about to see and, **only when it looks glare-affected**, builds a corrected copy (grey-world
-white balance for the cast, a percentile levels stretch for the veil, a shadow lift with highlight roll-off for the dark
-subject). `BirdClassifier` then classifies both and blends the probabilities 30% original / 70% corrected. Ordinary photos take
-one pass, as before; the camera also lets you drag up/down after tap-to-focus to change exposure.
+**Status: the pre-processing correction is built but switched off.** Against *simulated* glare (a warm cast, veiling flare and
+backlight added to ordinary photos) the model lost a lot of accuracy and `ML/GlareCorrector.swift` won back about 7 points. But on
+1,349 *real* iNaturalist photos with the sun's height computed from each capture time, the picture was different:
 
-Measured with `ml_pipeline/glare_eval/` on 177 openly licensed photos of 59 species, with glare **simulated** (see its README for
-the limits):
+- The model really is weaker only when the sun is within 3° of the horizon: 67.2% right against 77.3% in daylight (a
+  species-matched gap of −9.6 points, interval −15.4 to −3.6), with confident wrong answers doubling (8.8% against 4.5%). Golden hour
+  (3° to 10°) is as good as daylight.
+- Real near-horizon photos are not warmer, flatter or darker than daylight ones, so the simulated glare did not match. The
+  correction does nothing for them and slightly hurts ordinary daylight photos (−1.2 points, interval −2.4 to −0.3), so
+  `GlareCorrector.isEnabled` is `false`.
+- Editing the model's weights directly, and fine-tuning only its final layer, were also tried and did not help (see
+  `docs/GLARE_WEIGHT_PROGRAMMING.md`).
 
-| Condition | Correct suggestion shown, before → after | Confidently wrong, before → after |
-|---|---|---|
-| Clean (control) | 65% → 65% | 3% → 4% |
-| Golden-hour cast | 52% → 57% | 6% → 4% |
-| Sun veil / flare | 37% → 47% | 9% → 6% |
-| Backlit | 43% → 45% | 10% → 7% |
-| Silhouette | 13% → 22% | 10% → 7% |
-
-The correction also fires on about 18% of ordinary photos (mostly warm backgrounds); the blend keeps their accuracy unchanged.
-Candidates that did **not** make it: dark-channel dehazing (made backlit photos worse) and applying any correction to every
-photo (cost about 4% on clean photos). This is a pre-processing change, not training, so the "pre-trained models run as released"
-policy above is unaffected.
+The reason for the near-horizon gap is not known. Tools: `ml_pipeline/glare_eval/` (simulator, real-photo builder `fetch_lowsun.py`,
+`real_eval.py`, `horizon_analysis.py`) and `ml_pipeline/glare_weights/`. The camera's drag-to-adjust exposure after tap-to-focus is
+unaffected.
 
 ## Operations scripts (not models)
 

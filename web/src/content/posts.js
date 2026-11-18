@@ -41,6 +41,43 @@ export const POSTS = [
   ]
 },
 {
+  "slug": "finding-several-birds-in-one-photo",
+  "title": "Finding several birds in one photo",
+  "description": "A bug report said BioMap missed birds when more than one was in the frame. Here is what was wrong, how we fixed it, and how well it works.",
+  "date": "2026-11-17",
+  "body": [
+    { "p": "A tester reported that BioMap fails to notice when there is more than one bird in a photo. We measured the problem, fixed it, and measured again. This post covers what we found and what we have not yet been able to check." },
+    { "h2": "What was wrong" },
+    { "p": "The photo model looks at the whole picture and gives one answer. For a second species, the app was meant to use a bird detector that finds each bird in the frame. That detector had never been published to the app, so BioMap fell back to a simpler method that picks out the most eye-catching regions of the photo. We tested that fallback on 160 photos containing several birds, and it found no additional species in any of them." },
+    { "p": "There was a second effect. When two birds shared a frame, the whole-picture answer was often empty because the model was not sure which bird to name. In our test set that happened for 54% of the two-bird photos." },
+    { "h2": "What we changed" },
+    { "p": "BioMap now also looks at overlapping square windows across the photo, about fifteen for a typical phone photo, and classifies each window with the same on-device model. The answers are combined into one list with a species and its best window each. A species is shown as an extra only when the evidence is strong:" },
+    { "ul": [
+      "one window is at least 70% sure, or two or more windows agree and the best is at least 60% sure;",
+      "the window is not mostly inside the region already explained by the main species, which is usually the same bird with a different label;",
+      "at most three extra species are shown."
+    ] },
+    { "p": "When the whole photo gets no answer at all, the best window answer becomes the main suggestion instead of leaving the screen empty. Everything still runs on the phone." },
+    { "h2": "How we tested it" },
+    { "p": "We do not have a large set of labelled photos with several birds, so we built one. We took single-bird photos with known species and placed two or three of them in a frame, 320 frames in total, in four layouts: pairs, triples, a large bird beside a small one, and two birds of the same species. We also ran single-bird photos to see how often the app invents a second species. The same frames were run before and after the change." },
+    { "h2": "Results" },
+    { "ul": [
+      "Pairs: every bird found in 96% of frames, up from 0%.",
+      "Triples: every bird found in 100% of frames, up from 0%.",
+      "A large bird beside a small one: every bird found in 65% of frames, up from 0%. Small birds are the hard case.",
+      "Wrong extra species: about 0.06 per single-bird photo, and none on the frames with two birds of the same species."
+    ] },
+    { "p": "We chose the thresholds from these numbers. A lower bar finds more small birds, but it also adds wrong species to ordinary single-bird photos, and we would rather miss a bird than invent one." },
+    { "h2": "What we have not checked" },
+    { "ul": [
+      "These are composite frames, not real photos of flocks. Real photos have overlapping birds, motion blur and cluttered backgrounds that our frames do not.",
+      "We have not tried it on a phone yet. The fix ships in the next beta build, so the first real-world test will be yours.",
+      "Scanning many windows takes longer than classifying one photo. We have not yet measured the delay on a phone."
+    ] },
+    { "p": "If BioMap still misses a bird or names one that is not there, please report it from Profile, then Feedback. Reports appear on the Bug tracker page, with the time each one was noted and fixed." }
+  ]
+},
+{
   "slug": "identify-birds-without-internet",
   "title": "How BioMap identifies birds without the internet",
   "description": "The photo and sound models behind BioMap run on your phone, so you get a species suggestion in the field even with no signal.",

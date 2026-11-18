@@ -4,7 +4,7 @@ import SwiftUI
 /// on down to single-celled life (amoeba, bacterium, yeast, paramecium, diatom), then back to the
 /// bird, drawn as one flat blue line. Shapes are radius-vs-angle tables shared with the website
 /// (web/scripts/gen_organisms.py -> OrganismData.swift), so morphing is just interpolating radii.
-/// With Reduce Motion on it shows the still bird.
+/// With Reduce Motion on, the shapes cross-fade instead of moving (BioLoaderTimeline), so the carousel still plays.
 struct BioLoader: View {
     var size: CGFloat = 120
     var showsName = true
@@ -12,61 +12,36 @@ struct BioLoader: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private let holdSeconds = 1.1
-    private let morphSeconds = 0.95
-    private let nucleusFrom = 5   // Amoeba onward are microbes and get a nucleus
-
     var body: some View {
         let c = ThemeColors(scheme: scheme)
-        Group {
-            if reduceMotion {
-                content(radii: OrganismData.all[0].r, nucleus: 0, name: OrganismData.all[0].name, c: c)
-            } else {
-                TimelineView(.animation) { timeline in
-                    let f = frame(at: timeline.date.timeIntervalSinceReferenceDate)
-                    content(radii: f.radii, nucleus: f.nucleus, name: f.name, c: c)
-                }
-            }
+        TimelineView(.animation) { timeline in
+            content(BioLoaderTimeline.frame(at: timeline.date.timeIntervalSinceReferenceDate, reduceMotion: reduceMotion), c: c)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Loading")
     }
 
-    private func content(radii: [Double], nucleus: Double, name: String, c: ThemeColors) -> some View {
+    private func content(_ f: BioLoaderTimeline.Frame, c: ThemeColors) -> some View {
         VStack(spacing: 14) {
             Canvas { ctx, canvasSize in
                 let line = StrokeStyle(lineWidth: max(2, size * 0.018), lineCap: .round, lineJoin: .round)
-                ctx.stroke(Self.contour(radii, in: canvasSize), with: .color(c.accent), style: line)
-                if nucleus > 0.01 {
+                for layer in f.layers where layer.alpha > 0.01 {
+                    ctx.stroke(Self.contour(layer.radii, in: canvasSize), with: .color(c.accent.opacity(layer.alpha)), style: line)
+                }
+                if f.nucleus > 0.01 {
                     let r = size * 0.05
                     let dot = CGRect(x: canvasSize.width / 2 - r, y: canvasSize.height / 2 - r, width: r * 2, height: r * 2)
-                    ctx.fill(Path(ellipseIn: dot), with: .color(c.accent.opacity(nucleus)))
+                    ctx.fill(Path(ellipseIn: dot), with: .color(c.accent.opacity(f.nucleus)))
                 }
             }
             .frame(width: size, height: size)
             if showsName {
-                Text(name)
+                Text(f.name)
                     .font(Theme.sansSemibold(15))
                     .foregroundStyle(c.fgSoft)
                     .frame(height: 20)
             }
         }
-    }
-
-    private func frame(at time: TimeInterval) -> (radii: [Double], nucleus: Double, name: String) {
-        let all = OrganismData.all
-        let cycle = holdSeconds + morphSeconds
-        let step = Int(time / cycle)
-        let within = time - Double(step) * cycle
-        let fromIdx = step % all.count
-        let toIdx = (step + 1) % all.count
-        let raw = within < holdSeconds ? 0 : (within - holdSeconds) / morphSeconds
-        let t = raw < 0.5 ? 4 * raw * raw * raw : 1 - pow(-2 * raw + 2, 3) / 2   // ease in-out cubic
-        let from = all[fromIdx].r, to = all[toIdx].r
-        let radii = zip(from, to).map { $0 + ($1 - $0) * t }
-        let a = fromIdx >= nucleusFrom ? 1.0 : 0.0
-        let b = toIdx >= nucleusFrom ? 1.0 : 0.0
-        return (radii, a + (b - a) * t, all[t > 0.5 ? toIdx : fromIdx].name)
     }
 
     /// Closed Catmull-Rom spline through the sampled contour.

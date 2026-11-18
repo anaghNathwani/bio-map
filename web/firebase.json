@@ -122,6 +122,10 @@
         "destination": "/blog/install-biomap-testflight.html"
       },
       {
+        "source": "/blog/finding-several-birds-in-one-photo",
+        "destination": "/blog/finding-several-birds-in-one-photo.html"
+      },
+      {
         "source": "/blog/identify-birds-without-internet",
         "destination": "/blog/identify-birds-without-internet.html"
       },

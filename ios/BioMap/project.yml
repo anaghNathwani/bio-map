@@ -27,7 +27,7 @@ settings:
     # The app and its widget extension must carry identical version/build numbers.
     # Every upload to App Store Connect needs a higher build number than the last one (now 5).
     MARKETING_VERSION: "1.1"
-    CURRENT_PROJECT_VERSION: 5
+    CURRENT_PROJECT_VERSION: "6"
 
 targets:
   BioMap:

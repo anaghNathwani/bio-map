@@ -1,6 +1,7 @@
 // Swift side of the parity check: compiled together with ios/.../ML/GlareCorrector.swift by check_swift_parity.sh.
 import Foundation
 
+GlareCorrector.isEnabled = true     // the app ships it switched off; the parity check exercises the maths
 let dir = CommandLine.arguments[1]
 let meta = try! JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: "\(dir)/cases.json"))) as! [[String: Any]]
 

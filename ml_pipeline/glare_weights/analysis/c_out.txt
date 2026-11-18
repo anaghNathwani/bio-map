@@ -1,0 +1,62 @@
+== C: per-layer drift. relative drift = ||mean_ch(glare)-mean_ch(clean)|| / ||mean_ch(clean)|| (avg over images); sat% = frac of positions at upper range; dead% = channels zero everywhere
+idx op           hi    | sat clean | gold rel sat dead | veil rel sat dead | back rel sat dead | silh rel sat dead
+  4 CONV_2D      6.0 |  0.00 | 0.59  0.00 34.4 | 0.58  0.00 34.4 | 0.59  0.00 34.4 | 0.68  0.00 34.4 | 
+ 24 DEPTHWISE    6.0 |  0.18 | 0.39  0.14  0.0 | 0.39  0.07  0.0 | 0.38  0.20  0.0 | 0.44  0.25  0.0 | 
+ 44 CONV_2D     36.2 |  0.00 | 0.91  0.00  0.0 | 0.89  0.00  0.0 | 0.95  0.00  0.0 | 1.17  0.00  0.0 | 
+ 47 ADD         39.2 |  0.00 | 1.45  0.00  0.0 | 1.41  0.00  0.0 | 1.46  0.00  0.0 | 1.67  0.00  0.0 | 
+ 52 CONV_2D      6.0 |  0.27 | 0.35  0.33  0.0 | 0.34  0.21  0.0 | 0.34  0.35  0.0 | 0.38  0.34  0.0 | 
+ 72 DEPTHWISE    6.0 |  0.06 | 0.38  0.08  0.5 | 0.38  0.06  0.5 | 0.36  0.08  0.5 | 0.41  0.09  0.5 | 
+ 80 ADD         30.0 |  0.00 | 1.20  0.00  0.0 | 1.21  0.00  0.0 | 1.16  0.00  0.0 | 1.35  0.00  0.0 | 
+ 98 ADD         37.1 |  0.00 | 1.19  0.00  0.0 | 1.20  0.00  0.0 | 1.19  0.00  0.0 | 1.40  0.00  0.0 | 
+108 DEPTHWISE    6.0 |  0.03 | 0.28  0.03  0.0 | 0.28  0.01  0.0 | 0.28  0.03  0.0 | 0.33  0.04  0.0 | 
+128 CONV_2D     21.3 |  0.00 | 0.89  0.00  0.0 | 0.92  0.00  0.0 | 0.91  0.00  0.0 | 1.15  0.00  0.0 | 
+131 ADD         25.1 |  0.00 | 1.22  0.00  0.0 | 1.24  0.00  0.0 | 1.20  0.00  0.0 | 1.39  0.00  0.0 | 
+136 CONV_2D      6.0 |  0.00 | 0.42  0.00  0.3 | 0.44  0.00  0.3 | 0.41  0.00  0.3 | 0.47  0.00  0.3 | 
+149 ADD         24.9 |  0.00 | 1.00  0.00  0.0 | 1.06  0.00  0.0 | 1.02  0.00  0.0 | 1.21  0.00  0.0 | 
+164 CONV_2D     16.0 |  0.00 | 0.71  0.00  0.0 | 0.71  0.00  0.0 | 0.77  0.00  0.0 | 0.94  0.00  0.0 | 
+167 ADD         26.0 |  0.00 | 0.94  0.00  0.0 | 1.01  0.00  0.0 | 0.99  0.00  0.0 | 1.19  0.00  0.0 | 
+172 CONV_2D      6.0 |  0.04 | 0.28  0.02  0.0 | 0.31  0.01  0.0 | 0.30  0.02  0.0 | 0.35  0.02  0.0 | 
+192 DEPTHWISE    6.0 |  0.06 | 0.26  0.04  0.2 | 0.28  0.03  0.2 | 0.35  0.05  0.2 | 0.45  0.04  0.2 | 
+200 ADD         23.8 |  0.00 | 0.72  0.00  0.0 | 0.78  0.00  0.0 | 0.80  0.00  0.0 | 0.99  0.00  0.0 | 
+218 ADD         28.0 |  0.00 | 0.70  0.00  0.0 | 0.79  0.00  0.0 | 0.79  0.00  0.0 | 0.99  0.00  0.0 | 
+228 DEPTHWISE    6.0 |  0.11 | 0.29  0.08  0.0 | 0.31  0.08  0.0 | 0.34  0.09  0.0 | 0.42  0.09  0.0 | 
+248 CONV_2D     11.2 |  0.00 | 0.71  0.00  0.0 | 0.80  0.00  0.0 | 0.82  0.00  0.0 | 1.07  0.00  0.0 | 
+251 ADD         15.5 |  0.00 | 0.73  0.00  0.0 | 0.80  0.00  0.0 | 0.87  0.00  0.0 | 1.11  0.00  0.0 | 
+256 CONV_2D      6.0 |  0.01 | 0.32  0.01  1.0 | 0.35  0.00  0.9 | 0.36  0.00  0.9 | 0.45  0.00  0.7 | 
+269 ADD         25.1 |  0.00 | 0.67  0.00  0.0 | 0.77  0.00  0.0 | 0.79  0.00  0.0 | 1.05  0.00  0.0 | 
+284 CONV_2D     16.1 |  0.00 | 0.66  0.00  0.0 | 0.78  0.00  0.0 | 0.77  0.00  0.0 | 1.03  0.00  0.0 | 
+292 AVERAGE_P    0.0 |  0.00 | 0.77  0.00  0.0 | 0.91  0.00  0.0 | 0.86  0.00  0.0 | 1.14  0.00  0.0 | 
+
+== D: outcomes (n=90 dev images per condition)
+clean      top1 0.69 shown-right 0.59 conf<0.5 0.30 bgwins 0.03 wrong-shown 0.09 mean conf 0.65 true margin(logit) +1.22 bg-logit-minus-true -6.72  mean|pool| 0.138 mean max logit 9.25
+golden     top1 0.52 shown-right 0.46 conf<0.5 0.37 bgwins 0.03 wrong-shown 0.16 mean conf 0.58 true margin(logit) -0.27 bg-logit-minus-true -5.40  mean|pool| 0.157 mean max logit 9.06
+veil       top1 0.44 shown-right 0.28 conf<0.5 0.47 bgwins 0.09 wrong-shown 0.18 mean conf 0.53 true margin(logit) -1.21 bg-logit-minus-true -3.86  mean|pool| 0.159 mean max logit 8.73
+backlit    top1 0.48 shown-right 0.41 conf<0.5 0.37 bgwins 0.06 wrong-shown 0.18 mean conf 0.58 true margin(logit) -1.05 bg-logit-minus-true -4.11  mean|pool| 0.160 mean max logit 9.01
+silhouette top1 0.23 shown-right 0.13 conf<0.5 0.51 bgwins 0.30 wrong-shown 0.18 mean conf 0.51 true margin(logit) -3.40 bg-logit-minus-true -0.12  mean|pool| 0.165 mean max logit 8.69
+
+true-class evidence channels: contribution W[true,c]*f[c], top 15 channels by mean clean contribution; their change
+golden true-logit contrib sum clean 6.96 -> 6.04; top15 chans 0.27 -> 0.20; mean ratio feature(glare)/clean over top15 0.87; global mean pooled feat clean 0.138 glare 0.157; corr(delta feature) ...
+veil true-logit contrib sum clean 6.96 -> 5.23; top15 chans 0.27 -> 0.17; mean ratio feature(glare)/clean over top15 0.80; global mean pooled feat clean 0.138 glare 0.159; corr(delta feature) ...
+backlit true-logit contrib sum clean 6.96 -> 5.47; top15 chans 0.27 -> 0.21; mean ratio feature(glare)/clean over top15 0.94; global mean pooled feat clean 0.138 glare 0.160; corr(delta feature) ...
+silhouette true-logit contrib sum clean 6.96 -> 3.83; top15 chans 0.27 -> 0.16; mean ratio feature(glare)/clean over top15 0.83; global mean pooled feat clean 0.138 glare 0.165; corr(delta feature) ...
+
+attractors: classes predicted when wrong (glare), count, with bias rank
+golden wrong n=43; [('Unknown / Not a Bird', 3, 4.95), ('Downy Woodpecker', 3, 1.3), ('Northern Flicker', 3, 0.56), ('Summer Tanager', 2, 0.24), ('House Finch', 2, 1.98), ('House Sparrow', 2, 1.61)] | mean bias of wrong-preds 0.98 vs population 0.016; mean bias rank 166
+veil wrong n=50; [('Unknown / Not a Bird', 8, 4.95), ('Downy Woodpecker', 3, 1.3), ('House Finch', 3, 1.98), ('Northern Flicker', 3, 0.56), ("Cooper's Hawk", 2, 0.95), ('House Sparrow', 2, 1.61)] | mean bias of wrong-preds 1.39 vs population 0.016; mean bias rank 137
+backlit wrong n=47; [('Unknown / Not a Bird', 5, 4.95), ('House Sparrow', 5, 1.61), ('Downy Woodpecker', 3, 1.3), ('Northern Flicker', 3, 0.56), ('Common Raven', 2, 0.75), ("Clark's Nutcracker", 2, -0.15)] | mean bias of wrong-preds 1.16 vs population 0.016; mean bias rank 133
+silhouette wrong n=69; [('Unknown / Not a Bird', 27, 4.95), ('Northern Flicker', 4, 0.56), ('House Sparrow', 2, 1.61), ('Bushtit', 2, 0.38), ('Broad-billed Hummingbird', 2, 0.23), ("Lincoln's Sparrow", 2, 0.18)] | mean bias of wrong-preds 2.22 vs population 0.016; mean bias rank 101
+
+H1: lower bg bias by delta (head-only edit in memory)
+0 clea top1 0.69 shown 0.58; gold top1 0.51 shown 0.46; veil top1 0.44 shown 0.28; back top1 0.48 shown 0.41; silh top1 0.23 shown 0.13
+1 clea top1 0.69 shown 0.58; gold top1 0.51 shown 0.46; veil top1 0.44 shown 0.28; back top1 0.48 shown 0.41; silh top1 0.23 shown 0.13
+2 clea top1 0.69 shown 0.58; gold top1 0.51 shown 0.46; veil top1 0.46 shown 0.28; back top1 0.48 shown 0.41; silh top1 0.24 shown 0.13
+3 clea top1 0.69 shown 0.58; gold top1 0.51 shown 0.46; veil top1 0.46 shown 0.28; back top1 0.49 shown 0.41; silh top1 0.24 shown 0.13
+4.95 clea top1 0.69 shown 0.58; gold top1 0.51 shown 0.46; veil top1 0.46 shown 0.28; back top1 0.49 shown 0.41; silh top1 0.26 shown 0.13
+H2: subtract k*(bias-mean) from species biases (flatten bias), k=
+0 clea top1 0.69 shown 0.58 wrongshown 0.09; gold top1 0.51 shown 0.46 wrongshown 0.16; veil top1 0.44 shown 0.28 wrongshown 0.18; back top1 0.48 shown 0.41 wrongshown 0.17; silh top1 0.23 shown 0.13 wrongshown 0.18
+0.5 clea top1 0.63 shown 0.56 wrongshown 0.10; gold top1 0.51 shown 0.38 wrongshown 0.14; veil top1 0.40 shown 0.26 wrongshown 0.16; back top1 0.44 shown 0.37 wrongshown 0.13; silh top1 0.22 shown 0.12 wrongshown 0.16
+1 clea top1 0.62 shown 0.48 wrongshown 0.10; gold top1 0.49 shown 0.31 wrongshown 0.14; veil top1 0.39 shown 0.26 wrongshown 0.14; back top1 0.43 shown 0.31 wrongshown 0.12; silh top1 0.21 shown 0.08 wrongshown 0.14
+stem ch mean shift golden [-0.01  0.4   1.54 -0.11 -0.7  -0.14  0.35] (ch 0,12,14,16,21,24,31)
+stem ch mean shift veil [-0.02  0.36  1.34 -0.12 -1.04 -0.15  0.3 ] (ch 0,12,14,16,21,24,31)
+stem ch mean shift backlit [ 0.1   0.33  1.49 -0.1  -0.9  -0.15  0.42] (ch 0,12,14,16,21,24,31)
+stem ch mean shift silhouette [ 0.2   0.33  1.75 -0.1  -0.92 -0.15  0.56] (ch 0,12,14,16,21,24,31)

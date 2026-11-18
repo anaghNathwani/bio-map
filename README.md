@@ -59,6 +59,38 @@ troubleshooting are in [`docs/TESTFLIGHT.md`](docs/TESTFLIGHT.md).
   (billing in good standing), or none of the scheduled jobs start.
 - Signups and feedback are readable in the Firebase console under Firestore (`waitlist`, `feedback`).
 
+## Updating the public bug tracker
+
+The website's bug tracker (https://getbiomap.web.app/blog/bug-tracker) reads the public
+`bugTracker` Firestore collection. It is separate from the private `feedback` collection, so
+users' messages and emails are never exposed. Each row shows a title, status, and the
+Reported / Noted / Fixed dates; Turnaround is calculated from Reported to Fixed.
+
+**Run all commands from the `ml_pipeline/` folder** (a one-time `pip install firebase-admin==6.5.0`
+is needed), with the key at `../firebase-service-account.json`:
+
+```bash
+cd ml_pipeline
+```
+
+| When | Command |
+|---|---|
+| New bugs arrive | Nothing: `notify-waitlist.yml` copies new in-app bug reports into the tracker every 10 minutes. To do it immediately: `python sync_bug_tracker.py --service-account ../firebase-service-account.json` |
+| You want to see what each bug says | `python sync_bug_tracker.py --service-account ../firebase-service-account.json --list` (prints each bug's ID and the user's private message) |
+| You've looked at a bug (**Noted**) | `python sync_bug_tracker.py --service-account ../firebase-service-account.json --note <id> --title "Brief description"` |
+| You've fixed it (**Fixed**) | `python sync_bug_tracker.py --service-account ../firebase-service-account.json --fix <id>` |
+| Fix a title | `python sync_bug_tracker.py --service-account ../firebase-service-account.json --id <id> --title "New title"` |
+
+- `<id>` is the long ID shown by `--list` (new bugs also appear on the site as `Bug report (first 6 characters of the ID)`).
+- New bugs start with a generic title like `Bug report (abc123)`. Replace it with a short plain-English
+  description when you note the bug. The title is **public**, so don't include names, emails or other
+  personal details from the report.
+- Changes show on the site immediately after a refresh; no redeploy is needed.
+- You can do the same by hand in the Firebase console: Firestore → `bugTracker` → the bug → set
+  `notedAt` / `fixedAt` to a timestamp, or edit `title`.
+- The public read rule lives in `firestore.rules`; if rules change, redeploy with
+  `firebase deploy --only firestore:rules`.
+
 ## Website
 
 The marketing site and live map (`web/`) is prerendered at build time for search engines and deploys to Firebase

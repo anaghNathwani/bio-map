@@ -1,0 +1,40 @@
+dev species: 30 photos: 90
+n photos = 90; values in % (margin in logits)
+== top1
+system                 clean      golden        veil     backlit  silhouette   glare-mean
+unedited                68.9        52.2        44.4        47.8        23.3        41.9
+unedited+corr           68.9        60.0        55.6        52.2        34.4        50.6
+candidate               67.8        52.2        44.4        47.8        24.4        42.2
+candidate+corr          67.8        58.9        55.6        54.4        35.6        51.1
+cand - unedited -1.1[-3.3,+0.0]+0.0[+0.0,+0.0]+0.0[-3.3,+3.3]+0.0[-3.3,+3.3]+1.1[+0.0,+3.3]  +0.3[-1.1,+1.9]
+cand+corr - corr-1.1[-3.3,+0.0]-1.1[-3.3,+0.0]+0.0[-3.3,+3.3]+2.2[+0.0,+5.6]+1.1[-3.3,+6.7]  +0.6[-1.4,+2.5]
+== shown
+system                 clean      golden        veil     backlit  silhouette   glare-mean
+unedited                58.9        45.6        27.8        41.1        13.3        31.9
+unedited+corr           58.9        50.0        42.2        42.2        20.0        38.6
+candidate               60.0        46.7        32.2        41.1        13.3        33.3
+candidate+corr          58.9        51.1        43.3        44.4        18.9        39.4
+cand - unedited +1.1[+0.0,+3.3]+1.1[+0.0,+3.3]+4.4[+0.0,+10.0]+0.0[+0.0,+0.0]+0.0[+0.0,+0.0]  +1.4[+0.0,+2.8]
+cand+corr - corr+0.0[-3.3,+3.3]+1.1[-2.2,+4.4]+1.1[+0.0,+3.3]+2.2[+0.0,+5.6]-1.1[-3.3,+0.0]  +0.8[-0.6,+2.2]
+== wrong
+system                 clean      golden        veil     backlit  silhouette   glare-mean
+unedited                 8.9        15.6        17.8        17.8        17.8        17.2
+unedited+corr           10.0        14.4        11.1        16.7        13.3        13.9
+candidate                8.9        16.7        17.8        16.7        16.7        16.9
+candidate+corr          10.0        12.2        14.4        14.4        14.4        13.9
+cand - unedited +0.0[+0.0,+0.0]+1.1[+0.0,+3.3]+0.0[+0.0,+0.0]-1.1[-5.6,+3.3]-1.1[-3.3,+0.0]  -0.3[-1.4,+0.8]
+cand+corr - corr+0.0[+0.0,+0.0]-2.2[-5.6,+0.0]+3.3[+0.0,+7.8]-2.2[-5.6,+0.0]+1.1[+0.0,+3.3]  +0.0[-1.1,+1.1]
+== margin
+system                 clean      golden        veil     backlit  silhouette   glare-mean
+unedited                 1.2        -0.3        -1.2        -1.1        -3.4        -1.5
+unedited+corr            1.2         0.6        -0.0        -0.6        -2.6        -0.6
+candidate                1.3        -0.2        -1.0        -0.9        -3.4        -1.4
+candidate+corr           1.3         0.6         0.1        -0.5        -2.5        -0.6
+cand - unedited +0.0[-0.0,+0.1]+0.1[-0.0,+0.2]+0.2[+0.1,+0.3]+0.1[+0.0,+0.2]+0.0[-0.1,+0.1]  +0.1[+0.1,+0.2]
+cand+corr - corr+0.0[-0.0,+0.1]+0.0[-0.0,+0.1]+0.1[+0.0,+0.2]+0.1[+0.0,+0.1]+0.1[-0.0,+0.1]  +0.1[+0.0,+0.1]
+PASS 1 clean top1 fall <= 2 pts and CI lower bound > -5 -> -1.1 [-3.3, +0.0]
+PASS 2 clean shown-right fall <= 2 pts and CI lower bound > -5 -> +1.1 [+0.0, +3.3]
+PASS 3 clean wrong-shown does not rise -> +0.0 [+0.0, +0.0]
+FAIL 4 glare shown-right improves in >= 3 of 4 conditions and glare-mean CI lower bound > 0 -> 2/4 improved; glare mean +1.4 [+0.0, +2.8]
+PASS 5 candidate+correction not worse than correction alone (glare-mean shown CI lower bound >= -1 pt; wrong-shown not higher in glare mean or clean) -> shown glare +0.8 [-0.6, +2.2]; wrong glare +0.0 [-1.1, +1.1]; wrong clean +0.0
+PASS 6 outputs finite and softmax sums to 1 (max error < 1e-3) -> unedited: finite=True, max|sum-1|=1.1e-06; candidate: finite=True, max|sum-1|=1.1e-06

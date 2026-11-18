@@ -1,0 +1,26 @@
+{
+ "src": "/Users/anagh/important/congressional/birdmap/ml_pipeline/glare_weights/candidates/../../../ios/BioMap/BioMap/ML/Bundled/BundledBirdModel.tflite",
+ "src_sha256": "1c635b83c63650f48b07bdd9ced03c1561259692dd58320910ca2250a60a6114",
+ "dst": "/Users/anagh/important/congressional/birdmap/ml_pipeline/glare_weights/candidates/BirdModel_chroma14_a05.tflite",
+ "dst_sha256": "22eb34bae939a42f28643ab81397820b678ed116c23fd415212c64b4e52dbd0f",
+ "tensors": [
+  {
+   "tensor": 54,
+   "name": "MobilenetV2/Conv/Conv2D_Fold;MobilenetV2/Conv/weights_quant/FakeQuantWithMinMaxVars",
+   "n_changed": 27,
+   "n_total": 864,
+   "pct": 3.125,
+   "max_abs_change": 0.2814778685569763
+  }
+ ],
+ "recipe": [
+  {
+   "op": "weight_chroma_damp",
+   "tensor": 54,
+   "channels": [
+    14
+   ],
+   "alpha": 0.5
+  }
+ ]
+}

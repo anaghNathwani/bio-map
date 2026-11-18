@@ -67,9 +67,15 @@ final class CameraViewModel: NSObject, ObservableObject, CLLocationManagerDelega
             let results = await BirdClassifier.shared.classifyTopN(image: image, count: 3)
             aiCandidates = results
             aiSuggestion = results.first
-            aiAdditionalSuggestions = await MultiBirdDetector.detectAdditional(
-                in: image, primarySpecies: results.first?.species
-            )
+            var extras = await MultiBirdDetector.detectAdditional(in: image, primarySpecies: results.first?.species)
+            // The whole frame often gives no answer when two birds share it; promote the best window answer instead.
+            if results.isEmpty, let best = extras.first {
+                let promoted = ClassificationResult(species: best.species, confidence: Float(best.confidence))
+                aiCandidates = [promoted]
+                aiSuggestion = promoted
+                extras.removeFirst()
+            }
+            aiAdditionalSuggestions = extras
             didClassify = true
         }
     }

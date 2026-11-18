@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ORGANISMS, SAMPLES } from '../lib/organisms.js'
 
-const HOLD_MS = 1100
-const MORPH_MS = 950
+// A brief pause per shape: most loads last a second or two, and a long pause on the first shape (the bird) meant
+// short loads never got past it. Keep in step with BioLoaderTimeline.swift in the iOS app.
+const HOLD_MS = 450
+const MORPH_MS = 800
+const FADE_PAUSE_MS = 900   // Reduce Motion: how long each shape stays before dissolving to the next
+const FADE_MS = 300
 const NUCLEUS_FROM = 5 // organisms at or after this index are microbes (Amoeba onward) and get a nucleus
 
 const ease = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
@@ -29,8 +33,8 @@ function contourPath(radii, size) {
 /**
  * BioMap's loading animation: the brand bird melts into a butterfly, a fish, a leaf, a jellyfish and
  * on down to single-celled life (amoeba, bacterium, yeast, paramecium, diatom), then back to the
- * bird, drawn as one flat line. Every shape is a radius-vs-angle table (web/scripts/gen_organisms.py, shared with the iOS
- * app), so morphing is just interpolating radii. Honors prefers-reduced-motion with a still bird.
+ * bird, drawn as one flat line (with Reduce Motion on, the shapes dissolve into each other instead of moving). Every shape is a radius-vs-angle table (web/scripts/gen_organisms.py, shared with the iOS
+ * app), so morphing is just interpolating radii. Honors prefers-reduced-motion by dissolving between shapes instead of moving.
  */
 export default function BioLoader({ size = 160, label = true, className = '' }) {
   const pathRef = useRef(null)
@@ -38,7 +42,25 @@ export default function BioLoader({ size = 160, label = true, className = '' }) 
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      // Reduce Motion: don't morph or move, but still play the whole carousel by dissolving from shape to shape
+      // (it used to sit on one still bird, which reads as a broken loader).
+      let i = 0
+      let timer
+      const next = () => {
+        pathRef.current?.style.setProperty('opacity', '0')
+        timer = setTimeout(() => {
+          i = (i + 1) % ORGANISMS.length
+          pathRef.current?.setAttribute('d', contourPath(ORGANISMS[i].r, size))
+          nucleusRef.current?.setAttribute('opacity', i >= NUCLEUS_FROM ? '1' : '0')
+          pathRef.current?.style.setProperty('opacity', '1')
+          setIndex(i)
+          timer = setTimeout(next, FADE_PAUSE_MS)
+        }, FADE_MS)
+      }
+      timer = setTimeout(next, FADE_PAUSE_MS)
+      return () => clearTimeout(timer)
+    }
     const count = ORGANISMS.length
     let raf
     let start
@@ -74,7 +96,7 @@ export default function BioLoader({ size = 160, label = true, className = '' }) 
   return (
     <div role="status" aria-live="polite" className={`inline-flex flex-col items-center ${className}`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true" className="overflow-visible">
-        <path ref={pathRef} d={initial} fill="none" stroke="var(--accent)" strokeWidth={Math.max(2, size * 0.016)} strokeLinejoin="round" />
+        <path ref={pathRef} d={initial} fill="none" stroke="var(--accent)" strokeWidth={Math.max(2, size * 0.016)} strokeLinejoin="round" style={{ transition: `opacity ${FADE_MS}ms ease` }} />
         <circle ref={nucleusRef} cx={c} cy={c} r={size * 0.05} fill="var(--accent)" opacity="0" className="bio-loader-pulse" style={{ transformOrigin: 'center' }} />
       </svg>
       {label && (

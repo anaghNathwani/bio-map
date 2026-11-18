@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import BlogShell from '../components/BlogShell.jsx'
 
-const fmtDate = ms => (ms ? new Date(ms).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '—')
+// Dates and times are shown in Pacific Time so everyone sees the same clock times, whatever their own timezone.
+const TZ = 'America/Los_Angeles'
+function When({ ms }) {
+  if (!ms) return '—'
+  const d = new Date(ms)
+  return (
+    <>
+      <div>{d.toLocaleDateString('en-US', { timeZone: TZ, year: 'numeric', month: 'short', day: 'numeric' })}</div>
+      <div className="bug-time">{d.toLocaleTimeString('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' })} PT</div>
+    </>
+  )
+}
 
 function turnaround(b) {
   if (!b.fixedAt || !b.reportedAt) return '—'
@@ -42,9 +53,9 @@ export default function BugTrackerPage() {
                 <tr key={b.id}>
                   <td>{b.title}{b.appVersion && b.appVersion !== 'unknown' ? <span className="bug-ver"> · v{b.appVersion}</span> : null}</td>
                   <td><span className={`bug-status bug-status-${status(b).toLowerCase()}`}>{status(b)}</span></td>
-                  <td>{fmtDate(b.reportedAt)}</td>
-                  <td>{fmtDate(b.notedAt)}</td>
-                  <td>{fmtDate(b.fixedAt)}</td>
+                  <td><When ms={b.reportedAt} /></td>
+                  <td><When ms={b.notedAt} /></td>
+                  <td><When ms={b.fixedAt} /></td>
                   <td>{turnaround(b)}</td>
                 </tr>
               ))}

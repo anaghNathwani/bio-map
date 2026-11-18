@@ -158,9 +158,9 @@ and retried on the next launch; each file is deleted after a successful upload.
 
 ### Models (`ML/`)
 
-Photos taken into low sun are handled by `GlareCorrector.swift`: when a photo looks like it has a sunrise/sunset cast, veil or
-backlight, `BirdClassifier` also classifies a corrected copy and blends the two. See `docs/ML_PIPELINE.md` ("Sunrise / sunset
-glare") for the measurements.
+`GlareCorrector.swift` (a pre-processing correction for sunrise/sunset photos) is built but switched off
+(`GlareCorrector.isEnabled = false`), because real-photo tests showed no benefit. See `docs/ML_PIPELINE.md` ("Sunrise / sunset
+glare").
 
 See `docs/ML_PIPELINE.md` for what each model is. In short: photo ID is Google's AIY Birds V1, call ID is Cornell's BirdNET
 V2.4 plus its location model, all run on the phone through TensorFlow Lite; annotation moderation is rules and string matching,

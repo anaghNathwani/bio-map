@@ -1,0 +1,1801 @@
+photo_file,species,condition,system,top1,shown_right,wrong_shown,margin,top_label,confidence
+Blue_Jay_0.jpg,Blue Jay,clean,unedited,1,1,0,6.1012,Blue Jay,0.9592
+Blue_Jay_0.jpg,Blue Jay,golden,unedited,1,1,0,4.3698,Blue Jay,0.9341
+Blue_Jay_0.jpg,Blue Jay,veil,unedited,1,1,0,5.1118,Blue Jay,0.8783
+Blue_Jay_0.jpg,Blue Jay,backlit,unedited,1,1,0,4.2873,Blue Jay,0.8217
+Blue_Jay_0.jpg,Blue Jay,silhouette,unedited,1,0,0,1.3192,Blue Jay,0.1564
+Blue_Jay_1.jpg,Blue Jay,clean,unedited,1,1,0,2.3910,Blue Jay,0.7945
+Blue_Jay_1.jpg,Blue Jay,golden,unedited,0,0,1,-5.1943,Northern Lapwing,0.7710
+Blue_Jay_1.jpg,Blue Jay,veil,unedited,0,0,0,-1.1543,Northern Lapwing,0.1534
+Blue_Jay_1.jpg,Blue Jay,backlit,unedited,0,0,0,-4.2049,White-tailed Kite,0.1501
+Blue_Jay_1.jpg,Blue Jay,silhouette,unedited,0,0,0,-4.4522,Eurasian Blackbird,0.1037
+Blue_Jay_2.jpg,Blue Jay,clean,unedited,1,0,0,0.9894,Blue Jay,0.3470
+Blue_Jay_2.jpg,Blue Jay,golden,unedited,1,0,0,0.0000,Blue Jay,0.0589
+Blue_Jay_2.jpg,Blue Jay,veil,unedited,0,0,0,-2.4735,Eastern Kingbird,0.0597
+Blue_Jay_2.jpg,Blue Jay,backlit,unedited,0,0,0,-2.6384,Horned Lark,0.0718
+Blue_Jay_2.jpg,Blue Jay,silhouette,unedited,0,0,0,-5.2767,Unknown / Not a Bird,0.1162
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,clean,unedited,1,1,0,2.6384,Black-capped Chickadee,0.8045
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,golden,unedited,0,0,1,-1.9788,Carolina Chickadee,0.7041
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,veil,unedited,0,0,1,-3.4628,Carolina Chickadee,0.8906
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,backlit,unedited,0,0,0,-0.9894,House Sparrow,0.1342
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,silhouette,unedited,0,0,1,-2.2261,House Sparrow,0.5255
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,clean,unedited,1,0,0,0.2473,Black-capped Chickadee,0.1767
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,golden,unedited,0,0,0,-4.5347,Black Phoebe,0.4931
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,veil,unedited,0,0,0,-1.9788,Common Raven,0.1403
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,backlit,unedited,1,0,0,0.2473,Black-capped Chickadee,0.1235
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,silhouette,unedited,0,0,0,-5.3592,Unknown / Not a Bird,0.3033
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,clean,unedited,1,1,0,1.6490,Black-capped Chickadee,0.7107
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,golden,unedited,1,1,0,0.7420,Black-capped Chickadee,0.5386
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,veil,unedited,0,0,0,-4.5347,Unknown / Not a Bird,0.5275
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,backlit,unedited,0,0,1,-4.6171,House Sparrow,0.5473
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,silhouette,unedited,0,0,0,-6.3485,Unknown / Not a Bird,0.7819
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,clean,unedited,1,1,0,4.7820,Red-winged Blackbird,0.8083
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,golden,unedited,1,1,0,4.6996,Red-winged Blackbird,0.6176
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,veil,unedited,1,0,0,3.3804,Red-winged Blackbird,0.4489
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,backlit,unedited,1,1,0,4.0400,Red-winged Blackbird,0.6911
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,silhouette,unedited,1,1,0,4.1224,Red-winged Blackbird,0.7789
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,clean,unedited,1,1,0,6.1012,Red-winged Blackbird,0.9499
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,golden,unedited,1,1,0,5.5240,Red-winged Blackbird,0.9193
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,veil,unedited,1,1,0,4.1224,Red-winged Blackbird,0.9188
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,backlit,unedited,1,1,0,5.4416,Red-winged Blackbird,0.9522
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,silhouette,unedited,1,1,0,4.4522,Red-winged Blackbird,0.9128
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,clean,unedited,1,0,0,1.2367,Red-winged Blackbird,0.2864
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,golden,unedited,1,0,0,1.4016,Red-winged Blackbird,0.3973
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,veil,unedited,1,0,0,0.4122,Red-winged Blackbird,0.1570
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,backlit,unedited,0,0,1,-2.1437,House Sparrow,0.5170
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,silhouette,unedited,0,0,1,-7.0906,House Sparrow,0.9658
+Downy_Woodpecker_0.jpg,Downy Woodpecker,clean,unedited,0,0,0,-6.1012,Downy Woodpecker,0.2002
+Downy_Woodpecker_0.jpg,Downy Woodpecker,golden,unedited,0,0,1,-8.0800,Downy Woodpecker,0.6396
+Downy_Woodpecker_0.jpg,Downy Woodpecker,veil,unedited,0,0,1,-8.2448,Downy Woodpecker,0.5332
+Downy_Woodpecker_0.jpg,Downy Woodpecker,backlit,unedited,0,0,0,-8.4097,Downy Woodpecker,0.4884
+Downy_Woodpecker_0.jpg,Downy Woodpecker,silhouette,unedited,0,0,1,-9.2342,Nuttall's Woodpecker,0.5614
+Downy_Woodpecker_1.jpg,Downy Woodpecker,clean,unedited,0,0,1,-9.9763,Downy Woodpecker,0.8806
+Downy_Woodpecker_1.jpg,Downy Woodpecker,golden,unedited,0,0,1,-10.5534,Downy Woodpecker,0.9519
+Downy_Woodpecker_1.jpg,Downy Woodpecker,veil,unedited,0,0,1,-9.2342,Downy Woodpecker,0.8666
+Downy_Woodpecker_1.jpg,Downy Woodpecker,backlit,unedited,0,0,1,-10.1412,Downy Woodpecker,0.9416
+Downy_Woodpecker_1.jpg,Downy Woodpecker,silhouette,unedited,0,0,1,-10.0587,Downy Woodpecker,0.9648
+Downy_Woodpecker_2.jpg,Downy Woodpecker,clean,unedited,0,0,1,-8.8220,Downy Woodpecker,0.9036
+Downy_Woodpecker_2.jpg,Downy Woodpecker,golden,unedited,0,0,1,-8.8220,Downy Woodpecker,0.9351
+Downy_Woodpecker_2.jpg,Downy Woodpecker,veil,unedited,0,0,1,-8.7395,Downy Woodpecker,0.9112
+Downy_Woodpecker_2.jpg,Downy Woodpecker,backlit,unedited,0,0,1,-7.5028,Downy Woodpecker,0.7592
+Downy_Woodpecker_2.jpg,Downy Woodpecker,silhouette,unedited,0,0,1,-5.3592,Bushtit,0.6644
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,clean,unedited,1,1,0,2.8857,Dark-eyed Junco,0.7366
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,golden,unedited,0,0,0,-1.9788,Rock Pigeon,0.1034
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,veil,unedited,0,0,0,-2.3910,Rock Pigeon,0.1370
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,backlit,unedited,0,0,0,-1.8963,House Finch,0.2365
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,silhouette,unedited,0,0,0,-1.9788,Tufted Titmouse,0.4142
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,clean,unedited,1,1,0,4.0400,Dark-eyed Junco,0.9025
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,golden,unedited,1,1,0,2.3910,Dark-eyed Junco,0.7536
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,veil,unedited,1,1,0,3.6277,Dark-eyed Junco,0.8739
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,backlit,unedited,1,1,0,1.2367,Dark-eyed Junco,0.5693
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,silhouette,unedited,1,1,0,2.2261,Dark-eyed Junco,0.6047
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,clean,unedited,0,0,0,-2.6384,Unknown / Not a Bird,0.0505
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,golden,unedited,0,0,0,-4.2873,Willie Wagtail,0.0700
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,veil,unedited,0,0,0,-4.1224,Willie Wagtail,0.0896
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,backlit,unedited,0,0,0,-4.7820,Unknown / Not a Bird,0.1169
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,silhouette,unedited,0,0,0,-9.5640,Unknown / Not a Bird,0.4108
+Song_Sparrow_0.jpg,Song Sparrow,clean,unedited,1,1,0,6.7608,Song Sparrow,0.9359
+Song_Sparrow_0.jpg,Song Sparrow,golden,unedited,1,1,0,2.2261,Song Sparrow,0.6932
+Song_Sparrow_0.jpg,Song Sparrow,veil,unedited,1,0,0,0.7420,Song Sparrow,0.1866
+Song_Sparrow_0.jpg,Song Sparrow,backlit,unedited,1,1,0,1.7314,Song Sparrow,0.6883
+Song_Sparrow_0.jpg,Song Sparrow,silhouette,unedited,1,1,0,2.0612,Song Sparrow,0.7577
+Song_Sparrow_1.jpg,Song Sparrow,clean,unedited,1,1,0,6.0187,Song Sparrow,0.9215
+Song_Sparrow_1.jpg,Song Sparrow,golden,unedited,1,1,0,4.1224,Song Sparrow,0.8187
+Song_Sparrow_1.jpg,Song Sparrow,veil,unedited,1,1,0,4.1224,Song Sparrow,0.8749
+Song_Sparrow_1.jpg,Song Sparrow,backlit,unedited,1,0,0,0.4122,Song Sparrow,0.4858
+Song_Sparrow_1.jpg,Song Sparrow,silhouette,unedited,0,0,1,-3.9575,Lincoln's Sparrow,0.9570
+Song_Sparrow_2.jpg,Song Sparrow,clean,unedited,1,1,0,0.7420,Song Sparrow,0.5146
+Song_Sparrow_2.jpg,Song Sparrow,golden,unedited,0,0,0,-0.8245,Lincoln's Sparrow,0.4471
+Song_Sparrow_2.jpg,Song Sparrow,veil,unedited,0,0,1,-1.5665,Lincoln's Sparrow,0.6290
+Song_Sparrow_2.jpg,Song Sparrow,backlit,unedited,0,0,1,-1.4016,Lincoln's Sparrow,0.5180
+Song_Sparrow_2.jpg,Song Sparrow,silhouette,unedited,0,0,1,-3.8751,Lincoln's Sparrow,0.8526
+European_Starling_0.jpg,European Starling,clean,unedited,0,0,1,-2.2261,Eurasian Blackbird,0.6796
+European_Starling_0.jpg,European Starling,golden,unedited,0,0,0,-1.9788,Eurasian Blackbird,0.1432
+European_Starling_0.jpg,European Starling,veil,unedited,0,0,0,-5.6889,Unknown / Not a Bird,0.7333
+European_Starling_0.jpg,European Starling,backlit,unedited,0,0,1,-3.6277,Eurasian Blackbird,0.6665
+European_Starling_0.jpg,European Starling,silhouette,unedited,0,0,0,-3.5453,Unknown / Not a Bird,0.2189
+European_Starling_1.jpg,European Starling,clean,unedited,1,1,0,5.7714,European Starling,0.8806
+European_Starling_1.jpg,European Starling,golden,unedited,1,1,0,6.5134,European Starling,0.8510
+European_Starling_1.jpg,European Starling,veil,unedited,1,1,0,7.0906,European Starling,0.9083
+European_Starling_1.jpg,European Starling,backlit,unedited,1,1,0,5.9363,European Starling,0.8178
+European_Starling_1.jpg,European Starling,silhouette,unedited,1,1,0,6.3485,European Starling,0.8942
+European_Starling_2.jpg,European Starling,clean,unedited,0,0,0,-0.8245,Wild Turkey,0.0976
+European_Starling_2.jpg,European Starling,golden,unedited,0,0,0,-5.7714,Unknown / Not a Bird,0.5354
+European_Starling_2.jpg,European Starling,veil,unedited,0,0,0,-7.4204,Unknown / Not a Bird,0.7120
+European_Starling_2.jpg,European Starling,backlit,unedited,0,0,0,-6.9257,Unknown / Not a Bird,0.7591
+European_Starling_2.jpg,European Starling,silhouette,unedited,0,0,0,-9.0693,Unknown / Not a Bird,0.8787
+Mallard_0.jpg,Mallard,clean,unedited,0,0,0,-4.2049,Snow Goose,0.1171
+Mallard_0.jpg,Mallard,golden,unedited,0,0,0,-4.6996,Tundra Swan,0.2113
+Mallard_0.jpg,Mallard,veil,unedited,0,0,0,-5.8538,Snow Goose,0.2276
+Mallard_0.jpg,Mallard,backlit,unedited,0,0,0,-7.0081,Mute Swan,0.4541
+Mallard_0.jpg,Mallard,silhouette,unedited,0,0,1,-8.3273,Greylag Goose,0.5300
+Mallard_1.jpg,Mallard,clean,unedited,1,0,0,0.1649,Mallard,0.4938
+Mallard_1.jpg,Mallard,golden,unedited,1,1,0,1.6490,Mallard,0.7875
+Mallard_1.jpg,Mallard,veil,unedited,0,0,1,-1.4841,Anas platyrhynchos domesticus,0.6586
+Mallard_1.jpg,Mallard,backlit,unedited,0,0,0,-2.0612,American Coot,0.2528
+Mallard_1.jpg,Mallard,silhouette,unedited,0,0,0,-2.8032,American Coot,0.2111
+Mallard_2.jpg,Mallard,clean,unedited,1,1,0,4.4522,Mallard,0.8957
+Mallard_2.jpg,Mallard,golden,unedited,1,1,0,4.0400,Mallard,0.8814
+Mallard_2.jpg,Mallard,veil,unedited,1,1,0,2.8032,Mallard,0.6367
+Mallard_2.jpg,Mallard,backlit,unedited,0,0,1,-1.7314,House Sparrow,0.5762
+Mallard_2.jpg,Mallard,silhouette,unedited,0,0,0,-6.3485,Unknown / Not a Bird,0.2953
+American_Crow_0.jpg,American Crow,clean,unedited,1,0,0,1.5665,American Crow,0.3252
+American_Crow_0.jpg,American Crow,golden,unedited,0,0,0,-0.5771,Common Raven,0.1011
+American_Crow_0.jpg,American Crow,veil,unedited,0,0,0,-2.8857,Sulphur-crested Cockatoo,0.1428
+American_Crow_0.jpg,American Crow,backlit,unedited,0,0,1,-1.4016,Common Raven,0.5038
+American_Crow_0.jpg,American Crow,silhouette,unedited,0,0,1,-3.2155,Common Raven,0.6342
+American_Crow_1.jpg,American Crow,clean,unedited,0,0,0,-3.6277,Glaucous-winged Gull,0.1651
+American_Crow_1.jpg,American Crow,golden,unedited,0,0,0,-8.8220,Brown-headed Cowbird,0.2503
+American_Crow_1.jpg,American Crow,veil,unedited,0,0,0,-5.8538,Brewer's Blackbird,0.1121
+American_Crow_1.jpg,American Crow,backlit,unedited,0,0,0,-9.7289,Clark's Nutcracker,0.1644
+American_Crow_1.jpg,American Crow,silhouette,unedited,0,0,0,-8.4922,Least Grebe,0.0984
+American_Crow_2.jpg,American Crow,clean,unedited,0,0,0,-5.4416,Eurasian Jackdaw,0.3917
+American_Crow_2.jpg,American Crow,golden,unedited,0,0,0,-4.0400,Clark's Nutcracker,0.0910
+American_Crow_2.jpg,American Crow,veil,unedited,0,0,0,-4.6996,Cooper's Hawk,0.0703
+American_Crow_2.jpg,American Crow,backlit,unedited,0,0,0,-4.3698,Clark's Nutcracker,0.1311
+American_Crow_2.jpg,American Crow,silhouette,unedited,0,0,0,-8.1624,Brown-headed Cowbird,0.4418
+Tree_Swallow_0.jpg,Tree Swallow,clean,unedited,1,1,0,5.6065,Tree Swallow,0.9187
+Tree_Swallow_0.jpg,Tree Swallow,golden,unedited,1,1,0,2.3910,Tree Swallow,0.6739
+Tree_Swallow_0.jpg,Tree Swallow,veil,unedited,1,0,0,1.7314,Tree Swallow,0.3827
+Tree_Swallow_0.jpg,Tree Swallow,backlit,unedited,1,0,0,0.4122,Tree Swallow,0.3345
+Tree_Swallow_0.jpg,Tree Swallow,silhouette,unedited,0,0,0,-2.4735,Tūī,0.1161
+Tree_Swallow_1.jpg,Tree Swallow,clean,unedited,1,0,0,0.2473,Tree Swallow,0.2229
+Tree_Swallow_1.jpg,Tree Swallow,golden,unedited,0,0,1,-2.5559,Barn Swallow,0.6394
+Tree_Swallow_1.jpg,Tree Swallow,veil,unedited,0,0,1,-4.1224,Barn Swallow,0.5512
+Tree_Swallow_1.jpg,Tree Swallow,backlit,unedited,1,1,0,1.6490,Tree Swallow,0.5077
+Tree_Swallow_1.jpg,Tree Swallow,silhouette,unedited,0,0,0,-7.4204,Unknown / Not a Bird,0.7752
+Tree_Swallow_2.jpg,Tree Swallow,clean,unedited,1,1,0,3.3804,Tree Swallow,0.8567
+Tree_Swallow_2.jpg,Tree Swallow,golden,unedited,0,0,0,-1.8963,Yellow-rumped Warbler,0.1406
+Tree_Swallow_2.jpg,Tree Swallow,veil,unedited,0,0,0,-2.5559,Eastern Kingbird,0.3141
+Tree_Swallow_2.jpg,Tree Swallow,backlit,unedited,1,0,0,0.9069,Tree Swallow,0.4826
+Tree_Swallow_2.jpg,Tree Swallow,silhouette,unedited,0,0,0,-0.0824,American Redstart,0.1202
+Western_Bluebird_0.jpg,Western Bluebird,clean,unedited,0,0,0,-4.1224,House Sparrow,0.3881
+Western_Bluebird_0.jpg,Western Bluebird,golden,unedited,0,0,0,-7.7502,House Sparrow,0.2680
+Western_Bluebird_0.jpg,Western Bluebird,veil,unedited,0,0,0,-8.3273,Unknown / Not a Bird,0.5407
+Western_Bluebird_0.jpg,Western Bluebird,backlit,unedited,0,0,0,-8.9044,Dark-eyed Junco,0.4409
+Western_Bluebird_0.jpg,Western Bluebird,silhouette,unedited,0,0,0,-10.6359,Unknown / Not a Bird,0.9085
+Western_Bluebird_1.jpg,Western Bluebird,clean,unedited,1,1,0,2.3910,Western Bluebird,0.8340
+Western_Bluebird_1.jpg,Western Bluebird,golden,unedited,0,0,0,-1.9788,Eastern Bluebird,0.3544
+Western_Bluebird_1.jpg,Western Bluebird,veil,unedited,0,0,0,-1.9788,Eastern Bluebird,0.2079
+Western_Bluebird_1.jpg,Western Bluebird,backlit,unedited,1,1,0,1.5665,Western Bluebird,0.6994
+Western_Bluebird_1.jpg,Western Bluebird,silhouette,unedited,0,0,0,-2.9681,Unknown / Not a Bird,0.0541
+Western_Bluebird_2.jpg,Western Bluebird,clean,unedited,1,1,0,3.4628,Western Bluebird,0.8994
+Western_Bluebird_2.jpg,Western Bluebird,golden,unedited,1,1,0,4.2049,Western Bluebird,0.9594
+Western_Bluebird_2.jpg,Western Bluebird,veil,unedited,1,1,0,4.2049,Western Bluebird,0.9640
+Western_Bluebird_2.jpg,Western Bluebird,backlit,unedited,1,1,0,4.6171,Western Bluebird,0.9409
+Western_Bluebird_2.jpg,Western Bluebird,silhouette,unedited,1,1,0,2.3086,Western Bluebird,0.8213
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,clean,unedited,0,0,1,-8.1624,Northern Saw-whet Owl,0.6046
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,golden,unedited,0,0,0,-4.4522,Barred Owl,0.1794
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,veil,unedited,0,0,0,-4.3698,House Finch,0.2977
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,backlit,unedited,0,0,0,-3.3804,Western Barn Owl,0.0808
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,silhouette,unedited,0,0,0,-0.2473,Barred Owl,0.0444
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,clean,unedited,1,1,0,4.6171,Anna's Hummingbird,0.7114
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,golden,unedited,1,1,0,4.9469,Anna's Hummingbird,0.8496
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,veil,unedited,1,1,0,3.7102,Anna's Hummingbird,0.7987
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,backlit,unedited,1,1,0,2.1437,Anna's Hummingbird,0.6392
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,silhouette,unedited,0,0,0,-0.8245,Ruby-throated Hummingbird,0.1400
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,clean,unedited,1,1,0,4.9469,Anna's Hummingbird,0.9155
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,golden,unedited,1,1,0,5.7714,Anna's Hummingbird,0.9203
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,veil,unedited,1,1,0,4.9469,Anna's Hummingbird,0.9164
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,backlit,unedited,1,1,0,5.6065,Anna's Hummingbird,0.9262
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,silhouette,unedited,1,1,0,5.6065,Anna's Hummingbird,0.9588
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,clean,unedited,0,0,0,-3.5453,Anna's Hummingbird,0.2728
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,golden,unedited,0,0,1,-5.1943,Rufous Hummingbird,0.8173
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,veil,unedited,0,0,1,-6.2661,Rufous Hummingbird,0.8709
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,backlit,unedited,0,0,1,-3.7102,Rufous Hummingbird,0.5413
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,silhouette,unedited,0,0,1,-3.8751,Rufous Hummingbird,0.6152
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,clean,unedited,0,0,0,-0.5771,Black-headed Gull,0.1391
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,golden,unedited,0,0,0,-2.3910,Western Cattle-Egret,0.3077
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,veil,unedited,1,0,0,0.0824,Ruby-throated Hummingbird,0.1572
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,backlit,unedited,0,0,0,-3.7102,Buff-bellied Hummingbird,0.1658
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,silhouette,unedited,0,0,0,-5.2767,Broad-billed Hummingbird,0.2419
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,clean,unedited,0,0,0,-2.8032,Wilson's Warbler,0.0959
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,golden,unedited,0,0,0,-3.7926,House Finch,0.0303
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,veil,unedited,0,0,0,-4.2873,Bushtit,0.0250
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,backlit,unedited,0,0,0,-6.6783,Common Pauraque,0.1392
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,silhouette,unedited,0,0,0,-4.1224,Barn Swallow,0.1358
+Northern_Flicker_0.jpg,Northern Flicker,clean,unedited,0,0,1,-5.1943,Northern Flicker,0.9316
+Northern_Flicker_0.jpg,Northern Flicker,golden,unedited,0,0,1,-5.3592,Northern Flicker,0.8178
+Northern_Flicker_0.jpg,Northern Flicker,veil,unedited,0,0,1,-6.1012,Northern Flicker,0.9059
+Northern_Flicker_0.jpg,Northern Flicker,backlit,unedited,0,0,1,-5.8538,Northern Flicker,0.9702
+Northern_Flicker_0.jpg,Northern Flicker,silhouette,unedited,0,0,1,-4.8645,Northern Flicker,0.7408
+Northern_Flicker_1.jpg,Northern Flicker,clean,unedited,0,0,1,-2.4735,Northern Flicker,0.8708
+Northern_Flicker_1.jpg,Northern Flicker,golden,unedited,0,0,1,-2.8032,Northern Flicker,0.8763
+Northern_Flicker_1.jpg,Northern Flicker,veil,unedited,0,0,1,-3.9575,Northern Flicker,0.9571
+Northern_Flicker_1.jpg,Northern Flicker,backlit,unedited,0,0,1,-2.6384,Northern Flicker,0.8564
+Northern_Flicker_1.jpg,Northern Flicker,silhouette,unedited,0,0,1,-3.2979,Northern Flicker,0.9023
+Northern_Flicker_2.jpg,Northern Flicker,clean,unedited,0,0,1,-3.4628,Northern Flicker,0.9092
+Northern_Flicker_2.jpg,Northern Flicker,golden,unedited,0,0,1,-3.4628,Northern Flicker,0.8701
+Northern_Flicker_2.jpg,Northern Flicker,veil,unedited,0,0,1,-3.9575,Northern Flicker,0.9095
+Northern_Flicker_2.jpg,Northern Flicker,backlit,unedited,0,0,1,-4.2049,Northern Flicker,0.9433
+Northern_Flicker_2.jpg,Northern Flicker,silhouette,unedited,0,0,1,-4.3698,Northern Flicker,0.9464
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,clean,unedited,0,0,0,-1.8139,House Sparrow,0.0780
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,golden,unedited,0,0,0,-2.8857,Golden-fronted Woodpecker,0.0871
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,veil,unedited,0,0,0,-7.0081,Unknown / Not a Bird,0.1584
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,backlit,unedited,0,0,1,-8.4922,House Sparrow,0.8561
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,silhouette,unedited,0,0,0,-8.4097,Unknown / Not a Bird,0.8377
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,clean,unedited,1,1,0,7.7502,Pileated Woodpecker,0.9859
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,golden,unedited,1,1,0,7.3379,Pileated Woodpecker,0.9933
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,veil,unedited,1,1,0,4.5347,Pileated Woodpecker,0.9366
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,backlit,unedited,1,1,0,7.3379,Pileated Woodpecker,0.9955
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,silhouette,unedited,0,0,0,-6.1012,Unknown / Not a Bird,0.5323
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,clean,unedited,1,1,0,6.6783,Pileated Woodpecker,0.9547
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,golden,unedited,1,1,0,6.4310,Pileated Woodpecker,0.9585
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,veil,unedited,1,1,0,6.1836,Pileated Woodpecker,0.9589
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,backlit,unedited,1,1,0,6.3485,Pileated Woodpecker,0.9415
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,silhouette,unedited,1,1,0,2.1437,Pileated Woodpecker,0.6606
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,clean,unedited,1,1,0,1.9788,White-breasted Nuthatch,0.7550
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,golden,unedited,1,0,0,1.9788,White-breasted Nuthatch,0.3688
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,veil,unedited,0,0,0,-6.0187,House Sparrow,0.1230
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,backlit,unedited,0,0,0,-2.5559,Gray Catbird,0.1664
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,silhouette,unedited,0,0,0,-4.4522,Little Penguin,0.0660
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,clean,unedited,1,1,0,1.8139,White-breasted Nuthatch,0.5844
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,golden,unedited,1,0,0,2.1437,White-breasted Nuthatch,0.2224
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,veil,unedited,1,1,0,3.2979,White-breasted Nuthatch,0.5048
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,backlit,unedited,1,1,0,3.0506,White-breasted Nuthatch,0.6945
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,silhouette,unedited,1,0,0,1.4841,White-breasted Nuthatch,0.3838
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,clean,unedited,1,1,0,6.2661,White-breasted Nuthatch,0.9522
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,golden,unedited,1,1,0,3.4628,White-breasted Nuthatch,0.6901
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,veil,unedited,1,1,0,2.6384,White-breasted Nuthatch,0.6505
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,backlit,unedited,1,1,0,4.3698,White-breasted Nuthatch,0.8687
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,silhouette,unedited,1,0,0,0.5771,White-breasted Nuthatch,0.1954
+Carolina_Wren_0.jpg,Carolina Wren,clean,unedited,0,0,0,-5.0294,European Starling,0.0708
+Carolina_Wren_0.jpg,Carolina Wren,golden,unedited,0,0,0,-3.8751,Unknown / Not a Bird,0.1821
+Carolina_Wren_0.jpg,Carolina Wren,veil,unedited,0,0,0,-7.5853,Unknown / Not a Bird,0.6568
+Carolina_Wren_0.jpg,Carolina Wren,backlit,unedited,0,0,0,-3.9575,American Goldfinch,0.0620
+Carolina_Wren_0.jpg,Carolina Wren,silhouette,unedited,0,0,0,-8.0800,Unknown / Not a Bird,0.8523
+Carolina_Wren_1.jpg,Carolina Wren,clean,unedited,1,1,0,5.6065,Carolina Wren,0.8495
+Carolina_Wren_1.jpg,Carolina Wren,golden,unedited,1,1,0,6.0187,Carolina Wren,0.9249
+Carolina_Wren_1.jpg,Carolina Wren,veil,unedited,1,1,0,5.9363,Carolina Wren,0.9173
+Carolina_Wren_1.jpg,Carolina Wren,backlit,unedited,1,1,0,6.3485,Carolina Wren,0.9641
+Carolina_Wren_1.jpg,Carolina Wren,silhouette,unedited,1,0,0,0.0000,Carolina Wren,0.2420
+Carolina_Wren_2.jpg,Carolina Wren,clean,unedited,1,1,0,4.3698,Carolina Wren,0.9359
+Carolina_Wren_2.jpg,Carolina Wren,golden,unedited,1,1,0,1.2367,Carolina Wren,0.5530
+Carolina_Wren_2.jpg,Carolina Wren,veil,unedited,1,1,0,3.7926,Carolina Wren,0.8830
+Carolina_Wren_2.jpg,Carolina Wren,backlit,unedited,1,1,0,0.5771,Carolina Wren,0.5758
+Carolina_Wren_2.jpg,Carolina Wren,silhouette,unedited,0,0,0,-8.1624,Unknown / Not a Bird,0.9579
+Great_Egret_0.jpg,Great Egret,clean,unedited,1,1,0,4.2873,Great Egret,0.8992
+Great_Egret_0.jpg,Great Egret,golden,unedited,1,1,0,4.6171,Great Egret,0.9350
+Great_Egret_0.jpg,Great Egret,veil,unedited,1,1,0,4.5347,Great Egret,0.9337
+Great_Egret_0.jpg,Great Egret,backlit,unedited,1,1,0,3.2979,Great Egret,0.8372
+Great_Egret_0.jpg,Great Egret,silhouette,unedited,0,0,0,-6.3485,Unknown / Not a Bird,0.7911
+Great_Egret_1.jpg,Great Egret,clean,unedited,1,0,0,0.2473,Great Egret,0.4522
+Great_Egret_1.jpg,Great Egret,golden,unedited,0,0,0,-0.3298,Snowy Egret,0.2420
+Great_Egret_1.jpg,Great Egret,veil,unedited,1,0,0,0.3298,Great Egret,0.3246
+Great_Egret_1.jpg,Great Egret,backlit,unedited,0,0,1,-8.2448,Tricolored Heron,0.9396
+Great_Egret_1.jpg,Great Egret,silhouette,unedited,0,0,0,-7.4204,White-tipped Dove,0.2417
+Great_Egret_2.jpg,Great Egret,clean,unedited,1,1,0,4.1224,Great Egret,0.8816
+Great_Egret_2.jpg,Great Egret,golden,unedited,1,1,0,1.8139,Great Egret,0.7290
+Great_Egret_2.jpg,Great Egret,veil,unedited,1,0,0,0.0824,Great Egret,0.3396
+Great_Egret_2.jpg,Great Egret,backlit,unedited,0,0,0,-4.3698,Unknown / Not a Bird,0.6715
+Great_Egret_2.jpg,Great Egret,silhouette,unedited,0,0,0,-8.2448,Unknown / Not a Bird,0.9160
+Belted_Kingfisher_0.jpg,Belted Kingfisher,clean,unedited,1,1,0,1.2367,Belted Kingfisher,0.7357
+Belted_Kingfisher_0.jpg,Belted Kingfisher,golden,unedited,0,0,1,-5.7714,Common Kingfisher,0.6378
+Belted_Kingfisher_0.jpg,Belted Kingfisher,veil,unedited,0,0,0,-5.2767,Common Kingfisher,0.2924
+Belted_Kingfisher_0.jpg,Belted Kingfisher,backlit,unedited,0,0,0,-8.4097,Vermilion Flycatcher,0.1539
+Belted_Kingfisher_0.jpg,Belted Kingfisher,silhouette,unedited,0,0,1,-8.7395,Bushtit,0.5208
+Belted_Kingfisher_1.jpg,Belted Kingfisher,clean,unedited,1,1,0,3.2979,Belted Kingfisher,0.8593
+Belted_Kingfisher_1.jpg,Belted Kingfisher,golden,unedited,1,1,0,1.0718,Belted Kingfisher,0.5809
+Belted_Kingfisher_1.jpg,Belted Kingfisher,veil,unedited,1,0,0,1.1543,Belted Kingfisher,0.4729
+Belted_Kingfisher_1.jpg,Belted Kingfisher,backlit,unedited,1,1,0,2.8857,Belted Kingfisher,0.8223
+Belted_Kingfisher_1.jpg,Belted Kingfisher,silhouette,unedited,0,0,0,-4.2049,Unknown / Not a Bird,0.3913
+Belted_Kingfisher_2.jpg,Belted Kingfisher,clean,unedited,1,1,0,2.5559,Belted Kingfisher,0.7070
+Belted_Kingfisher_2.jpg,Belted Kingfisher,golden,unedited,1,1,0,2.1437,Belted Kingfisher,0.8551
+Belted_Kingfisher_2.jpg,Belted Kingfisher,veil,unedited,1,1,0,3.7102,Belted Kingfisher,0.9403
+Belted_Kingfisher_2.jpg,Belted Kingfisher,backlit,unedited,1,0,0,0.0824,Belted Kingfisher,0.4135
+Belted_Kingfisher_2.jpg,Belted Kingfisher,silhouette,unedited,0,0,0,-0.0824,Ringed Kingfisher,0.3545
+Osprey_0.jpg,Osprey,clean,unedited,1,1,0,6.1836,Osprey,0.9833
+Osprey_0.jpg,Osprey,golden,unedited,1,1,0,6.1836,Osprey,0.9834
+Osprey_0.jpg,Osprey,veil,unedited,1,1,0,2.7208,Osprey,0.9096
+Osprey_0.jpg,Osprey,backlit,unedited,1,1,0,2.6384,Osprey,0.6683
+Osprey_0.jpg,Osprey,silhouette,unedited,0,0,0,-0.9894,Black-crowned Night Heron,0.0676
+Osprey_1.jpg,Osprey,clean,unedited,1,1,0,0.7420,Osprey,0.5341
+Osprey_1.jpg,Osprey,golden,unedited,1,1,0,2.1437,Osprey,0.5215
+Osprey_1.jpg,Osprey,veil,unedited,1,0,0,1.8139,Osprey,0.4523
+Osprey_1.jpg,Osprey,backlit,unedited,0,0,0,-2.8857,Unknown / Not a Bird,0.8001
+Osprey_1.jpg,Osprey,silhouette,unedited,0,0,0,-7.8326,Unknown / Not a Bird,0.8863
+Osprey_2.jpg,Osprey,clean,unedited,1,1,0,7.0081,Osprey,0.9238
+Osprey_2.jpg,Osprey,golden,unedited,1,1,0,6.4310,Osprey,0.9424
+Osprey_2.jpg,Osprey,veil,unedited,0,0,0,-3.7102,Black-crowned Night Heron,0.1144
+Osprey_2.jpg,Osprey,backlit,unedited,1,1,0,4.9469,Osprey,0.8097
+Osprey_2.jpg,Osprey,silhouette,unedited,0,0,0,-4.4522,Violet-crowned Hummingbird,0.1236
+Turkey_Vulture_0.jpg,Turkey Vulture,clean,unedited,0,0,0,-10.9656,Pied Cormorant,0.1979
+Turkey_Vulture_0.jpg,Turkey Vulture,golden,unedited,0,0,0,-9.2342,Little Penguin,0.1127
+Turkey_Vulture_0.jpg,Turkey Vulture,veil,unedited,0,0,0,-7.5853,Mute Swan,0.0773
+Turkey_Vulture_0.jpg,Turkey Vulture,backlit,unedited,0,0,0,-11.1305,Cairina moschata domestica,0.1162
+Turkey_Vulture_0.jpg,Turkey Vulture,silhouette,unedited,0,0,0,-5.8538,White-breasted Nuthatch,0.0868
+Turkey_Vulture_1.jpg,Turkey Vulture,clean,unedited,1,1,0,5.8538,Turkey Vulture,0.8622
+Turkey_Vulture_1.jpg,Turkey Vulture,golden,unedited,1,1,0,6.5134,Turkey Vulture,0.9026
+Turkey_Vulture_1.jpg,Turkey Vulture,veil,unedited,1,1,0,6.6783,Turkey Vulture,0.9138
+Turkey_Vulture_1.jpg,Turkey Vulture,backlit,unedited,1,1,0,6.4310,Turkey Vulture,0.9306
+Turkey_Vulture_1.jpg,Turkey Vulture,silhouette,unedited,1,1,0,6.3485,Turkey Vulture,0.8853
+Turkey_Vulture_2.jpg,Turkey Vulture,clean,unedited,1,1,0,6.0187,Turkey Vulture,0.9175
+Turkey_Vulture_2.jpg,Turkey Vulture,golden,unedited,1,1,0,5.2767,Turkey Vulture,0.9086
+Turkey_Vulture_2.jpg,Turkey Vulture,veil,unedited,1,1,0,5.6889,Turkey Vulture,0.9444
+Turkey_Vulture_2.jpg,Turkey Vulture,backlit,unedited,1,1,0,4.8645,Turkey Vulture,0.8884
+Turkey_Vulture_2.jpg,Turkey Vulture,silhouette,unedited,1,1,0,2.4735,Turkey Vulture,0.6876
+American_Kestrel_0.jpg,American Kestrel,clean,unedited,1,1,0,5.0294,American Kestrel,0.8252
+American_Kestrel_0.jpg,American Kestrel,golden,unedited,1,1,0,4.6996,American Kestrel,0.8544
+American_Kestrel_0.jpg,American Kestrel,veil,unedited,1,1,0,4.2049,American Kestrel,0.8169
+American_Kestrel_0.jpg,American Kestrel,backlit,unedited,1,1,0,3.3804,American Kestrel,0.9068
+American_Kestrel_0.jpg,American Kestrel,silhouette,unedited,0,0,0,-0.1649,Northern Flicker,0.1319
+American_Kestrel_1.jpg,American Kestrel,clean,unedited,1,1,0,1.2367,American Kestrel,0.5030
+American_Kestrel_1.jpg,American Kestrel,golden,unedited,0,0,1,-2.3086,Prairie Falcon,0.6448
+American_Kestrel_1.jpg,American Kestrel,veil,unedited,0,0,1,-2.6384,Prairie Falcon,0.7754
+American_Kestrel_1.jpg,American Kestrel,backlit,unedited,0,0,0,-5.7714,Ovenbird,0.0730
+American_Kestrel_1.jpg,American Kestrel,silhouette,unedited,0,0,0,-8.0800,Unknown / Not a Bird,0.7886
+American_Kestrel_2.jpg,American Kestrel,clean,unedited,1,1,0,4.6996,American Kestrel,0.9033
+American_Kestrel_2.jpg,American Kestrel,golden,unedited,1,1,0,2.5559,American Kestrel,0.5959
+American_Kestrel_2.jpg,American Kestrel,veil,unedited,1,0,0,0.8245,American Kestrel,0.4692
+American_Kestrel_2.jpg,American Kestrel,backlit,unedited,1,1,0,2.1437,American Kestrel,0.5873
+American_Kestrel_2.jpg,American Kestrel,silhouette,unedited,0,0,0,-6.3485,Unknown / Not a Bird,0.8035
+Baltimore_Oriole_0.jpg,Baltimore Oriole,clean,unedited,1,1,0,3.7102,Baltimore Oriole,0.8046
+Baltimore_Oriole_0.jpg,Baltimore Oriole,golden,unedited,1,1,0,2.5559,Baltimore Oriole,0.8135
+Baltimore_Oriole_0.jpg,Baltimore Oriole,veil,unedited,1,1,0,2.8857,Baltimore Oriole,0.7757
+Baltimore_Oriole_0.jpg,Baltimore Oriole,backlit,unedited,1,1,0,1.8963,Baltimore Oriole,0.7310
+Baltimore_Oriole_0.jpg,Baltimore Oriole,silhouette,unedited,0,0,1,-2.1437,Orchard Oriole,0.8427
+Baltimore_Oriole_1.jpg,Baltimore Oriole,clean,unedited,0,0,0,-5.2767,House Finch,0.1080
+Baltimore_Oriole_1.jpg,Baltimore Oriole,golden,unedited,0,0,0,-8.9869,Verdin,0.1596
+Baltimore_Oriole_1.jpg,Baltimore Oriole,veil,unedited,0,0,0,-8.0800,Verdin,0.1844
+Baltimore_Oriole_1.jpg,Baltimore Oriole,backlit,unedited,0,0,0,-9.8114,North Island Robin,0.2992
+Baltimore_Oriole_1.jpg,Baltimore Oriole,silhouette,unedited,0,0,0,-8.7395,Unknown / Not a Bird,0.7882
+Baltimore_Oriole_2.jpg,Baltimore Oriole,clean,unedited,1,0,0,0.9069,Baltimore Oriole,0.1630
+Baltimore_Oriole_2.jpg,Baltimore Oriole,golden,unedited,0,0,0,-3.9575,House Finch,0.0518
+Baltimore_Oriole_2.jpg,Baltimore Oriole,veil,unedited,0,0,0,-3.5453,House Finch,0.0266
+Baltimore_Oriole_2.jpg,Baltimore Oriole,backlit,unedited,0,0,0,-4.6996,Bushtit,0.0625
+Baltimore_Oriole_2.jpg,Baltimore Oriole,silhouette,unedited,0,0,0,-7.2555,Eastern Screech-Owl,0.3102
+Scarlet_Tanager_0.jpg,Scarlet Tanager,clean,unedited,1,1,0,5.4416,Scarlet Tanager,0.9406
+Scarlet_Tanager_0.jpg,Scarlet Tanager,golden,unedited,1,1,0,2.8857,Scarlet Tanager,0.8138
+Scarlet_Tanager_0.jpg,Scarlet Tanager,veil,unedited,0,0,0,-0.1649,Summer Tanager,0.4104
+Scarlet_Tanager_0.jpg,Scarlet Tanager,backlit,unedited,1,1,0,4.8645,Scarlet Tanager,0.9243
+Scarlet_Tanager_0.jpg,Scarlet Tanager,silhouette,unedited,0,0,0,-0.4947,Summer Tanager,0.4640
+Scarlet_Tanager_1.jpg,Scarlet Tanager,clean,unedited,1,1,0,1.3192,Scarlet Tanager,0.5715
+Scarlet_Tanager_1.jpg,Scarlet Tanager,golden,unedited,0,0,0,-0.4122,Summer Tanager,0.3985
+Scarlet_Tanager_1.jpg,Scarlet Tanager,veil,unedited,0,0,1,-2.8032,Summer Tanager,0.5883
+Scarlet_Tanager_1.jpg,Scarlet Tanager,backlit,unedited,0,0,0,-0.6596,Summer Tanager,0.4766
+Scarlet_Tanager_1.jpg,Scarlet Tanager,silhouette,unedited,0,0,0,-3.8751,Northern Cardinal,0.4409
+Scarlet_Tanager_2.jpg,Scarlet Tanager,clean,unedited,1,1,0,1.8139,Scarlet Tanager,0.6350
+Scarlet_Tanager_2.jpg,Scarlet Tanager,golden,unedited,0,0,0,-0.9069,Summer Tanager,0.4270
+Scarlet_Tanager_2.jpg,Scarlet Tanager,veil,unedited,0,0,0,-1.7314,House Finch,0.0437
+Scarlet_Tanager_2.jpg,Scarlet Tanager,backlit,unedited,1,1,0,2.3086,Scarlet Tanager,0.6658
+Scarlet_Tanager_2.jpg,Scarlet Tanager,silhouette,unedited,1,0,0,0.4947,Scarlet Tanager,0.1486
+Indigo_Bunting_0.jpg,Indigo Bunting,clean,unedited,1,1,0,4.0400,Indigo Bunting,0.7743
+Indigo_Bunting_0.jpg,Indigo Bunting,golden,unedited,1,0,0,1.0718,Indigo Bunting,0.2994
+Indigo_Bunting_0.jpg,Indigo Bunting,veil,unedited,1,0,0,2.9681,Indigo Bunting,0.4039
+Indigo_Bunting_0.jpg,Indigo Bunting,backlit,unedited,1,1,0,5.0294,Indigo Bunting,0.8440
+Indigo_Bunting_0.jpg,Indigo Bunting,silhouette,unedited,0,0,0,-1.8139,Unknown / Not a Bird,0.2316
+Indigo_Bunting_1.jpg,Indigo Bunting,clean,unedited,1,1,0,5.6889,Indigo Bunting,0.9454
+Indigo_Bunting_1.jpg,Indigo Bunting,golden,unedited,1,1,0,2.8857,Indigo Bunting,0.7571
+Indigo_Bunting_1.jpg,Indigo Bunting,veil,unedited,1,1,0,4.2049,Indigo Bunting,0.8696
+Indigo_Bunting_1.jpg,Indigo Bunting,backlit,unedited,1,1,0,2.9681,Indigo Bunting,0.8919
+Indigo_Bunting_1.jpg,Indigo Bunting,silhouette,unedited,0,0,0,-2.1437,Groove-billed Ani,0.2098
+Indigo_Bunting_2.jpg,Indigo Bunting,clean,unedited,1,1,0,5.4416,Indigo Bunting,0.8794
+Indigo_Bunting_2.jpg,Indigo Bunting,golden,unedited,1,1,0,4.5347,Indigo Bunting,0.8150
+Indigo_Bunting_2.jpg,Indigo Bunting,veil,unedited,1,0,0,1.0718,Indigo Bunting,0.2214
+Indigo_Bunting_2.jpg,Indigo Bunting,backlit,unedited,1,1,0,4.5347,Indigo Bunting,0.8253
+Indigo_Bunting_2.jpg,Indigo Bunting,silhouette,unedited,0,0,0,-1.4841,Broad-billed Hummingbird,0.2423
+Common_Loon_0.jpg,Common Loon,clean,unedited,1,1,0,3.1330,Common Loon,0.7328
+Common_Loon_0.jpg,Common Loon,golden,unedited,1,1,0,1.2367,Common Loon,0.5476
+Common_Loon_0.jpg,Common Loon,veil,unedited,0,0,0,-1.5665,Double-crested Cormorant,0.1663
+Common_Loon_0.jpg,Common Loon,backlit,unedited,1,1,0,3.4628,Common Loon,0.7179
+Common_Loon_0.jpg,Common Loon,silhouette,unedited,1,0,0,0.9069,Common Loon,0.2066
+Common_Loon_1.jpg,Common Loon,clean,unedited,0,0,0,-1.4841,Cooper's Hawk,0.2285
+Common_Loon_1.jpg,Common Loon,golden,unedited,0,0,1,-6.1836,Cooper's Hawk,0.6012
+Common_Loon_1.jpg,Common Loon,veil,unedited,0,0,0,-4.1224,Cooper's Hawk,0.1113
+Common_Loon_1.jpg,Common Loon,backlit,unedited,0,0,0,-6.1012,Ruffed Grouse,0.2660
+Common_Loon_1.jpg,Common Loon,silhouette,unedited,0,0,0,-7.2555,Unknown / Not a Bird,0.4578
+Common_Loon_2.jpg,Common Loon,clean,unedited,0,0,0,-9.3167,Unknown / Not a Bird,0.5906
+Common_Loon_2.jpg,Common Loon,golden,unedited,0,0,0,-7.6677,Great Egret,0.0929
+Common_Loon_2.jpg,Common Loon,veil,unedited,0,0,0,-8.1624,Mallard,0.1521
+Common_Loon_2.jpg,Common Loon,backlit,unedited,0,0,0,-7.3379,Red-tailed Hawk,0.0322
+Common_Loon_2.jpg,Common Loon,silhouette,unedited,0,0,0,-6.9257,Common Moorhen,0.0594
+Mute_Swan_0.jpg,Mute Swan,clean,unedited,0,0,0,-4.9469,Tree Swallow,0.2386
+Mute_Swan_0.jpg,Mute Swan,golden,unedited,0,0,0,-5.7714,Turkey Vulture,0.2872
+Mute_Swan_0.jpg,Mute Swan,veil,unedited,0,0,0,-5.7714,Turkey Vulture,0.3203
+Mute_Swan_0.jpg,Mute Swan,backlit,unedited,0,0,0,-3.7926,Common Raven,0.1781
+Mute_Swan_0.jpg,Mute Swan,silhouette,unedited,0,0,0,-6.0187,American Crow,0.2600
+Mute_Swan_1.jpg,Mute Swan,clean,unedited,1,0,0,1.8963,Mute Swan,0.3967
+Mute_Swan_1.jpg,Mute Swan,golden,unedited,1,0,0,0.8245,Mute Swan,0.2355
+Mute_Swan_1.jpg,Mute Swan,veil,unedited,0,0,1,-5.7714,Eurasian Collared-Dove,0.5814
+Mute_Swan_1.jpg,Mute Swan,backlit,unedited,0,0,0,-6.2661,Mallard,0.2966
+Mute_Swan_1.jpg,Mute Swan,silhouette,unedited,0,0,0,-7.9151,Unknown / Not a Bird,0.3704
+Mute_Swan_2.jpg,Mute Swan,clean,unedited,1,1,0,5.6889,Mute Swan,0.7552
+Mute_Swan_2.jpg,Mute Swan,golden,unedited,1,1,0,6.1012,Mute Swan,0.9698
+Mute_Swan_2.jpg,Mute Swan,veil,unedited,0,0,0,-1.4841,Unknown / Not a Bird,0.6750
+Mute_Swan_2.jpg,Mute Swan,backlit,unedited,1,1,0,4.6171,Mute Swan,0.8274
+Mute_Swan_2.jpg,Mute Swan,silhouette,unedited,1,0,0,1.8139,Mute Swan,0.3961
+Wood_Duck_0.jpg,Wood Duck,clean,unedited,0,0,1,-3.9575,Cairina moschata domestica,0.6241
+Wood_Duck_0.jpg,Wood Duck,golden,unedited,0,0,0,-4.2049,Cairina moschata domestica,0.1755
+Wood_Duck_0.jpg,Wood Duck,veil,unedited,0,0,1,-7.8326,Columba livia domestica,0.5470
+Wood_Duck_0.jpg,Wood Duck,backlit,unedited,0,0,0,-2.3910,Columba livia domestica,0.1220
+Wood_Duck_0.jpg,Wood Duck,silhouette,unedited,0,0,0,-6.1836,Unknown / Not a Bird,0.1981
+Wood_Duck_1.jpg,Wood Duck,clean,unedited,1,1,0,6.9257,Wood Duck,0.9442
+Wood_Duck_1.jpg,Wood Duck,golden,unedited,1,1,0,5.5240,Wood Duck,0.8816
+Wood_Duck_1.jpg,Wood Duck,veil,unedited,1,1,0,5.4416,Wood Duck,0.8968
+Wood_Duck_1.jpg,Wood Duck,backlit,unedited,1,1,0,5.1943,Wood Duck,0.8112
+Wood_Duck_1.jpg,Wood Duck,silhouette,unedited,1,1,0,4.2049,Wood Duck,0.8058
+Wood_Duck_2.jpg,Wood Duck,clean,unedited,1,1,0,6.7608,Wood Duck,0.9349
+Wood_Duck_2.jpg,Wood Duck,golden,unedited,1,1,0,5.6889,Wood Duck,0.8659
+Wood_Duck_2.jpg,Wood Duck,veil,unedited,1,1,0,2.3086,Wood Duck,0.6656
+Wood_Duck_2.jpg,Wood Duck,backlit,unedited,1,1,0,3.4628,Wood Duck,0.8415
+Wood_Duck_2.jpg,Wood Duck,silhouette,unedited,0,0,0,-3.1330,Unknown / Not a Bird,0.8475
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,clean,unedited,0,0,0,-5.0294,Red-bellied Woodpecker,0.4347
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,golden,unedited,0,0,1,-7.7502,Red-bellied Woodpecker,0.7696
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,veil,unedited,0,0,1,-7.4204,Red-bellied Woodpecker,0.8143
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,backlit,unedited,0,0,1,-6.6783,Red-bellied Woodpecker,0.7828
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,silhouette,unedited,0,0,1,-5.4416,Red-bellied Woodpecker,0.6553
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,clean,unedited,1,1,0,5.1118,Acorn Woodpecker,0.8482
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,golden,unedited,1,1,0,4.6171,Acorn Woodpecker,0.7959
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,veil,unedited,1,0,0,1.7314,Acorn Woodpecker,0.4294
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,backlit,unedited,1,0,0,2.0612,Acorn Woodpecker,0.2908
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,silhouette,unedited,1,0,0,2.8857,Acorn Woodpecker,0.4696
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,clean,unedited,1,1,0,6.4310,Acorn Woodpecker,0.9338
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,golden,unedited,1,1,0,4.0400,Acorn Woodpecker,0.5277
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,veil,unedited,1,0,0,3.3804,Acorn Woodpecker,0.2922
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,backlit,unedited,1,1,0,4.8645,Acorn Woodpecker,0.7554
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,silhouette,unedited,1,0,0,1.8963,Acorn Woodpecker,0.3110
+California_Scrub-Jay_0.jpg,California Scrub-Jay,clean,unedited,0,0,0,-8.1624,Unknown / Not a Bird,0.9211
+California_Scrub-Jay_0.jpg,California Scrub-Jay,golden,unedited,0,0,0,-10.6359,Unknown / Not a Bird,0.8606
+California_Scrub-Jay_0.jpg,California Scrub-Jay,veil,unedited,0,0,0,-11.0481,Unknown / Not a Bird,0.7933
+California_Scrub-Jay_0.jpg,California Scrub-Jay,backlit,unedited,0,0,0,-9.6465,Unknown / Not a Bird,0.8992
+California_Scrub-Jay_0.jpg,California Scrub-Jay,silhouette,unedited,0,0,0,-9.3991,Unknown / Not a Bird,0.8910
+California_Scrub-Jay_1.jpg,California Scrub-Jay,clean,unedited,1,1,0,5.2767,California Scrub-Jay,0.9571
+California_Scrub-Jay_1.jpg,California Scrub-Jay,golden,unedited,1,1,0,3.7926,California Scrub-Jay,0.7006
+California_Scrub-Jay_1.jpg,California Scrub-Jay,veil,unedited,1,0,0,2.3910,California Scrub-Jay,0.3832
+California_Scrub-Jay_1.jpg,California Scrub-Jay,backlit,unedited,1,1,0,4.2049,California Scrub-Jay,0.8680
+California_Scrub-Jay_1.jpg,California Scrub-Jay,silhouette,unedited,1,1,0,2.3910,California Scrub-Jay,0.5926
+California_Scrub-Jay_2.jpg,California Scrub-Jay,clean,unedited,0,0,0,-0.4947,Blue Jay,0.2799
+California_Scrub-Jay_2.jpg,California Scrub-Jay,golden,unedited,0,0,0,-2.1437,House Sparrow,0.4677
+California_Scrub-Jay_2.jpg,California Scrub-Jay,veil,unedited,0,0,0,-2.9681,House Sparrow,0.3874
+California_Scrub-Jay_2.jpg,California Scrub-Jay,backlit,unedited,0,0,1,-5.1118,Dark-eyed Junco,0.7953
+California_Scrub-Jay_2.jpg,California Scrub-Jay,silhouette,unedited,0,0,0,-3.0506,Dark-eyed Junco,0.4100
+Blue_Jay_0.jpg,Blue Jay,clean,unedited+corr,1,1,0,6.1012,Blue Jay,0.9592
+Blue_Jay_0.jpg,Blue Jay,golden,unedited+corr,1,1,0,5.2929,Blue Jay,0.9637
+Blue_Jay_0.jpg,Blue Jay,veil,unedited+corr,1,1,0,5.8032,Blue Jay,0.9271
+Blue_Jay_0.jpg,Blue Jay,backlit,unedited+corr,1,1,0,4.0379,Blue Jay,0.7759
+Blue_Jay_0.jpg,Blue Jay,silhouette,unedited+corr,0,0,0,-0.3397,Northern Cardinal,0.1242
+Blue_Jay_1.jpg,Blue Jay,clean,unedited+corr,1,1,0,2.3910,Blue Jay,0.7945
+Blue_Jay_1.jpg,Blue Jay,golden,unedited+corr,0,0,0,-0.7079,Northern Lapwing,0.2412
+Blue_Jay_1.jpg,Blue Jay,veil,unedited+corr,0,0,0,-0.5929,Clark's Nutcracker,0.0541
+Blue_Jay_1.jpg,Blue Jay,backlit,unedited+corr,0,0,0,-2.8031,White-tailed Kite,0.0814
+Blue_Jay_1.jpg,Blue Jay,silhouette,unedited+corr,0,0,0,-3.2888,Red-winged Blackbird,0.0446
+Blue_Jay_2.jpg,Blue Jay,clean,unedited+corr,1,0,0,0.9894,Blue Jay,0.3470
+Blue_Jay_2.jpg,Blue Jay,golden,unedited+corr,1,0,0,1.0929,Blue Jay,0.1462
+Blue_Jay_2.jpg,Blue Jay,veil,unedited+corr,1,0,0,0.4035,Blue Jay,0.0670
+Blue_Jay_2.jpg,Blue Jay,backlit,unedited+corr,0,0,1,-5.1816,Eurasian Collared-Dove,0.5071
+Blue_Jay_2.jpg,Blue Jay,silhouette,unedited+corr,0,0,0,-3.4658,Black-chinned Hummingbird,0.0603
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,clean,unedited+corr,1,1,0,2.6384,Black-capped Chickadee,0.8045
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,golden,unedited+corr,0,0,1,-0.9802,Carolina Chickadee,0.5641
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,veil,unedited+corr,0,0,0,-1.8161,Carolina Chickadee,0.4970
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,backlit,unedited+corr,0,0,0,-0.1085,House Sparrow,0.1152
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,silhouette,unedited+corr,0,0,1,-3.2039,House Sparrow,0.6192
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,clean,unedited+corr,1,0,0,0.2473,Black-capped Chickadee,0.1767
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,golden,unedited+corr,0,0,0,-1.6968,House Sparrow,0.2013
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,veil,unedited+corr,1,0,0,0.3426,Black-capped Chickadee,0.1543
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,backlit,unedited+corr,1,0,0,0.2473,Black-capped Chickadee,0.1975
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,silhouette,unedited+corr,0,0,0,-2.4450,Loggerhead Shrike,0.1326
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,clean,unedited+corr,1,1,0,1.6490,Black-capped Chickadee,0.7107
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,golden,unedited+corr,1,0,0,1.1751,Black-capped Chickadee,0.4910
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,veil,unedited+corr,0,0,0,-1.1306,Western Gull,0.1644
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,backlit,unedited+corr,1,0,0,0.1341,Black-capped Chickadee,0.1923
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,silhouette,unedited+corr,1,0,0,0.1873,Black-capped Chickadee,0.2836
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,clean,unedited+corr,1,1,0,4.7820,Red-winged Blackbird,0.8083
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,golden,unedited+corr,1,1,0,5.2394,Red-winged Blackbird,0.7206
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,veil,unedited+corr,1,1,0,1.9224,Red-winged Blackbird,0.5227
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,backlit,unedited+corr,1,1,0,4.2691,Red-winged Blackbird,0.5734
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,silhouette,unedited+corr,1,1,0,4.7804,Red-winged Blackbird,0.7896
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,clean,unedited+corr,1,1,0,6.1012,Red-winged Blackbird,0.9499
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,golden,unedited+corr,1,1,0,6.2504,Red-winged Blackbird,0.9341
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,veil,unedited+corr,1,1,0,5.2682,Red-winged Blackbird,0.9208
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,backlit,unedited+corr,1,1,0,3.5473,Red-winged Blackbird,0.7989
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,silhouette,unedited+corr,1,1,0,0.9186,Red-winged Blackbird,0.6054
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,clean,unedited+corr,1,0,0,1.2367,Red-winged Blackbird,0.2864
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,golden,unedited+corr,1,0,0,1.1963,Red-winged Blackbird,0.2861
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,veil,unedited+corr,1,0,0,0.8086,Red-winged Blackbird,0.2536
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,backlit,unedited+corr,1,0,0,0.8593,Red-winged Blackbird,0.3941
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,silhouette,unedited+corr,0,0,1,-4.3943,House Sparrow,0.9252
+Downy_Woodpecker_0.jpg,Downy Woodpecker,clean,unedited+corr,0,0,0,-6.1012,Downy Woodpecker,0.2002
+Downy_Woodpecker_0.jpg,Downy Woodpecker,golden,unedited+corr,0,0,1,-7.9157,Downy Woodpecker,0.5271
+Downy_Woodpecker_0.jpg,Downy Woodpecker,veil,unedited+corr,0,0,0,-7.8213,Downy Woodpecker,0.4926
+Downy_Woodpecker_0.jpg,Downy Woodpecker,backlit,unedited+corr,0,0,0,-8.1299,Downy Woodpecker,0.3992
+Downy_Woodpecker_0.jpg,Downy Woodpecker,silhouette,unedited+corr,0,0,0,-7.9830,Ladder-backed Woodpecker,0.2677
+Downy_Woodpecker_1.jpg,Downy Woodpecker,clean,unedited+corr,0,0,1,-9.9763,Downy Woodpecker,0.8806
+Downy_Woodpecker_1.jpg,Downy Woodpecker,golden,unedited+corr,0,0,1,-10.1872,Downy Woodpecker,0.9240
+Downy_Woodpecker_1.jpg,Downy Woodpecker,veil,unedited+corr,0,0,1,-8.3351,Downy Woodpecker,0.7905
+Downy_Woodpecker_1.jpg,Downy Woodpecker,backlit,unedited+corr,0,0,1,-9.7145,Downy Woodpecker,0.8868
+Downy_Woodpecker_1.jpg,Downy Woodpecker,silhouette,unedited+corr,0,0,1,-10.0010,Downy Woodpecker,0.9368
+Downy_Woodpecker_2.jpg,Downy Woodpecker,clean,unedited+corr,0,0,1,-8.8220,Downy Woodpecker,0.9036
+Downy_Woodpecker_2.jpg,Downy Woodpecker,golden,unedited+corr,0,0,1,-8.6446,Downy Woodpecker,0.9099
+Downy_Woodpecker_2.jpg,Downy Woodpecker,veil,unedited+corr,0,0,1,-8.9069,Downy Woodpecker,0.9217
+Downy_Woodpecker_2.jpg,Downy Woodpecker,backlit,unedited+corr,0,0,1,-7.6705,Downy Woodpecker,0.7712
+Downy_Woodpecker_2.jpg,Downy Woodpecker,silhouette,unedited+corr,0,0,0,-4.7881,Bushtit,0.2663
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,clean,unedited+corr,1,1,0,2.8857,Dark-eyed Junco,0.7366
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,golden,unedited+corr,1,0,0,1.2662,Dark-eyed Junco,0.1971
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,veil,unedited+corr,0,0,0,-0.0013,Rock Pigeon,0.0663
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,backlit,unedited+corr,0,0,0,-1.6250,Purple Martin,0.1611
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,silhouette,unedited+corr,0,0,0,-2.0346,Purple Martin,0.1355
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,clean,unedited+corr,1,1,0,4.0400,Dark-eyed Junco,0.9025
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,golden,unedited+corr,1,1,0,3.1218,Dark-eyed Junco,0.8391
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,veil,unedited+corr,1,1,0,3.9478,Dark-eyed Junco,0.8794
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,backlit,unedited+corr,1,1,0,1.9942,Dark-eyed Junco,0.7615
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,silhouette,unedited+corr,1,1,0,1.8109,Dark-eyed Junco,0.5321
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,clean,unedited+corr,0,0,0,-2.6384,Unknown / Not a Bird,0.0505
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,golden,unedited+corr,0,0,0,-5.4379,Unknown / Not a Bird,0.2639
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,veil,unedited+corr,0,0,0,-2.8180,Willie Wagtail,0.0637
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,backlit,unedited+corr,0,0,0,-4.7820,Unknown / Not a Bird,0.3339
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,silhouette,unedited+corr,0,0,0,-5.7342,Unknown / Not a Bird,0.6388
+Song_Sparrow_0.jpg,Song Sparrow,clean,unedited+corr,1,1,0,6.7608,Song Sparrow,0.9359
+Song_Sparrow_0.jpg,Song Sparrow,golden,unedited+corr,1,1,0,3.6429,Song Sparrow,0.8636
+Song_Sparrow_0.jpg,Song Sparrow,veil,unedited+corr,1,1,0,2.9665,Song Sparrow,0.5971
+Song_Sparrow_0.jpg,Song Sparrow,backlit,unedited+corr,1,1,0,3.0061,Song Sparrow,0.8370
+Song_Sparrow_0.jpg,Song Sparrow,silhouette,unedited+corr,1,1,0,1.4519,Song Sparrow,0.6594
+Song_Sparrow_1.jpg,Song Sparrow,clean,unedited+corr,1,1,0,6.0187,Song Sparrow,0.9215
+Song_Sparrow_1.jpg,Song Sparrow,golden,unedited+corr,1,1,0,5.2954,Song Sparrow,0.9030
+Song_Sparrow_1.jpg,Song Sparrow,veil,unedited+corr,1,1,0,5.2942,Song Sparrow,0.9264
+Song_Sparrow_1.jpg,Song Sparrow,backlit,unedited+corr,1,1,0,2.0149,Song Sparrow,0.7511
+Song_Sparrow_1.jpg,Song Sparrow,silhouette,unedited+corr,0,0,1,-1.2334,Lincoln's Sparrow,0.6332
+Song_Sparrow_2.jpg,Song Sparrow,clean,unedited+corr,1,1,0,0.7420,Song Sparrow,0.5146
+Song_Sparrow_2.jpg,Song Sparrow,golden,unedited+corr,1,1,0,1.4867,Song Sparrow,0.6383
+Song_Sparrow_2.jpg,Song Sparrow,veil,unedited+corr,1,1,0,0.8538,Song Sparrow,0.5428
+Song_Sparrow_2.jpg,Song Sparrow,backlit,unedited+corr,0,0,1,-1.2189,Lincoln's Sparrow,0.5438
+Song_Sparrow_2.jpg,Song Sparrow,silhouette,unedited+corr,0,0,1,-3.7540,Lincoln's Sparrow,0.9075
+European_Starling_0.jpg,European Starling,clean,unedited+corr,0,0,1,-2.2261,Eurasian Blackbird,0.6796
+European_Starling_0.jpg,European Starling,golden,unedited+corr,0,0,1,-2.2787,Eurasian Blackbird,0.5540
+European_Starling_0.jpg,European Starling,veil,unedited+corr,0,0,0,-5.6889,Unknown / Not a Bird,0.3381
+European_Starling_0.jpg,European Starling,backlit,unedited+corr,0,0,1,-4.6260,Eurasian Blackbird,0.5931
+European_Starling_0.jpg,European Starling,silhouette,unedited+corr,0,0,0,-4.2832,Noisy Miner,0.2293
+European_Starling_1.jpg,European Starling,clean,unedited+corr,1,1,0,5.5989,European Starling,0.8022
+European_Starling_1.jpg,European Starling,golden,unedited+corr,1,1,0,6.7012,European Starling,0.8932
+European_Starling_1.jpg,European Starling,veil,unedited+corr,1,1,0,6.3897,European Starling,0.8725
+European_Starling_1.jpg,European Starling,backlit,unedited+corr,1,1,0,5.5100,European Starling,0.7681
+European_Starling_1.jpg,European Starling,silhouette,unedited+corr,1,1,0,5.6538,European Starling,0.8364
+European_Starling_2.jpg,European Starling,clean,unedited+corr,0,0,0,-0.8245,Wild Turkey,0.0976
+European_Starling_2.jpg,European Starling,golden,unedited+corr,0,0,0,-2.9512,Unknown / Not a Bird,0.1628
+European_Starling_2.jpg,European Starling,veil,unedited+corr,0,0,0,-3.4282,Unknown / Not a Bird,0.2227
+European_Starling_2.jpg,European Starling,backlit,unedited+corr,0,0,0,-3.6999,Unknown / Not a Bird,0.3185
+European_Starling_2.jpg,European Starling,silhouette,unedited+corr,0,0,0,-8.4307,Unknown / Not a Bird,0.8729
+Mallard_0.jpg,Mallard,clean,unedited+corr,0,0,0,-4.2049,Snow Goose,0.1171
+Mallard_0.jpg,Mallard,golden,unedited+corr,0,0,0,-4.1511,Snow Goose,0.1047
+Mallard_0.jpg,Mallard,veil,unedited+corr,0,0,0,-5.5240,Ross's Goose,0.2011
+Mallard_0.jpg,Mallard,backlit,unedited+corr,0,0,0,-5.1427,Mute Swan,0.1686
+Mallard_0.jpg,Mallard,silhouette,unedited+corr,0,0,0,-6.4734,Anser anser domesticus,0.4908
+Mallard_1.jpg,Mallard,clean,unedited+corr,1,0,0,0.1649,Mallard,0.4938
+Mallard_1.jpg,Mallard,golden,unedited+corr,1,1,0,0.2965,Mallard,0.5349
+Mallard_1.jpg,Mallard,veil,unedited+corr,0,0,1,-1.0154,Anas platyrhynchos domesticus,0.5490
+Mallard_1.jpg,Mallard,backlit,unedited+corr,0,0,0,-1.6503,American Coot,0.1663
+Mallard_1.jpg,Mallard,silhouette,unedited+corr,0,0,0,-2.0631,Eurasian Coot,0.1555
+Mallard_2.jpg,Mallard,clean,unedited+corr,1,1,0,4.4522,Mallard,0.8957
+Mallard_2.jpg,Mallard,golden,unedited+corr,1,1,0,5.0748,Mallard,0.9306
+Mallard_2.jpg,Mallard,veil,unedited+corr,1,1,0,4.3004,Mallard,0.8615
+Mallard_2.jpg,Mallard,backlit,unedited+corr,0,0,1,-1.7314,House Sparrow,0.6263
+Mallard_2.jpg,Mallard,silhouette,unedited+corr,0,0,0,-5.9035,Unknown / Not a Bird,0.3138
+American_Crow_0.jpg,American Crow,clean,unedited+corr,1,0,0,1.3914,American Crow,0.3069
+American_Crow_0.jpg,American Crow,golden,unedited+corr,0,0,0,-0.6860,Common Raven,0.0944
+American_Crow_0.jpg,American Crow,veil,unedited+corr,0,0,0,-1.7535,Common Raven,0.1841
+American_Crow_0.jpg,American Crow,backlit,unedited+corr,1,1,0,1.2259,American Crow,0.5242
+American_Crow_0.jpg,American Crow,silhouette,unedited+corr,0,0,0,-0.2782,Common Raven,0.2156
+American_Crow_1.jpg,American Crow,clean,unedited+corr,0,0,0,-3.6277,Glaucous-winged Gull,0.1651
+American_Crow_1.jpg,American Crow,golden,unedited+corr,0,0,0,-4.8746,Brown-headed Cowbird,0.2152
+American_Crow_1.jpg,American Crow,veil,unedited+corr,0,0,0,-6.0515,Clark's Nutcracker,0.1713
+American_Crow_1.jpg,American Crow,backlit,unedited+corr,0,0,0,-10.0752,Clark's Nutcracker,0.3691
+American_Crow_1.jpg,American Crow,silhouette,unedited+corr,0,0,0,-9.5960,House Crow,0.2764
+American_Crow_2.jpg,American Crow,clean,unedited+corr,0,0,0,-4.5221,Eurasian Jackdaw,0.3068
+American_Crow_2.jpg,American Crow,golden,unedited+corr,0,0,0,-4.2891,Eurasian Jackdaw,0.1527
+American_Crow_2.jpg,American Crow,veil,unedited+corr,0,0,0,-2.8586,Bald Eagle,0.1146
+American_Crow_2.jpg,American Crow,backlit,unedited+corr,0,0,0,-4.6217,Clark's Nutcracker,0.1896
+American_Crow_2.jpg,American Crow,silhouette,unedited+corr,0,0,0,-6.5477,Brown-headed Cowbird,0.2386
+Tree_Swallow_0.jpg,Tree Swallow,clean,unedited+corr,1,1,0,5.6065,Tree Swallow,0.9187
+Tree_Swallow_0.jpg,Tree Swallow,golden,unedited+corr,1,1,0,3.5708,Tree Swallow,0.8300
+Tree_Swallow_0.jpg,Tree Swallow,veil,unedited+corr,1,1,0,3.4287,Tree Swallow,0.7436
+Tree_Swallow_0.jpg,Tree Swallow,backlit,unedited+corr,1,1,0,2.2413,Tree Swallow,0.6786
+Tree_Swallow_0.jpg,Tree Swallow,silhouette,unedited+corr,1,0,0,0.3145,Tree Swallow,0.1220
+Tree_Swallow_1.jpg,Tree Swallow,clean,unedited+corr,1,0,0,0.2473,Tree Swallow,0.2229
+Tree_Swallow_1.jpg,Tree Swallow,golden,unedited+corr,1,0,0,0.2120,Tree Swallow,0.2748
+Tree_Swallow_1.jpg,Tree Swallow,veil,unedited+corr,1,0,0,0.3724,Tree Swallow,0.2799
+Tree_Swallow_1.jpg,Tree Swallow,backlit,unedited+corr,1,0,0,1.2837,Tree Swallow,0.4897
+Tree_Swallow_1.jpg,Tree Swallow,silhouette,unedited+corr,0,0,0,-0.9091,Unknown / Not a Bird,0.4132
+Tree_Swallow_2.jpg,Tree Swallow,clean,unedited+corr,1,1,0,3.1608,Tree Swallow,0.5087
+Tree_Swallow_2.jpg,Tree Swallow,golden,unedited+corr,1,0,0,0.2153,Tree Swallow,0.0547
+Tree_Swallow_2.jpg,Tree Swallow,veil,unedited+corr,1,0,0,0.4874,Tree Swallow,0.4337
+Tree_Swallow_2.jpg,Tree Swallow,backlit,unedited+corr,1,0,0,1.6447,Tree Swallow,0.4704
+Tree_Swallow_2.jpg,Tree Swallow,silhouette,unedited+corr,0,0,0,-0.3584,Eastern Kingbird,0.2731
+Western_Bluebird_0.jpg,Western Bluebird,clean,unedited+corr,0,0,0,-4.1224,House Sparrow,0.3881
+Western_Bluebird_0.jpg,Western Bluebird,golden,unedited+corr,0,0,0,-5.9255,House Sparrow,0.2599
+Western_Bluebird_0.jpg,Western Bluebird,veil,unedited+corr,0,0,0,-5.8018,House Sparrow,0.2144
+Western_Bluebird_0.jpg,Western Bluebird,backlit,unedited+corr,0,0,0,-2.3126,Dark-eyed Junco,0.2347
+Western_Bluebird_0.jpg,Western Bluebird,silhouette,unedited+corr,0,0,0,-9.1070,Unknown / Not a Bird,0.9197
+Western_Bluebird_1.jpg,Western Bluebird,clean,unedited+corr,1,1,0,2.3910,Western Bluebird,0.8340
+Western_Bluebird_1.jpg,Western Bluebird,golden,unedited+corr,1,0,0,0.8563,Western Bluebird,0.4782
+Western_Bluebird_1.jpg,Western Bluebird,veil,unedited+corr,0,0,0,-0.0126,Eastern Bluebird,0.2431
+Western_Bluebird_1.jpg,Western Bluebird,backlit,unedited+corr,1,1,0,1.2614,Western Bluebird,0.6978
+Western_Bluebird_1.jpg,Western Bluebird,silhouette,unedited+corr,1,0,0,0.9253,Western Bluebird,0.0654
+Western_Bluebird_2.jpg,Western Bluebird,clean,unedited+corr,1,1,0,4.3450,Western Bluebird,0.9374
+Western_Bluebird_2.jpg,Western Bluebird,golden,unedited+corr,1,1,0,2.5010,Western Bluebird,0.8359
+Western_Bluebird_2.jpg,Western Bluebird,veil,unedited+corr,1,1,0,3.7736,Western Bluebird,0.9346
+Western_Bluebird_2.jpg,Western Bluebird,backlit,unedited+corr,1,1,0,4.7824,Western Bluebird,0.9265
+Western_Bluebird_2.jpg,Western Bluebird,silhouette,unedited+corr,1,1,0,2.8252,Western Bluebird,0.8752
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,clean,unedited+corr,0,0,1,-8.1624,Northern Saw-whet Owl,0.6046
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,golden,unedited+corr,0,0,0,-4.6581,Barred Owl,0.1593
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,veil,unedited+corr,0,0,0,-5.0176,Barred Owl,0.2561
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,backlit,unedited+corr,0,0,0,-4.2960,Northern Saw-whet Owl,0.1257
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,silhouette,unedited+corr,0,0,0,-0.5927,Barred Owl,0.0529
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,clean,unedited+corr,1,1,0,4.6171,Anna's Hummingbird,0.7114
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,golden,unedited+corr,1,1,0,3.9884,Anna's Hummingbird,0.7447
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,veil,unedited+corr,1,1,0,4.7083,Anna's Hummingbird,0.8454
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,backlit,unedited+corr,1,0,0,1.1665,Anna's Hummingbird,0.3434
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,silhouette,unedited+corr,0,0,0,-0.2915,Unknown / Not a Bird,0.1323
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,clean,unedited+corr,1,1,0,4.9469,Anna's Hummingbird,0.9155
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,golden,unedited+corr,1,1,0,5.5333,Anna's Hummingbird,0.8852
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,veil,unedited+corr,1,1,0,4.7067,Anna's Hummingbird,0.9015
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,backlit,unedited+corr,1,1,0,4.4228,Anna's Hummingbird,0.8281
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,silhouette,unedited+corr,1,1,0,4.6317,Anna's Hummingbird,0.8857
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,clean,unedited+corr,0,0,0,-3.5453,Anna's Hummingbird,0.2728
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,golden,unedited+corr,0,0,1,-5.1943,Rufous Hummingbird,0.8173
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,veil,unedited+corr,0,0,1,-6.2661,Rufous Hummingbird,0.8709
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,backlit,unedited+corr,0,0,1,-3.7102,Rufous Hummingbird,0.5413
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,silhouette,unedited+corr,0,0,1,-3.8751,Rufous Hummingbird,0.6214
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,clean,unedited+corr,0,0,0,-0.5771,Black-headed Gull,0.1391
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,golden,unedited+corr,0,0,0,-1.0325,Violet-crowned Hummingbird,0.1347
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,veil,unedited+corr,0,0,0,-1.1299,Violet-crowned Hummingbird,0.2881
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,backlit,unedited+corr,0,0,0,-4.8312,Broad-billed Hummingbird,0.4124
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,silhouette,unedited+corr,0,0,0,-3.2863,Broad-billed Hummingbird,0.1997
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,clean,unedited+corr,0,0,0,-2.8032,Wilson's Warbler,0.0959
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,golden,unedited+corr,0,0,0,-1.8478,Wilson's Warbler,0.0241
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,veil,unedited+corr,0,0,0,-4.8206,American Robin,0.0358
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,backlit,unedited+corr,0,0,0,-3.2713,Bushtit,0.0508
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,silhouette,unedited+corr,0,0,0,-4.0015,Unknown / Not a Bird,0.1195
+Northern_Flicker_0.jpg,Northern Flicker,clean,unedited+corr,0,0,1,-5.1943,Northern Flicker,0.9316
+Northern_Flicker_0.jpg,Northern Flicker,golden,unedited+corr,0,0,1,-5.3592,Northern Flicker,0.8178
+Northern_Flicker_0.jpg,Northern Flicker,veil,unedited+corr,0,0,1,-6.1012,Northern Flicker,0.9059
+Northern_Flicker_0.jpg,Northern Flicker,backlit,unedited+corr,0,0,1,-5.8538,Northern Flicker,0.9702
+Northern_Flicker_0.jpg,Northern Flicker,silhouette,unedited+corr,0,0,1,-5.6621,Northern Flicker,0.8895
+Northern_Flicker_1.jpg,Northern Flicker,clean,unedited+corr,0,0,1,-2.2367,Northern Flicker,0.8260
+Northern_Flicker_1.jpg,Northern Flicker,golden,unedited+corr,0,0,1,-2.3717,Northern Flicker,0.8507
+Northern_Flicker_1.jpg,Northern Flicker,veil,unedited+corr,0,0,1,-2.1785,Northern Flicker,0.8296
+Northern_Flicker_1.jpg,Northern Flicker,backlit,unedited+corr,0,0,1,-2.5800,Northern Flicker,0.8545
+Northern_Flicker_1.jpg,Northern Flicker,silhouette,unedited+corr,0,0,1,-3.1804,Northern Flicker,0.8890
+Northern_Flicker_2.jpg,Northern Flicker,clean,unedited+corr,0,0,1,-3.6300,Northern Flicker,0.9167
+Northern_Flicker_2.jpg,Northern Flicker,golden,unedited+corr,0,0,1,-3.4041,Northern Flicker,0.8801
+Northern_Flicker_2.jpg,Northern Flicker,veil,unedited+corr,0,0,1,-3.2598,Northern Flicker,0.8617
+Northern_Flicker_2.jpg,Northern Flicker,backlit,unedited+corr,0,0,1,-4.2049,Northern Flicker,0.9484
+Northern_Flicker_2.jpg,Northern Flicker,silhouette,unedited+corr,0,0,1,-4.5368,Northern Flicker,0.9533
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,clean,unedited+corr,0,0,0,-1.8139,House Sparrow,0.0780
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,golden,unedited+corr,0,0,0,-1.0159,House Finch,0.0591
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,veil,unedited+corr,0,0,0,-3.7391,Unknown / Not a Bird,0.1024
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,backlit,unedited+corr,0,0,1,-5.2786,House Sparrow,0.6401
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,silhouette,unedited+corr,0,0,0,-8.4097,Unknown / Not a Bird,0.3413
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,clean,unedited+corr,1,1,0,7.3811,Pileated Woodpecker,0.9774
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,golden,unedited+corr,1,1,0,7.6538,Pileated Woodpecker,0.9857
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,veil,unedited+corr,1,1,0,5.7730,Pileated Woodpecker,0.9728
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,backlit,unedited+corr,1,1,0,6.6867,Pileated Woodpecker,0.9779
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,silhouette,unedited+corr,0,0,0,-6.1644,Unknown / Not a Bird,0.7060
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,clean,unedited+corr,1,1,0,6.6783,Pileated Woodpecker,0.9547
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,golden,unedited+corr,1,1,0,5.9966,Pileated Woodpecker,0.9479
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,veil,unedited+corr,1,1,0,5.6818,Pileated Woodpecker,0.9522
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,backlit,unedited+corr,1,1,0,6.1690,Pileated Woodpecker,0.9434
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,silhouette,unedited+corr,1,1,0,3.1915,Pileated Woodpecker,0.7493
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,clean,unedited+corr,1,1,0,1.9788,White-breasted Nuthatch,0.7550
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,golden,unedited+corr,1,1,0,3.5344,White-breasted Nuthatch,0.7373
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,veil,unedited+corr,0,0,0,-7.1880,Gray Catbird,0.4797
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,backlit,unedited+corr,0,0,1,-3.7374,Gray Catbird,0.6206
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,silhouette,unedited+corr,1,0,0,0.8987,White-breasted Nuthatch,0.1905
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,clean,unedited+corr,1,1,0,1.8139,White-breasted Nuthatch,0.5844
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,golden,unedited+corr,1,1,0,3.4019,White-breasted Nuthatch,0.5064
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,veil,unedited+corr,1,1,0,4.3445,White-breasted Nuthatch,0.7136
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,backlit,unedited+corr,1,1,0,2.6874,White-breasted Nuthatch,0.6597
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,silhouette,unedited+corr,1,1,0,3.0940,White-breasted Nuthatch,0.7190
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,clean,unedited+corr,1,1,0,6.2661,White-breasted Nuthatch,0.9522
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,golden,unedited+corr,1,1,0,4.7735,White-breasted Nuthatch,0.8759
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,veil,unedited+corr,1,1,0,4.1066,White-breasted Nuthatch,0.8719
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,backlit,unedited+corr,1,1,0,1.9031,White-breasted Nuthatch,0.6269
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,silhouette,unedited+corr,1,0,0,0.5119,White-breasted Nuthatch,0.1260
+Carolina_Wren_0.jpg,Carolina Wren,clean,unedited+corr,0,0,0,-5.0294,European Starling,0.0708
+Carolina_Wren_0.jpg,Carolina Wren,golden,unedited+corr,0,0,0,-6.2732,Unknown / Not a Bird,0.6814
+Carolina_Wren_0.jpg,Carolina Wren,veil,unedited+corr,0,0,0,-6.5812,Unknown / Not a Bird,0.6736
+Carolina_Wren_0.jpg,Carolina Wren,backlit,unedited+corr,0,0,0,-3.8214,House Sparrow,0.0761
+Carolina_Wren_0.jpg,Carolina Wren,silhouette,unedited+corr,0,0,0,-9.1501,Unknown / Not a Bird,0.8889
+Carolina_Wren_1.jpg,Carolina Wren,clean,unedited+corr,1,1,0,5.6065,Carolina Wren,0.8495
+Carolina_Wren_1.jpg,Carolina Wren,golden,unedited+corr,1,1,0,5.9621,Carolina Wren,0.8620
+Carolina_Wren_1.jpg,Carolina Wren,veil,unedited+corr,1,1,0,5.8790,Carolina Wren,0.8603
+Carolina_Wren_1.jpg,Carolina Wren,backlit,unedited+corr,1,1,0,6.3485,Carolina Wren,0.9523
+Carolina_Wren_1.jpg,Carolina Wren,silhouette,unedited+corr,1,1,0,2.2344,Carolina Wren,0.7296
+Carolina_Wren_2.jpg,Carolina Wren,clean,unedited+corr,1,1,0,4.3698,Carolina Wren,0.9359
+Carolina_Wren_2.jpg,Carolina Wren,golden,unedited+corr,1,1,0,2.2656,Carolina Wren,0.7569
+Carolina_Wren_2.jpg,Carolina Wren,veil,unedited+corr,1,1,0,4.3860,Carolina Wren,0.9212
+Carolina_Wren_2.jpg,Carolina Wren,backlit,unedited+corr,1,1,0,1.7293,Carolina Wren,0.7184
+Carolina_Wren_2.jpg,Carolina Wren,silhouette,unedited+corr,0,0,0,-8.1624,Unknown / Not a Bird,0.9395
+Great_Egret_0.jpg,Great Egret,clean,unedited+corr,1,1,0,4.2873,Great Egret,0.8992
+Great_Egret_0.jpg,Great Egret,golden,unedited+corr,1,1,0,4.2516,Great Egret,0.9035
+Great_Egret_0.jpg,Great Egret,veil,unedited+corr,1,1,0,4.5917,Great Egret,0.9353
+Great_Egret_0.jpg,Great Egret,backlit,unedited+corr,1,1,0,3.9202,Great Egret,0.8749
+Great_Egret_0.jpg,Great Egret,silhouette,unedited+corr,0,0,0,-4.0401,Unknown / Not a Bird,0.3820
+Great_Egret_1.jpg,Great Egret,clean,unedited+corr,1,0,0,0.3258,Great Egret,0.2069
+Great_Egret_1.jpg,Great Egret,golden,unedited+corr,0,0,0,-1.0518,Tricolored Heron,0.3710
+Great_Egret_1.jpg,Great Egret,veil,unedited+corr,1,0,0,0.6720,Great Egret,0.2025
+Great_Egret_1.jpg,Great Egret,backlit,unedited+corr,0,0,1,-6.1328,Tricolored Heron,0.7253
+Great_Egret_1.jpg,Great Egret,silhouette,unedited+corr,0,0,0,-6.4409,Tricolored Heron,0.4155
+Great_Egret_2.jpg,Great Egret,clean,unedited+corr,1,1,0,4.1224,Great Egret,0.8816
+Great_Egret_2.jpg,Great Egret,golden,unedited+corr,1,1,0,3.1153,Great Egret,0.8798
+Great_Egret_2.jpg,Great Egret,veil,unedited+corr,1,1,0,2.0838,Great Egret,0.7548
+Great_Egret_2.jpg,Great Egret,backlit,unedited+corr,1,0,0,0.0054,Great Egret,0.2247
+Great_Egret_2.jpg,Great Egret,silhouette,unedited+corr,0,0,0,-8.1267,Unknown / Not a Bird,0.9141
+Belted_Kingfisher_0.jpg,Belted Kingfisher,clean,unedited+corr,1,1,0,1.2367,Belted Kingfisher,0.7421
+Belted_Kingfisher_0.jpg,Belted Kingfisher,golden,unedited+corr,1,1,0,1.0614,Belted Kingfisher,0.5533
+Belted_Kingfisher_0.jpg,Belted Kingfisher,veil,unedited+corr,1,0,0,1.7273,Belted Kingfisher,0.4983
+Belted_Kingfisher_0.jpg,Belted Kingfisher,backlit,unedited+corr,0,0,0,-6.3151,Common Kingfisher,0.1031
+Belted_Kingfisher_0.jpg,Belted Kingfisher,silhouette,unedited+corr,0,0,0,-8.0505,Bushtit,0.2203
+Belted_Kingfisher_1.jpg,Belted Kingfisher,clean,unedited+corr,1,1,0,2.9930,Belted Kingfisher,0.8560
+Belted_Kingfisher_1.jpg,Belted Kingfisher,golden,unedited+corr,1,1,0,2.6123,Belted Kingfisher,0.8500
+Belted_Kingfisher_1.jpg,Belted Kingfisher,veil,unedited+corr,1,1,0,1.0309,Belted Kingfisher,0.5308
+Belted_Kingfisher_1.jpg,Belted Kingfisher,backlit,unedited+corr,1,1,0,2.5458,Belted Kingfisher,0.6711
+Belted_Kingfisher_1.jpg,Belted Kingfisher,silhouette,unedited+corr,0,0,0,-3.6721,Unknown / Not a Bird,0.1737
+Belted_Kingfisher_2.jpg,Belted Kingfisher,clean,unedited+corr,1,1,0,2.5559,Belted Kingfisher,0.7070
+Belted_Kingfisher_2.jpg,Belted Kingfisher,golden,unedited+corr,1,1,0,2.4120,Belted Kingfisher,0.8456
+Belted_Kingfisher_2.jpg,Belted Kingfisher,veil,unedited+corr,1,1,0,3.4801,Belted Kingfisher,0.8352
+Belted_Kingfisher_2.jpg,Belted Kingfisher,backlit,unedited+corr,1,0,0,0.0721,Belted Kingfisher,0.1411
+Belted_Kingfisher_2.jpg,Belted Kingfisher,silhouette,unedited+corr,0,0,0,-0.0771,Ringed Kingfisher,0.1096
+Osprey_0.jpg,Osprey,clean,unedited+corr,1,1,0,6.1836,Osprey,0.9833
+Osprey_0.jpg,Osprey,golden,unedited+corr,1,1,0,6.0532,Osprey,0.9704
+Osprey_0.jpg,Osprey,veil,unedited+corr,1,1,0,3.1581,Osprey,0.8428
+Osprey_0.jpg,Osprey,backlit,unedited+corr,1,1,0,3.5005,Osprey,0.7431
+Osprey_0.jpg,Osprey,silhouette,unedited+corr,1,0,0,0.0311,Osprey,0.0362
+Osprey_1.jpg,Osprey,clean,unedited+corr,1,1,0,0.7420,Osprey,0.5341
+Osprey_1.jpg,Osprey,golden,unedited+corr,1,1,0,1.8982,Osprey,0.6388
+Osprey_1.jpg,Osprey,veil,unedited+corr,1,0,0,0.3673,Osprey,0.3646
+Osprey_1.jpg,Osprey,backlit,unedited+corr,0,0,0,-1.2907,Unknown / Not a Bird,0.5621
+Osprey_1.jpg,Osprey,silhouette,unedited+corr,0,0,0,-8.1055,Unknown / Not a Bird,0.9072
+Osprey_2.jpg,Osprey,clean,unedited+corr,1,1,0,7.0081,Osprey,0.9238
+Osprey_2.jpg,Osprey,golden,unedited+corr,1,1,0,6.6029,Osprey,0.9277
+Osprey_2.jpg,Osprey,veil,unedited+corr,1,0,0,2.4320,Osprey,0.3999
+Osprey_2.jpg,Osprey,backlit,unedited+corr,1,1,0,5.9777,Osprey,0.8403
+Osprey_2.jpg,Osprey,silhouette,unedited+corr,1,0,0,0.7726,Osprey,0.1901
+Turkey_Vulture_0.jpg,Turkey Vulture,clean,unedited+corr,0,0,0,-10.9656,Pied Cormorant,0.1979
+Turkey_Vulture_0.jpg,Turkey Vulture,golden,unedited+corr,0,0,0,-9.3677,Little Penguin,0.0787
+Turkey_Vulture_0.jpg,Turkey Vulture,veil,unedited+corr,0,0,0,-7.5407,Northern Gannet,0.0694
+Turkey_Vulture_0.jpg,Turkey Vulture,backlit,unedited+corr,0,0,0,-10.9284,Anas platyrhynchos domesticus,0.1708
+Turkey_Vulture_0.jpg,Turkey Vulture,silhouette,unedited+corr,0,0,0,-6.5682,Downy Woodpecker,0.0744
+Turkey_Vulture_1.jpg,Turkey Vulture,clean,unedited+corr,1,1,0,5.8538,Turkey Vulture,0.8554
+Turkey_Vulture_1.jpg,Turkey Vulture,golden,unedited+corr,1,1,0,6.2738,Turkey Vulture,0.8823
+Turkey_Vulture_1.jpg,Turkey Vulture,veil,unedited+corr,1,1,0,6.1214,Turkey Vulture,0.8499
+Turkey_Vulture_1.jpg,Turkey Vulture,backlit,unedited+corr,1,1,0,6.2669,Turkey Vulture,0.8830
+Turkey_Vulture_1.jpg,Turkey Vulture,silhouette,unedited+corr,1,1,0,6.3485,Turkey Vulture,0.8974
+Turkey_Vulture_2.jpg,Turkey Vulture,clean,unedited+corr,1,1,0,6.0187,Turkey Vulture,0.9175
+Turkey_Vulture_2.jpg,Turkey Vulture,golden,unedited+corr,1,1,0,5.2767,Turkey Vulture,0.9086
+Turkey_Vulture_2.jpg,Turkey Vulture,veil,unedited+corr,1,1,0,5.6889,Turkey Vulture,0.9444
+Turkey_Vulture_2.jpg,Turkey Vulture,backlit,unedited+corr,1,1,0,5.1155,Turkey Vulture,0.9128
+Turkey_Vulture_2.jpg,Turkey Vulture,silhouette,unedited+corr,1,0,0,1.8783,Turkey Vulture,0.2675
+American_Kestrel_0.jpg,American Kestrel,clean,unedited+corr,1,1,0,5.0294,American Kestrel,0.8252
+American_Kestrel_0.jpg,American Kestrel,golden,unedited+corr,1,1,0,4.9146,American Kestrel,0.8232
+American_Kestrel_0.jpg,American Kestrel,veil,unedited+corr,1,1,0,4.8083,American Kestrel,0.8790
+American_Kestrel_0.jpg,American Kestrel,backlit,unedited+corr,1,1,0,4.3986,American Kestrel,0.9163
+American_Kestrel_0.jpg,American Kestrel,silhouette,unedited+corr,0,0,0,-0.3792,Northern Flicker,0.3311
+American_Kestrel_1.jpg,American Kestrel,clean,unedited+corr,1,1,0,1.2367,American Kestrel,0.5030
+American_Kestrel_1.jpg,American Kestrel,golden,unedited+corr,0,0,1,-2.3086,Prairie Falcon,0.6448
+American_Kestrel_1.jpg,American Kestrel,veil,unedited+corr,0,0,1,-2.6384,Prairie Falcon,0.7754
+American_Kestrel_1.jpg,American Kestrel,backlit,unedited+corr,0,0,0,-5.7478,Unknown / Not a Bird,0.2013
+American_Kestrel_1.jpg,American Kestrel,silhouette,unedited+corr,0,0,0,-8.5934,Unknown / Not a Bird,0.8304
+American_Kestrel_2.jpg,American Kestrel,clean,unedited+corr,1,1,0,4.6996,American Kestrel,0.9033
+American_Kestrel_2.jpg,American Kestrel,golden,unedited+corr,1,1,0,3.3226,American Kestrel,0.7600
+American_Kestrel_2.jpg,American Kestrel,veil,unedited+corr,1,0,0,1.8100,American Kestrel,0.4629
+American_Kestrel_2.jpg,American Kestrel,backlit,unedited+corr,1,1,0,3.6030,American Kestrel,0.8018
+American_Kestrel_2.jpg,American Kestrel,silhouette,unedited+corr,0,0,0,-5.4567,Unknown / Not a Bird,0.5865
+Baltimore_Oriole_0.jpg,Baltimore Oriole,clean,unedited+corr,1,1,0,4.5642,Baltimore Oriole,0.8351
+Baltimore_Oriole_0.jpg,Baltimore Oriole,golden,unedited+corr,1,1,0,3.5869,Baltimore Oriole,0.8543
+Baltimore_Oriole_0.jpg,Baltimore Oriole,veil,unedited+corr,1,1,0,3.7703,Baltimore Oriole,0.8521
+Baltimore_Oriole_0.jpg,Baltimore Oriole,backlit,unedited+corr,1,1,0,2.9043,Baltimore Oriole,0.8675
+Baltimore_Oriole_0.jpg,Baltimore Oriole,silhouette,unedited+corr,1,1,0,0.7896,Baltimore Oriole,0.6307
+Baltimore_Oriole_1.jpg,Baltimore Oriole,clean,unedited+corr,0,0,0,-5.2767,House Finch,0.1080
+Baltimore_Oriole_1.jpg,Baltimore Oriole,golden,unedited+corr,0,0,0,-6.6991,Verdin,0.0579
+Baltimore_Oriole_1.jpg,Baltimore Oriole,veil,unedited+corr,0,0,0,-7.8650,Unknown / Not a Bird,0.3293
+Baltimore_Oriole_1.jpg,Baltimore Oriole,backlit,unedited+corr,0,0,0,-9.2484,Bushtit,0.1281
+Baltimore_Oriole_1.jpg,Baltimore Oriole,silhouette,unedited+corr,0,0,0,-8.0886,Unknown / Not a Bird,0.2513
+Baltimore_Oriole_2.jpg,Baltimore Oriole,clean,unedited+corr,1,0,0,0.9069,Baltimore Oriole,0.1630
+Baltimore_Oriole_2.jpg,Baltimore Oriole,golden,unedited+corr,0,0,0,-3.1225,Savannah Sparrow,0.1405
+Baltimore_Oriole_2.jpg,Baltimore Oriole,veil,unedited+corr,0,0,0,-2.8258,Northern Mockingbird,0.0477
+Baltimore_Oriole_2.jpg,Baltimore Oriole,backlit,unedited+corr,0,0,0,-5.3646,Broad-billed Hummingbird,0.1186
+Baltimore_Oriole_2.jpg,Baltimore Oriole,silhouette,unedited+corr,0,0,0,-6.9886,Broad-billed Hummingbird,0.1579
+Scarlet_Tanager_0.jpg,Scarlet Tanager,clean,unedited+corr,1,1,0,5.5538,Scarlet Tanager,0.9343
+Scarlet_Tanager_0.jpg,Scarlet Tanager,golden,unedited+corr,1,1,0,3.7376,Scarlet Tanager,0.8415
+Scarlet_Tanager_0.jpg,Scarlet Tanager,veil,unedited+corr,1,1,0,1.8468,Scarlet Tanager,0.7825
+Scarlet_Tanager_0.jpg,Scarlet Tanager,backlit,unedited+corr,1,1,0,4.4314,Scarlet Tanager,0.9064
+Scarlet_Tanager_0.jpg,Scarlet Tanager,silhouette,unedited+corr,0,0,1,-1.4343,Summer Tanager,0.6560
+Scarlet_Tanager_1.jpg,Scarlet Tanager,clean,unedited+corr,1,1,0,1.3192,Scarlet Tanager,0.5715
+Scarlet_Tanager_1.jpg,Scarlet Tanager,golden,unedited+corr,0,0,0,-0.2394,Summer Tanager,0.3647
+Scarlet_Tanager_1.jpg,Scarlet Tanager,veil,unedited+corr,0,0,0,-1.2258,Summer Tanager,0.4601
+Scarlet_Tanager_1.jpg,Scarlet Tanager,backlit,unedited+corr,0,0,0,-0.2787,Summer Tanager,0.3518
+Scarlet_Tanager_1.jpg,Scarlet Tanager,silhouette,unedited+corr,0,0,0,-0.7274,Summer Tanager,0.3023
+Scarlet_Tanager_2.jpg,Scarlet Tanager,clean,unedited+corr,1,1,0,1.8139,Scarlet Tanager,0.6350
+Scarlet_Tanager_2.jpg,Scarlet Tanager,golden,unedited+corr,0,0,0,-0.2473,Vermilion Flycatcher,0.3744
+Scarlet_Tanager_2.jpg,Scarlet Tanager,veil,unedited+corr,0,0,0,-0.1703,Summer Tanager,0.2583
+Scarlet_Tanager_2.jpg,Scarlet Tanager,backlit,unedited+corr,1,1,0,0.7006,Scarlet Tanager,0.5358
+Scarlet_Tanager_2.jpg,Scarlet Tanager,silhouette,unedited+corr,1,0,0,0.2069,Scarlet Tanager,0.1612
+Indigo_Bunting_0.jpg,Indigo Bunting,clean,unedited+corr,1,1,0,3.7434,Indigo Bunting,0.7184
+Indigo_Bunting_0.jpg,Indigo Bunting,golden,unedited+corr,1,1,0,2.9681,Indigo Bunting,0.6341
+Indigo_Bunting_0.jpg,Indigo Bunting,veil,unedited+corr,1,1,0,4.0947,Indigo Bunting,0.6778
+Indigo_Bunting_0.jpg,Indigo Bunting,backlit,unedited+corr,1,1,0,3.6635,Indigo Bunting,0.8295
+Indigo_Bunting_0.jpg,Indigo Bunting,silhouette,unedited+corr,1,0,0,0.1290,Indigo Bunting,0.1758
+Indigo_Bunting_1.jpg,Indigo Bunting,clean,unedited+corr,1,1,0,5.6889,Indigo Bunting,0.9454
+Indigo_Bunting_1.jpg,Indigo Bunting,golden,unedited+corr,1,1,0,4.0398,Indigo Bunting,0.7993
+Indigo_Bunting_1.jpg,Indigo Bunting,veil,unedited+corr,1,1,0,4.4387,Indigo Bunting,0.8144
+Indigo_Bunting_1.jpg,Indigo Bunting,backlit,unedited+corr,1,1,0,3.8570,Indigo Bunting,0.8713
+Indigo_Bunting_1.jpg,Indigo Bunting,silhouette,unedited+corr,1,1,0,2.2517,Indigo Bunting,0.5987
+Indigo_Bunting_2.jpg,Indigo Bunting,clean,unedited+corr,1,1,0,5.4416,Indigo Bunting,0.8794
+Indigo_Bunting_2.jpg,Indigo Bunting,golden,unedited+corr,1,1,0,5.3924,Indigo Bunting,0.8543
+Indigo_Bunting_2.jpg,Indigo Bunting,veil,unedited+corr,1,1,0,3.2331,Indigo Bunting,0.6132
+Indigo_Bunting_2.jpg,Indigo Bunting,backlit,unedited+corr,1,1,0,4.8324,Indigo Bunting,0.7278
+Indigo_Bunting_2.jpg,Indigo Bunting,silhouette,unedited+corr,1,1,0,1.8673,Indigo Bunting,0.5189
+Common_Loon_0.jpg,Common Loon,clean,unedited+corr,1,1,0,3.1330,Common Loon,0.7328
+Common_Loon_0.jpg,Common Loon,golden,unedited+corr,1,1,0,2.7620,Common Loon,0.7607
+Common_Loon_0.jpg,Common Loon,veil,unedited+corr,1,1,0,2.6399,Common Loon,0.6994
+Common_Loon_0.jpg,Common Loon,backlit,unedited+corr,1,1,0,3.2372,Common Loon,0.7545
+Common_Loon_0.jpg,Common Loon,silhouette,unedited+corr,1,0,0,1.1576,Common Loon,0.1914
+Common_Loon_1.jpg,Common Loon,clean,unedited+corr,0,0,0,-1.4841,Cooper's Hawk,0.2285
+Common_Loon_1.jpg,Common Loon,golden,unedited+corr,0,0,1,-4.9982,Cooper's Hawk,0.5402
+Common_Loon_1.jpg,Common Loon,veil,unedited+corr,0,0,0,-0.2587,Red-throated Loon,0.1041
+Common_Loon_1.jpg,Common Loon,backlit,unedited+corr,0,0,0,-5.7376,House Finch,0.3657
+Common_Loon_1.jpg,Common Loon,silhouette,unedited+corr,0,0,0,-6.9049,Unknown / Not a Bird,0.2971
+Common_Loon_2.jpg,Common Loon,clean,unedited+corr,0,0,0,-9.3167,Unknown / Not a Bird,0.5906
+Common_Loon_2.jpg,Common Loon,golden,unedited+corr,0,0,0,-7.1730,Mallard,0.1293
+Common_Loon_2.jpg,Common Loon,veil,unedited+corr,0,0,0,-8.1624,Mallard,0.1521
+Common_Loon_2.jpg,Common Loon,backlit,unedited+corr,0,0,0,-7.5508,Mallard,0.1850
+Common_Loon_2.jpg,Common Loon,silhouette,unedited+corr,0,0,0,-7.6461,Unknown / Not a Bird,0.2630
+Mute_Swan_0.jpg,Mute Swan,clean,unedited+corr,0,0,0,-4.9469,Tree Swallow,0.2386
+Mute_Swan_0.jpg,Mute Swan,golden,unedited+corr,0,0,0,-5.7195,Turkey Vulture,0.2269
+Mute_Swan_0.jpg,Mute Swan,veil,unedited+corr,0,0,0,-6.3669,Turkey Vulture,0.3883
+Mute_Swan_0.jpg,Mute Swan,backlit,unedited+corr,0,0,0,-3.6501,Tree Swallow,0.0749
+Mute_Swan_0.jpg,Mute Swan,silhouette,unedited+corr,0,0,1,-7.8703,House Sparrow,0.6320
+Mute_Swan_1.jpg,Mute Swan,clean,unedited+corr,1,0,0,1.8963,Mute Swan,0.3967
+Mute_Swan_1.jpg,Mute Swan,golden,unedited+corr,1,0,0,0.1300,Mute Swan,0.2201
+Mute_Swan_1.jpg,Mute Swan,veil,unedited+corr,0,0,0,-2.3637,Canada Goose,0.2060
+Mute_Swan_1.jpg,Mute Swan,backlit,unedited+corr,0,0,0,-3.2086,Canada Goose,0.1271
+Mute_Swan_1.jpg,Mute Swan,silhouette,unedited+corr,0,0,0,-5.1047,Unknown / Not a Bird,0.1827
+Mute_Swan_2.jpg,Mute Swan,clean,unedited+corr,1,1,0,5.6889,Mute Swan,0.7552
+Mute_Swan_2.jpg,Mute Swan,golden,unedited+corr,1,1,0,6.5768,Mute Swan,0.8926
+Mute_Swan_2.jpg,Mute Swan,veil,unedited+corr,1,1,0,1.2966,Mute Swan,0.7409
+Mute_Swan_2.jpg,Mute Swan,backlit,unedited+corr,1,1,0,5.6275,Mute Swan,0.9149
+Mute_Swan_2.jpg,Mute Swan,silhouette,unedited+corr,1,1,0,3.3090,Mute Swan,0.6663
+Wood_Duck_0.jpg,Wood Duck,clean,unedited+corr,0,0,1,-3.9575,Cairina moschata domestica,0.6241
+Wood_Duck_0.jpg,Wood Duck,golden,unedited+corr,0,0,1,-4.3522,Cairina moschata domestica,0.5337
+Wood_Duck_0.jpg,Wood Duck,veil,unedited+corr,0,0,1,-7.0525,Cairina moschata domestica,0.6187
+Wood_Duck_0.jpg,Wood Duck,backlit,unedited+corr,0,0,0,-3.4396,Columba livia domestica,0.1486
+Wood_Duck_0.jpg,Wood Duck,silhouette,unedited+corr,0,0,0,-7.8825,American Coot,0.3978
+Wood_Duck_1.jpg,Wood Duck,clean,unedited+corr,1,1,0,6.9257,Wood Duck,0.9442
+Wood_Duck_1.jpg,Wood Duck,golden,unedited+corr,1,1,0,6.2337,Wood Duck,0.9316
+Wood_Duck_1.jpg,Wood Duck,veil,unedited+corr,1,1,0,6.2687,Wood Duck,0.9314
+Wood_Duck_1.jpg,Wood Duck,backlit,unedited+corr,1,1,0,5.3410,Wood Duck,0.8565
+Wood_Duck_1.jpg,Wood Duck,silhouette,unedited+corr,1,1,0,3.4430,Wood Duck,0.7464
+Wood_Duck_2.jpg,Wood Duck,clean,unedited+corr,1,1,0,6.7608,Wood Duck,0.9349
+Wood_Duck_2.jpg,Wood Duck,golden,unedited+corr,1,1,0,6.7440,Wood Duck,0.9261
+Wood_Duck_2.jpg,Wood Duck,veil,unedited+corr,1,1,0,3.7471,Wood Duck,0.8650
+Wood_Duck_2.jpg,Wood Duck,backlit,unedited+corr,1,1,0,4.6493,Wood Duck,0.9138
+Wood_Duck_2.jpg,Wood Duck,silhouette,unedited+corr,1,1,0,0.4789,Wood Duck,0.5251
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,clean,unedited+corr,0,0,1,-5.2161,Red-bellied Woodpecker,0.5854
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,golden,unedited+corr,0,0,1,-6.7354,Red-bellied Woodpecker,0.6445
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,veil,unedited+corr,0,0,1,-6.6065,Red-bellied Woodpecker,0.7066
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,backlit,unedited+corr,0,0,1,-6.6783,Red-bellied Woodpecker,0.7496
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,silhouette,unedited+corr,0,0,1,-5.2623,Red-bellied Woodpecker,0.6552
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,clean,unedited+corr,1,1,0,5.1118,Acorn Woodpecker,0.8482
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,golden,unedited+corr,1,1,0,3.9164,Acorn Woodpecker,0.7534
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,veil,unedited+corr,1,0,0,2.4291,Acorn Woodpecker,0.3800
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,backlit,unedited+corr,1,0,0,2.4591,Acorn Woodpecker,0.3472
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,silhouette,unedited+corr,1,0,0,0.9381,Acorn Woodpecker,0.2088
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,clean,unedited+corr,1,1,0,6.4310,Acorn Woodpecker,0.9338
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,golden,unedited+corr,1,1,0,5.6322,Acorn Woodpecker,0.8229
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,veil,unedited+corr,1,1,0,5.4391,Acorn Woodpecker,0.7436
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,backlit,unedited+corr,1,1,0,3.5592,Acorn Woodpecker,0.5765
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,silhouette,unedited+corr,1,0,0,1.4926,Acorn Woodpecker,0.1039
+California_Scrub-Jay_0.jpg,California Scrub-Jay,clean,unedited+corr,0,0,0,-8.1624,Unknown / Not a Bird,0.9211
+California_Scrub-Jay_0.jpg,California Scrub-Jay,golden,unedited+corr,0,0,0,-8.2093,Unknown / Not a Bird,0.5856
+California_Scrub-Jay_0.jpg,California Scrub-Jay,veil,unedited+corr,0,0,0,-8.0142,Unknown / Not a Bird,0.6609
+California_Scrub-Jay_0.jpg,California Scrub-Jay,backlit,unedited+corr,0,0,0,-9.5875,Unknown / Not a Bird,0.9216
+California_Scrub-Jay_0.jpg,California Scrub-Jay,silhouette,unedited+corr,0,0,0,-9.6204,Unknown / Not a Bird,0.9107
+California_Scrub-Jay_1.jpg,California Scrub-Jay,clean,unedited+corr,1,1,0,5.2767,California Scrub-Jay,0.9571
+California_Scrub-Jay_1.jpg,California Scrub-Jay,golden,unedited+corr,1,1,0,5.1218,California Scrub-Jay,0.8888
+California_Scrub-Jay_1.jpg,California Scrub-Jay,veil,unedited+corr,1,1,0,4.2128,California Scrub-Jay,0.7985
+California_Scrub-Jay_1.jpg,California Scrub-Jay,backlit,unedited+corr,1,1,0,4.5291,California Scrub-Jay,0.8965
+California_Scrub-Jay_1.jpg,California Scrub-Jay,silhouette,unedited+corr,1,1,0,3.4932,California Scrub-Jay,0.6879
+California_Scrub-Jay_2.jpg,California Scrub-Jay,clean,unedited+corr,0,0,0,-0.4947,Blue Jay,0.2799
+California_Scrub-Jay_2.jpg,California Scrub-Jay,golden,unedited+corr,1,0,0,1.2117,California Scrub-Jay,0.4728
+California_Scrub-Jay_2.jpg,California Scrub-Jay,veil,unedited+corr,1,0,0,0.9617,California Scrub-Jay,0.3462
+California_Scrub-Jay_2.jpg,California Scrub-Jay,backlit,unedited+corr,0,0,1,-2.8743,Dark-eyed Junco,0.6708
+California_Scrub-Jay_2.jpg,California Scrub-Jay,silhouette,unedited+corr,0,0,0,-0.8321,Steller's Jay,0.1655
+Blue_Jay_0.jpg,Blue Jay,clean,candidate,1,1,0,6.1836,Blue Jay,0.9599
+Blue_Jay_0.jpg,Blue Jay,golden,candidate,1,1,0,4.3698,Blue Jay,0.9128
+Blue_Jay_0.jpg,Blue Jay,veil,candidate,1,1,0,5.0294,Blue Jay,0.8998
+Blue_Jay_0.jpg,Blue Jay,backlit,candidate,1,1,0,4.1224,Blue Jay,0.7719
+Blue_Jay_0.jpg,Blue Jay,silhouette,candidate,1,0,0,1.4841,Blue Jay,0.1357
+Blue_Jay_1.jpg,Blue Jay,clean,candidate,1,1,0,2.3910,Blue Jay,0.7965
+Blue_Jay_1.jpg,Blue Jay,golden,candidate,0,0,1,-4.3698,Northern Lapwing,0.5926
+Blue_Jay_1.jpg,Blue Jay,veil,candidate,0,0,0,-1.1543,Northern Lapwing,0.1913
+Blue_Jay_1.jpg,Blue Jay,backlit,candidate,0,0,0,-3.9575,White-tailed Kite,0.1485
+Blue_Jay_1.jpg,Blue Jay,silhouette,candidate,0,0,0,-5.2767,Red-winged Blackbird,0.1427
+Blue_Jay_2.jpg,Blue Jay,clean,candidate,1,0,0,1.4841,Blue Jay,0.4205
+Blue_Jay_2.jpg,Blue Jay,golden,candidate,1,0,0,0.1649,Blue Jay,0.0893
+Blue_Jay_2.jpg,Blue Jay,veil,candidate,0,0,0,-3.0506,Eastern Kingbird,0.1150
+Blue_Jay_2.jpg,Blue Jay,backlit,candidate,0,0,0,-2.1437,Horned Lark,0.0550
+Blue_Jay_2.jpg,Blue Jay,silhouette,candidate,0,0,0,-5.2767,Unknown / Not a Bird,0.1025
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,clean,candidate,1,1,0,2.2261,Black-capped Chickadee,0.7633
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,golden,candidate,0,0,1,-2.0612,Carolina Chickadee,0.6422
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,veil,candidate,0,0,1,-3.3804,Carolina Chickadee,0.8719
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,backlit,candidate,0,0,0,-0.6596,Carolina Chickadee,0.1525
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,silhouette,candidate,0,0,1,-2.2261,House Sparrow,0.5471
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,clean,candidate,1,0,0,0.0000,Black-capped Chickadee,0.1700
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,golden,candidate,0,0,0,-4.2873,Black Phoebe,0.4153
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,veil,candidate,0,0,0,-2.1437,Black Phoebe,0.2569
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,backlit,candidate,1,0,0,0.4122,Black-capped Chickadee,0.1971
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,silhouette,candidate,0,0,0,-5.5240,Unknown / Not a Bird,0.3757
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,clean,candidate,1,1,0,1.3192,Black-capped Chickadee,0.5976
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,golden,candidate,1,1,0,0.8245,Black-capped Chickadee,0.5410
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,veil,candidate,0,0,0,-1.8139,Unknown / Not a Bird,0.2295
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,backlit,candidate,0,0,0,-4.3698,House Sparrow,0.4799
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,silhouette,candidate,0,0,0,-6.4310,Unknown / Not a Bird,0.7920
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,clean,candidate,1,1,0,4.9469,Red-winged Blackbird,0.8104
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,golden,candidate,1,1,0,4.6996,Red-winged Blackbird,0.6031
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,veil,candidate,1,1,0,3.6277,Red-winged Blackbird,0.5492
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,backlit,candidate,1,1,0,3.7926,Red-winged Blackbird,0.6396
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,silhouette,candidate,1,1,0,4.6171,Red-winged Blackbird,0.8027
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,clean,candidate,1,1,0,6.1012,Red-winged Blackbird,0.9500
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,golden,candidate,1,1,0,5.6889,Red-winged Blackbird,0.9228
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,veil,candidate,1,1,0,5.1118,Red-winged Blackbird,0.9663
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,backlit,candidate,1,1,0,5.7714,Red-winged Blackbird,0.9492
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,silhouette,candidate,1,1,0,4.6171,Red-winged Blackbird,0.9045
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,clean,candidate,1,0,0,1.4016,Red-winged Blackbird,0.3003
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,golden,candidate,1,0,0,0.9894,Red-winged Blackbird,0.3013
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,veil,candidate,1,0,0,0.8245,Red-winged Blackbird,0.1566
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,backlit,candidate,0,0,0,-1.4016,House Sparrow,0.4068
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,silhouette,candidate,0,0,1,-6.6783,House Sparrow,0.9534
+Downy_Woodpecker_0.jpg,Downy Woodpecker,clean,candidate,0,0,0,-6.1836,Downy Woodpecker,0.2031
+Downy_Woodpecker_0.jpg,Downy Woodpecker,golden,candidate,0,0,1,-7.9151,Downy Woodpecker,0.6321
+Downy_Woodpecker_0.jpg,Downy Woodpecker,veil,candidate,0,0,1,-8.4097,Downy Woodpecker,0.6100
+Downy_Woodpecker_0.jpg,Downy Woodpecker,backlit,candidate,0,0,0,-8.3273,Downy Woodpecker,0.4515
+Downy_Woodpecker_0.jpg,Downy Woodpecker,silhouette,candidate,0,0,1,-9.2342,Nuttall's Woodpecker,0.5702
+Downy_Woodpecker_1.jpg,Downy Woodpecker,clean,candidate,0,0,1,-9.9763,Downy Woodpecker,0.8855
+Downy_Woodpecker_1.jpg,Downy Woodpecker,golden,candidate,0,0,1,-10.8007,Downy Woodpecker,0.9561
+Downy_Woodpecker_1.jpg,Downy Woodpecker,veil,candidate,0,0,1,-9.1518,Downy Woodpecker,0.8781
+Downy_Woodpecker_1.jpg,Downy Woodpecker,backlit,candidate,0,0,1,-10.0587,Downy Woodpecker,0.9348
+Downy_Woodpecker_1.jpg,Downy Woodpecker,silhouette,candidate,0,0,1,-10.0587,Downy Woodpecker,0.9634
+Downy_Woodpecker_2.jpg,Downy Woodpecker,clean,candidate,0,0,1,-8.7395,Downy Woodpecker,0.8993
+Downy_Woodpecker_2.jpg,Downy Woodpecker,golden,candidate,0,0,1,-8.5746,Downy Woodpecker,0.9180
+Downy_Woodpecker_2.jpg,Downy Woodpecker,veil,candidate,0,0,1,-8.7395,Downy Woodpecker,0.9141
+Downy_Woodpecker_2.jpg,Downy Woodpecker,backlit,candidate,0,0,1,-7.4204,Downy Woodpecker,0.7346
+Downy_Woodpecker_2.jpg,Downy Woodpecker,silhouette,candidate,0,0,1,-5.1943,Bushtit,0.6507
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,clean,candidate,1,1,0,2.8032,Dark-eyed Junco,0.7009
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,golden,candidate,0,0,0,-1.4841,Rock Pigeon,0.0984
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,veil,candidate,0,0,0,-2.4735,Rock Pigeon,0.1809
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,backlit,candidate,0,0,0,-0.9069,House Finch,0.2012
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,silhouette,candidate,0,0,0,-1.7314,Tufted Titmouse,0.3992
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,clean,candidate,1,1,0,4.1224,Dark-eyed Junco,0.9031
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,golden,candidate,1,1,0,2.7208,Dark-eyed Junco,0.8025
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,veil,candidate,1,1,0,3.7926,Dark-eyed Junco,0.8553
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,backlit,candidate,1,1,0,1.2367,Dark-eyed Junco,0.5736
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,silhouette,candidate,1,1,0,2.1437,Dark-eyed Junco,0.6179
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,clean,candidate,0,0,0,-2.9681,Black Phoebe,0.0672
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,golden,candidate,0,0,0,-4.4522,Black Phoebe,0.0708
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,veil,candidate,0,0,0,-4.0400,Willie Wagtail,0.0831
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,backlit,candidate,0,0,0,-4.6171,Unknown / Not a Bird,0.1044
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,silhouette,candidate,0,0,0,-9.4816,Unknown / Not a Bird,0.4490
+Song_Sparrow_0.jpg,Song Sparrow,clean,candidate,1,1,0,6.8432,Song Sparrow,0.9418
+Song_Sparrow_0.jpg,Song Sparrow,golden,candidate,1,1,0,3.4628,Song Sparrow,0.8292
+Song_Sparrow_0.jpg,Song Sparrow,veil,candidate,1,0,0,1.6490,Song Sparrow,0.3085
+Song_Sparrow_0.jpg,Song Sparrow,backlit,candidate,1,1,0,1.6490,Song Sparrow,0.6824
+Song_Sparrow_0.jpg,Song Sparrow,silhouette,candidate,1,1,0,2.3910,Song Sparrow,0.8047
+Song_Sparrow_1.jpg,Song Sparrow,clean,candidate,1,1,0,5.7714,Song Sparrow,0.9085
+Song_Sparrow_1.jpg,Song Sparrow,golden,candidate,1,1,0,3.7926,Song Sparrow,0.8094
+Song_Sparrow_1.jpg,Song Sparrow,veil,candidate,1,1,0,4.2049,Song Sparrow,0.8617
+Song_Sparrow_1.jpg,Song Sparrow,backlit,candidate,1,0,0,0.2473,Song Sparrow,0.4423
+Song_Sparrow_1.jpg,Song Sparrow,silhouette,candidate,0,0,1,-3.8751,Lincoln's Sparrow,0.9500
+Song_Sparrow_2.jpg,Song Sparrow,clean,candidate,1,1,0,1.1543,Song Sparrow,0.5889
+Song_Sparrow_2.jpg,Song Sparrow,golden,candidate,0,0,0,-0.4947,Lincoln's Sparrow,0.3943
+Song_Sparrow_2.jpg,Song Sparrow,veil,candidate,0,0,1,-1.3192,Lincoln's Sparrow,0.6074
+Song_Sparrow_2.jpg,Song Sparrow,backlit,candidate,0,0,1,-1.2367,Lincoln's Sparrow,0.5461
+Song_Sparrow_2.jpg,Song Sparrow,silhouette,candidate,0,0,1,-3.3804,Lincoln's Sparrow,0.6894
+European_Starling_0.jpg,European Starling,clean,candidate,0,0,1,-1.5665,Eurasian Blackbird,0.5332
+European_Starling_0.jpg,European Starling,golden,candidate,0,0,0,-2.6384,Eurasian Blackbird,0.2425
+European_Starling_0.jpg,European Starling,veil,candidate,0,0,0,-4.6996,Unknown / Not a Bird,0.5595
+European_Starling_0.jpg,European Starling,backlit,candidate,0,0,1,-4.2049,Eurasian Blackbird,0.7940
+European_Starling_0.jpg,European Starling,silhouette,candidate,0,0,0,-3.2155,Unknown / Not a Bird,0.2189
+European_Starling_1.jpg,European Starling,clean,candidate,1,1,0,5.6889,European Starling,0.8716
+European_Starling_1.jpg,European Starling,golden,candidate,1,1,0,6.3485,European Starling,0.8502
+European_Starling_1.jpg,European Starling,veil,candidate,1,1,0,7.0081,European Starling,0.9081
+European_Starling_1.jpg,European Starling,backlit,candidate,1,1,0,6.1012,European Starling,0.8400
+European_Starling_1.jpg,European Starling,silhouette,candidate,1,1,0,6.3485,European Starling,0.8934
+European_Starling_2.jpg,European Starling,clean,candidate,0,0,0,-0.4122,Wild Turkey,0.0799
+European_Starling_2.jpg,European Starling,golden,candidate,0,0,0,-5.0294,Unknown / Not a Bird,0.4592
+European_Starling_2.jpg,European Starling,veil,candidate,0,0,0,-7.0081,Unknown / Not a Bird,0.6591
+European_Starling_2.jpg,European Starling,backlit,candidate,0,0,0,-6.8432,Unknown / Not a Bird,0.7578
+European_Starling_2.jpg,European Starling,silhouette,candidate,0,0,0,-9.0693,Unknown / Not a Bird,0.8789
+Mallard_0.jpg,Mallard,clean,candidate,0,0,0,-4.3698,Snow Goose,0.1326
+Mallard_0.jpg,Mallard,golden,candidate,0,0,0,-4.6996,Tundra Swan,0.1683
+Mallard_0.jpg,Mallard,veil,candidate,0,0,0,-6.0187,Snow Goose,0.2333
+Mallard_0.jpg,Mallard,backlit,candidate,0,0,1,-8.0800,Mute Swan,0.5308
+Mallard_0.jpg,Mallard,silhouette,candidate,0,0,0,-7.9975,Greylag Goose,0.4974
+Mallard_1.jpg,Mallard,clean,candidate,1,1,0,0.2473,Mallard,0.5105
+Mallard_1.jpg,Mallard,golden,candidate,1,1,0,0.4947,Mallard,0.5858
+Mallard_1.jpg,Mallard,veil,candidate,0,0,1,-1.2367,Anas platyrhynchos domesticus,0.5992
+Mallard_1.jpg,Mallard,backlit,candidate,0,0,0,-1.9788,American Coot,0.2365
+Mallard_1.jpg,Mallard,silhouette,candidate,0,0,0,-3.2979,American Coot,0.2620
+Mallard_2.jpg,Mallard,clean,candidate,1,1,0,4.2873,Mallard,0.8884
+Mallard_2.jpg,Mallard,golden,candidate,1,1,0,4.2873,Mallard,0.8958
+Mallard_2.jpg,Mallard,veil,candidate,1,1,0,3.0506,Mallard,0.6978
+Mallard_2.jpg,Mallard,backlit,candidate,0,0,1,-1.9788,House Sparrow,0.6160
+Mallard_2.jpg,Mallard,silhouette,candidate,0,0,0,-6.0187,Unknown / Not a Bird,0.2377
+American_Crow_0.jpg,American Crow,clean,candidate,1,0,0,1.8139,American Crow,0.2711
+American_Crow_0.jpg,American Crow,golden,candidate,0,0,0,-0.7420,Common Raven,0.1372
+American_Crow_0.jpg,American Crow,veil,candidate,0,0,0,-2.5559,Sulphur-crested Cockatoo,0.1429
+American_Crow_0.jpg,American Crow,backlit,candidate,0,0,0,-0.9894,Common Raven,0.4042
+American_Crow_0.jpg,American Crow,silhouette,candidate,0,0,1,-2.8032,Common Raven,0.6150
+American_Crow_1.jpg,American Crow,clean,candidate,0,0,0,-2.7208,Glaucous-winged Gull,0.1027
+American_Crow_1.jpg,American Crow,golden,candidate,0,0,0,-8.9044,Brown-headed Cowbird,0.2285
+American_Crow_1.jpg,American Crow,veil,candidate,0,0,0,-6.4310,Brewer's Blackbird,0.1532
+American_Crow_1.jpg,American Crow,backlit,candidate,0,0,0,-9.9763,Clark's Nutcracker,0.1876
+American_Crow_1.jpg,American Crow,silhouette,candidate,0,0,0,-7.9975,Least Grebe,0.0903
+American_Crow_2.jpg,American Crow,clean,candidate,0,0,0,-5.2767,Eurasian Jackdaw,0.4441
+American_Crow_2.jpg,American Crow,golden,candidate,0,0,0,-5.6889,New Zealand Bellbird,0.1757
+American_Crow_2.jpg,American Crow,veil,candidate,0,0,0,-5.6889,Curve-billed Thrasher,0.1418
+American_Crow_2.jpg,American Crow,backlit,candidate,0,0,0,-4.1224,Clark's Nutcracker,0.1364
+American_Crow_2.jpg,American Crow,silhouette,candidate,0,0,0,-7.4204,Brewer's Blackbird,0.3490
+Tree_Swallow_0.jpg,Tree Swallow,clean,candidate,1,1,0,5.6889,Tree Swallow,0.9238
+Tree_Swallow_0.jpg,Tree Swallow,golden,candidate,1,1,0,2.3086,Tree Swallow,0.6416
+Tree_Swallow_0.jpg,Tree Swallow,veil,candidate,1,0,0,1.4841,Tree Swallow,0.3862
+Tree_Swallow_0.jpg,Tree Swallow,backlit,candidate,0,0,0,0.0000,Violet-green Swallow,0.2979
+Tree_Swallow_0.jpg,Tree Swallow,silhouette,candidate,0,0,0,-2.6384,Tūī,0.1106
+Tree_Swallow_1.jpg,Tree Swallow,clean,candidate,1,0,0,0.3298,Tree Swallow,0.2220
+Tree_Swallow_1.jpg,Tree Swallow,golden,candidate,0,0,1,-1.6490,Barn Swallow,0.5628
+Tree_Swallow_1.jpg,Tree Swallow,veil,candidate,0,0,1,-3.5453,Barn Swallow,0.5285
+Tree_Swallow_1.jpg,Tree Swallow,backlit,candidate,1,1,0,2.3910,Tree Swallow,0.5641
+Tree_Swallow_1.jpg,Tree Swallow,silhouette,candidate,0,0,0,-8.5746,Unknown / Not a Bird,0.8858
+Tree_Swallow_2.jpg,Tree Swallow,clean,candidate,1,1,0,2.8032,Tree Swallow,0.8117
+Tree_Swallow_2.jpg,Tree Swallow,golden,candidate,0,0,0,-1.8139,Eastern Kingbird,0.1151
+Tree_Swallow_2.jpg,Tree Swallow,veil,candidate,0,0,0,-2.7208,Eastern Kingbird,0.2956
+Tree_Swallow_2.jpg,Tree Swallow,backlit,candidate,1,0,0,0.5771,Tree Swallow,0.4350
+Tree_Swallow_2.jpg,Tree Swallow,silhouette,candidate,0,0,0,-0.1649,American Redstart,0.1256
+Western_Bluebird_0.jpg,Western Bluebird,clean,candidate,0,0,0,-3.9575,House Sparrow,0.3636
+Western_Bluebird_0.jpg,Western Bluebird,golden,candidate,0,0,0,-8.2448,House Sparrow,0.3515
+Western_Bluebird_0.jpg,Western Bluebird,veil,candidate,0,0,0,-7.9151,Unknown / Not a Bird,0.3077
+Western_Bluebird_0.jpg,Western Bluebird,backlit,candidate,0,0,1,-8.5746,Dark-eyed Junco,0.5303
+Western_Bluebird_0.jpg,Western Bluebird,silhouette,candidate,0,0,0,-10.7183,Unknown / Not a Bird,0.9228
+Western_Bluebird_1.jpg,Western Bluebird,clean,candidate,1,1,0,1.6490,Western Bluebird,0.7218
+Western_Bluebird_1.jpg,Western Bluebird,golden,candidate,0,0,0,-1.4016,Eastern Bluebird,0.1395
+Western_Bluebird_1.jpg,Western Bluebird,veil,candidate,0,0,0,-1.9788,Eastern Bluebird,0.1281
+Western_Bluebird_1.jpg,Western Bluebird,backlit,candidate,1,1,0,1.6490,Western Bluebird,0.6936
+Western_Bluebird_1.jpg,Western Bluebird,silhouette,candidate,0,0,0,-2.9681,Unknown / Not a Bird,0.0805
+Western_Bluebird_2.jpg,Western Bluebird,clean,candidate,1,1,0,3.3804,Western Bluebird,0.9010
+Western_Bluebird_2.jpg,Western Bluebird,golden,candidate,1,1,0,4.0400,Western Bluebird,0.9510
+Western_Bluebird_2.jpg,Western Bluebird,veil,candidate,1,1,0,3.8751,Western Bluebird,0.9563
+Western_Bluebird_2.jpg,Western Bluebird,backlit,candidate,1,1,0,4.5347,Western Bluebird,0.9429
+Western_Bluebird_2.jpg,Western Bluebird,silhouette,candidate,1,1,0,1.8139,Western Bluebird,0.7762
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,clean,candidate,0,0,1,-8.1624,Northern Saw-whet Owl,0.5913
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,golden,candidate,0,0,0,-4.2873,House Finch,0.1158
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,veil,candidate,0,0,0,-4.7820,House Finch,0.3840
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,backlit,candidate,0,0,0,-3.3804,Western Barn Owl,0.0746
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,silhouette,candidate,0,0,0,-0.3298,Barred Owl,0.0394
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,clean,candidate,1,1,0,4.9469,Anna's Hummingbird,0.7477
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,golden,candidate,1,1,0,3.6277,Anna's Hummingbird,0.7694
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,veil,candidate,1,1,0,3.6277,Anna's Hummingbird,0.8112
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,backlit,candidate,1,1,0,1.7314,Anna's Hummingbird,0.5780
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,silhouette,candidate,0,0,0,-0.8245,Ruby-throated Hummingbird,0.1104
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,clean,candidate,1,1,0,5.1118,Anna's Hummingbird,0.9314
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,golden,candidate,1,1,0,5.7714,Anna's Hummingbird,0.9202
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,veil,candidate,1,1,0,4.9469,Anna's Hummingbird,0.9115
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,backlit,candidate,1,1,0,5.7714,Anna's Hummingbird,0.9316
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,silhouette,candidate,1,1,0,5.7714,Anna's Hummingbird,0.9504
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,clean,candidate,0,0,0,-3.4628,Anna's Hummingbird,0.2471
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,golden,candidate,0,0,1,-5.5240,Rufous Hummingbird,0.8733
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,veil,candidate,0,0,1,-6.8432,Rufous Hummingbird,0.9053
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,backlit,candidate,0,0,1,-3.7102,Rufous Hummingbird,0.5562
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,silhouette,candidate,0,0,1,-3.5453,Rufous Hummingbird,0.5783
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,clean,candidate,0,0,0,-0.2473,Black-headed Gull,0.1298
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,golden,candidate,0,0,0,-1.8963,Western Cattle-Egret,0.2708
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,veil,candidate,0,0,0,-0.0824,Rufous Hummingbird,0.1684
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,backlit,candidate,0,0,0,-3.4628,Broad-billed Hummingbird,0.1929
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,silhouette,candidate,0,0,0,-4.9469,Broad-billed Hummingbird,0.2031
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,clean,candidate,0,0,0,-3.4628,Wilson's Warbler,0.1475
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,golden,candidate,0,0,0,-3.8751,House Finch,0.0360
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,veil,candidate,0,0,0,-4.0400,House Finch,0.0236
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,backlit,candidate,0,0,0,-5.9363,Common Pauraque,0.1045
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,silhouette,candidate,0,0,0,-4.0400,Barn Swallow,0.1493
+Northern_Flicker_0.jpg,Northern Flicker,clean,candidate,0,0,1,-5.2767,Northern Flicker,0.9318
+Northern_Flicker_0.jpg,Northern Flicker,golden,candidate,0,0,1,-5.1943,Northern Flicker,0.7661
+Northern_Flicker_0.jpg,Northern Flicker,veil,candidate,0,0,1,-5.8538,Northern Flicker,0.9180
+Northern_Flicker_0.jpg,Northern Flicker,backlit,candidate,0,0,1,-5.6889,Northern Flicker,0.9683
+Northern_Flicker_0.jpg,Northern Flicker,silhouette,candidate,0,0,1,-4.6171,Northern Flicker,0.7085
+Northern_Flicker_1.jpg,Northern Flicker,clean,candidate,0,0,1,-2.3910,Northern Flicker,0.8687
+Northern_Flicker_1.jpg,Northern Flicker,golden,candidate,0,0,1,-2.7208,Northern Flicker,0.8716
+Northern_Flicker_1.jpg,Northern Flicker,veil,candidate,0,0,1,-3.7926,Northern Flicker,0.9508
+Northern_Flicker_1.jpg,Northern Flicker,backlit,candidate,0,0,1,-2.7208,Northern Flicker,0.8614
+Northern_Flicker_1.jpg,Northern Flicker,silhouette,candidate,0,0,1,-3.1330,Northern Flicker,0.8782
+Northern_Flicker_2.jpg,Northern Flicker,clean,candidate,0,0,1,-3.4628,Northern Flicker,0.9015
+Northern_Flicker_2.jpg,Northern Flicker,golden,candidate,0,0,1,-3.3804,Northern Flicker,0.8613
+Northern_Flicker_2.jpg,Northern Flicker,veil,candidate,0,0,1,-3.9575,Northern Flicker,0.9088
+Northern_Flicker_2.jpg,Northern Flicker,backlit,candidate,0,0,1,-4.2873,Northern Flicker,0.9417
+Northern_Flicker_2.jpg,Northern Flicker,silhouette,candidate,0,0,1,-4.2873,Northern Flicker,0.9460
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,clean,candidate,0,0,0,-1.4016,House Sparrow,0.0832
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,golden,candidate,0,0,0,-2.8032,Golden-fronted Woodpecker,0.0693
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,veil,candidate,0,0,0,-6.1836,Unknown / Not a Bird,0.1078
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,backlit,candidate,0,0,1,-8.2448,House Sparrow,0.8494
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,silhouette,candidate,0,0,0,-7.7502,Unknown / Not a Bird,0.7430
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,clean,candidate,1,1,0,7.6677,Pileated Woodpecker,0.9856
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,golden,candidate,1,1,0,8.1624,Pileated Woodpecker,0.9946
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,veil,candidate,1,1,0,5.6889,Pileated Woodpecker,0.9678
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,backlit,candidate,1,1,0,7.3379,Pileated Woodpecker,0.9929
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,silhouette,candidate,0,0,0,-6.4310,Unknown / Not a Bird,0.5893
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,clean,candidate,1,1,0,6.6783,Pileated Woodpecker,0.9607
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,golden,candidate,1,1,0,6.3485,Pileated Woodpecker,0.9580
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,veil,candidate,1,1,0,6.0187,Pileated Woodpecker,0.9490
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,backlit,candidate,1,1,0,6.2661,Pileated Woodpecker,0.9323
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,silhouette,candidate,1,1,0,2.5559,Pileated Woodpecker,0.7219
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,clean,candidate,1,1,0,1.3192,White-breasted Nuthatch,0.6478
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,golden,candidate,1,1,0,4.1224,White-breasted Nuthatch,0.7379
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,veil,candidate,0,0,0,-5.4416,Western Barn Owl,0.1190
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,backlit,candidate,0,0,0,-2.2261,Gray Catbird,0.1967
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,silhouette,candidate,0,0,0,-4.8645,Little Penguin,0.0781
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,clean,candidate,1,1,0,1.4016,White-breasted Nuthatch,0.5201
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,golden,candidate,1,0,0,1.9788,White-breasted Nuthatch,0.1630
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,veil,candidate,1,0,0,3.1330,White-breasted Nuthatch,0.4695
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,backlit,candidate,1,1,0,3.7926,White-breasted Nuthatch,0.7780
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,silhouette,candidate,1,0,0,0.9894,White-breasted Nuthatch,0.3392
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,clean,candidate,1,1,0,6.0187,White-breasted Nuthatch,0.9460
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,golden,candidate,1,1,0,2.8032,White-breasted Nuthatch,0.5215
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,veil,candidate,1,1,0,2.4735,White-breasted Nuthatch,0.5698
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,backlit,candidate,1,1,0,4.2049,White-breasted Nuthatch,0.8608
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,silhouette,candidate,1,0,0,0.9069,White-breasted Nuthatch,0.2320
+Carolina_Wren_0.jpg,Carolina Wren,clean,candidate,0,0,0,-5.6889,European Starling,0.1031
+Carolina_Wren_0.jpg,Carolina Wren,golden,candidate,0,0,0,-3.6277,Unknown / Not a Bird,0.1504
+Carolina_Wren_0.jpg,Carolina Wren,veil,candidate,0,0,0,-7.5028,Unknown / Not a Bird,0.6282
+Carolina_Wren_0.jpg,Carolina Wren,backlit,candidate,0,0,0,-4.5347,American Goldfinch,0.0408
+Carolina_Wren_0.jpg,Carolina Wren,silhouette,candidate,0,0,0,-8.1624,Unknown / Not a Bird,0.8142
+Carolina_Wren_1.jpg,Carolina Wren,clean,candidate,1,1,0,5.6065,Carolina Wren,0.8489
+Carolina_Wren_1.jpg,Carolina Wren,golden,candidate,1,1,0,6.1836,Carolina Wren,0.9314
+Carolina_Wren_1.jpg,Carolina Wren,veil,candidate,1,1,0,6.1836,Carolina Wren,0.9260
+Carolina_Wren_1.jpg,Carolina Wren,backlit,candidate,1,1,0,6.5134,Carolina Wren,0.9690
+Carolina_Wren_1.jpg,Carolina Wren,silhouette,candidate,1,0,0,0.4947,Carolina Wren,0.3179
+Carolina_Wren_2.jpg,Carolina Wren,clean,candidate,1,1,0,4.7820,Carolina Wren,0.9384
+Carolina_Wren_2.jpg,Carolina Wren,golden,candidate,1,1,0,1.6490,Carolina Wren,0.6152
+Carolina_Wren_2.jpg,Carolina Wren,veil,candidate,1,1,0,3.8751,Carolina Wren,0.9046
+Carolina_Wren_2.jpg,Carolina Wren,backlit,candidate,1,1,0,1.0718,Carolina Wren,0.6685
+Carolina_Wren_2.jpg,Carolina Wren,silhouette,candidate,0,0,0,-7.9151,Unknown / Not a Bird,0.9489
+Great_Egret_0.jpg,Great Egret,clean,candidate,1,1,0,4.4522,Great Egret,0.9023
+Great_Egret_0.jpg,Great Egret,golden,candidate,1,1,0,4.6171,Great Egret,0.9488
+Great_Egret_0.jpg,Great Egret,veil,candidate,1,1,0,4.7820,Great Egret,0.9517
+Great_Egret_0.jpg,Great Egret,backlit,candidate,1,1,0,3.1330,Great Egret,0.8227
+Great_Egret_0.jpg,Great Egret,silhouette,candidate,0,0,0,-6.4310,Unknown / Not a Bird,0.8149
+Great_Egret_1.jpg,Great Egret,clean,candidate,0,0,0,-0.2473,Snowy Egret,0.3486
+Great_Egret_1.jpg,Great Egret,golden,candidate,0,0,0,-0.4947,Tricolored Heron,0.2324
+Great_Egret_1.jpg,Great Egret,veil,candidate,1,0,0,0.7420,Great Egret,0.4747
+Great_Egret_1.jpg,Great Egret,backlit,candidate,0,0,1,-7.9151,Tricolored Heron,0.9370
+Great_Egret_1.jpg,Great Egret,silhouette,candidate,0,0,0,-7.1730,White-tipped Dove,0.2223
+Great_Egret_2.jpg,Great Egret,clean,candidate,1,1,0,4.3698,Great Egret,0.8991
+Great_Egret_2.jpg,Great Egret,golden,candidate,1,1,0,1.4841,Great Egret,0.6498
+Great_Egret_2.jpg,Great Egret,veil,candidate,1,0,0,0.4122,Great Egret,0.3906
+Great_Egret_2.jpg,Great Egret,backlit,candidate,0,0,0,-4.3698,Unknown / Not a Bird,0.6638
+Great_Egret_2.jpg,Great Egret,silhouette,candidate,0,0,0,-7.8326,Unknown / Not a Bird,0.8995
+Belted_Kingfisher_0.jpg,Belted Kingfisher,clean,candidate,1,1,0,1.4841,Belted Kingfisher,0.7688
+Belted_Kingfisher_0.jpg,Belted Kingfisher,golden,candidate,0,0,1,-6.1836,Common Kingfisher,0.5123
+Belted_Kingfisher_0.jpg,Belted Kingfisher,veil,candidate,0,0,0,-4.1224,Common Kingfisher,0.3133
+Belted_Kingfisher_0.jpg,Belted Kingfisher,backlit,candidate,0,0,0,-7.6677,Vermilion Flycatcher,0.1225
+Belted_Kingfisher_0.jpg,Belted Kingfisher,silhouette,candidate,0,0,1,-8.6571,Bushtit,0.5669
+Belted_Kingfisher_1.jpg,Belted Kingfisher,clean,candidate,1,1,0,3.5453,Belted Kingfisher,0.8660
+Belted_Kingfisher_1.jpg,Belted Kingfisher,golden,candidate,1,1,0,1.5665,Belted Kingfisher,0.6763
+Belted_Kingfisher_1.jpg,Belted Kingfisher,veil,candidate,1,0,0,1.1543,Belted Kingfisher,0.4950
+Belted_Kingfisher_1.jpg,Belted Kingfisher,backlit,candidate,1,1,0,3.2979,Belted Kingfisher,0.8520
+Belted_Kingfisher_1.jpg,Belted Kingfisher,silhouette,candidate,0,0,0,-4.5347,Unknown / Not a Bird,0.4890
+Belted_Kingfisher_2.jpg,Belted Kingfisher,clean,candidate,1,1,0,2.5559,Belted Kingfisher,0.7341
+Belted_Kingfisher_2.jpg,Belted Kingfisher,golden,candidate,1,1,0,2.1437,Belted Kingfisher,0.8466
+Belted_Kingfisher_2.jpg,Belted Kingfisher,veil,candidate,1,1,0,3.9575,Belted Kingfisher,0.9469
+Belted_Kingfisher_2.jpg,Belted Kingfisher,backlit,candidate,1,0,0,0.0824,Belted Kingfisher,0.3917
+Belted_Kingfisher_2.jpg,Belted Kingfisher,silhouette,candidate,0,0,0,0.0000,Ringed Kingfisher,0.2766
+Osprey_0.jpg,Osprey,clean,candidate,1,1,0,6.5134,Osprey,0.9819
+Osprey_0.jpg,Osprey,golden,candidate,1,1,0,6.1836,Osprey,0.9823
+Osprey_0.jpg,Osprey,veil,candidate,1,1,0,4.3698,Osprey,0.9611
+Osprey_0.jpg,Osprey,backlit,candidate,1,1,0,2.6384,Osprey,0.6539
+Osprey_0.jpg,Osprey,silhouette,candidate,0,0,0,-1.1543,Black-crowned Night Heron,0.0981
+Osprey_1.jpg,Osprey,clean,candidate,1,1,0,0.9069,Osprey,0.5552
+Osprey_1.jpg,Osprey,golden,candidate,1,1,0,2.5559,Osprey,0.6122
+Osprey_1.jpg,Osprey,veil,candidate,1,1,0,2.8032,Osprey,0.5954
+Osprey_1.jpg,Osprey,backlit,candidate,0,0,0,-2.8032,Unknown / Not a Bird,0.8192
+Osprey_1.jpg,Osprey,silhouette,candidate,0,0,0,-7.5853,Unknown / Not a Bird,0.8782
+Osprey_2.jpg,Osprey,clean,candidate,1,1,0,6.9257,Osprey,0.9237
+Osprey_2.jpg,Osprey,golden,candidate,1,1,0,6.7608,Osprey,0.9420
+Osprey_2.jpg,Osprey,veil,candidate,0,0,0,-1.8963,Black-crowned Night Heron,0.1088
+Osprey_2.jpg,Osprey,backlit,candidate,1,1,0,5.5240,Osprey,0.8668
+Osprey_2.jpg,Osprey,silhouette,candidate,0,0,0,-4.0400,Violet-crowned Hummingbird,0.1074
+Turkey_Vulture_0.jpg,Turkey Vulture,clean,candidate,0,0,0,-10.6359,Pied Cormorant,0.2190
+Turkey_Vulture_0.jpg,Turkey Vulture,golden,candidate,0,0,0,-8.1624,Little Penguin,0.0969
+Turkey_Vulture_0.jpg,Turkey Vulture,veil,candidate,0,0,0,-6.9257,Anas platyrhynchos domesticus,0.0565
+Turkey_Vulture_0.jpg,Turkey Vulture,backlit,candidate,0,0,0,-11.3779,Anas platyrhynchos domesticus,0.1420
+Turkey_Vulture_0.jpg,Turkey Vulture,silhouette,candidate,0,0,0,-5.8538,White-breasted Nuthatch,0.1079
+Turkey_Vulture_1.jpg,Turkey Vulture,clean,candidate,1,1,0,5.9363,Turkey Vulture,0.8625
+Turkey_Vulture_1.jpg,Turkey Vulture,golden,candidate,1,1,0,6.5959,Turkey Vulture,0.9019
+Turkey_Vulture_1.jpg,Turkey Vulture,veil,candidate,1,1,0,6.4310,Turkey Vulture,0.8859
+Turkey_Vulture_1.jpg,Turkey Vulture,backlit,candidate,1,1,0,6.1836,Turkey Vulture,0.9142
+Turkey_Vulture_1.jpg,Turkey Vulture,silhouette,candidate,1,1,0,6.2661,Turkey Vulture,0.8844
+Turkey_Vulture_2.jpg,Turkey Vulture,clean,candidate,1,1,0,5.9363,Turkey Vulture,0.9107
+Turkey_Vulture_2.jpg,Turkey Vulture,golden,candidate,1,1,0,5.2767,Turkey Vulture,0.8972
+Turkey_Vulture_2.jpg,Turkey Vulture,veil,candidate,1,1,0,5.7714,Turkey Vulture,0.9450
+Turkey_Vulture_2.jpg,Turkey Vulture,backlit,candidate,1,1,0,4.9469,Turkey Vulture,0.8960
+Turkey_Vulture_2.jpg,Turkey Vulture,silhouette,candidate,1,1,0,2.6384,Turkey Vulture,0.6708
+American_Kestrel_0.jpg,American Kestrel,clean,candidate,1,1,0,5.0294,American Kestrel,0.8234
+American_Kestrel_0.jpg,American Kestrel,golden,candidate,1,1,0,4.8645,American Kestrel,0.8824
+American_Kestrel_0.jpg,American Kestrel,veil,candidate,1,1,0,4.5347,American Kestrel,0.8539
+American_Kestrel_0.jpg,American Kestrel,backlit,candidate,1,1,0,4.2873,American Kestrel,0.9474
+American_Kestrel_0.jpg,American Kestrel,silhouette,candidate,0,0,0,-0.6596,Northern Flicker,0.2559
+American_Kestrel_1.jpg,American Kestrel,clean,candidate,1,1,0,1.2367,American Kestrel,0.5001
+American_Kestrel_1.jpg,American Kestrel,golden,candidate,0,0,1,-2.3086,Prairie Falcon,0.6222
+American_Kestrel_1.jpg,American Kestrel,veil,candidate,0,0,1,-2.4735,Prairie Falcon,0.7674
+American_Kestrel_1.jpg,American Kestrel,backlit,candidate,0,0,0,-5.0294,Ovenbird,0.0489
+American_Kestrel_1.jpg,American Kestrel,silhouette,candidate,0,0,0,-8.2448,Unknown / Not a Bird,0.7974
+American_Kestrel_2.jpg,American Kestrel,clean,candidate,1,1,0,5.1943,American Kestrel,0.9319
+American_Kestrel_2.jpg,American Kestrel,golden,candidate,1,1,0,2.0612,American Kestrel,0.5386
+American_Kestrel_2.jpg,American Kestrel,veil,candidate,1,1,0,1.4016,American Kestrel,0.5996
+American_Kestrel_2.jpg,American Kestrel,backlit,candidate,1,1,0,2.7208,American Kestrel,0.5961
+American_Kestrel_2.jpg,American Kestrel,silhouette,candidate,0,0,0,-6.7608,Unknown / Not a Bird,0.8689
+Baltimore_Oriole_0.jpg,Baltimore Oriole,clean,candidate,1,1,0,4.0400,Baltimore Oriole,0.8320
+Baltimore_Oriole_0.jpg,Baltimore Oriole,golden,candidate,1,1,0,2.6384,Baltimore Oriole,0.8331
+Baltimore_Oriole_0.jpg,Baltimore Oriole,veil,candidate,1,1,0,2.7208,Baltimore Oriole,0.7734
+Baltimore_Oriole_0.jpg,Baltimore Oriole,backlit,candidate,1,1,0,1.8963,Baltimore Oriole,0.7160
+Baltimore_Oriole_0.jpg,Baltimore Oriole,silhouette,candidate,0,0,1,-1.8139,Orchard Oriole,0.8058
+Baltimore_Oriole_1.jpg,Baltimore Oriole,clean,candidate,0,0,0,-5.0294,House Finch,0.0891
+Baltimore_Oriole_1.jpg,Baltimore Oriole,golden,candidate,0,0,0,-8.4922,Verdin,0.1576
+Baltimore_Oriole_1.jpg,Baltimore Oriole,veil,candidate,0,0,0,-7.9151,Verdin,0.1638
+Baltimore_Oriole_1.jpg,Baltimore Oriole,backlit,candidate,0,0,0,-9.3167,North Island Robin,0.2749
+Baltimore_Oriole_1.jpg,Baltimore Oriole,silhouette,candidate,0,0,0,-8.5746,Unknown / Not a Bird,0.7892
+Baltimore_Oriole_2.jpg,Baltimore Oriole,clean,candidate,1,0,0,1.3192,Baltimore Oriole,0.1807
+Baltimore_Oriole_2.jpg,Baltimore Oriole,golden,candidate,0,0,0,-3.9575,House Finch,0.0609
+Baltimore_Oriole_2.jpg,Baltimore Oriole,veil,candidate,0,0,0,-3.4628,House Finch,0.0295
+Baltimore_Oriole_2.jpg,Baltimore Oriole,backlit,candidate,0,0,0,-4.4522,Bushtit,0.0608
+Baltimore_Oriole_2.jpg,Baltimore Oriole,silhouette,candidate,0,0,0,-7.0081,Eastern Screech-Owl,0.3096
+Scarlet_Tanager_0.jpg,Scarlet Tanager,clean,candidate,1,1,0,5.6889,Scarlet Tanager,0.9456
+Scarlet_Tanager_0.jpg,Scarlet Tanager,golden,candidate,1,1,0,4.1224,Scarlet Tanager,0.9028
+Scarlet_Tanager_0.jpg,Scarlet Tanager,veil,candidate,1,1,0,0.9894,Scarlet Tanager,0.5752
+Scarlet_Tanager_0.jpg,Scarlet Tanager,backlit,candidate,1,1,0,5.0294,Scarlet Tanager,0.9268
+Scarlet_Tanager_0.jpg,Scarlet Tanager,silhouette,candidate,1,0,0,0.3298,Scarlet Tanager,0.4448
+Scarlet_Tanager_1.jpg,Scarlet Tanager,clean,candidate,1,1,0,1.6490,Scarlet Tanager,0.6119
+Scarlet_Tanager_1.jpg,Scarlet Tanager,golden,candidate,0,0,0,-0.5771,Summer Tanager,0.3998
+Scarlet_Tanager_1.jpg,Scarlet Tanager,veil,candidate,0,0,1,-2.8032,Summer Tanager,0.5678
+Scarlet_Tanager_1.jpg,Scarlet Tanager,backlit,candidate,1,0,0,0.7420,Scarlet Tanager,0.4565
+Scarlet_Tanager_1.jpg,Scarlet Tanager,silhouette,candidate,0,0,0,-4.8645,Northern Cardinal,0.3667
+Scarlet_Tanager_2.jpg,Scarlet Tanager,clean,candidate,1,1,0,1.9788,Scarlet Tanager,0.6733
+Scarlet_Tanager_2.jpg,Scarlet Tanager,golden,candidate,0,0,0,-0.9069,Vermilion Flycatcher,0.4212
+Scarlet_Tanager_2.jpg,Scarlet Tanager,veil,candidate,0,0,0,-0.4947,Vermilion Flycatcher,0.0540
+Scarlet_Tanager_2.jpg,Scarlet Tanager,backlit,candidate,1,1,0,2.1437,Scarlet Tanager,0.6339
+Scarlet_Tanager_2.jpg,Scarlet Tanager,silhouette,candidate,1,0,0,0.7420,Scarlet Tanager,0.2104
+Indigo_Bunting_0.jpg,Indigo Bunting,clean,candidate,1,1,0,4.1224,Indigo Bunting,0.7776
+Indigo_Bunting_0.jpg,Indigo Bunting,golden,candidate,1,0,0,0.4122,Indigo Bunting,0.2132
+Indigo_Bunting_0.jpg,Indigo Bunting,veil,candidate,1,0,0,3.1330,Indigo Bunting,0.4124
+Indigo_Bunting_0.jpg,Indigo Bunting,backlit,candidate,1,1,0,5.0294,Indigo Bunting,0.8176
+Indigo_Bunting_0.jpg,Indigo Bunting,silhouette,candidate,0,0,0,-1.0718,Unknown / Not a Bird,0.1685
+Indigo_Bunting_1.jpg,Indigo Bunting,clean,candidate,1,1,0,5.6889,Indigo Bunting,0.9454
+Indigo_Bunting_1.jpg,Indigo Bunting,golden,candidate,1,1,0,2.6384,Indigo Bunting,0.7017
+Indigo_Bunting_1.jpg,Indigo Bunting,veil,candidate,1,1,0,4.2873,Indigo Bunting,0.8459
+Indigo_Bunting_1.jpg,Indigo Bunting,backlit,candidate,1,1,0,3.2155,Indigo Bunting,0.8980
+Indigo_Bunting_1.jpg,Indigo Bunting,silhouette,candidate,0,0,0,-3.2979,Groove-billed Ani,0.3600
+Indigo_Bunting_2.jpg,Indigo Bunting,clean,candidate,1,1,0,5.2767,Indigo Bunting,0.8718
+Indigo_Bunting_2.jpg,Indigo Bunting,golden,candidate,1,1,0,4.8645,Indigo Bunting,0.8293
+Indigo_Bunting_2.jpg,Indigo Bunting,veil,candidate,1,0,0,1.4016,Indigo Bunting,0.2535
+Indigo_Bunting_2.jpg,Indigo Bunting,backlit,candidate,1,1,0,4.3698,Indigo Bunting,0.8244
+Indigo_Bunting_2.jpg,Indigo Bunting,silhouette,candidate,0,0,0,-2.1437,Broad-billed Hummingbird,0.2452
+Common_Loon_0.jpg,Common Loon,clean,candidate,1,1,0,3.0506,Common Loon,0.7357
+Common_Loon_0.jpg,Common Loon,golden,candidate,1,1,0,2.3086,Common Loon,0.7112
+Common_Loon_0.jpg,Common Loon,veil,candidate,0,0,0,-2.1437,Double-crested Cormorant,0.2074
+Common_Loon_0.jpg,Common Loon,backlit,candidate,1,1,0,3.6277,Common Loon,0.7796
+Common_Loon_0.jpg,Common Loon,silhouette,candidate,1,0,0,1.1543,Common Loon,0.2557
+Common_Loon_1.jpg,Common Loon,clean,candidate,0,0,0,-1.2367,Cooper's Hawk,0.2097
+Common_Loon_1.jpg,Common Loon,golden,candidate,0,0,1,-6.5134,Cooper's Hawk,0.6257
+Common_Loon_1.jpg,Common Loon,veil,candidate,0,0,0,-4.7820,Cooper's Hawk,0.1870
+Common_Loon_1.jpg,Common Loon,backlit,candidate,0,0,0,-6.2661,Ruffed Grouse,0.3002
+Common_Loon_1.jpg,Common Loon,silhouette,candidate,0,0,0,-7.4204,Unknown / Not a Bird,0.5429
+Common_Loon_2.jpg,Common Loon,clean,candidate,0,0,0,-9.2342,Unknown / Not a Bird,0.5849
+Common_Loon_2.jpg,Common Loon,golden,candidate,0,0,0,-7.6677,Great Egret,0.0866
+Common_Loon_2.jpg,Common Loon,veil,candidate,0,0,0,-7.1730,Great Egret,0.0830
+Common_Loon_2.jpg,Common Loon,backlit,candidate,0,0,0,-7.4204,Wild Turkey,0.0353
+Common_Loon_2.jpg,Common Loon,silhouette,candidate,0,0,0,-6.7608,Common Moorhen,0.0472
+Mute_Swan_0.jpg,Mute Swan,clean,candidate,0,0,0,-5.1943,Tree Swallow,0.2800
+Mute_Swan_0.jpg,Mute Swan,golden,candidate,0,0,0,-5.8538,Turkey Vulture,0.3041
+Mute_Swan_0.jpg,Mute Swan,veil,candidate,0,0,0,-5.6065,Turkey Vulture,0.2221
+Mute_Swan_0.jpg,Mute Swan,backlit,candidate,0,0,0,-4.4522,American Crow,0.2297
+Mute_Swan_0.jpg,Mute Swan,silhouette,candidate,0,0,0,-6.3485,American Crow,0.3059
+Mute_Swan_1.jpg,Mute Swan,clean,candidate,1,0,0,1.8139,Mute Swan,0.3698
+Mute_Swan_1.jpg,Mute Swan,golden,candidate,1,0,0,1.1543,Mute Swan,0.2710
+Mute_Swan_1.jpg,Mute Swan,veil,candidate,0,0,1,-5.8538,Eurasian Collared-Dove,0.5731
+Mute_Swan_1.jpg,Mute Swan,backlit,candidate,0,0,0,-5.8538,Mallard,0.2705
+Mute_Swan_1.jpg,Mute Swan,silhouette,candidate,0,0,0,-8.2448,Unknown / Not a Bird,0.4478
+Mute_Swan_2.jpg,Mute Swan,clean,candidate,1,1,0,5.4416,Mute Swan,0.7278
+Mute_Swan_2.jpg,Mute Swan,golden,candidate,1,1,0,6.2661,Mute Swan,0.9683
+Mute_Swan_2.jpg,Mute Swan,veil,candidate,0,0,0,-1.5665,Unknown / Not a Bird,0.6917
+Mute_Swan_2.jpg,Mute Swan,backlit,candidate,1,1,0,5.1118,Mute Swan,0.8644
+Mute_Swan_2.jpg,Mute Swan,silhouette,candidate,1,0,0,2.0612,Mute Swan,0.4584
+Wood_Duck_0.jpg,Wood Duck,clean,candidate,0,0,1,-2.9681,Cairina moschata domestica,0.5434
+Wood_Duck_0.jpg,Wood Duck,golden,candidate,0,0,0,-4.0400,Chukar,0.1308
+Wood_Duck_0.jpg,Wood Duck,veil,candidate,0,0,1,-7.5028,Columba livia domestica,0.5053
+Wood_Duck_0.jpg,Wood Duck,backlit,candidate,0,0,0,-2.5559,Columba livia domestica,0.1161
+Wood_Duck_0.jpg,Wood Duck,silhouette,candidate,0,0,0,-6.4310,Unknown / Not a Bird,0.1910
+Wood_Duck_1.jpg,Wood Duck,clean,candidate,1,1,0,7.0081,Wood Duck,0.9514
+Wood_Duck_1.jpg,Wood Duck,golden,candidate,1,1,0,5.9363,Wood Duck,0.9050
+Wood_Duck_1.jpg,Wood Duck,veil,candidate,1,1,0,5.6889,Wood Duck,0.9023
+Wood_Duck_1.jpg,Wood Duck,backlit,candidate,1,1,0,5.3592,Wood Duck,0.8339
+Wood_Duck_1.jpg,Wood Duck,silhouette,candidate,1,1,0,4.5347,Wood Duck,0.8496
+Wood_Duck_2.jpg,Wood Duck,clean,candidate,1,1,0,6.9257,Wood Duck,0.9393
+Wood_Duck_2.jpg,Wood Duck,golden,candidate,1,1,0,6.1836,Wood Duck,0.8931
+Wood_Duck_2.jpg,Wood Duck,veil,candidate,1,1,0,2.8032,Wood Duck,0.7203
+Wood_Duck_2.jpg,Wood Duck,backlit,candidate,1,1,0,3.8751,Wood Duck,0.8577
+Wood_Duck_2.jpg,Wood Duck,silhouette,candidate,0,0,0,-2.5559,Unknown / Not a Bird,0.8091
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,clean,candidate,0,0,0,-4.9469,Red-bellied Woodpecker,0.3911
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,golden,candidate,0,0,1,-7.9975,Red-bellied Woodpecker,0.7891
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,veil,candidate,0,0,1,-7.4204,Red-bellied Woodpecker,0.7908
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,backlit,candidate,0,0,1,-7.0906,Red-bellied Woodpecker,0.8109
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,silhouette,candidate,0,0,1,-5.0294,Red-bellied Woodpecker,0.6151
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,clean,candidate,1,1,0,5.3592,Acorn Woodpecker,0.8793
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,golden,candidate,1,1,0,4.8645,Acorn Woodpecker,0.8374
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,veil,candidate,1,1,0,1.8963,Acorn Woodpecker,0.5033
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,backlit,candidate,1,0,0,2.2261,Acorn Woodpecker,0.3101
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,silhouette,candidate,1,0,0,2.8857,Acorn Woodpecker,0.4626
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,clean,candidate,1,1,0,6.3485,Acorn Woodpecker,0.9291
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,golden,candidate,1,1,0,4.0400,Acorn Woodpecker,0.5254
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,veil,candidate,1,0,0,3.2155,Acorn Woodpecker,0.3041
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,backlit,candidate,1,1,0,5.1118,Acorn Woodpecker,0.8015
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,silhouette,candidate,1,0,0,1.6490,Acorn Woodpecker,0.2997
+California_Scrub-Jay_0.jpg,California Scrub-Jay,clean,candidate,0,0,0,-8.1624,Unknown / Not a Bird,0.9238
+California_Scrub-Jay_0.jpg,California Scrub-Jay,golden,candidate,0,0,0,-10.5534,Unknown / Not a Bird,0.8290
+California_Scrub-Jay_0.jpg,California Scrub-Jay,veil,candidate,0,0,0,-11.1305,Unknown / Not a Bird,0.8036
+California_Scrub-Jay_0.jpg,California Scrub-Jay,backlit,candidate,0,0,0,-9.3991,Unknown / Not a Bird,0.8860
+California_Scrub-Jay_0.jpg,California Scrub-Jay,silhouette,candidate,0,0,0,-9.4816,Unknown / Not a Bird,0.8991
+California_Scrub-Jay_1.jpg,California Scrub-Jay,clean,candidate,1,1,0,5.3592,California Scrub-Jay,0.9601
+California_Scrub-Jay_1.jpg,California Scrub-Jay,golden,candidate,1,1,0,3.4628,California Scrub-Jay,0.6599
+California_Scrub-Jay_1.jpg,California Scrub-Jay,veil,candidate,1,0,0,2.4735,California Scrub-Jay,0.3200
+California_Scrub-Jay_1.jpg,California Scrub-Jay,backlit,candidate,1,1,0,4.1224,California Scrub-Jay,0.8608
+California_Scrub-Jay_1.jpg,California Scrub-Jay,silhouette,candidate,1,1,0,2.3910,California Scrub-Jay,0.5331
+California_Scrub-Jay_2.jpg,California Scrub-Jay,clean,candidate,0,0,0,-0.7420,Blue Jay,0.4073
+California_Scrub-Jay_2.jpg,California Scrub-Jay,golden,candidate,0,0,1,-3.2155,House Sparrow,0.5669
+California_Scrub-Jay_2.jpg,California Scrub-Jay,veil,candidate,0,0,0,-2.3910,House Sparrow,0.2798
+California_Scrub-Jay_2.jpg,California Scrub-Jay,backlit,candidate,0,0,1,-6.1836,Dark-eyed Junco,0.8087
+California_Scrub-Jay_2.jpg,California Scrub-Jay,silhouette,candidate,0,0,0,-4.3698,Dark-eyed Junco,0.4755
+Blue_Jay_0.jpg,Blue Jay,clean,candidate+corr,1,1,0,6.1836,Blue Jay,0.9599
+Blue_Jay_0.jpg,Blue Jay,golden,candidate+corr,1,1,0,5.3028,Blue Jay,0.9568
+Blue_Jay_0.jpg,Blue Jay,veil,candidate+corr,1,1,0,6.0059,Blue Jay,0.9449
+Blue_Jay_0.jpg,Blue Jay,backlit,candidate+corr,1,1,0,4.1061,Blue Jay,0.8100
+Blue_Jay_0.jpg,Blue Jay,silhouette,candidate+corr,0,0,0,-0.0724,Northern Cardinal,0.1122
+Blue_Jay_1.jpg,Blue Jay,clean,candidate+corr,1,1,0,2.3910,Blue Jay,0.7965
+Blue_Jay_1.jpg,Blue Jay,golden,candidate+corr,0,0,0,-0.3288,Northern Lapwing,0.1865
+Blue_Jay_1.jpg,Blue Jay,veil,candidate+corr,0,0,0,-0.4904,Clark's Nutcracker,0.0656
+Blue_Jay_1.jpg,Blue Jay,backlit,candidate+corr,0,0,0,-2.4496,White-tailed Kite,0.0690
+Blue_Jay_1.jpg,Blue Jay,silhouette,candidate+corr,0,0,0,-3.5934,Red-winged Blackbird,0.0524
+Blue_Jay_2.jpg,Blue Jay,clean,candidate+corr,1,0,0,1.4841,Blue Jay,0.4205
+Blue_Jay_2.jpg,Blue Jay,golden,candidate+corr,1,0,0,0.8610,Blue Jay,0.1329
+Blue_Jay_2.jpg,Blue Jay,veil,candidate+corr,1,0,0,0.3708,Blue Jay,0.0768
+Blue_Jay_2.jpg,Blue Jay,backlit,candidate+corr,0,0,0,-5.0198,Eurasian Collared-Dove,0.4829
+Blue_Jay_2.jpg,Blue Jay,silhouette,candidate+corr,0,0,0,-3.4769,Black-chinned Hummingbird,0.0633
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,clean,candidate+corr,1,1,0,2.2261,Black-capped Chickadee,0.7633
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,golden,candidate+corr,0,0,0,-0.4682,Carolina Chickadee,0.4497
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,veil,candidate+corr,0,0,1,-1.6818,Carolina Chickadee,0.5692
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,backlit,candidate+corr,1,0,0,0.0657,Black-capped Chickadee,0.1323
+Black-capped_Chickadee_0.jpg,Black-capped Chickadee,silhouette,candidate+corr,0,0,1,-2.9499,House Sparrow,0.5527
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,clean,candidate+corr,1,0,0,0.0000,Black-capped Chickadee,0.1700
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,golden,candidate+corr,0,0,0,-1.6922,House Sparrow,0.2081
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,veil,candidate+corr,1,0,0,0.1074,Black-capped Chickadee,0.1331
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,backlit,candidate+corr,1,0,0,0.2821,Black-capped Chickadee,0.2630
+Black-capped_Chickadee_1.jpg,Black-capped Chickadee,silhouette,candidate+corr,0,0,0,-2.3684,Loggerhead Shrike,0.1732
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,clean,candidate+corr,1,1,0,1.3192,Black-capped Chickadee,0.5976
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,golden,candidate+corr,1,1,0,1.3066,Black-capped Chickadee,0.5091
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,veil,candidate+corr,0,0,0,-1.1988,Western Gull,0.1893
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,backlit,candidate+corr,1,0,0,0.5490,Black-capped Chickadee,0.2540
+Black-capped_Chickadee_2.jpg,Black-capped Chickadee,silhouette,candidate+corr,1,0,0,0.1043,Black-capped Chickadee,0.2642
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,clean,candidate+corr,1,1,0,4.9469,Red-winged Blackbird,0.8104
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,golden,candidate+corr,1,1,0,5.3799,Red-winged Blackbird,0.7253
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,veil,candidate+corr,1,1,0,1.8949,Red-winged Blackbird,0.5530
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,backlit,candidate+corr,1,1,0,4.0533,Red-winged Blackbird,0.6094
+Red-winged_Blackbird_0.jpg,Red-winged Blackbird,silhouette,candidate+corr,1,1,0,4.7287,Red-winged Blackbird,0.7889
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,clean,candidate+corr,1,1,0,6.1012,Red-winged Blackbird,0.9500
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,golden,candidate+corr,1,1,0,6.3455,Red-winged Blackbird,0.9322
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,veil,candidate+corr,1,1,0,6.1528,Red-winged Blackbird,0.9427
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,backlit,candidate+corr,1,1,0,2.9611,Red-winged Blackbird,0.7268
+Red-winged_Blackbird_1.jpg,Red-winged Blackbird,silhouette,candidate+corr,1,1,0,1.2536,Red-winged Blackbird,0.6647
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,clean,candidate+corr,1,0,0,1.4016,Red-winged Blackbird,0.3003
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,golden,candidate+corr,1,0,0,1.3015,Red-winged Blackbird,0.2888
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,veil,candidate+corr,1,0,0,1.2304,Red-winged Blackbird,0.3240
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,backlit,candidate+corr,1,0,0,1.2891,Red-winged Blackbird,0.4711
+Red-winged_Blackbird_2.jpg,Red-winged Blackbird,silhouette,candidate+corr,0,0,1,-3.9075,House Sparrow,0.9002
+Downy_Woodpecker_0.jpg,Downy Woodpecker,clean,candidate+corr,0,0,0,-6.1836,Downy Woodpecker,0.2031
+Downy_Woodpecker_0.jpg,Downy Woodpecker,golden,candidate+corr,0,0,0,-7.6423,Downy Woodpecker,0.4920
+Downy_Woodpecker_0.jpg,Downy Woodpecker,veil,candidate+corr,0,0,1,-7.8067,Downy Woodpecker,0.5174
+Downy_Woodpecker_0.jpg,Downy Woodpecker,backlit,candidate+corr,0,0,0,-8.0462,Downy Woodpecker,0.3723
+Downy_Woodpecker_0.jpg,Downy Woodpecker,silhouette,candidate+corr,0,0,0,-7.7538,Nuttall's Woodpecker,0.1922
+Downy_Woodpecker_1.jpg,Downy Woodpecker,clean,candidate+corr,0,0,1,-9.9763,Downy Woodpecker,0.8855
+Downy_Woodpecker_1.jpg,Downy Woodpecker,golden,candidate+corr,0,0,1,-10.2360,Downy Woodpecker,0.9251
+Downy_Woodpecker_1.jpg,Downy Woodpecker,veil,candidate+corr,0,0,1,-8.2545,Downy Woodpecker,0.7960
+Downy_Woodpecker_1.jpg,Downy Woodpecker,backlit,candidate+corr,0,0,1,-9.6321,Downy Woodpecker,0.8802
+Downy_Woodpecker_1.jpg,Downy Woodpecker,silhouette,candidate+corr,0,0,1,-10.1151,Downy Woodpecker,0.9408
+Downy_Woodpecker_2.jpg,Downy Woodpecker,clean,candidate+corr,0,0,1,-8.7395,Downy Woodpecker,0.8993
+Downy_Woodpecker_2.jpg,Downy Woodpecker,golden,candidate+corr,0,0,1,-8.6315,Downy Woodpecker,0.9140
+Downy_Woodpecker_2.jpg,Downy Woodpecker,veil,candidate+corr,0,0,1,-8.8524,Downy Woodpecker,0.9200
+Downy_Woodpecker_2.jpg,Downy Woodpecker,backlit,candidate+corr,0,0,1,-7.5342,Downy Woodpecker,0.7542
+Downy_Woodpecker_2.jpg,Downy Woodpecker,silhouette,candidate+corr,0,0,0,-4.8098,Bushtit,0.2702
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,clean,candidate+corr,1,1,0,2.8032,Dark-eyed Junco,0.7009
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,golden,candidate+corr,1,0,0,1.2294,Dark-eyed Junco,0.2066
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,veil,candidate+corr,1,0,0,0.1336,Dark-eyed Junco,0.1123
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,backlit,candidate+corr,0,0,0,-1.7816,Purple Martin,0.2070
+Dark-eyed_Junco_0.jpg,Dark-eyed Junco,silhouette,candidate+corr,0,0,0,-1.8188,Purple Martin,0.1340
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,clean,candidate+corr,1,1,0,4.1224,Dark-eyed Junco,0.9031
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,golden,candidate+corr,1,1,0,3.1456,Dark-eyed Junco,0.8496
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,veil,candidate+corr,1,1,0,3.9608,Dark-eyed Junco,0.8741
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,backlit,candidate+corr,1,1,0,2.1200,Dark-eyed Junco,0.7757
+Dark-eyed_Junco_1.jpg,Dark-eyed Junco,silhouette,candidate+corr,1,0,0,1.7459,Dark-eyed Junco,0.4951
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,clean,candidate+corr,0,0,0,-2.9681,Black Phoebe,0.0672
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,golden,candidate+corr,0,0,0,-5.0343,Unknown / Not a Bird,0.2077
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,veil,candidate+corr,0,0,0,-2.8258,New Zealand Fantail,0.0607
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,backlit,candidate+corr,0,0,0,-4.2425,Unknown / Not a Bird,0.2867
+Dark-eyed_Junco_2.jpg,Dark-eyed Junco,silhouette,candidate+corr,0,0,0,-6.1468,Unknown / Not a Bird,0.6890
+Song_Sparrow_0.jpg,Song Sparrow,clean,candidate+corr,1,1,0,6.8432,Song Sparrow,0.9418
+Song_Sparrow_0.jpg,Song Sparrow,golden,candidate+corr,1,1,0,4.7321,Song Sparrow,0.9047
+Song_Sparrow_0.jpg,Song Sparrow,veil,candidate+corr,1,1,0,3.2206,Song Sparrow,0.6156
+Song_Sparrow_0.jpg,Song Sparrow,backlit,candidate+corr,1,1,0,2.8794,Song Sparrow,0.8305
+Song_Sparrow_0.jpg,Song Sparrow,silhouette,candidate+corr,1,1,0,1.7163,Song Sparrow,0.6944
+Song_Sparrow_1.jpg,Song Sparrow,clean,candidate+corr,1,1,0,5.7714,Song Sparrow,0.9085
+Song_Sparrow_1.jpg,Song Sparrow,golden,candidate+corr,1,1,0,5.0098,Song Sparrow,0.9026
+Song_Sparrow_1.jpg,Song Sparrow,veil,candidate+corr,1,1,0,5.3806,Song Sparrow,0.9243
+Song_Sparrow_1.jpg,Song Sparrow,backlit,candidate+corr,1,1,0,1.9420,Song Sparrow,0.7442
+Song_Sparrow_1.jpg,Song Sparrow,silhouette,candidate+corr,0,0,1,-1.1018,Lincoln's Sparrow,0.6049
+Song_Sparrow_2.jpg,Song Sparrow,clean,candidate+corr,1,1,0,1.1543,Song Sparrow,0.5889
+Song_Sparrow_2.jpg,Song Sparrow,golden,candidate+corr,1,1,0,1.6495,Song Sparrow,0.6613
+Song_Sparrow_2.jpg,Song Sparrow,veil,candidate+corr,1,1,0,0.9017,Song Sparrow,0.5538
+Song_Sparrow_2.jpg,Song Sparrow,backlit,candidate+corr,0,0,0,-1.0097,Lincoln's Sparrow,0.4712
+Song_Sparrow_2.jpg,Song Sparrow,silhouette,candidate+corr,0,0,1,-3.6767,Lincoln's Sparrow,0.8582
+European_Starling_0.jpg,European Starling,clean,candidate+corr,0,0,1,-1.5665,Eurasian Blackbird,0.5332
+European_Starling_0.jpg,European Starling,golden,candidate+corr,0,0,1,-2.5657,Eurasian Blackbird,0.5931
+European_Starling_0.jpg,European Starling,veil,candidate+corr,0,0,0,-4.9402,Unknown / Not a Bird,0.2545
+European_Starling_0.jpg,European Starling,backlit,candidate+corr,0,0,1,-5.2057,Eurasian Blackbird,0.7374
+European_Starling_0.jpg,European Starling,silhouette,candidate+corr,0,0,0,-4.6710,Noisy Miner,0.3295
+European_Starling_1.jpg,European Starling,clean,candidate+corr,1,1,0,5.5750,European Starling,0.7996
+European_Starling_1.jpg,European Starling,golden,candidate+corr,1,1,0,6.7365,European Starling,0.8930
+European_Starling_1.jpg,European Starling,veil,candidate+corr,1,1,0,6.3764,European Starling,0.8723
+European_Starling_1.jpg,European Starling,backlit,candidate+corr,1,1,0,5.4813,European Starling,0.7648
+European_Starling_1.jpg,European Starling,silhouette,candidate+corr,1,1,0,5.8267,European Starling,0.8517
+European_Starling_2.jpg,European Starling,clean,candidate+corr,0,0,0,-0.4122,Wild Turkey,0.0799
+European_Starling_2.jpg,European Starling,golden,candidate+corr,0,0,0,-2.9024,Unknown / Not a Bird,0.1399
+European_Starling_2.jpg,European Starling,veil,candidate+corr,0,0,0,-3.3011,Unknown / Not a Bird,0.2051
+European_Starling_2.jpg,European Starling,backlit,candidate+corr,0,0,0,-3.3631,Unknown / Not a Bird,0.2868
+European_Starling_2.jpg,European Starling,silhouette,candidate+corr,0,0,0,-8.3594,Unknown / Not a Bird,0.8790
+Mallard_0.jpg,Mallard,clean,candidate+corr,0,0,0,-4.3698,Snow Goose,0.1326
+Mallard_0.jpg,Mallard,golden,candidate+corr,0,0,0,-4.0928,Snow Goose,0.0978
+Mallard_0.jpg,Mallard,veil,candidate+corr,0,0,0,-5.6381,Ross's Goose,0.2019
+Mallard_0.jpg,Mallard,backlit,candidate+corr,0,0,0,-5.2209,Mute Swan,0.1849
+Mallard_0.jpg,Mallard,silhouette,candidate+corr,0,0,0,-6.0690,Anser anser domesticus,0.4859
+Mallard_1.jpg,Mallard,clean,candidate+corr,1,1,0,0.2473,Mallard,0.5105
+Mallard_1.jpg,Mallard,golden,candidate+corr,1,1,0,0.2048,Mallard,0.5154
+Mallard_1.jpg,Mallard,veil,candidate+corr,0,0,1,-0.9471,Anas platyrhynchos domesticus,0.5263
+Mallard_1.jpg,Mallard,backlit,candidate+corr,0,0,0,-1.6836,American Coot,0.1531
+Mallard_1.jpg,Mallard,silhouette,candidate+corr,0,0,0,-2.2844,Eurasian Coot,0.1461
+Mallard_2.jpg,Mallard,clean,candidate+corr,1,1,0,4.2873,Mallard,0.8884
+Mallard_2.jpg,Mallard,golden,candidate+corr,1,1,0,5.2996,Mallard,0.9385
+Mallard_2.jpg,Mallard,veil,candidate+corr,1,1,0,4.4767,Mallard,0.8794
+Mallard_2.jpg,Mallard,backlit,candidate+corr,0,0,1,-1.2324,House Sparrow,0.5381
+Mallard_2.jpg,Mallard,silhouette,candidate+corr,0,0,0,-5.8924,Unknown / Not a Bird,0.2867
+American_Crow_0.jpg,American Crow,clean,candidate+corr,1,0,0,1.5674,American Crow,0.2858
+American_Crow_0.jpg,American Crow,golden,candidate+corr,0,0,0,-0.2107,Common Raven,0.0910
+American_Crow_0.jpg,American Crow,veil,candidate+corr,0,0,0,-1.0025,Common Raven,0.1565
+American_Crow_0.jpg,American Crow,backlit,candidate+corr,1,1,0,1.3094,American Crow,0.5296
+American_Crow_0.jpg,American Crow,silhouette,candidate+corr,1,0,0,0.0178,American Crow,0.2017
+American_Crow_1.jpg,American Crow,clean,candidate+corr,0,0,0,-2.7208,Glaucous-winged Gull,0.1027
+American_Crow_1.jpg,American Crow,golden,candidate+corr,0,0,0,-4.6167,Brown-headed Cowbird,0.2012
+American_Crow_1.jpg,American Crow,veil,candidate+corr,0,0,0,-6.0292,Clark's Nutcracker,0.1620
+American_Crow_1.jpg,American Crow,backlit,candidate+corr,0,0,0,-9.9061,Clark's Nutcracker,0.3655
+American_Crow_1.jpg,American Crow,silhouette,candidate+corr,0,0,0,-9.4683,House Crow,0.2927
+American_Crow_2.jpg,American Crow,clean,candidate+corr,0,0,0,-4.5753,Eurasian Jackdaw,0.3344
+American_Crow_2.jpg,American Crow,golden,candidate+corr,0,0,0,-4.6539,Eurasian Jackdaw,0.1838
+American_Crow_2.jpg,American Crow,veil,candidate+corr,0,0,0,-2.8564,Bald Eagle,0.0737
+American_Crow_2.jpg,American Crow,backlit,candidate+corr,0,0,0,-4.6167,Clark's Nutcracker,0.2126
+American_Crow_2.jpg,American Crow,silhouette,candidate+corr,0,0,0,-5.7129,Brown-headed Cowbird,0.1791
+Tree_Swallow_0.jpg,Tree Swallow,clean,candidate+corr,1,1,0,5.6889,Tree Swallow,0.9238
+Tree_Swallow_0.jpg,Tree Swallow,golden,candidate+corr,1,1,0,3.5157,Tree Swallow,0.8207
+Tree_Swallow_0.jpg,Tree Swallow,veil,candidate+corr,1,1,0,3.2209,Tree Swallow,0.7455
+Tree_Swallow_0.jpg,Tree Swallow,backlit,candidate+corr,1,1,0,1.9152,Tree Swallow,0.6552
+Tree_Swallow_0.jpg,Tree Swallow,silhouette,candidate+corr,1,0,0,0.5552,Tree Swallow,0.1368
+Tree_Swallow_1.jpg,Tree Swallow,clean,candidate+corr,1,0,0,0.3298,Tree Swallow,0.2220
+Tree_Swallow_1.jpg,Tree Swallow,golden,candidate+corr,1,0,0,0.3382,Tree Swallow,0.2812
+Tree_Swallow_1.jpg,Tree Swallow,veil,candidate+corr,1,0,0,0.5417,Tree Swallow,0.3180
+Tree_Swallow_1.jpg,Tree Swallow,backlit,candidate+corr,1,1,0,1.9530,Tree Swallow,0.5713
+Tree_Swallow_1.jpg,Tree Swallow,silhouette,candidate+corr,0,0,0,-1.4343,Unknown / Not a Bird,0.4927
+Tree_Swallow_2.jpg,Tree Swallow,clean,candidate+corr,1,0,0,2.8980,Tree Swallow,0.4890
+Tree_Swallow_2.jpg,Tree Swallow,golden,candidate+corr,0,0,0,-0.0970,Eastern Kingbird,0.0419
+Tree_Swallow_2.jpg,Tree Swallow,veil,candidate+corr,0,0,0,-0.0431,Eastern Kingbird,0.3337
+Tree_Swallow_2.jpg,Tree Swallow,backlit,candidate+corr,1,1,0,1.5745,Tree Swallow,0.5070
+Tree_Swallow_2.jpg,Tree Swallow,silhouette,candidate+corr,0,0,0,-0.6548,Eastern Kingbird,0.2407
+Western_Bluebird_0.jpg,Western Bluebird,clean,candidate+corr,0,0,0,-3.9575,House Sparrow,0.3636
+Western_Bluebird_0.jpg,Western Bluebird,golden,candidate+corr,0,0,0,-5.8085,House Sparrow,0.2189
+Western_Bluebird_0.jpg,Western Bluebird,veil,candidate+corr,0,0,0,-5.5558,House Sparrow,0.2176
+Western_Bluebird_0.jpg,Western Bluebird,backlit,candidate+corr,0,0,0,-2.3986,Dark-eyed Junco,0.3264
+Western_Bluebird_0.jpg,Western Bluebird,silhouette,candidate+corr,0,0,0,-8.5007,Unknown / Not a Bird,0.8896
+Western_Bluebird_1.jpg,Western Bluebird,clean,candidate+corr,1,1,0,1.6490,Western Bluebird,0.7218
+Western_Bluebird_1.jpg,Western Bluebird,golden,candidate+corr,1,0,0,0.6979,Western Bluebird,0.4016
+Western_Bluebird_1.jpg,Western Bluebird,veil,candidate+corr,0,0,0,-0.3813,Eastern Bluebird,0.2523
+Western_Bluebird_1.jpg,Western Bluebird,backlit,candidate+corr,1,1,0,1.2146,Western Bluebird,0.6859
+Western_Bluebird_1.jpg,Western Bluebird,silhouette,candidate+corr,0,0,0,-0.5252,Unknown / Not a Bird,0.0431
+Western_Bluebird_2.jpg,Western Bluebird,clean,candidate+corr,1,1,0,4.2103,Western Bluebird,0.9409
+Western_Bluebird_2.jpg,Western Bluebird,golden,candidate+corr,1,1,0,2.4930,Western Bluebird,0.8224
+Western_Bluebird_2.jpg,Western Bluebird,veil,candidate+corr,1,1,0,3.8751,Western Bluebird,0.9469
+Western_Bluebird_2.jpg,Western Bluebird,backlit,candidate+corr,1,1,0,4.9468,Western Bluebird,0.9412
+Western_Bluebird_2.jpg,Western Bluebird,silhouette,candidate+corr,1,1,0,2.7057,Western Bluebird,0.8642
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,clean,candidate+corr,0,0,1,-8.1624,Northern Saw-whet Owl,0.5913
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,golden,candidate+corr,0,0,0,-4.5776,Barred Owl,0.1366
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,veil,candidate+corr,0,0,0,-4.9752,Barred Owl,0.2364
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,backlit,candidate+corr,0,0,0,-4.3238,Ferruginous Pygmy-Owl,0.1311
+Anna's_Hummingbird_0.jpg,Anna's Hummingbird,silhouette,candidate+corr,0,0,0,-0.9269,Barred Owl,0.0593
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,clean,candidate+corr,1,1,0,4.9469,Anna's Hummingbird,0.7477
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,golden,candidate+corr,1,1,0,4.0288,Anna's Hummingbird,0.7350
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,veil,candidate+corr,1,1,0,4.5256,Anna's Hummingbird,0.8334
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,backlit,candidate+corr,1,0,0,1.3626,Anna's Hummingbird,0.3377
+Anna's_Hummingbird_1.jpg,Anna's Hummingbird,silhouette,candidate+corr,0,0,0,-0.8832,Unknown / Not a Bird,0.2027
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,clean,candidate+corr,1,1,0,5.1118,Anna's Hummingbird,0.9314
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,golden,candidate+corr,1,1,0,5.5943,Anna's Hummingbird,0.8923
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,veil,candidate+corr,1,1,0,4.7684,Anna's Hummingbird,0.9012
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,backlit,candidate+corr,1,1,0,4.3646,Anna's Hummingbird,0.8297
+Anna's_Hummingbird_2.jpg,Anna's Hummingbird,silhouette,candidate+corr,1,1,0,4.7196,Anna's Hummingbird,0.8903
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,clean,candidate+corr,0,0,0,-3.4628,Anna's Hummingbird,0.2471
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,golden,candidate+corr,0,0,1,-5.5240,Rufous Hummingbird,0.8733
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,veil,candidate+corr,0,0,1,-6.8432,Rufous Hummingbird,0.9053
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,backlit,candidate+corr,0,0,1,-3.7102,Rufous Hummingbird,0.5562
+Ruby-throated_Hummingbird_0.jpg,Ruby-throated Hummingbird,silhouette,candidate+corr,0,0,1,-3.6035,Rufous Hummingbird,0.6071
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,clean,candidate+corr,0,0,0,-0.2473,Black-headed Gull,0.1298
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,golden,candidate+corr,0,0,0,-1.0404,Broad-billed Hummingbird,0.1669
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,veil,candidate+corr,0,0,0,-0.9873,Violet-crowned Hummingbird,0.2748
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,backlit,candidate+corr,0,0,0,-4.8456,Broad-billed Hummingbird,0.4881
+Ruby-throated_Hummingbird_1.jpg,Ruby-throated Hummingbird,silhouette,candidate+corr,0,0,0,-3.0194,Broad-billed Hummingbird,0.1732
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,clean,candidate+corr,0,0,0,-3.4628,Wilson's Warbler,0.1475
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,golden,candidate+corr,0,0,0,-2.4569,Wilson's Warbler,0.0348
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,veil,candidate+corr,0,0,0,-5.1020,American Robin,0.0415
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,backlit,candidate+corr,0,0,0,-2.9573,Bushtit,0.0409
+Ruby-throated_Hummingbird_2.jpg,Ruby-throated Hummingbird,silhouette,candidate+corr,0,0,0,-4.2707,Unknown / Not a Bird,0.1701
+Northern_Flicker_0.jpg,Northern Flicker,clean,candidate+corr,0,0,1,-5.2767,Northern Flicker,0.9318
+Northern_Flicker_0.jpg,Northern Flicker,golden,candidate+corr,0,0,1,-5.1943,Northern Flicker,0.7661
+Northern_Flicker_0.jpg,Northern Flicker,veil,candidate+corr,0,0,1,-5.8538,Northern Flicker,0.9180
+Northern_Flicker_0.jpg,Northern Flicker,backlit,candidate+corr,0,0,1,-5.6889,Northern Flicker,0.9683
+Northern_Flicker_0.jpg,Northern Flicker,silhouette,candidate+corr,0,0,1,-5.4946,Northern Flicker,0.8691
+Northern_Flicker_1.jpg,Northern Flicker,clean,candidate+corr,0,0,1,-2.2744,Northern Flicker,0.8409
+Northern_Flicker_1.jpg,Northern Flicker,golden,candidate+corr,0,0,1,-2.3541,Northern Flicker,0.8494
+Northern_Flicker_1.jpg,Northern Flicker,veil,candidate+corr,0,0,1,-2.2402,Northern Flicker,0.8332
+Northern_Flicker_1.jpg,Northern Flicker,backlit,candidate+corr,0,0,1,-2.5427,Northern Flicker,0.8461
+Northern_Flicker_1.jpg,Northern Flicker,silhouette,candidate+corr,0,0,1,-3.1330,Northern Flicker,0.8788
+Northern_Flicker_2.jpg,Northern Flicker,clean,candidate+corr,0,0,1,-3.6305,Northern Flicker,0.9146
+Northern_Flicker_2.jpg,Northern Flicker,golden,candidate+corr,0,0,1,-3.4380,Northern Flicker,0.8825
+Northern_Flicker_2.jpg,Northern Flicker,veil,candidate+corr,0,0,1,-3.3272,Northern Flicker,0.8674
+Northern_Flicker_2.jpg,Northern Flicker,backlit,candidate+corr,0,0,1,-4.1690,Northern Flicker,0.9438
+Northern_Flicker_2.jpg,Northern Flicker,silhouette,candidate+corr,0,0,1,-4.4000,Northern Flicker,0.9489
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,clean,candidate+corr,0,0,0,-1.4016,House Sparrow,0.0832
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,golden,candidate+corr,0,0,0,-1.1910,House Sparrow,0.0629
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,veil,candidate+corr,0,0,0,-3.3798,Unknown / Not a Bird,0.0799
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,backlit,candidate+corr,0,0,1,-4.3633,House Sparrow,0.5256
+Pileated_Woodpecker_0.jpg,Pileated Woodpecker,silhouette,candidate+corr,0,0,0,-7.8760,Unknown / Not a Bird,0.3198
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,clean,candidate+corr,1,1,0,7.4889,Pileated Woodpecker,0.9785
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,golden,candidate+corr,1,1,0,7.7931,Pileated Woodpecker,0.9878
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,veil,candidate+corr,1,1,0,6.9027,Pileated Woodpecker,0.9846
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,backlit,candidate+corr,1,1,0,6.8070,Pileated Woodpecker,0.9800
+Pileated_Woodpecker_1.jpg,Pileated Woodpecker,silhouette,candidate+corr,0,0,0,-6.2421,Unknown / Not a Bird,0.6824
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,clean,candidate+corr,1,1,0,6.6783,Pileated Woodpecker,0.9607
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,golden,candidate+corr,1,1,0,5.9794,Pileated Woodpecker,0.9502
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,veil,candidate+corr,1,1,0,5.7767,Pileated Woodpecker,0.9523
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,backlit,candidate+corr,1,1,0,6.0865,Pileated Woodpecker,0.9352
+Pileated_Woodpecker_2.jpg,Pileated Woodpecker,silhouette,candidate+corr,1,1,0,3.3824,Pileated Woodpecker,0.7489
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,clean,candidate+corr,1,1,0,1.3192,White-breasted Nuthatch,0.6478
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,golden,candidate+corr,1,1,0,3.6571,White-breasted Nuthatch,0.8246
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,veil,candidate+corr,0,0,1,-7.2313,Gray Catbird,0.5031
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,backlit,candidate+corr,0,0,1,-3.5499,Gray Catbird,0.6450
+White-breasted_Nuthatch_0.jpg,White-breasted Nuthatch,silhouette,candidate+corr,1,0,0,0.0388,White-breasted Nuthatch,0.1151
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,clean,candidate+corr,1,1,0,1.4016,White-breasted Nuthatch,0.5201
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,golden,candidate+corr,1,0,0,3.2994,White-breasted Nuthatch,0.4807
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,veil,candidate+corr,1,1,0,3.9973,White-breasted Nuthatch,0.6764
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,backlit,candidate+corr,1,1,0,3.1041,White-breasted Nuthatch,0.7093
+White-breasted_Nuthatch_1.jpg,White-breasted Nuthatch,silhouette,candidate+corr,1,1,0,2.7229,White-breasted Nuthatch,0.6891
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,clean,candidate+corr,1,1,0,6.0187,White-breasted Nuthatch,0.9460
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,golden,candidate+corr,1,1,0,4.3905,White-breasted Nuthatch,0.8224
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,veil,candidate+corr,1,1,0,4.0448,White-breasted Nuthatch,0.8440
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,backlit,candidate+corr,1,1,0,1.8004,White-breasted Nuthatch,0.6384
+White-breasted_Nuthatch_2.jpg,White-breasted Nuthatch,silhouette,candidate+corr,1,0,0,1.1726,White-breasted Nuthatch,0.1869
+Carolina_Wren_0.jpg,Carolina Wren,clean,candidate+corr,0,0,0,-5.6889,European Starling,0.1031
+Carolina_Wren_0.jpg,Carolina Wren,golden,candidate+corr,0,0,0,-6.1955,Unknown / Not a Bird,0.6614
+Carolina_Wren_0.jpg,Carolina Wren,veil,candidate+corr,0,0,0,-6.4985,Unknown / Not a Bird,0.6450
+Carolina_Wren_0.jpg,Carolina Wren,backlit,candidate+corr,0,0,0,-4.3049,House Sparrow,0.0869
+Carolina_Wren_0.jpg,Carolina Wren,silhouette,candidate+corr,0,0,0,-9.2759,Unknown / Not a Bird,0.8828
+Carolina_Wren_1.jpg,Carolina Wren,clean,candidate+corr,1,1,0,5.6065,Carolina Wren,0.8489
+Carolina_Wren_1.jpg,Carolina Wren,golden,candidate+corr,1,1,0,6.0819,Carolina Wren,0.8762
+Carolina_Wren_1.jpg,Carolina Wren,veil,candidate+corr,1,1,0,6.0375,Carolina Wren,0.8765
+Carolina_Wren_1.jpg,Carolina Wren,backlit,candidate+corr,1,1,0,6.5134,Carolina Wren,0.9611
+Carolina_Wren_1.jpg,Carolina Wren,silhouette,candidate+corr,1,1,0,2.4981,Carolina Wren,0.7555
+Carolina_Wren_2.jpg,Carolina Wren,clean,candidate+corr,1,1,0,4.7820,Carolina Wren,0.9384
+Carolina_Wren_2.jpg,Carolina Wren,golden,candidate+corr,1,1,0,2.3884,Carolina Wren,0.7795
+Carolina_Wren_2.jpg,Carolina Wren,veil,candidate+corr,1,1,0,4.2956,Carolina Wren,0.9384
+Carolina_Wren_2.jpg,Carolina Wren,backlit,candidate+corr,1,1,0,1.9604,Carolina Wren,0.7397
+Carolina_Wren_2.jpg,Carolina Wren,silhouette,candidate+corr,0,0,0,-8.0267,Unknown / Not a Bird,0.9325
+Great_Egret_0.jpg,Great Egret,clean,candidate+corr,1,1,0,4.4522,Great Egret,0.9023
+Great_Egret_0.jpg,Great Egret,golden,candidate+corr,1,1,0,4.3152,Great Egret,0.9205
+Great_Egret_0.jpg,Great Egret,veil,candidate+corr,1,1,0,4.7240,Great Egret,0.9350
+Great_Egret_0.jpg,Great Egret,backlit,candidate+corr,1,1,0,3.6417,Great Egret,0.8510
+Great_Egret_0.jpg,Great Egret,silhouette,candidate+corr,0,0,0,-4.0723,Unknown / Not a Bird,0.3690
+Great_Egret_1.jpg,Great Egret,clean,candidate+corr,0,0,0,-0.0605,Tricolored Heron,0.1643
+Great_Egret_1.jpg,Great Egret,golden,candidate+corr,0,0,0,-1.2009,Tricolored Heron,0.3599
+Great_Egret_1.jpg,Great Egret,veil,candidate+corr,1,0,0,0.8928,Great Egret,0.2431
+Great_Egret_1.jpg,Great Egret,backlit,candidate+corr,0,0,1,-6.4399,Tricolored Heron,0.8188
+Great_Egret_1.jpg,Great Egret,silhouette,candidate+corr,0,0,1,-6.9440,Tricolored Heron,0.5144
+Great_Egret_2.jpg,Great Egret,clean,candidate+corr,1,1,0,4.3698,Great Egret,0.8991
+Great_Egret_2.jpg,Great Egret,golden,candidate+corr,1,1,0,2.8918,Great Egret,0.8577
+Great_Egret_2.jpg,Great Egret,veil,candidate+corr,1,1,0,2.2918,Great Egret,0.7684
+Great_Egret_2.jpg,Great Egret,backlit,candidate+corr,1,0,0,0.3788,Great Egret,0.3047
+Great_Egret_2.jpg,Great Egret,silhouette,candidate+corr,0,0,0,-8.0000,Unknown / Not a Bird,0.9102
+Belted_Kingfisher_0.jpg,Belted Kingfisher,clean,candidate+corr,1,1,0,1.0621,Belted Kingfisher,0.7036
+Belted_Kingfisher_0.jpg,Belted Kingfisher,golden,candidate+corr,1,1,0,1.1892,Belted Kingfisher,0.5052
+Belted_Kingfisher_0.jpg,Belted Kingfisher,veil,candidate+corr,1,0,0,1.4642,Belted Kingfisher,0.4107
+Belted_Kingfisher_0.jpg,Belted Kingfisher,backlit,candidate+corr,0,0,0,-6.5918,Common Kingfisher,0.1265
+Belted_Kingfisher_0.jpg,Belted Kingfisher,silhouette,candidate+corr,0,0,0,-7.7628,Bushtit,0.2367
+Belted_Kingfisher_1.jpg,Belted Kingfisher,clean,candidate+corr,1,1,0,3.3038,Belted Kingfisher,0.8636
+Belted_Kingfisher_1.jpg,Belted Kingfisher,golden,candidate+corr,1,1,0,2.9917,Belted Kingfisher,0.8826
+Belted_Kingfisher_1.jpg,Belted Kingfisher,veil,candidate+corr,1,1,0,1.1543,Belted Kingfisher,0.5603
+Belted_Kingfisher_1.jpg,Belted Kingfisher,backlit,candidate+corr,1,1,0,2.3091,Belted Kingfisher,0.5278
+Belted_Kingfisher_1.jpg,Belted Kingfisher,silhouette,candidate+corr,0,0,0,-3.9991,Unknown / Not a Bird,0.2066
+Belted_Kingfisher_2.jpg,Belted Kingfisher,clean,candidate+corr,1,1,0,2.5559,Belted Kingfisher,0.7341
+Belted_Kingfisher_2.jpg,Belted Kingfisher,golden,candidate+corr,1,1,0,2.3615,Belted Kingfisher,0.8380
+Belted_Kingfisher_2.jpg,Belted Kingfisher,veil,candidate+corr,1,1,0,3.5428,Belted Kingfisher,0.8309
+Belted_Kingfisher_2.jpg,Belted Kingfisher,backlit,candidate+corr,1,0,0,0.0824,Belted Kingfisher,0.1363
+Belted_Kingfisher_2.jpg,Belted Kingfisher,silhouette,candidate+corr,1,0,0,0.0140,Belted Kingfisher,0.0873
+Osprey_0.jpg,Osprey,clean,candidate+corr,1,1,0,6.5134,Osprey,0.9819
+Osprey_0.jpg,Osprey,golden,candidate+corr,1,1,0,6.1836,Osprey,0.9722
+Osprey_0.jpg,Osprey,veil,candidate+corr,1,1,0,3.8852,Osprey,0.8675
+Osprey_0.jpg,Osprey,backlit,candidate+corr,1,1,0,3.6477,Osprey,0.7474
+Osprey_0.jpg,Osprey,silhouette,candidate+corr,0,0,0,-0.2138,Black-crowned Night Heron,0.0423
+Osprey_1.jpg,Osprey,clean,candidate+corr,1,1,0,0.9069,Osprey,0.5552
+Osprey_1.jpg,Osprey,golden,candidate+corr,1,1,0,1.6622,Osprey,0.6157
+Osprey_1.jpg,Osprey,veil,candidate+corr,1,0,0,0.4856,Osprey,0.4077
+Osprey_1.jpg,Osprey,backlit,candidate+corr,0,0,0,-0.7978,Unknown / Not a Bird,0.4866
+Osprey_1.jpg,Osprey,silhouette,candidate+corr,0,0,0,-7.9076,Unknown / Not a Bird,0.8967
+Osprey_2.jpg,Osprey,clean,candidate+corr,1,1,0,6.9257,Osprey,0.9237
+Osprey_2.jpg,Osprey,golden,candidate+corr,1,1,0,6.8176,Osprey,0.9361
+Osprey_2.jpg,Osprey,veil,candidate+corr,1,0,0,1.9267,Osprey,0.2387
+Osprey_2.jpg,Osprey,backlit,candidate+corr,1,1,0,6.4101,Osprey,0.8706
+Osprey_2.jpg,Osprey,silhouette,candidate+corr,1,0,0,0.9616,Osprey,0.2063
+Turkey_Vulture_0.jpg,Turkey Vulture,clean,candidate+corr,0,0,0,-10.6359,Pied Cormorant,0.2190
+Turkey_Vulture_0.jpg,Turkey Vulture,golden,candidate+corr,0,0,0,-9.1572,Anas platyrhynchos domesticus,0.1007
+Turkey_Vulture_0.jpg,Turkey Vulture,veil,candidate+corr,0,0,0,-7.3072,Northern Gannet,0.1214
+Turkey_Vulture_0.jpg,Turkey Vulture,backlit,candidate+corr,0,0,0,-11.4443,Anas platyrhynchos domesticus,0.2264
+Turkey_Vulture_0.jpg,Turkey Vulture,silhouette,candidate+corr,0,0,0,-6.5013,Downy Woodpecker,0.0940
+Turkey_Vulture_1.jpg,Turkey Vulture,clean,candidate+corr,1,1,0,5.8185,Turkey Vulture,0.8552
+Turkey_Vulture_1.jpg,Turkey Vulture,golden,candidate+corr,1,1,0,6.3550,Turkey Vulture,0.8935
+Turkey_Vulture_1.jpg,Turkey Vulture,veil,candidate+corr,1,1,0,5.8737,Turkey Vulture,0.8254
+Turkey_Vulture_1.jpg,Turkey Vulture,backlit,candidate+corr,1,1,0,6.2540,Turkey Vulture,0.8840
+Turkey_Vulture_1.jpg,Turkey Vulture,silhouette,candidate+corr,1,1,0,6.2074,Turkey Vulture,0.8952
+Turkey_Vulture_2.jpg,Turkey Vulture,clean,candidate+corr,1,1,0,5.9363,Turkey Vulture,0.9107
+Turkey_Vulture_2.jpg,Turkey Vulture,golden,candidate+corr,1,1,0,5.2767,Turkey Vulture,0.8972
+Turkey_Vulture_2.jpg,Turkey Vulture,veil,candidate+corr,1,1,0,5.7714,Turkey Vulture,0.9450
+Turkey_Vulture_2.jpg,Turkey Vulture,backlit,candidate+corr,1,1,0,5.1431,Turkey Vulture,0.9185
+Turkey_Vulture_2.jpg,Turkey Vulture,silhouette,candidate+corr,1,0,0,2.2900,Turkey Vulture,0.2838
+American_Kestrel_0.jpg,American Kestrel,clean,candidate+corr,1,1,0,5.0294,American Kestrel,0.8234
+American_Kestrel_0.jpg,American Kestrel,golden,candidate+corr,1,1,0,5.0263,American Kestrel,0.8319
+American_Kestrel_0.jpg,American Kestrel,veil,candidate+corr,1,1,0,5.0017,American Kestrel,0.8903
+American_Kestrel_0.jpg,American Kestrel,backlit,candidate+corr,1,1,0,4.9995,American Kestrel,0.9330
+American_Kestrel_0.jpg,American Kestrel,silhouette,candidate+corr,0,0,0,-0.0538,Northern Flicker,0.3156
+American_Kestrel_1.jpg,American Kestrel,clean,candidate+corr,1,1,0,1.2367,American Kestrel,0.5001
+American_Kestrel_1.jpg,American Kestrel,golden,candidate+corr,0,0,1,-2.3086,Prairie Falcon,0.6222
+American_Kestrel_1.jpg,American Kestrel,veil,candidate+corr,0,0,1,-2.4735,Prairie Falcon,0.7674
+American_Kestrel_1.jpg,American Kestrel,backlit,candidate+corr,0,0,0,-5.4698,Unknown / Not a Bird,0.1682
+American_Kestrel_1.jpg,American Kestrel,silhouette,candidate+corr,0,0,0,-8.5691,Unknown / Not a Bird,0.8236
+American_Kestrel_2.jpg,American Kestrel,clean,candidate+corr,1,1,0,5.1943,American Kestrel,0.9319
+American_Kestrel_2.jpg,American Kestrel,golden,candidate+corr,1,1,0,3.0716,American Kestrel,0.7155
+American_Kestrel_2.jpg,American Kestrel,veil,candidate+corr,1,1,0,2.3478,American Kestrel,0.5859
+American_Kestrel_2.jpg,American Kestrel,backlit,candidate+corr,1,1,0,4.1588,American Kestrel,0.8136
+American_Kestrel_2.jpg,American Kestrel,silhouette,candidate+corr,0,0,0,-5.6566,Unknown / Not a Bird,0.5571
+Baltimore_Oriole_0.jpg,Baltimore Oriole,clean,candidate+corr,1,1,0,4.7249,Baltimore Oriole,0.8286
+Baltimore_Oriole_0.jpg,Baltimore Oriole,golden,candidate+corr,1,1,0,3.6355,Baltimore Oriole,0.8543
+Baltimore_Oriole_0.jpg,Baltimore Oriole,veil,candidate+corr,1,1,0,3.6625,Baltimore Oriole,0.8558
+Baltimore_Oriole_0.jpg,Baltimore Oriole,backlit,candidate+corr,1,1,0,2.9095,Baltimore Oriole,0.8573
+Baltimore_Oriole_0.jpg,Baltimore Oriole,silhouette,candidate+corr,1,1,0,0.7602,Baltimore Oriole,0.6121
+Baltimore_Oriole_1.jpg,Baltimore Oriole,clean,candidate+corr,0,0,0,-5.0294,House Finch,0.0891
+Baltimore_Oriole_1.jpg,Baltimore Oriole,golden,candidate+corr,0,0,0,-6.8628,Verdin,0.0582
+Baltimore_Oriole_1.jpg,Baltimore Oriole,veil,candidate+corr,0,0,0,-8.1518,Unknown / Not a Bird,0.3651
+Baltimore_Oriole_1.jpg,Baltimore Oriole,backlit,candidate+corr,0,0,0,-9.0402,Bushtit,0.1393
+Baltimore_Oriole_1.jpg,Baltimore Oriole,silhouette,candidate+corr,0,0,0,-7.9338,Unknown / Not a Bird,0.2656
+Baltimore_Oriole_2.jpg,Baltimore Oriole,clean,candidate+corr,1,0,0,1.3192,Baltimore Oriole,0.1807
+Baltimore_Oriole_2.jpg,Baltimore Oriole,golden,candidate+corr,0,0,0,-3.0396,Savannah Sparrow,0.1458
+Baltimore_Oriole_2.jpg,Baltimore Oriole,veil,candidate+corr,0,0,0,-2.6746,Northern Mockingbird,0.0426
+Baltimore_Oriole_2.jpg,Baltimore Oriole,backlit,candidate+corr,0,0,0,-5.2501,Broad-billed Hummingbird,0.1522
+Baltimore_Oriole_2.jpg,Baltimore Oriole,silhouette,candidate+corr,0,0,0,-6.3782,Broad-billed Hummingbird,0.1166
+Scarlet_Tanager_0.jpg,Scarlet Tanager,clean,candidate+corr,1,1,0,5.6889,Scarlet Tanager,0.9416
+Scarlet_Tanager_0.jpg,Scarlet Tanager,golden,candidate+corr,1,1,0,3.9412,Scarlet Tanager,0.8603
+Scarlet_Tanager_0.jpg,Scarlet Tanager,veil,candidate+corr,1,1,0,2.5812,Scarlet Tanager,0.8510
+Scarlet_Tanager_0.jpg,Scarlet Tanager,backlit,candidate+corr,1,1,0,4.3267,Scarlet Tanager,0.8971
+Scarlet_Tanager_0.jpg,Scarlet Tanager,silhouette,candidate+corr,0,0,1,-1.0827,Summer Tanager,0.5996
+Scarlet_Tanager_1.jpg,Scarlet Tanager,clean,candidate+corr,1,1,0,1.6490,Scarlet Tanager,0.6119
+Scarlet_Tanager_1.jpg,Scarlet Tanager,golden,candidate+corr,0,0,0,-0.1037,Summer Tanager,0.3411
+Scarlet_Tanager_1.jpg,Scarlet Tanager,veil,candidate+corr,0,0,0,-1.0205,Summer Tanager,0.4243
+Scarlet_Tanager_1.jpg,Scarlet Tanager,backlit,candidate+corr,1,0,0,0.4711,Scarlet Tanager,0.3511
+Scarlet_Tanager_1.jpg,Scarlet Tanager,silhouette,candidate+corr,1,0,0,0.1649,Scarlet Tanager,0.1901
+Scarlet_Tanager_2.jpg,Scarlet Tanager,clean,candidate+corr,1,1,0,1.9788,Scarlet Tanager,0.6733
+Scarlet_Tanager_2.jpg,Scarlet Tanager,golden,candidate+corr,0,0,0,-0.5944,Vermilion Flycatcher,0.4498
+Scarlet_Tanager_2.jpg,Scarlet Tanager,veil,candidate+corr,0,0,0,-0.5643,Summer Tanager,0.2995
+Scarlet_Tanager_2.jpg,Scarlet Tanager,backlit,candidate+corr,1,1,0,0.8929,Scarlet Tanager,0.5593
+Scarlet_Tanager_2.jpg,Scarlet Tanager,silhouette,candidate+corr,1,0,0,0.4649,Scarlet Tanager,0.1804
+Indigo_Bunting_0.jpg,Indigo Bunting,clean,candidate+corr,1,1,0,3.8244,Indigo Bunting,0.7301
+Indigo_Bunting_0.jpg,Indigo Bunting,golden,candidate+corr,1,1,0,2.5880,Indigo Bunting,0.5913
+Indigo_Bunting_0.jpg,Indigo Bunting,veil,candidate+corr,1,1,0,4.2158,Indigo Bunting,0.6866
+Indigo_Bunting_0.jpg,Indigo Bunting,backlit,candidate+corr,1,1,0,3.5863,Indigo Bunting,0.8196
+Indigo_Bunting_0.jpg,Indigo Bunting,silhouette,candidate+corr,1,0,0,0.4635,Indigo Bunting,0.1933
+Indigo_Bunting_1.jpg,Indigo Bunting,clean,candidate+corr,1,1,0,5.6889,Indigo Bunting,0.9454
+Indigo_Bunting_1.jpg,Indigo Bunting,golden,candidate+corr,1,1,0,3.9004,Indigo Bunting,0.7989
+Indigo_Bunting_1.jpg,Indigo Bunting,veil,candidate+corr,1,1,0,4.2349,Indigo Bunting,0.8058
+Indigo_Bunting_1.jpg,Indigo Bunting,backlit,candidate+corr,1,1,0,4.0806,Indigo Bunting,0.8741
+Indigo_Bunting_1.jpg,Indigo Bunting,silhouette,candidate+corr,1,1,0,1.7456,Indigo Bunting,0.6191
+Indigo_Bunting_2.jpg,Indigo Bunting,clean,candidate+corr,1,1,0,5.2767,Indigo Bunting,0.8718
+Indigo_Bunting_2.jpg,Indigo Bunting,golden,candidate+corr,1,1,0,5.4423,Indigo Bunting,0.8540
+Indigo_Bunting_2.jpg,Indigo Bunting,veil,candidate+corr,1,1,0,3.5067,Indigo Bunting,0.6329
+Indigo_Bunting_2.jpg,Indigo Bunting,backlit,candidate+corr,1,1,0,4.7570,Indigo Bunting,0.7379
+Indigo_Bunting_2.jpg,Indigo Bunting,silhouette,candidate+corr,1,1,0,1.9230,Indigo Bunting,0.5546
+Common_Loon_0.jpg,Common Loon,clean,candidate+corr,1,1,0,3.0506,Common Loon,0.7357
+Common_Loon_0.jpg,Common Loon,golden,candidate+corr,1,1,0,3.5641,Common Loon,0.7698
+Common_Loon_0.jpg,Common Loon,veil,candidate+corr,1,1,0,2.4155,Common Loon,0.6968
+Common_Loon_0.jpg,Common Loon,backlit,candidate+corr,1,1,0,3.2783,Common Loon,0.7866
+Common_Loon_0.jpg,Common Loon,silhouette,candidate+corr,1,0,0,1.4537,Common Loon,0.2586
+Common_Loon_1.jpg,Common Loon,clean,candidate+corr,0,0,0,-1.2367,Cooper's Hawk,0.2097
+Common_Loon_1.jpg,Common Loon,golden,candidate+corr,0,0,1,-4.7103,Cooper's Hawk,0.5741
+Common_Loon_1.jpg,Common Loon,veil,candidate+corr,0,0,0,-0.4206,Red-throated Loon,0.1259
+Common_Loon_1.jpg,Common Loon,backlit,candidate+corr,0,0,0,-5.6065,House Finch,0.3196
+Common_Loon_1.jpg,Common Loon,silhouette,candidate+corr,0,0,0,-6.8843,Unknown / Not a Bird,0.3134
+Common_Loon_2.jpg,Common Loon,clean,candidate+corr,0,0,0,-9.2342,Unknown / Not a Bird,0.5849
+Common_Loon_2.jpg,Common Loon,golden,candidate+corr,0,0,0,-7.2941,Mallard,0.1172
+Common_Loon_2.jpg,Common Loon,veil,candidate+corr,0,0,0,-7.1730,Great Egret,0.0830
+Common_Loon_2.jpg,Common Loon,backlit,candidate+corr,0,0,0,-7.4720,Mallard,0.1925
+Common_Loon_2.jpg,Common Loon,silhouette,candidate+corr,0,0,0,-7.4393,Unknown / Not a Bird,0.2545
+Mute_Swan_0.jpg,Mute Swan,clean,candidate+corr,0,0,0,-5.1943,Tree Swallow,0.2800
+Mute_Swan_0.jpg,Mute Swan,golden,candidate+corr,0,0,0,-5.5050,Turkey Vulture,0.1960
+Mute_Swan_0.jpg,Mute Swan,veil,candidate+corr,0,0,0,-6.2979,Turkey Vulture,0.3244
+Mute_Swan_0.jpg,Mute Swan,backlit,candidate+corr,0,0,0,-4.2302,Tree Swallow,0.1104
+Mute_Swan_0.jpg,Mute Swan,silhouette,candidate+corr,0,0,1,-7.6825,House Sparrow,0.5543
+Mute_Swan_1.jpg,Mute Swan,clean,candidate+corr,1,0,0,1.8139,Mute Swan,0.3698
+Mute_Swan_1.jpg,Mute Swan,golden,candidate+corr,1,0,0,0.6131,Mute Swan,0.2390
+Mute_Swan_1.jpg,Mute Swan,veil,candidate+corr,0,0,0,-2.2888,Canada Goose,0.2318
+Mute_Swan_1.jpg,Mute Swan,backlit,candidate+corr,0,0,0,-3.3891,Canada Goose,0.1214
+Mute_Swan_1.jpg,Mute Swan,silhouette,candidate+corr,0,0,0,-4.7197,Unknown / Not a Bird,0.1679
+Mute_Swan_2.jpg,Mute Swan,clean,candidate+corr,1,1,0,5.4416,Mute Swan,0.7278
+Mute_Swan_2.jpg,Mute Swan,golden,candidate+corr,1,1,0,6.6662,Mute Swan,0.8992
+Mute_Swan_2.jpg,Mute Swan,veil,candidate+corr,1,1,0,1.2676,Mute Swan,0.7376
+Mute_Swan_2.jpg,Mute Swan,backlit,candidate+corr,1,1,0,6.0091,Mute Swan,0.9253
+Mute_Swan_2.jpg,Mute Swan,silhouette,candidate+corr,1,1,0,3.0112,Mute Swan,0.6645
+Wood_Duck_0.jpg,Wood Duck,clean,candidate+corr,0,0,1,-2.9681,Cairina moschata domestica,0.5434
+Wood_Duck_0.jpg,Wood Duck,golden,candidate+corr,0,0,1,-4.4784,Cairina moschata domestica,0.5364
+Wood_Duck_0.jpg,Wood Duck,veil,candidate+corr,0,0,1,-6.9573,Cairina moschata domestica,0.6341
+Wood_Duck_0.jpg,Wood Duck,backlit,candidate+corr,0,0,0,-3.2845,Columba livia domestica,0.1426
+Wood_Duck_0.jpg,Wood Duck,silhouette,candidate+corr,0,0,0,-8.1046,American Coot,0.4180
+Wood_Duck_1.jpg,Wood Duck,clean,candidate+corr,1,1,0,7.0081,Wood Duck,0.9514
+Wood_Duck_1.jpg,Wood Duck,golden,candidate+corr,1,1,0,6.3549,Wood Duck,0.9308
+Wood_Duck_1.jpg,Wood Duck,veil,candidate+corr,1,1,0,6.3534,Wood Duck,0.9301
+Wood_Duck_1.jpg,Wood Duck,backlit,candidate+corr,1,1,0,5.2659,Wood Duck,0.8457
+Wood_Duck_1.jpg,Wood Duck,silhouette,candidate+corr,1,1,0,3.2869,Wood Duck,0.7388
+Wood_Duck_2.jpg,Wood Duck,clean,candidate+corr,1,1,0,6.9257,Wood Duck,0.9393
+Wood_Duck_2.jpg,Wood Duck,golden,candidate+corr,1,1,0,6.8190,Wood Duck,0.9315
+Wood_Duck_2.jpg,Wood Duck,veil,candidate+corr,1,1,0,4.1818,Wood Duck,0.8862
+Wood_Duck_2.jpg,Wood Duck,backlit,candidate+corr,1,1,0,5.0027,Wood Duck,0.9184
+Wood_Duck_2.jpg,Wood Duck,silhouette,candidate+corr,1,1,0,0.6449,Wood Duck,0.5663
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,clean,candidate+corr,0,0,1,-5.1363,Red-bellied Woodpecker,0.5521
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,golden,candidate+corr,0,0,1,-6.7695,Red-bellied Woodpecker,0.6522
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,veil,candidate+corr,0,0,1,-6.3928,Red-bellied Woodpecker,0.6871
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,backlit,candidate+corr,0,0,1,-6.7940,Red-bellied Woodpecker,0.7523
+Acorn_Woodpecker_0.jpg,Acorn Woodpecker,silhouette,candidate+corr,0,0,1,-4.9727,Red-bellied Woodpecker,0.5731
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,clean,candidate+corr,1,1,0,5.3592,Acorn Woodpecker,0.8793
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,golden,candidate+corr,1,1,0,4.0242,Acorn Woodpecker,0.7991
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,veil,candidate+corr,1,0,0,2.4140,Acorn Woodpecker,0.4103
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,backlit,candidate+corr,1,0,0,2.1889,Acorn Woodpecker,0.3194
+Acorn_Woodpecker_1.jpg,Acorn Woodpecker,silhouette,candidate+corr,1,0,0,1.5212,Acorn Woodpecker,0.2117
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,clean,candidate+corr,1,1,0,6.3485,Acorn Woodpecker,0.9291
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,golden,candidate+corr,1,1,0,5.6397,Acorn Woodpecker,0.8221
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,veil,candidate+corr,1,1,0,5.2552,Acorn Woodpecker,0.7473
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,backlit,candidate+corr,1,1,0,3.6832,Acorn Woodpecker,0.5797
+Acorn_Woodpecker_2.jpg,Acorn Woodpecker,silhouette,candidate+corr,1,0,0,1.5116,Acorn Woodpecker,0.1068
+California_Scrub-Jay_0.jpg,California Scrub-Jay,clean,candidate+corr,0,0,0,-8.1624,Unknown / Not a Bird,0.9238
+California_Scrub-Jay_0.jpg,California Scrub-Jay,golden,candidate+corr,0,0,0,-7.7402,Unknown / Not a Bird,0.5043
+California_Scrub-Jay_0.jpg,California Scrub-Jay,veil,candidate+corr,0,0,0,-7.5395,Unknown / Not a Bird,0.6548
+California_Scrub-Jay_0.jpg,California Scrub-Jay,backlit,candidate+corr,0,0,0,-9.6223,Unknown / Not a Bird,0.9225
+California_Scrub-Jay_0.jpg,California Scrub-Jay,silhouette,candidate+corr,0,0,0,-9.7029,Unknown / Not a Bird,0.9200
+California_Scrub-Jay_1.jpg,California Scrub-Jay,clean,candidate+corr,1,1,0,5.3592,California Scrub-Jay,0.9601
+California_Scrub-Jay_1.jpg,California Scrub-Jay,golden,candidate+corr,1,1,0,4.9334,California Scrub-Jay,0.8754
+California_Scrub-Jay_1.jpg,California Scrub-Jay,veil,candidate+corr,1,1,0,4.4427,California Scrub-Jay,0.7818
+California_Scrub-Jay_1.jpg,California Scrub-Jay,backlit,candidate+corr,1,1,0,4.3440,California Scrub-Jay,0.8828
+California_Scrub-Jay_1.jpg,California Scrub-Jay,silhouette,candidate+corr,1,1,0,3.5256,California Scrub-Jay,0.6483
+California_Scrub-Jay_2.jpg,California Scrub-Jay,clean,candidate+corr,0,0,0,-0.7420,Blue Jay,0.4073
+California_Scrub-Jay_2.jpg,California Scrub-Jay,golden,candidate+corr,1,1,0,1.1435,California Scrub-Jay,0.5345
+California_Scrub-Jay_2.jpg,California Scrub-Jay,veil,candidate+corr,1,0,0,1.5511,California Scrub-Jay,0.4311
+California_Scrub-Jay_2.jpg,California Scrub-Jay,backlit,candidate+corr,0,0,1,-2.7369,Dark-eyed Junco,0.6819
+California_Scrub-Jay_2.jpg,California Scrub-Jay,silhouette,candidate+corr,0,0,0,-0.9678,Dark-eyed Junco,0.1614

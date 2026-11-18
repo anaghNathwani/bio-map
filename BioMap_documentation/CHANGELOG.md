@@ -10,10 +10,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed (build 6)
+- **Loading screen showed only the bird:** with Reduce Motion on, `BioLoader` held a still bird. It now cross-fades through all ten organisms (iOS `BioLoaderTimeline`, web `BioLoader.jsx`). Checked by `ios/BioMap/Tools/BioLoaderCheck/run.sh`.
+- **Map always opened on San Francisco:** the map now follows the user's location once permission and a fix arrive, and stops following after the user pans or opens a sighting.
+- **Multiple birds in one frame:** the Tier 2 detector was never published, so the app used the saliency fallback, which found no extra species in 160 test frames. `MultiBirdDetector` now classifies sliding windows and aggregates species. On 320 composite frames, all birds found: pairs 0% -> 96%, triples 0% -> 100%, unequal sizes 0% -> 65%; about 0.06 wrong extra species per single-bird photo. Eval tools in `ml_pipeline/multibird_eval/`. Not yet tested on a real device.
+- Bug tracker page now shows times (PT); `sync_bug_tracker.py` gained `--only`, `--at`, `--tz`.
+
 ### Added (not yet released)
-- **Glare handling for sunrise/sunset photos:** `GlareCorrector` detects an orange cast, a washed-out veil or a backlit subject
-  and `BirdClassifier` blends in a corrected copy; plus exposure drag after tap-to-focus in the camera. Evaluated on simulated
-  glare in `ml_pipeline/glare_eval/` (see `docs/ML_PIPELINE.md`).
+- **Sunrise/sunset glare:** exposure drag after tap-to-focus in the camera. A pre-processing glare correction (`GlareCorrector`) was
+  built and then switched off: it helped on simulated glare but not on 1,349 real photos (see `docs/ML_PIPELINE.md` and
+  `docs/GLARE_WEIGHT_PROGRAMMING.md`).
 
 ### Planned (not built yet)
 - Species autocomplete via a curated species list endpoint
