@@ -101,7 +101,7 @@
 		053A296A2A5819343BC2E8F2 /* AdaptiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLayout.swift; sourceTree = "<group>"; };
 		0C37575471E52718891D9FAF /* BioLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioLoader.swift; sourceTree = "<group>"; };
 		0C46399C2914A7F950B13819 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		112C45936E50DB79321AFD66 /* BundledBirdNET.tflite */ = {isa = PBXFileReference; path = BundledBirdNET.tflite; sourceTree = "<group>"; };
+		112C45936E50DB79321AFD66 /* BundledBirdNET.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = BundledBirdNET.tflite; sourceTree = "<group>"; };
 		11528B44D0B78122DC81010C /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		151408506D6C0A1208E8B186 /* BioMapWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioMapWidgets.swift; sourceTree = "<group>"; };
 		2B49FFEE2CB9CACD645AE9EC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		366F98A5444E320F3D9C6D48 /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
 		36F2E19ED3971E712E75A8CB /* SupabaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseStorage.swift; sourceTree = "<group>"; };
 		3703FD6B6BFF9E7BA911863B /* GlareCorrector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlareCorrector.swift; sourceTree = "<group>"; };
-		374990A569A9CC961A566D48 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		374990A569A9CC961A566D48 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3BA990DBCBAA064609615557 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		3BB2940A51585C276AED26F7 /* Sighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sighting.swift; sourceTree = "<group>"; };
 		40C2EB058A1A7955E7ADD2B9 /* AnnotationModerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationModerator.swift; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 		59D53B666ECA560C5089F17B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5F8DE32D56936BE54408B011 /* BirdInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdInfoView.swift; sourceTree = "<group>"; };
 		61762F7028AB7A7C39A37AA6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		625DA9DF4A1360DE3CEBA6B9 /* BioMap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BioMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		625DA9DF4A1360DE3CEBA6B9 /* BioMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BioMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		687D4157C5AC88EB3D90E3CF /* ControlIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlIntents.swift; sourceTree = "<group>"; };
 		692635802870C1FF30E7B203 /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		6E9F066666BFF809B649E486 /* AIPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPredictionCard.swift; sourceTree = "<group>"; };
@@ -144,11 +144,11 @@
 		B14ECDF6A7F34EF916422C98 /* CameraControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControls.swift; sourceTree = "<group>"; };
 		B29DC45B35FF195887DA6735 /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
 		B8E739AC64350DEF4F9905EA /* AudioImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioImporter.swift; sourceTree = "<group>"; };
-		BC76EFFC6863139FD386DB64 /* BundledBirdModel.tflite */ = {isa = PBXFileReference; path = BundledBirdModel.tflite; sourceTree = "<group>"; };
+		BC76EFFC6863139FD386DB64 /* BundledBirdModel.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = BundledBirdModel.tflite; sourceTree = "<group>"; };
 		BCCE40013FB860D5B5BBF9D8 /* AudioRecorderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderViewModel.swift; sourceTree = "<group>"; };
 		BD6911A72A9692483291E2B0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		BE28A03F143AF6F33D8D2248 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		C14ECB898ACF3C1A41306D3D /* BundledBirdNETLocation.tflite */ = {isa = PBXFileReference; path = BundledBirdNETLocation.tflite; sourceTree = "<group>"; };
+		C14ECB898ACF3C1A41306D3D /* BundledBirdNETLocation.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = BundledBirdNETLocation.tflite; sourceTree = "<group>"; };
 		DAA84F8A055F47E9B24F1544 /* SightingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingDetailView.swift; sourceTree = "<group>"; };
 		DECB22A086594D117D69A338 /* SightingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SightingListView.swift; sourceTree = "<group>"; };
 		E0E2E167736D07B37A5EE506 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
@@ -330,7 +330,6 @@
 				2D9BDD580875FD617FD8B2E7 /* Pods-BioMap.debug.xcconfig */,
 				7D955A2C7C1837BA1CBC57FE /* Pods-BioMap.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -658,6 +657,7 @@
 				CODE_SIGN_ENTITLEMENTS = BioMap/BioMap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 2JN5C47MQT;
 				INFOPLIST_FILE = BioMap/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
@@ -665,6 +665,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.8.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.biomap.BioMap;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -804,6 +805,7 @@
 				CODE_SIGN_ENTITLEMENTS = BioMap/BioMap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 2JN5C47MQT;
 				INFOPLIST_FILE = BioMap/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
@@ -811,6 +813,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.8.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.biomap.BioMap;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
