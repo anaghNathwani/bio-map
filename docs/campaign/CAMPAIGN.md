@@ -19,7 +19,7 @@ one-line ending) but none of its words, footage or tagline.
 | `film/look-up-film-16x9.mp4` | The full film, widescreen (website, YouTube, presentations) |
 | `film/look-up-short-9x16.mp4` | Shorter cut (two lines, then the mark) for feeds and ads |
 | `film/look-up-bumper-9x16.mp4` | ~10 s bumper |
-| `posters/*-4x5.png`, `*-story.png` | 5 posters (feed 1080x1350 and Story 1080x1920) |
+| `posters/*-4x5.png`, `*-story.png` | 7 posters (feed 1080x1350 and Story 1080x1920). `06-lurks` ("Something lurks around the corner.") is built by `build_lurk.py`; `07-lurks-flock` (same line, a flock in viewfinder brackets) by `build_lurk_flock.py` |
 | `vo/lines/*.wav` | The narration, one file per line (see "Voice") |
 | `build_campaign.py`, `flock.js`, `vo.py`, `score.py` | Regenerate everything (edit the words, re-run) |
 
