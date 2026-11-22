@@ -196,3 +196,21 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
         }
     }
 
+    private func crop(_ buffer: CVPixelBuffer, box: CGRect) -> UIImage? {
+        let w = CGFloat(CVPixelBufferGetWidth(buffer)), h = CGFloat(CVPixelBufferGetHeight(buffer))
+        let padded = box.insetBy(dx: -box.width * 0.12, dy: -box.height * 0.12).intersection(CGRect(x: 0, y: 0, width: 1, height: 1))
+        // CoreImage is bottom-left origin.
+        let rect = CGRect(x: padded.minX * w, y: (1 - padded.maxY) * h, width: padded.width * w, height: padded.height * h).integral
+        guard rect.width >= 32, rect.height >= 32 else { return nil }
+        let image = CIImage(cvPixelBuffer: buffer).cropped(to: rect)
+        guard let cg = ciContext.createCGImage(image, from: image.extent) else { return nil }
+        return UIImage(cgImage: cg)
+    }
+
+    static func iou(_ a: CGRect, _ b: CGRect) -> CGFloat {
+        let i = a.intersection(b)
+        guard !i.isNull else { return 0 }
+        let inter = i.width * i.height
+        return inter / (a.width * a.height + b.width * b.height - inter)
+    }
+}
