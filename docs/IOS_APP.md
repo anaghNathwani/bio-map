@@ -197,3 +197,7 @@ The privacy manifest (`PrivacyInfo.xcprivacy`) declares no tracking and the `Use
 - **`API_BASE_URL`:** `http://localhost:8000` in Debug and the legacy backend URL in Release; only the optional Vision proxy
   uses it.
 - **Signing:** automatic, team `2JN5C47MQT`.
+
+## Incognito live view
+
+Photo tab, "Incognito live view" (`Views/Camera/LiveScopeView.swift`, `ML/LiveBirdScope.swift`). Full-screen camera, video only, no recording and no upload. `LiveBirdScope` runs the bundled YOLOv3-Tiny bird detector (`BundledBirdDetector.mlmodel`) on about 5 frames a second with `imageCropAndScaleOption = .scaleFit`, follows birds between frames by box overlap (IoU), and classifies a crop of each followed bird about once a second with `BirdClassifier`, voting the answers so a tag doesn't flicker. `PixelBox` draws the green blocky box (outline, corner brackets, flickering dither, scan line; static when Reduce Motion is on). Tap a bird to select it. Frames are processed and dropped; the class has no recording output, audio input or network code.
