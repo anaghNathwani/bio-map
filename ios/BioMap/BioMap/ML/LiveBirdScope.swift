@@ -109,3 +109,11 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
         return true
     }
 
+    private static func loadDetector() -> VNCoreMLModel? {
+        guard let url = Bundle.main.url(forResource: "BundledBirdDetector", withExtension: "mlmodelc"),
+              let ml = try? MLModel(contentsOf: url) else { return nil }
+        return try? VNCoreMLModel(for: ml)
+    }
+
+    // MARK: - Frames
+
