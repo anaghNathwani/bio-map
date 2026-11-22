@@ -83,3 +83,29 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
         set(.running)
     }
 
+    private func configure() -> Bool {
+        if configured { return true }
+        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+              let input = try? AVCaptureDeviceInput(device: camera),
+              let model = Self.loadDetector() else { set(.unavailable); return false }
+        let request = VNCoreMLRequest(model: model)
+        // Fit the whole frame inside the model's square input (padded, not stretched) and Vision hands the boxes back in
+        // frame coordinates. Stretching a tall camera frame into the square found no birds at all in testing.
+        request.imageCropAndScaleOption = .scaleFit
+        self.request = request
+
+        session.beginConfiguration()
+        session.sessionPreset = .hd1280x720
+        if session.canAddInput(input) { session.addInput(input) }
+        output.alwaysDiscardsLateVideoFrames = true
+        output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
+        output.setSampleBufferDelegate(self, queue: work)
+        if session.canAddOutput(output) { session.addOutput(output) }
+        session.commitConfiguration()
+        if let connection = output.connection(with: .video), connection.isVideoRotationAngleSupported(90) {
+            connection.videoRotationAngle = 90          // upright frames, so boxes need no rotation maths
+        }
+        configured = true
+        return true
+    }
+
