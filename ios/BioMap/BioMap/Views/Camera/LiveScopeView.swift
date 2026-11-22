@@ -161,3 +161,7 @@ enum PixelBox {
     }
 }
 
+/// The camera feed itself.
+struct CameraPreview: UIViewRepresentable {
+    let session: AVCaptureSession
+
