@@ -8,6 +8,7 @@ struct CameraView: View {
     @Environment(\.colorScheme) private var scheme
     @StateObject private var vm = CameraViewModel()
     @State private var showPicker = false
+    @State private var showLiveScope = false
     @State private var showBirdInfo = false
     @State private var visionCandidates: [VisionCandidate] = []
     @State private var showAIReview = false
