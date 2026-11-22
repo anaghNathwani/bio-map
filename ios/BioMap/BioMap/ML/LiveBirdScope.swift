@@ -27,3 +27,17 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
 
     enum Status: Equatable { case starting, running, denied, unavailable }
 
+    let session = AVCaptureSession()
+    /// Frame size as delivered (portrait), for mapping boxes onto the preview.
+    @Published private(set) var frameSize = CGSize(width: 720, height: 1280)
+
+    // Everything below is touched only on `work`.
+    private let work = DispatchQueue(label: "biomap.livescope", qos: .userInitiated)
+    private let output = AVCaptureVideoDataOutput()
+    private var configured = false
+    private var request: VNCoreMLRequest?
+    private let ciContext = CIContext()
+    private var lastRun = Date.distantPast
+    private var tracks: [Track] = []
+    private var nextID = 1
+
