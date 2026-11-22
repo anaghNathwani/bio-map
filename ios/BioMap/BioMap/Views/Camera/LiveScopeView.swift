@@ -127,3 +127,37 @@ struct FrameMap {
     }
 }
 
+/// The green, blocky box: an outline and corner brackets made of square "pixels", a sparse flickering dither inside and a
+/// scan line that sweeps down it.
+enum PixelBox {
+    static let cell: CGFloat = 5
+
+    static func draw(in ctx: inout GraphicsContext, rect: CGRect, selected: Bool, tick: Int, animated: Bool, color: Color) {
+        let cols = max(Int(rect.width / cell), 4), rows = max(Int(rect.height / cell), 4)
+        let origin = CGPoint(x: (rect.minX / cell).rounded() * cell, y: (rect.minY / cell).rounded() * cell)
+        func cellRect(_ c: Int, _ r: Int) -> CGRect {
+            CGRect(x: origin.x + CGFloat(c) * cell + 0.5, y: origin.y + CGFloat(r) * cell + 0.5, width: cell - 1, height: cell - 1)
+        }
+
+        var dither = Path(), outline = Path(), brackets = Path(), scan = Path()
+        let density = selected ? 5 : 11                        // one cell in `density` lights up
+        let sweep = animated ? (tick % (rows + 8)) - 4 : -10
+        for r in 0..<rows {
+            for c in 0..<cols {
+                let edge = r == 0 || r == rows - 1 || c == 0 || c == cols - 1
+                let corner = (r < 3 || r >= rows - 3) && (c < 3 || c >= cols - 3)
+                if corner, edge || r < 2 || r >= rows - 2 || c < 2 || c >= cols - 2 { brackets.addRect(cellRect(c, r)); continue }
+                if edge { if (c + r) % 2 == 0 || selected { outline.addRect(cellRect(c, r)) }; continue }
+                if r == sweep { scan.addRect(cellRect(c, r)); continue }
+                var h = UInt64(c &* 73856093) ^ UInt64(r &* 19349663) ^ UInt64(tick &* 83492791)
+                h = (h ^ (h >> 13)) &* 0x5bd1e995
+                if Int(h % UInt64(density)) == 0 { dither.addRect(cellRect(c, r)) }
+            }
+        }
+        ctx.fill(dither, with: .color(color.opacity(selected ? 0.35 : 0.22)))
+        ctx.fill(scan, with: .color(color.opacity(0.4)))
+        ctx.fill(outline, with: .color(color.opacity(selected ? 0.95 : 0.7)))
+        ctx.fill(brackets, with: .color(color))
+    }
+}
+
