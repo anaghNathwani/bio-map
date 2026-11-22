@@ -28,12 +28,11 @@ struct BioMapApp: App {
             await UploadQueue.shared.flushIfNeeded { item in
                 guard let data = try? Data(contentsOf: URL(fileURLWithPath: item.imagePath)) else { return }
                 let sightingID = UUID().uuidString
-                let (photoURL, thumbURL, fallbackURL) = try await FirebaseService.shared.uploadImage(data, sightingID: sightingID)
+                let (photoURL, thumbURL) = try await FirebaseService.shared.uploadImage(data, sightingID: sightingID)
                 _ = try await FirebaseService.shared.createSighting(
                     photoURL: photoURL,
                     thumbnailURL: thumbURL,
                     audioURL: nil,
-                    photoFallbackURL: fallbackURL,
                     mediaType: "photo",
                     latitude: item.latitude,
                     longitude: item.longitude,

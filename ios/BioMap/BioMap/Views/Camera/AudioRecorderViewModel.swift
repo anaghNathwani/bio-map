@@ -235,12 +235,11 @@ final class AudioRecorderViewModel: NSObject, ObservableObject, CLLocationManage
         }
 
         do {
-            let (audioURL, fallbackURL) = try await FirebaseService.shared.uploadAudio(data, sightingID: sightingID, filename: url.lastPathComponent)
+            let audioURL = try await FirebaseService.shared.uploadAudio(data, sightingID: sightingID, filename: url.lastPathComponent)
             _ = try await FirebaseService.shared.createSighting(
                 photoURL: nil,
                 thumbnailURL: nil,
                 audioURL: audioURL,
-                audioFallbackURL: fallbackURL,
                 mediaType: "audio",
                 latitude: location.coordinate.latitude,
                 longitude: location.coordinate.longitude,
