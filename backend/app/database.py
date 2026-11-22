@@ -3,10 +3,7 @@ from sqlalchemy.orm import DeclarativeBase
 
 from app.config import settings
 
-# Supabase's pgbouncer pooler requires statement_cache_size=0 for asyncpg.
-# For direct connections (local/dev) this is a no-op.
-_connect_args = {"statement_cache_size": 0} if "pooler.supabase.com" in settings.database_url else {}
-engine = create_async_engine(settings.database_url or "postgresql+asyncpg://localhost/birdmap", echo=False, connect_args=_connect_args)
+engine = create_async_engine(settings.database_url or "postgresql+asyncpg://localhost/birdmap", echo=False)
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
 

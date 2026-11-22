@@ -9,7 +9,7 @@ s3 = boto3.client(
     endpoint_url=settings.s3_endpoint or "http://localhost:9000",
     aws_access_key_id=settings.s3_access_key or "minioadmin",
     aws_secret_access_key=settings.s3_secret_key or "minioadmin",
-    # Supabase Storage and MinIO both work without a real AWS region
+    # MinIO and most S3-compatible stores work without a real AWS region
     region_name="us-east-1",
 )
 
@@ -18,15 +18,9 @@ SOUNDS_BUCKET = "birdmap-sounds"
 
 
 def _public_object_url(bucket: str, key: str) -> str:
-    """Public download URL for an object, correct for both backends this
-    project targets. Supabase Storage serves public objects under
-    /object/public/ — distinct from the S3-compatible endpoint used for
-    uploads — so a bare "{base}/{bucket}/{key}" 404s against real Supabase.
-    MinIO (local dev) has no such route and serves a public bucket directly
-    at "{base}/{bucket}/{key}", so only insert the segment for Supabase."""
+    """Public download URL for an object: a public bucket served directly at
+    "{base}/{bucket}/{key}" (MinIO in local dev, or any S3-compatible host)."""
     base = settings.public_s3_url or settings.s3_endpoint
-    if "supabase.co" in base:
-        return f"{base}/object/public/{bucket}/{key}"
     return f"{base}/{bucket}/{key}"
 
 
@@ -35,8 +29,8 @@ def ensure_buckets() -> None:
     try:
         existing = {b["Name"] for b in s3.list_buckets()["Buckets"]}
     except Exception:
-        # Supabase Storage doesn't support ListBuckets — skip the check.
-        # Buckets are created manually in the Supabase dashboard.
+        # Some S3-compatible hosts don't support ListBuckets — skip the check;
+        # create the buckets manually there.
         return
     for bucket in (settings.s3_bucket, settings.model_bucket, SOUNDS_BUCKET):
         if bucket not in existing:
