@@ -113,9 +113,7 @@ final class ModelManager {
     /// primary path. A model is too big for one 1 MiB Firestore document, so
     /// it's split into base64 chunk documents under
     /// `model_versions/{id}/chunks`, reassembled here — see
-    /// docs/ML_PIPELINE.md. If the Firestore chunks can't be assembled for
-    /// any reason, falls back to downloading the same zip from the doc's
-    /// `fallbackURL` (a Supabase Storage public URL), when present.
+    /// docs/ML_PIPELINE.md.
     func checkForUpdate() async {
         await checkForClassifierUpdate()
         await checkForDetectorUpdate()
@@ -149,20 +147,8 @@ final class ModelManager {
         return result
     }
 
-    /// Firestore primary failed (missing/malformed chunks, read error, etc.)
-    /// — try the Supabase fallback URL stored on the same doc, if published.
     private func fetchModelData(from doc: QueryDocumentSnapshot) async throws -> Data {
-        do {
-            return try await assembleModelData(from: doc)
-        } catch {
-            guard let fallbackURLString = doc.data()["fallbackURL"] as? String,
-                  let fallbackURL = URL(string: fallbackURLString) else {
-                throw error
-            }
-            print("[ModelManager] Firestore chunks unavailable (\(error)), trying fallback URL…")
-            let (data, _) = try await URLSession.shared.data(from: fallbackURL)
-            return data
-        }
+        try await assembleModelData(from: doc)
     }
 
     private func checkForClassifierUpdate() async {
