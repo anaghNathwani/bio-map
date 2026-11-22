@@ -10,6 +10,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added (build 6)
+- **Incognito live view** (Photo tab, "Incognito live view"): the camera with a green, pixelated, terminal-style box and tag on every bird in frame; tap a bird to pick it out and see its confidence. Where the birds are comes from the bundled YOLOv3-Tiny COCO "bird" detector (`ML/Bundled/BundledBirdDetector.mlmodel`, 35 MB, same model as `ml_pipeline/output_detector`), run about 5 times a second with `.scaleFit` (stretching a portrait frame into the model's square found no birds in testing); which species comes from the photo classifier on a crop of each followed bird about once a second, voted over time. Nothing is recorded, saved or uploaded: no audio, no photo or movie output, no network. New code: `ML/LiveBirdScope.swift`, `Views/Camera/LiveScopeView.swift`. Checked on the simulator with stills (a two-bird landscape and a portrait frame: both birds found and named, 89-95%); the live camera path has not been run on a real device.
+
 ### Fixed (build 6)
 - **Loading screen showed only the bird:** with Reduce Motion on, `BioLoader` held a still bird. It now cross-fades through all ten organisms (iOS `BioLoaderTimeline`, web `BioLoader.jsx`). Checked by `ios/BioMap/Tools/BioLoaderCheck/run.sh`.
 - **Map always opened on San Francisco:** the map now follows the user's location once permission and a fix arrive, and stops following after the user pans or opens a sighting.
