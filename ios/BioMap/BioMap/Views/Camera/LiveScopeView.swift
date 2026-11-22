@@ -59,3 +59,36 @@ struct LiveScopeView: View {
 
     // MARK: - Pieces
 
+    private func tag(for bird: LiveBird, rect: CGRect, selected: Bool, in size: CGSize) -> some View {
+        let name = bird.species?.uppercased() ?? "SCANNING…"
+        let text = selected && bird.species != nil ? "> \(name)  \(Int(bird.confidence * 100))%" : "> \(name)"
+        return Text(text)
+            .font(.system(size: selected ? 13 : 11, weight: .bold, design: .monospaced))
+            .foregroundStyle(Self.green)
+            .padding(.horizontal, 6).padding(.vertical, 3)
+            .background(Color.black.opacity(0.82))
+            .overlay(Rectangle().strokeBorder(Self.green.opacity(selected ? 1 : 0.6), lineWidth: 1))
+            .fixedSize()
+            .position(x: min(max(rect.minX + 4, 0) + 70, size.width - 70), y: rect.minY > 40 ? rect.minY - 14 : rect.minY + 16)
+            .allowsHitTesting(false)
+    }
+
+    private var topBar: some View {
+        HStack {
+            HStack(spacing: 6) {
+                Rectangle().fill(Self.green).frame(width: 8, height: 8)
+                Text("LIVE  ·  INCOGNITO").font(.system(size: 12, weight: .bold, design: .monospaced))
+            }
+            .foregroundStyle(Self.green)
+            .padding(.horizontal, 10).padding(.vertical, 6)
+            .background(Color.black.opacity(0.7))
+            Spacer()
+            Button { dismiss() } label: {
+                Image(systemName: "xmark").font(.system(size: 14, weight: .bold)).foregroundStyle(Self.green)
+                    .frame(width: 34, height: 34).background(Color.black.opacity(0.7))
+            }
+            .accessibilityLabel("Close")
+        }
+        .padding(.horizontal, 16).padding(.top, 8)
+    }
+
