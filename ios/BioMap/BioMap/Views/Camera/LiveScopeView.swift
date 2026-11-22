@@ -6,15 +6,25 @@ import AVFoundation
 struct LiveScopeView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @StateObject private var scope = LiveBirdScope()
+    @StateObject private var scope: LiveBirdScope
+    @ObservedObject private var controls: ScopeCameraControls
+
+    init() {
+        let scope = LiveBirdScope()
+        _scope = StateObject(wrappedValue: scope)
+        _controls = ObservedObject(wrappedValue: scope.controls)
+    }
 
     private static let green = Color(red: 0, green: 1, blue: 0.255)
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
+            // Tap anywhere that isn't a bird to focus there; drag after a tap for exposure; pinch to zoom.
+            Color.clear.contentShape(Rectangle()).ignoresSafeArea()
+                .gesture(SpatialTapGesture().onEnded { controls.focus(at: $0.location) })
             if scope.status == .running || scope.status == .starting {
-                CameraPreview(session: scope.session).ignoresSafeArea()
+                CameraPreview(session: scope.session, controls: controls).ignoresSafeArea()
             }
             GeometryReader { geo in
                 let map = FrameMap(frame: scope.frameSize, view: geo.size)
@@ -36,7 +46,10 @@ struct LiveScopeView: View {
                         .contentShape(Rectangle())
                         .frame(width: r.width, height: r.height)
                         .position(x: r.midX, y: r.midY)
-                        .onTapGesture { scope.selectedID = selected ? nil : bird.id }
+                        .onTapGesture {
+                            scope.selectedID = selected ? nil : bird.id
+                            controls.focus(at: CGPoint(x: r.midX, y: r.midY))     // focus on the bird you picked
+                        }
                         .accessibilityElement()
                         .accessibilityLabel(bird.species.map { "Bird: \($0)" } ?? "Bird, identifying")
                         .accessibilityAddTraits(.isButton)
@@ -45,13 +58,23 @@ struct LiveScopeView: View {
             }
             .ignoresSafeArea()
 
+            FocusSquareOverlay(proxy: controls.focusProxy).ignoresSafeArea()
+
             VStack {
                 topBar
                 Spacer()
+                if !controls.presets.isEmpty {
+                    ZoomBarView(presets: controls.presets, zoom: controls.zoom, pinching: controls.pinching) { controls.ramp(toDisplay: $0) }
+                        .fixedSize()
+                        .frame(height: 50)
+                        .padding(.bottom, 10)
+                }
                 bottomBar
             }
             if scope.status == .denied || scope.status == .unavailable { problem }
         }
+        .simultaneousGesture(MagnifyGesture().onChanged { controls.pinchChanged(scale: $0.magnification) }.onEnded { _ in controls.pinchEnded() })
+        .simultaneousGesture(DragGesture(minimumDistance: 8).onChanged { controls.dragExposure(translationY: $0.translation.height) }.onEnded { _ in controls.dragEnded() })
         .statusBarHidden()
         .onAppear { scope.start(); UIApplication.shared.isIdleTimerDisabled = true }
         .onDisappear { scope.stop(); UIApplication.shared.isIdleTimerDisabled = false }
@@ -164,6 +187,7 @@ enum PixelBox {
 /// The camera feed itself.
 struct CameraPreview: UIViewRepresentable {
     let session: AVCaptureSession
+    var controls: ScopeCameraControls?
 
     final class PreviewView: UIView {
         override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
@@ -175,6 +199,7 @@ struct CameraPreview: UIViewRepresentable {
         view.previewLayer.session = session
         view.previewLayer.videoGravity = .resizeAspectFill
         view.backgroundColor = .black
+        controls?.previewLayer = view.previewLayer
         return view
     }
 

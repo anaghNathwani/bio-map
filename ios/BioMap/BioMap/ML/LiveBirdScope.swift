@@ -28,6 +28,8 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
     enum Status: Equatable { case starting, running, denied, unavailable }
 
     let session = AVCaptureSession()
+    /// Zoom, focus and exposure, the same controls as the main camera.
+    @MainActor let controls = ScopeCameraControls()
     /// Frame size as delivered (portrait), for mapping boxes onto the preview.
     @Published private(set) var frameSize = CGSize(width: 720, height: 1280)
 
@@ -85,7 +87,7 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
 
     private func configure() -> Bool {
         if configured { return true }
-        guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+        guard let camera = ScopeCameraControls.bestBackCamera(),
               let input = try? AVCaptureDeviceInput(device: camera),
               let model = Self.loadDetector() else { set(.unavailable); return false }
         let request = VNCoreMLRequest(model: model)
@@ -106,6 +108,7 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
             connection.videoRotationAngle = 90          // upright frames, so boxes need no rotation maths
         }
         configured = true
+        DispatchQueue.main.async { self.controls.attach(camera) }
         return true
     }
 
