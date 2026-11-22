@@ -57,3 +57,5 @@ struct LiveScopeView: View {
         .onDisappear { scope.stop(); UIApplication.shared.isIdleTimerDisabled = false }
     }
 
+    // MARK: - Pieces
+
