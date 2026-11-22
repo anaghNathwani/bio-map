@@ -116,3 +116,14 @@ struct LiveScopeView: View {
     }
 }
 
+/// Maps a normalised box in the camera frame to view coordinates when the preview fills the screen (aspect fill).
+struct FrameMap {
+    let frame: CGSize, view: CGSize
+    func rect(_ n: CGRect) -> CGRect {
+        let scale = max(view.width / frame.width, view.height / frame.height)
+        let dx = (view.width - frame.width * scale) / 2, dy = (view.height - frame.height * scale) / 2
+        return CGRect(x: dx + n.minX * frame.width * scale, y: dy + n.minY * frame.height * scale,
+                      width: n.width * frame.width * scale, height: n.height * frame.height * scale)
+    }
+}
+
