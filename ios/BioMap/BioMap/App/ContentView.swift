@@ -5,6 +5,8 @@ struct ContentView: View {
     @Environment(\.colorScheme) private var scheme
     @State private var tab: Tab = .map
     @State private var reportMode: ReportTabView.ReportMode = .photo
+    /// Onboarding: the Terms must be accepted (again, whenever they change) before the app is used.
+    @State private var needsTerms = false
 
     enum Tab { case map, report, leaders, profile }
 
@@ -52,8 +54,18 @@ struct ContentView: View {
                 .tag(Tab.profile)
         }
         .tint(c.accent)
-        .onAppear { consume(env.pendingDeepLink) }
+        .fullScreenCover(isPresented: $needsTerms) {
+            if let uid = env.user?.uid {
+                TermsAcceptanceView(uid: uid) { needsTerms = false }
+            }
+        }
+        .onAppear { checkTerms(); consume(env.pendingDeepLink) }
+        .onChange(of: env.user?.uid) { _, _ in checkTerms() }
         .onChange(of: env.pendingDeepLink) { _, link in consume(link) }
+    }
+
+    private func checkTerms() {
+        needsTerms = env.user.map { TermsAcceptance.needsAcceptance(uid: $0.uid) } ?? false
     }
 
     /// Jump to wherever a widget / lock-screen control asked for, then clear the request.
