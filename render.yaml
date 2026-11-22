@@ -1,12 +1,8 @@
 # Deploys to Render's free web service tier (no credit card required).
-# Backed by Supabase for Postgres + S3-compatible Storage (also free, no
-# card) — not a Render-managed database, since Render's free Postgres tier
-# auto-deletes after a fixed period, while Supabase's just pauses after 7
-# days idle (recoverable, not destructive). See docs/DEPLOYMENT.md.
+# This is the legacy backend, which the live app does not call.
 #
 # DATABASE_URL, S3_*, and FIREBASE_SERVICE_ACCOUNT_JSON are `sync: false` —
-# ./deploy.sh sets them for you after provisioning the Supabase project, or
-# set them manually via `render env set` / the Render dashboard.
+# set them via `render env set` / the Render dashboard.
 services:
   - type: web
     name: birdmap-api

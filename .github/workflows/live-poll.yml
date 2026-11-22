@@ -17,14 +17,8 @@ name: Live poll (audio ID + moderation)
 # Required repo secrets (Settings -> Secrets and variables -> Actions):
 #   FIREBASE_SERVICE_ACCOUNT_JSON  — full contents of a Firebase service
 #     account key (Firebase Console -> Project Settings -> Service Accounts)
-# Optional secrets (enables keepalive pings, see the last step):
+# Optional secret (enables the keepalive ping, see the last step):
 #   RENDER_URL       — e.g. https://birdmap-api.onrender.com
-#   SUPABASE_URL     — e.g. https://<project-ref>.supabase.co
-#   SUPABASE_ANON_KEY
-# Note: as of this writing no Supabase project has actually been provisioned
-# for this app (see docs/DEPLOYMENT.md) — the Supabase keepalive ping and
-# anything that publishes a model (ml_pipeline/publish_model.py) needs one
-# created first (provision-supabase.sh) before those secrets are meaningful.
 
 on:
   schedule:
@@ -74,20 +68,14 @@ jobs:
         run: python live_poll.py --service-account /tmp/firebase-key.json
         working-directory: ml_pipeline
 
-      - name: Keepalive pings (Render + Supabase, best-effort)
+      - name: Keepalive ping (Render, best-effort)
         if: always()
         run: |
           if [ -n "$RENDER_URL" ]; then
             curl -sf -m 30 "$RENDER_URL/health" > /dev/null && echo "Render: warm" || echo "Render: ping failed (non-fatal)"
           fi
-          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_ANON_KEY" ]; then
-            curl -sf -m 15 "$SUPABASE_URL/rest/v1/" -H "apikey: $SUPABASE_ANON_KEY" > /dev/null \
-              && echo "Supabase: pinged (prevents 7-day inactivity pause)" || echo "Supabase: ping failed (non-fatal)"
-          fi
         env:
           RENDER_URL: ${{ secrets.RENDER_URL }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
   # Independent job, same schedule, no `needs:` — runs on its own runner so a
   # bug here can never block or break the poll job above. Checks whether
