@@ -41,3 +41,16 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
     private var tracks: [Track] = []
     private var nextID = 1
 
+    private struct Track {
+        var bird: LiveBird
+        var misses = 0
+        var votes: [String: Float] = [:]
+        var lastClassified = Date.distantPast
+        var classifying = false
+    }
+
+    static let detectEvery: TimeInterval = 0.2          // ~5 detections a second
+    static let classifyEvery: TimeInterval = 1.0
+    static let detectionThreshold: Float = 0.35
+    static let maxMisses = 5
+
