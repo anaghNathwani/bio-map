@@ -331,6 +331,22 @@ struct CameraView: View {
 
     private var captureButtons: some View {
         let c = ThemeColors(scheme: scheme)
+        return VStack(spacing: 12) {
+            captureRow
+            Button { showLiveScope = true } label: {
+                Label("Incognito live view", systemImage: "eye.slash")
+                    .font(Theme.sansMedium(13))
+                    .foregroundStyle(c.fgSoft)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+            }
+            .accessibilityHint("Shows the camera with each bird named. Nothing is saved.")
+        }
+        .fullScreenCover(isPresented: $showLiveScope) { LiveScopeView() }
+    }
+
+    private var captureRow: some View {
+        let c = ThemeColors(scheme: scheme)
         return HStack(spacing: 12) {
             Button {
                 showPicker = true
