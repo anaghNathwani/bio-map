@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "build:client": "vite build",
     "seo:check": "node scripts/seo-check.mjs",
-    "indexnow": "node scripts/indexnow.mjs"
+    "indexnow": "node scripts/indexnow.mjs",
+    "terms:swift": "node scripts/gen_terms_swift.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
