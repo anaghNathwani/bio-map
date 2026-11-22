@@ -12,7 +12,7 @@ TestFlight; the web map and marketing site are live at https://getbiomap.web.app
   (BirdNET via TFLite), and annotation moderation (a bundled bird-name
   heuristic). Photo/audio bytes are compressed client-side and embedded as a
   base64 data URI directly in the sighting's Firestore document — **no
-  Firebase Storage, no Supabase, no deployed backend of any kind is needed
+  Firebase Storage, no deployed backend of any kind is needed
   for the live app to work.**
 - **Widgets:** a widget extension adds home screen and Lock Screen widgets and two
   Lock Screen corner controls (iOS 18+); see `docs/IOS_APP.md`.
@@ -25,7 +25,7 @@ TestFlight; the web map and marketing site are live at https://getbiomap.web.app
   is dormant — the app no longer writes `moderation: "pending"`, since
   moderation moved on-device — but the code hasn't been deleted yet.
 
-Firebase Storage is intentionally not used, and neither is Supabase for the
+Firebase Storage is intentionally not used, and neither is any other media host for the
 live app's media. See `CLAUDE.md` and `docs/DEPLOYMENT.md` for the full
 architecture and hosting tradeoffs, and `docs/ML_PIPELINE.md` for what each
 model runs on and why.
@@ -121,22 +121,9 @@ docker compose exec api alembic upgrade head
 The local stack uses PostGIS and MinIO. The media broker additionally needs a
 Firebase service-account JSON value in `FIREBASE_SERVICE_ACCOUNT_JSON`.
 
-### Deploying it
+### Hosting it
 
-```bash
-# Render — needs a card, confirmed live
-./deploy.sh /path/to/firebase-service-account.json
-
-# Google Cloud Run — needs GCP billing enabled
-./deploy-gcp.sh <gcp-project-id> /path/to/firebase-service-account.json
-
-# Runs on a spare machine you already have — needs backend/.env.supabase copied over
-./deploy-selfhost.sh
-```
-
-All three share the same Supabase Postgres data layer, provisioned first via
-`provision-supabase.sh`. See `docs/DEPLOYMENT.md` for provisioning, GitHub
-Actions secrets, monitoring, and rollback procedures.
+The backend isn't deployed, because the live app doesn't call it. `render.yaml` and `fly.toml` are starting points if you ever host it; it needs a Postgres database and an S3-compatible bucket (see `backend/.env.example`).
 
 ## Local development
 
