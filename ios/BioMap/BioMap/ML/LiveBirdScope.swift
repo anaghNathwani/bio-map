@@ -135,3 +135,64 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
         update(with: found, buffer: buffer, now: now)
     }
 
+    /// Matches this frame's boxes to the birds already followed, adds new ones, drops ones gone for a while, and
+    /// schedules a species check for any that are due.
+    private func update(with boxes: [CGRect], buffer: CVPixelBuffer, now: Date) {
+        var unmatched = Array(boxes.indices)
+        for i in tracks.indices {
+            var best: (idx: Int, iou: CGFloat)?
+            for j in unmatched {
+                let v = Self.iou(tracks[i].bird.box, boxes[j])
+                if v > 0.25, v > (best?.iou ?? 0) { best = (j, v) }
+            }
+            if let (j, _) = best {
+                let old = tracks[i].bird.box, new = boxes[j]
+                // Ease toward the new box so the overlay glides instead of jittering.
+                tracks[i].bird.box = CGRect(x: old.minX + (new.minX - old.minX) * 0.6, y: old.minY + (new.minY - old.minY) * 0.6,
+                                            width: old.width + (new.width - old.width) * 0.6, height: old.height + (new.height - old.height) * 0.6)
+                tracks[i].misses = 0
+                unmatched.removeAll { $0 == j }
+            } else {
+                tracks[i].misses += 1
+            }
+        }
+        tracks.removeAll { $0.misses > Self.maxMisses }
+        for j in unmatched {
+            tracks.append(Track(bird: LiveBird(id: nextID, box: boxes[j], species: nil)))
+            nextID += 1
+        }
+
+        for i in tracks.indices where tracks[i].misses == 0
+            && !tracks[i].classifying && now.timeIntervalSince(tracks[i].lastClassified) >= Self.classifyEvery {
+            tracks[i].classifying = true
+            tracks[i].lastClassified = now
+            if let crop = crop(buffer, box: tracks[i].bird.box) {
+                let id = tracks[i].bird.id
+                Task.detached(priority: .userInitiated) { [weak self] in
+                    let result = await BirdClassifier.shared.classify(image: crop)
+                    self?.work.async { self?.apply(result, to: id) }
+                }
+            } else {
+                tracks[i].classifying = false
+            }
+        }
+
+        let snapshot = tracks.filter { $0.misses <= 1 }.map(\.bird)
+        DispatchQueue.main.async {
+            self.birds = snapshot
+            if let s = self.selectedID, !snapshot.contains(where: { $0.id == s }) { self.selectedID = nil }
+        }
+    }
+
+    /// Folds one species answer into the bird's running vote; the label is whichever species has the most weight.
+    private func apply(_ result: ClassificationResult?, to id: Int) {
+        guard let i = tracks.firstIndex(where: { $0.bird.id == id }) else { return }
+        tracks[i].classifying = false
+        for key in tracks[i].votes.keys { tracks[i].votes[key]! *= 0.8 }       // older answers fade
+        if let r = result { tracks[i].votes[r.species, default: 0] += r.confidence }
+        if let top = tracks[i].votes.max(by: { $0.value < $1.value }), top.value > 0.3 {
+            tracks[i].bird.species = top.key
+            tracks[i].bird.confidence = result?.species == top.key ? (result?.confidence ?? tracks[i].bird.confidence) : tracks[i].bird.confidence
+        }
+    }
+
