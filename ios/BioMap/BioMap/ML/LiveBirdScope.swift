@@ -117,3 +117,21 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
 
     // MARK: - Frames
 
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        let now = Date()
+        guard now.timeIntervalSince(lastRun) >= Self.detectEvery,
+              let buffer = CMSampleBufferGetImageBuffer(sampleBuffer), let request else { return }
+        lastRun = now
+
+        let size = CGSize(width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
+        if size != frameSize { DispatchQueue.main.async { self.frameSize = size } }
+
+        try? VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .up).perform([request])
+        let found: [CGRect] = ((request.results as? [VNRecognizedObjectObservation]) ?? []).compactMap { o in
+            guard let top = o.labels.first, top.identifier == "bird", top.confidence >= Self.detectionThreshold else { return nil }
+            let b = o.boundingBox                         // Vision: bottom-left origin
+            return CGRect(x: b.minX, y: 1 - b.maxY, width: b.width, height: b.height)
+        }
+        update(with: found, buffer: buffer, now: now)
+    }
+
