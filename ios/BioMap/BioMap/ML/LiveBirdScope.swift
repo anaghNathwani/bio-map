@@ -75,3 +75,11 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
         }
     }
 
+    private func set(_ s: Status) { DispatchQueue.main.async { self.status = s } }
+
+    private func run() {
+        guard configure() else { return }
+        if !session.isRunning { session.startRunning() }
+        set(.running)
+    }
+
