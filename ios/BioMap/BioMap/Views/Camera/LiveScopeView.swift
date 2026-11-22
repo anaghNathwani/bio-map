@@ -92,3 +92,16 @@ struct LiveScopeView: View {
         .padding(.horizontal, 16).padding(.top, 8)
     }
 
+    private var bottomBar: some View {
+        VStack(spacing: 4) {
+            Text(scope.birds.isEmpty ? "NO BIRDS IN VIEW" : "\(scope.birds.count) BIRD\(scope.birds.count == 1 ? "" : "S") IN VIEW  ·  TAP ONE")
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
+            Text("Nothing is recorded, saved or uploaded.")
+                .font(.system(size: 11, design: .monospaced)).opacity(0.75)
+        }
+        .foregroundStyle(Self.green)
+        .padding(.horizontal, 12).padding(.vertical, 8)
+        .background(Color.black.opacity(0.7))
+        .padding(.bottom, 24)
+    }
+
