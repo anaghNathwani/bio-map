@@ -105,3 +105,14 @@ struct LiveScopeView: View {
         .padding(.bottom, 24)
     }
 
+    private var problem: some View {
+        VStack(spacing: 10) {
+            Text(scope.status == .denied ? "CAMERA ACCESS IS OFF" : "LIVE VIEW NEEDS A CAMERA")
+                .font(.system(size: 14, weight: .bold, design: .monospaced))
+            Text(scope.status == .denied ? "Turn it on in Settings > BioMap." : "This device has no camera available.")
+                .font(.system(size: 12, design: .monospaced))
+        }
+        .foregroundStyle(Self.green).multilineTextAlignment(.center).padding(24)
+    }
+}
+
