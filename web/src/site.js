@@ -91,7 +91,7 @@ export const ROUTES = [
   {
     path: '/terms',
     title: 'Terms of Service | BioMap',
-    description: 'The terms that apply when you use BioMap: data use, conduct, privacy, content and changes.',
+    description: 'The terms that apply when you use BioMap: your content and license, community rules, identification disclaimers, liability and governing law.',
     changefreq: 'yearly',
     priority: 0.3,
     prerender: true,

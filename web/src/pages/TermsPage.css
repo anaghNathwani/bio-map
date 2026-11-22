@@ -3,3 +3,25 @@
   color: var(--fg-soft);
   margin-bottom: 32px;
 }
+
+.terms-page-intro {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--fg);
+  margin-bottom: 24px;
+}
+
+.terms-page-para + .terms-page-para,
+.terms-page-para + .terms-page-list,
+.terms-page-list + .terms-page-para {
+  margin-top: 10px;
+}
+
+.terms-page-list {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.terms-page-list li + li {
+  margin-top: 6px;
+}
