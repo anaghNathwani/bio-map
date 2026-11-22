@@ -106,7 +106,7 @@ struct SightingDetailView: View {
                             Image(systemName: "waveform")
                                 .font(.system(size: 48))
                                 .foregroundStyle(c.accent)
-                            if detail.audioURL != nil || detail.audioFallbackURL != nil {
+                            if detail.audioURL != nil {
                                 Button {
                                     Task { await togglePlayback(detail) }
                                 } label: {
@@ -133,18 +133,9 @@ struct SightingDetailView: View {
                     .frame(minHeight: 220, maxHeight: 380)
                     .clipped()
             } else {
-                AsyncImage(url: detail.photoFallbackURL.flatMap { URL(string: $0) }) { phase in
-                    switch phase {
-                    case .success(let img):
-                        img.resizable().scaledToFill()
-                    case .failure:
-                        Rectangle().fill(c.bgRaised)
-                            .overlay(Image(systemName: "photo.badge.exclamationmark").font(.largeTitle).foregroundStyle(c.fgSoft))
-                    default:
-                        Rectangle().fill(c.bgRaised).overlay(ProgressView().tint(c.accent))
-                    }
-                }
-                .frame(maxWidth: .infinity)
+                Rectangle().fill(c.bgRaised)
+                    .overlay(Image(systemName: "photo.badge.exclamationmark").font(.largeTitle).foregroundStyle(c.fgSoft))
+                    .frame(maxWidth: .infinity)
                 .frame(minHeight: 220, maxHeight: 380)
                 .clipped()
             }
@@ -329,14 +320,10 @@ struct SightingDetailView: View {
         }
     }
 
-    /// Plays the embedded recording, or downloads the Supabase fallback copy
-    /// if the embedded one is missing/undecodable.
+    /// Plays the embedded recording.
     private func togglePlayback(_ detail: SightingDetail) async {
         if playback.isPlaying { playback.stop(); return }
         if let embedded = detail.audioURL, let data = DataURI.decode(embedded) {
-            playback.play(data: data)
-        } else if let fallback = detail.audioFallbackURL, let url = URL(string: fallback),
-                  let (data, _) = try? await URLSession.shared.data(from: url) {
             playback.play(data: data)
         } else {
             playback.play(data: Data())     // surfaces the "couldn't play" message

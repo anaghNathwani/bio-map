@@ -47,8 +47,6 @@ struct SightingDetail: Identifiable {
     var photoURL: String?
     var thumbnailURL: String?
     var audioURL: String?
-    var photoFallbackURL: String?
-    var audioFallbackURL: String?
     var mediaType: String
     var notes: String?
     var aiSpeciesSuggestion: String?
