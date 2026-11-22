@@ -54,3 +54,5 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
     static let detectionThreshold: Float = 0.35
     static let maxMisses = 5
 
+    // MARK: - Session
+
