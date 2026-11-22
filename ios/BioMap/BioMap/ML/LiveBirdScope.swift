@@ -56,3 +56,22 @@ final class LiveBirdScope: NSObject, ObservableObject, AVCaptureVideoDataOutputS
 
     // MARK: - Session
 
+    func start() {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized: work.async { self.run() }
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { ok in
+                if ok { self.work.async { self.run() } } else { self.set(.denied) }
+            }
+        default: set(.denied)
+        }
+    }
+
+    func stop() {
+        work.async {
+            if self.session.isRunning { self.session.stopRunning() }
+            self.tracks.removeAll()
+            DispatchQueue.main.async { self.birds = []; self.selectedID = nil }
+        }
+    }
+
