@@ -12,9 +12,6 @@ import CoreLocation
 // github.com/ishanvi-dekate/team-efficient-epp (Profile.jsx's avatar upload,
 // ChatBot.jsx's imageToBase64) to avoid Firebase Storage's Blaze billing
 // requirement entirely — genuinely free, no card. See docs/DEPLOYMENT.md.
-// The same bytes are also uploaded to Supabase Storage as a best-effort
-// fallback copy (SupabaseStorage.uploadFallback) — if that fails, the sighting
-// still saves fine with just the primary embedded copy.
 private extension UIImage {
     /// Aspect-preserving downscale, no-op if already within bounds.
     func resized(maxDimension: CGFloat) -> UIImage {
@@ -164,24 +161,18 @@ final class FirebaseService {
         return image.resized(maxDimension: 640).jpegData(compressionQuality: 0.25)
     }
 
-    func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?, fallbackURL: String?) {
+    func uploadImage(_ data: Data, sightingID: String) async throws -> (photoURL: String, thumbnailURL: String?) {
         guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
         guard let image = UIImage(data: data) else { throw AppError.invalidImage }
         guard let jpeg = compressForEmbedding(image) else { throw AppError.invalidImage }
         let dataURI = "data:image/jpeg;base64,\(jpeg.base64EncodedString())"
-        let fallbackURL = await SupabaseStorage.uploadFallback(
-            jpeg, path: "sightings/\(sightingID)/photo.jpg", contentType: "image/jpeg"
-        )
-        return (dataURI, nil, fallbackURL)
+        return (dataURI, nil)
     }
 
-    func uploadAudio(_ data: Data, sightingID: String, filename: String) async throws -> (audioURL: String, fallbackURL: String?) {
+    func uploadAudio(_ data: Data, sightingID: String, filename: String) async throws -> String {
         guard Auth.auth().currentUser != nil else { throw AppError.notLoggedIn }
         let dataURI = "data:audio/mp4;base64,\(data.base64EncodedString())"
-        let fallbackURL = await SupabaseStorage.uploadFallback(
-            data, path: "sightings/\(sightingID)/\(filename)", contentType: "audio/mp4"
-        )
-        return (dataURI, fallbackURL)
+        return dataURI
     }
 
     // MARK: - Sightings
@@ -190,8 +181,6 @@ final class FirebaseService {
         photoURL: String?,
         thumbnailURL: String?,
         audioURL: String?,
-        photoFallbackURL: String? = nil,
-        audioFallbackURL: String? = nil,
         mediaType: String,
         latitude: Double,
         longitude: Double,
@@ -216,8 +205,6 @@ final class FirebaseService {
         if let v = photoURL { data["photoURL"] = v }
         if let v = thumbnailURL { data["thumbnailURL"] = v }
         if let v = audioURL { data["audioURL"] = v }
-        if let v = photoFallbackURL { data["photoFallbackURL"] = v }
-        if let v = audioFallbackURL { data["audioFallbackURL"] = v }
         if let v = notes { data["notes"] = v }
         if let v = aiSpecies { data["aiSpeciesSuggestion"] = v }
         if let v = aiConfidence { data["aiConfidence"] = v }
@@ -235,6 +222,7 @@ final class FirebaseService {
         try await ref.setData(data)
         return ref.documentID
     }
+
 
     func fetchSightings(region: (minLat: Double, maxLat: Double, minLng: Double, maxLng: Double)? = nil) async throws -> [Sighting] {
         var query: Query = db.collection("sightings").limit(to: 300)
@@ -303,8 +291,6 @@ final class FirebaseService {
             photoURL: data["photoURL"] as? String,
             thumbnailURL: data["thumbnailURL"] as? String,
             audioURL: data["audioURL"] as? String,
-            photoFallbackURL: data["photoFallbackURL"] as? String,
-            audioFallbackURL: data["audioFallbackURL"] as? String,
             mediaType: data["mediaType"] as? String ?? "photo",
             notes: data["notes"] as? String,
             aiSpeciesSuggestion: data["aiSpeciesSuggestion"] as? String,
